@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqjfdxm2uvtt5"]
+
+[ext_resource type="Script" path="res://CreditNames.cs" id="1_2nial"]
+
+[node name="Credits" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.345098, 0.0980392, 0.160784, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 660.0
+offset_top = 1080.0
+offset_right = 1260.0
+offset_bottom = 1680.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Made By Jess[/center]
+
+[center]Made By Jonathan[/center]
+
+[center]Made by Geran[/center]"
+scroll_active = false
+script = ExtResource("1_2nial")

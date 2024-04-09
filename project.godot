@@ -11,9 +11,17 @@ config_version=5
 [application]
 
 config/name="mkgodot"
-run/main_scene="res://RootNode.tscn"
+run/main_scene="res://MainScene.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/stretch/mode="viewport"
+window/stretch/aspect="ignore"
 
 [dotnet]
 
