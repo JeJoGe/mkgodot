@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dw4y4svunisx6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n4dmt"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"Flip",
+"speed": 5.0
+}]
+
+[sub_resource type="ImageTexture" id="ImageTexture_i2rn7"]
+
+[node name="Card" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_n4dmt")
+animation = &"Flip"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ImageTexture_i2rn7")

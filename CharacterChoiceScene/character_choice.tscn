@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://drqo64v0t6gku"]
+
+[ext_resource type="Script" path="res://CharacterChoiceScene/character_choice.cs" id="1_yb81j"]
+[ext_resource type="Script" path="res://CharacterChoiceScene/Submit.cs" id="2_7gfy2"]
+
+[node name="CharacterChoice" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yb81j")
+
+[node name="Title" type="TextEdit" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 136.0
+offset_top = 64.0
+offset_right = 355.0
+offset_bottom = 100.0
+scale = Vector2(4.05609, 5.89373)
+text = "CHOOSE YOUR CHARACTER"
+placeholder_text = "CHOOSE YOUR CHARACTER"
+
+[node name="CharacterDropdown" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 384.0
+offset_right = 508.0
+offset_bottom = 415.0
+scale = Vector2(3.27002, 2.47062)
+
+[node name="Submit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 512.0
+offset_top = 512.0
+offset_right = 632.0
+offset_bottom = 568.0
+text = "PLAY"
+script = ExtResource("2_7gfy2")
+
+[node name="Title2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 128.0
+offset_right = 242.0
+offset_bottom = 151.0
+scale = Vector2(5.15522, 9.30733)
+text = "CHOOSE YOUR CHARACTER"
+
+[connection signal="item_selected" from="CharacterDropdown" to="." method="OnCharacterSelected"]
+[connection signal="pressed" from="Submit" to="." method="OnSubmitPressed"]
