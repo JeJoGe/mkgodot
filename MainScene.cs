@@ -15,6 +15,10 @@ public partial class MainScene : Node2D
 	{
 		GetTree().Quit();
 	}
+
+	private void OnPlayPressed() {
+		GetTree().ChangeSceneToFile("res://CharacterChoiceScene/CharacterChoice.tscn");
+	}
 }
 
 

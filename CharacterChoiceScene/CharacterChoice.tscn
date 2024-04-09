@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://drqo64v0t6gku"]
 
-[ext_resource type="Script" path="res://CharacterChoiceScene/character_choice.cs" id="1_yb81j"]
+[ext_resource type="Script" path="res://CharacterChoiceScene/CharacterChoice.cs" id="1_pku4p"]
 
 [node name="CharacterChoice" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_yb81j")
+script = ExtResource("1_pku4p")
 
 [node name="Title" type="TextEdit" parent="."]
 visible = false

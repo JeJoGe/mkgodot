@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class character_choice : Control
+public partial class CharacterChoice : Control
 {
-	private string[] characters = ["Tovak", "Areythea"];
+	private string[] characters = ["Tovak", "Arythea"];
 
 	public override void _Ready() {
 		var characterDropdown = GetNode<OptionButton>("CharacterDropdown");
@@ -11,10 +11,9 @@ public partial class character_choice : Control
 			characterDropdown.AddItem(characters[i], i);
 		}
 		characterDropdown.Selected = -1;
-		characterDropdown.ItemSelected += OnCharacterSelected;
+
 		var submitButton = GetNode<Button>("Submit");
 		submitButton.Disabled = true;
-		submitButton.Pressed += OnSubmitPressed;
 	}
 
 	private void OnCharacterSelected(long index)
@@ -26,6 +25,7 @@ public partial class character_choice : Control
 	private void OnSubmitPressed()
 	{
 		GD.Print("PLAY");
+		GetTree().ChangeSceneToFile("res://GamePlay.tscn");
 	}
 	
 }

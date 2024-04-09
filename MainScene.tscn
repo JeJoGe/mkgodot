@@ -61,5 +61,6 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Quit"
 
+[connection signal="pressed" from="UI/MainMenu/StartGame" to="." method="OnPlayPressed"]
 [connection signal="pressed" from="UI/MainMenu/Credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Quit" to="." method="_on_quit_pressed"]
