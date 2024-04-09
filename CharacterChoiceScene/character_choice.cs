@@ -4,7 +4,6 @@ using System;
 public partial class character_choice : Control
 {
 	private string[] characters = ["Tovak", "Areythea"];
-	private Submit submitButton { get; set; }
 
 	public override void _Ready() {
 		var characterDropdown = GetNode<OptionButton>("CharacterDropdown");
