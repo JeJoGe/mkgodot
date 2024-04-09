@@ -1,0 +1,108 @@
+[gd_scene load_steps=8 format=3 uid="uid://rgqlw68wyrqj"]
+
+[ext_resource type="Script" path="res://Source.cs" id="1_a7l7i"]
+[ext_resource type="Texture2D" uid="uid://bueo1503ko8qa" path="res://assets/blue.jpg" id="1_olv1x"]
+[ext_resource type="Texture2D" uid="uid://de4dsvtcufe3k" path="res://assets/red.jpg" id="2_gqa0y"]
+[ext_resource type="Texture2D" uid="uid://eol5rlwymm3j" path="res://assets/green.jpg" id="3_hy52u"]
+[ext_resource type="Texture2D" uid="uid://bwl6pkr3ptmfa" path="res://assets/white.jpg" id="4_qe0q0"]
+[ext_resource type="Texture2D" uid="uid://da2sxjom5m1yk" path="res://assets/gold.jpg" id="5_vpvkg"]
+[ext_resource type="Texture2D" uid="uid://duo7q1ecn7m0f" path="res://assets/black.jpg" id="6_aoe1g"]
+
+[node name="Source" type="Node2D"]
+script = ExtResource("1_a7l7i")
+metadata/_edit_group_ = true
+
+[node name="BlueButton" type="Button" parent="."]
+offset_right = 691.0
+offset_bottom = 691.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("1_olv1x")
+
+[node name="BlueLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_right = 64.0
+offset_bottom = 33.0
+text = "0"
+vertical_alignment = 1
+
+[node name="RedButton" type="Button" parent="."]
+offset_top = 40.0
+offset_right = 691.0
+offset_bottom = 731.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("2_gqa0y")
+
+[node name="RedLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 64.0
+offset_bottom = 73.0
+text = "0"
+vertical_alignment = 1
+
+[node name="GreenButton" type="Button" parent="."]
+offset_left = 64.0
+offset_right = 755.0
+offset_bottom = 691.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("3_hy52u")
+
+[node name="GreenLabel" type="Label" parent="."]
+offset_left = 104.0
+offset_right = 128.0
+offset_bottom = 33.0
+text = "0"
+vertical_alignment = 1
+
+[node name="WhiteButton" type="Button" parent="."]
+offset_left = 64.0
+offset_top = 42.0
+offset_right = 755.0
+offset_bottom = 733.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("4_qe0q0")
+
+[node name="WhiteLabel" type="Label" parent="."]
+offset_left = 104.0
+offset_top = 40.0
+offset_right = 128.0
+offset_bottom = 73.0
+text = "0"
+vertical_alignment = 1
+
+[node name="GoldButton" type="Button" parent="."]
+offset_left = 128.0
+offset_right = 819.0
+offset_bottom = 691.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("5_vpvkg")
+
+[node name="GoldLabel" type="Label" parent="."]
+offset_left = 168.0
+offset_right = 192.0
+offset_bottom = 33.0
+text = "0"
+vertical_alignment = 1
+
+[node name="BlackButton" type="Button" parent="."]
+offset_left = 128.0
+offset_top = 42.0
+offset_right = 819.0
+offset_bottom = 733.0
+scale = Vector2(0.05, 0.05)
+icon = ExtResource("6_aoe1g")
+
+[node name="BlackLabel" type="Label" parent="."]
+offset_left = 168.0
+offset_top = 40.0
+offset_right = 192.0
+offset_bottom = 73.0
+text = "0"
+vertical_alignment = 1
+
+[connection signal="pressed" from="BlueButton" to="." method="OnBlueDiePressed"]
+[connection signal="pressed" from="RedButton" to="." method="OnRedDiePressed"]
+[connection signal="pressed" from="GreenButton" to="." method="OnGreenDiePressed"]
+[connection signal="pressed" from="WhiteButton" to="." method="OnWhiteDiePressed"]
+[connection signal="pressed" from="GoldButton" to="." method="OnGoldDiePressed"]
+[connection signal="pressed" from="BlackButton" to="." method="OnBlackDiePressed"]
