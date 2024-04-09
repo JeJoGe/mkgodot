@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://yqlpgaqts46f"]
+
+[ext_resource type="Script" path="res://Deck.cs" id="1_dtned"]
+[ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="2_w7aa5"]
+[ext_resource type="Texture2D" uid="uid://drtmvnnioa3kt" path="res://assets/basics.jpg" id="3_nwtmp"]
+
+[node name="Deck" type="Node2D"]
+script = ExtResource("1_dtned")
+metadata/_edit_group_ = true
+
+[node name="DeckButton" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+scale = Vector2(0.15, 0.15)
+icon = ExtResource("2_w7aa5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(240, 104)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("3_nwtmp")
+hframes = 7
+vframes = 4
+frame = 18
