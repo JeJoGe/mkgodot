@@ -21,7 +21,7 @@ public partial class character_choice : Control
 	private void OnCharacterSelected(long index)
 	{
 		GD.Print("Selected ", characters[index]);
-		submitButton.setDisabled(false);
+		GetNode<Button>("Submit").Disabled = false;
 	}
 	
 	private void OnSubmitPressed()

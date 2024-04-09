@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://drqo64v0t6gku"]
+[gd_scene load_steps=2 format=3 uid="uid://drqo64v0t6gku"]
 
 [ext_resource type="Script" path="res://CharacterChoiceScene/character_choice.cs" id="1_yb81j"]
-[ext_resource type="Script" path="res://CharacterChoiceScene/Submit.cs" id="2_7gfy2"]
 
 [node name="CharacterChoice" type="Control"]
 layout_mode = 3
@@ -38,7 +37,6 @@ offset_top = 512.0
 offset_right = 632.0
 offset_bottom = 568.0
 text = "PLAY"
-script = ExtResource("2_7gfy2")
 
 [node name="Title2" type="Label" parent="."]
 layout_mode = 0
