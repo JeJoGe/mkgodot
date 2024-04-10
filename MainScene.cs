@@ -4,7 +4,7 @@ using System;
 public partial class MainScene : Node2D
 {
 	public MainScene() {
-		GD.Print("Hello, world!");
+		GD.Print("Hello, JJG!");
 	}
 	private void _on_credits_pressed()
 	{	
