@@ -1,12 +1,141 @@
-[gd_scene load_steps=2 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=11 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
+[ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
+[ext_resource type="ButtonGroup" uid="uid://bwjq78y5esejs" path="res://Tactics/TacticsGroup.tres" id="2_j6tl2"]
+[ext_resource type="Script" path="res://Tactics.cs" id="2_o1npl"]
+[ext_resource type="Texture2D" uid="uid://c0v7wfecp1b3v" path="res://assets/Tactics/day1.jpg" id="3_5mt76"]
+[ext_resource type="Texture2D" uid="uid://dautabdtkq2tj" path="res://assets/Tactics/day2.jpg" id="4_b2aj0"]
+[ext_resource type="Texture2D" uid="uid://dnvqtapwrs4r" path="res://assets/Tactics/day3.jpg" id="5_2ng8m"]
+[ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
+[ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
+[ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 
 [node name="GamePlay" type="Node2D"]
+script = ExtResource("1_m0gf8")
 
 [node name="PlayerArea" type="Node2D" parent="."]
 
-[node name="HUD" type="Node2D" parent="."]
+[node name="Inventory" type="Sprite2D" parent="PlayerArea"]
 
-[node name="Source" parent="HUD" instance=ExtResource("1_fhj8j")]
+[node name="Tactics" type="Control" parent="PlayerArea"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 384.0
+offset_top = 160.0
+offset_right = 424.0
+offset_bottom = 200.0
+script = ExtResource("2_o1npl")
+metadata/_edit_group_ = true
+
+[node name="Tactic1" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 16.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("3_5mt76")
+
+[node name="Tactic2" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 8.0
+offset_right = 1144.0
+offset_bottom = 1416.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("4_b2aj0")
+
+[node name="Tactic3" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 8.0
+offset_right = 1272.0
+offset_bottom = 1416.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("5_2ng8m")
+
+[node name="Tactic4" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 168.0
+offset_right = 1016.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("6_rt858")
+
+[node name="Tactic5" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 168.0
+offset_right = 1144.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("7_bkwh1")
+
+[node name="Tactic6" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 168.0
+offset_right = 1272.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("8_1ear6")
+
+[node name="ConfirmTactic" type="Button" parent="PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 328.0
+offset_right = 160.0
+offset_bottom = 336.0
+text = "Confirm"
+
+[node name="SharedArea" type="Node2D" parent="."]
+
+[node name="Source" parent="SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
+
+[node name="RoundMarker" type="Label" parent="SharedArea"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+text = "1"
+
+[node name="NewRoundButton" type="Button" parent="."]
+offset_left = 198.937
+offset_top = 171.0
+offset_right = 206.937
+offset_bottom = 179.0
+text = "New Round"
+
+[node name="EndTurnButton" type="Button" parent="."]
+offset_left = 208.0
+offset_top = 240.0
+offset_right = 216.0
+offset_bottom = 248.0
+text = "End Turn"
+
+[connection signal="pressed" from="PlayerArea/Tactics/ConfirmTactic" to="PlayerArea/Tactics" method="OnConfirmTacticPressed"]
+[connection signal="pressed" from="NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="NewRoundButton" to="SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="EndTurnButton" to="SharedArea/Source" method="EndTurn"]
