@@ -142,6 +142,7 @@ offset_right = 216.0
 offset_bottom = 248.0
 text = "End Turn"
 
+[connection signal="TurnOrder" from="PlayerArea/Tactics" to="SharedArea/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic1" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic2" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic3" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
