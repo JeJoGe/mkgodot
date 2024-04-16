@@ -61,13 +61,25 @@ public partial class Source : Node2D
 		_white = 0;
 		_gold = 0;
 		_black = 0;
-		UpdateLabels();
-		UpdateButtons();
 		var numDice = _numPlayers + 2; //number of dice be default
 		for (int i = 0; i < numDice; i++)
 		{
 			SetDie(RollDie());
 		}
+		// check if half are basics and reroll all black and yellow until true
+		var numNonBasic = Gold + Black;
+		while (numNonBasic > numDice/2 )
+		{
+			_gold = 0;
+			_black = 0;
+			for (int j = 0; j < numNonBasic; j++)
+			{
+				SetDie(RollDie());
+			}
+			numNonBasic = Gold + Black;
+		}
+		UpdateLabels();
+		UpdateButtons();
 	}
 
 	public void EndTurn()
@@ -81,6 +93,7 @@ public partial class Source : Node2D
 		}
 		_dicePerTurn = 1;
 		_diceTaken = 0;
+		UpdateButtons();
 	}
 
 	private void UpdateLabels() {
