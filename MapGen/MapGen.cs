@@ -1,28 +1,33 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public partial class MapGen : TileMap
 {
 	const int MainLayer = 0;
 	const int MainAtlasID = 0;
 	const int MainTerrainSet = 0;
-
-	Godot.Collections.Array greenTiles = new Godot.Collections.Array{2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-	Godot.Collections.Array brownTiles = new Godot.Collections.Array{16,17,18,19,20,21,22,23,24,25};
+	
+	//Initial stack of Green Tiles and Brown Tiles
+	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
+	int[] greenTiles = Enumerable.Range(2, 14).ToArray();
+	int tileStackState = 2; //2 is green, 1 is brown, 0 is empty
+	Stack<int> tileStack;
 	public override void _Ready()
 	{
 		GD.Randomize();
 		Random rSeed = new Random();
-		greenTiles.Shuffle();
-		brownTiles.Shuffle();
-		// shuffleArray(rSeed, greenTiles);
-		// shuffleArray(rSeed, brownTiles);
+		//greenTiles.Shuffle(); // Commented out because Godot Arrays ARE ASS
+		//brownTiles.Shuffle();
+		shuffleArray(rSeed, greenTiles);
+		tileStack = new Stack<int>(greenTiles);
 
 	}
+	
 	// Don't know where to place this as can reuse for many things
 	// Shuffle array function based on Fisher-Yate algorithm
-	public static void shuffleArray(Random rSeed, Godot.Collections.Array origArray)
+	public static void shuffleArray(Random rSeed, int[] origArray)
 	{
 		//Step 1: For each unshuffled item in the collection
 		for (int n = origArray.Count() - 1; n > 0; --n)
@@ -54,6 +59,7 @@ public partial class MapGen : TileMap
     {
 		// Need to redeclare greenTiles for var functions instead of array
         if (@event is InputEventMouseButton eventMouseButton)
+		{
 			if (eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Left)
 			{
 				// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
@@ -64,33 +70,27 @@ public partial class MapGen : TileMap
 				// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
 				var currentAtlasCoords = GetCellAtlasCoords(MainLayer, posClicked);
 				GD.Print("Atlas: " + currentAtlasCoords.ToString());
+
 				if (currentAtlasCoords is (-1,-1)) // No tile from atlas exists here
 				{
 					GD.Print("No Pattern Detected");
-					if (this.greenTiles[0] == null) // No green tiles left
+					if (this.tileStackState != 0)
 					{
-						if (this.brownTiles[0] == null) // No brown tiles left
+						// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
+						var tilePos = this.DetermineMapPlacement(posClicked);
+						GD.Print("Add tile at " + tilePos.ToString());
+						SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop())); 
+						
+						if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 						{
-							throw new InvalidOperationException("No tiles available");
-						}
-
-						else
-						{
-							// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
-							var tilePos = DetermineMapPlacement(posClicked);
-							GD.Print("Add tile at " + tilePos.ToString());
-							SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.brownTiles[^1])); 
-							var array1 = [3, 2];
-
+							this.tileStack = new Stack<int>(this.brownTiles);
+							this.tileStackState--;
 						}
 					}
 
 					else
 					{
-						var tilePos = DetermineMapPlacement(posClicked);
-							GD.Print("Add tile at " + tilePos.ToString());
-							SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.greenTiles[^1])); 
-							var array1 = [3, 2];
+						throw new InvalidOperationException("No tiles available");
 					}
 				}
 
@@ -100,6 +100,7 @@ public partial class MapGen : TileMap
 					GD.Print("Terrain: " + TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				}
 			}
+		}
     }
 	// Using math to determine how to position tile. Don't understand why it works, it just does
 	private Vector2I DetermineMapPlacement(Vector2I posClicked)
