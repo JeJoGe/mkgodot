@@ -9,7 +9,6 @@ public partial class Tactics : Control
 	public delegate void TurnOrderEventHandler(int playerTurn, int dummyTurn);
 
 	private List<string> _availableDay = ["Tactic1", "Tactic2", "Tactic3", "Tactic4", "Tactic5", "Tactic6"];
-	//private List<int> _availableNight = [1,2,3,4,5,6];
 	private bool _night = true;
 
 	// Called when the node enters the scene tree for the first time.
@@ -32,28 +31,37 @@ public partial class Tactics : Control
 		Show();
 	}
 
+	private void OnTacticButtonPressed()
+	{
+		GetNode<Button>("ConfirmTactic").Disabled = false;
+	}
+
 	private void OnConfirmTacticPressed() {
 		if (GamePlay.NumPlayers == 1)
 		{
 			SinglePlayerConquest();
 		} else {
-			// handle different scenarios
+			// handle different scenarios and player numbers
 		}
 	}
 
 	private void SinglePlayerConquest() {
 		var group = GetNode<Button>("Tactic1").ButtonGroup;
-		var selectedButton = group.GetPressedButton();
-		GD.Print(selectedButton.Name + " selected");
-		_availableDay.Remove(selectedButton.Name);
+		var selectedButton = (string)group.GetPressedButton().Name;
+		var playerTurn = selectedButton.Substring(6);
+		_availableDay.Remove(selectedButton);
 		var tacticButtons = group.GetButtons();
+		// reset buttons
 		foreach (var button in tacticButtons) {
 			button.Disabled = true;
 		}
-		int max = _availableDay.Count;
-		int dummyNum = Source.RandomNumber(0,max);
-		string dummyTactic = _availableDay[dummyNum];
-		GD.Print(dummyTactic);
+		GetNode<Button>("ConfirmTactic").Disabled = true;
+		// get dummy tactic
+		int dummyNum = Source.RandomNumber(0,_availableDay.Count);
+		string dummyTurn = _availableDay[dummyNum].Substring(6);
+		GD.Print("Player: "+playerTurn + " Dummy: "+dummyTurn);
 		_availableDay.RemoveAt(dummyNum);
+		Hide();
+		EmitSignal(SignalName.TurnOrder,playerTurn,dummyTurn);
 	} 
 }

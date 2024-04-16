@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=13 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
+[ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
+[ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
 
 [node name="GamePlay" type="Node2D"]
 script = ExtResource("1_m0gf8")
@@ -107,9 +109,11 @@ offset_left = 152.0
 offset_top = 328.0
 offset_right = 160.0
 offset_bottom = 336.0
+disabled = true
 text = "Confirm"
 
 [node name="SharedArea" type="Node2D" parent="."]
+script = ExtResource("10_bkisu")
 
 [node name="Source" parent="SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
@@ -119,7 +123,10 @@ offset_left = 24.0
 offset_top = 24.0
 offset_right = 64.0
 offset_bottom = 47.0
-text = "1"
+
+[node name="TurnOrderTracker" type="Node2D" parent="SharedArea"]
+position = Vector2(160, 32)
+script = ExtResource("12_js350")
 
 [node name="NewRoundButton" type="Button" parent="."]
 offset_left = 198.937
@@ -135,7 +142,14 @@ offset_right = 216.0
 offset_bottom = 248.0
 text = "End Turn"
 
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic1" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic2" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic3" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic4" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic5" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="PlayerArea/Tactics/Tactic6" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/ConfirmTactic" to="PlayerArea/Tactics" method="OnConfirmTacticPressed"]
 [connection signal="pressed" from="NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="NewRoundButton" to="SharedArea" method="NewRound"]
 [connection signal="pressed" from="NewRoundButton" to="SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="EndTurnButton" to="SharedArea/Source" method="EndTurn"]
