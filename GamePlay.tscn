@@ -1,6 +1,63 @@
-[gd_scene load_steps=2 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=10 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
+[ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
+[ext_resource type="Script" path="res://MapGen/MapGen.cs" id="3_hiwow"]
+[ext_resource type="Script" path="res://Player/Player.cs" id="4_jr7il"]
+[ext_resource type="Texture2D" uid="uid://drb6w7us2qncs" path="res://assets/CharacterModel/TovakModel.png" id="5_w03ud"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
+tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_t51yq"]
+tile_data = PackedInt32Array(65536, 131072, 1, 131072, 327680, 1, 1, 0, 1, 65537, 196608, 1, 131073, 393216, 1, 2, 65536, 1, 65538, 262144, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkkx8"]
+texture = ExtResource("2_qbpyy")
+texture_region_size = Vector2i(61, 70)
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 1
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 2
+3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 0
+4:0/0 = 0
+4:0/0/terrain_set = 0
+4:0/0/terrain = 0
+5:0/0 = 0
+5:0/0/terrain_set = 0
+5:0/0/terrain = 2
+6:0/0 = 0
+6:0/0/terrain_set = 0
+6:0/0/terrain = 2
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_cu01s"]
+tile_shape = 3
+tile_layout = 2
+tile_size = Vector2i(61, 71)
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Plains"
+terrain_set_0/terrain_0/color = Color(0.360784, 0.415686, 0.145098, 1)
+terrain_set_0/terrain_1/name = "Forest"
+terrain_set_0/terrain_1/color = Color(0.0823529, 0.172549, 0.0666667, 1)
+terrain_set_0/terrain_2/name = "Lake"
+terrain_set_0/terrain_2/color = Color(0.0392157, 0.317647, 0.572549, 1)
+sources/0 = SubResource("TileSetAtlasSource_rkkx8")
+pattern_0 = SubResource("TileMapPattern_7j6h4")
+pattern_1 = SubResource("TileMapPattern_t51yq")
 
 [node name="GamePlay" type="Node2D"]
 
@@ -10,3 +67,17 @@
 
 [node name="Source" parent="HUD" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
+
+[node name="MapGen" type="TileMap" parent="."]
+position = Vector2(184, 757)
+tile_set = SubResource("TileSet_cu01s")
+format = 2
+layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, -65536, 0, 0, 0, 196608, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0)
+script = ExtResource("3_hiwow")
+
+[node name="Player" type="Node2D" parent="."]
+script = ExtResource("4_jr7il")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(213, 792)
+texture = ExtResource("5_w03ud")
