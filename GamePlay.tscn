@@ -1,24 +1,21 @@
+[gd_scene load_steps=46 format=3 uid="uid://dimobf2w6ua88"]
 
-[gd_scene load_steps=35 format=3 uid="uid://dimobf2w6ua88"]
-
-[ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
-[ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
-[ext_resource type="Script" path="res://MapGen/MapGen.cs" id="3_hiwow"]
-[ext_resource type="Script" path="res://Player/Player.cs" id="4_jr7il"]
-[ext_resource type="Texture2D" uid="uid://drb6w7us2qncs" path="res://assets/CharacterModel/TovakModel.png" id="5_w03ud"]
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
 [ext_resource type="ButtonGroup" uid="uid://bwjq78y5esejs" path="res://Tactics/TacticsGroup.tres" id="2_j6tl2"]
 [ext_resource type="Script" path="res://Tactics.cs" id="2_o1npl"]
+[ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
 [ext_resource type="Texture2D" uid="uid://c0v7wfecp1b3v" path="res://assets/Tactics/day1.jpg" id="3_5mt76"]
+[ext_resource type="Script" path="res://MapGen/MapGen.cs" id="3_hiwow"]
 [ext_resource type="Texture2D" uid="uid://dautabdtkq2tj" path="res://assets/Tactics/day2.jpg" id="4_b2aj0"]
+[ext_resource type="Script" path="res://Player/Player.cs" id="4_jr7il"]
 [ext_resource type="Texture2D" uid="uid://dnvqtapwrs4r" path="res://assets/Tactics/day3.jpg" id="5_2ng8m"]
+[ext_resource type="Texture2D" uid="uid://drb6w7us2qncs" path="res://assets/CharacterModel/TovakModel.png" id="5_w03ud"]
 [ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
-
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
 tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
@@ -454,6 +451,15 @@ script = ExtResource("10_bkisu")
 [node name="Source" parent="SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
+[node name="RoundMarker" type="Label" parent="SharedArea"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+
+[node name="TurnOrderTracker" type="Node2D" parent="SharedArea"]
+position = Vector2(160, 32)
+script = ExtResource("12_js350")
 
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(184, 757)
@@ -468,16 +474,6 @@ script = ExtResource("4_jr7il")
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 position = Vector2(213, 792)
 texture = ExtResource("5_w03ud")
-
-[node name="RoundMarker" type="Label" parent="SharedArea"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 64.0
-offset_bottom = 47.0
-
-[node name="TurnOrderTracker" type="Node2D" parent="SharedArea"]
-position = Vector2(160, 32)
-script = ExtResource("12_js350")
 
 [node name="NewRoundButton" type="Button" parent="."]
 offset_left = 198.937
@@ -505,4 +501,3 @@ text = "End Turn"
 [connection signal="pressed" from="NewRoundButton" to="SharedArea" method="NewRound"]
 [connection signal="pressed" from="NewRoundButton" to="SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="EndTurnButton" to="SharedArea/Source" method="EndTurn"]
-
