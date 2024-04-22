@@ -16,7 +16,6 @@ public partial class CardObj : Sprite2D
     public int copies {get; set;}
     public ExpandoObject topFunction {get; set;}
     public ExpandoObject bottomFunction {get; set;}
-
     public override void _Ready()
     {
         base._Ready();
@@ -26,14 +25,27 @@ public partial class CardObj : Sprite2D
         this.Hframes = 7;
         this.Vframes = 4;
         this.FrameCoords = new Vector2I(xCoord, yCoord);
-        this.Scale = new Godot.Vector2((float) 0.5, (float) 0.5);
+        this.Scale = new Godot.Vector2((float) 0.25, (float) 0.25);
+        PlayButton play = new PlayButton(id);
+        PowerUpButton powerUp = new PowerUpButton(id, "PowerUp");
+        AddChild(play);
+        AddChild(powerUp);
+        play.Pressed += onPlayButtonPressed;
+        powerUp.Pressed += onPowerUpPressed;
+
     }
 
     public void onPlayButtonPressed() {
-
+        GD.Print("Play " + id);
     }
 
     public void onPowerUpPressed() {
-        
+        GD.Print("power" + id);
+        var getPowerUp = GetChild<Button>(1);
+        if(getPowerUp.Text == "PowerUp") {
+            getPowerUp.Text = "PowerDown";
+        } else {
+            getPowerUp.Text = "PowerUp";
+        }
     }
 }

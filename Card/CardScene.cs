@@ -16,10 +16,24 @@ public partial class CardScene : Node2D
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
 
         foreach (var card in cardsObj) {
-            Guid _id = Guid.NewGuid();
-            card.id = _id;
-            GD.Print(card.cardId);
-            deckOfCards.Add(card); 
+                Guid _id = Guid.NewGuid();
+                card.id = _id;
+                deckOfCards.Add(card); 
+            if (card.copies > 0) {
+                for (int i = 0; i < card.copies; i++) {
+                    Guid _id1 = Guid.NewGuid();
+                    CardObj newCard = new CardObj() {
+                        id = _id1,
+                        cardId = card.cardId,
+                        color = card.color,
+                        xCoord = card.xCoord,
+                        copies = card.copies,
+                        topFunction = card.topFunction,
+                        bottomFunction = card.bottomFunction
+                    };
+                    deckOfCards.Add(newCard); 
+                }
+            }
         };
         initialDeckLength = deckOfCards.Count;
     }

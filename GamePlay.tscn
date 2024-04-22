@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=47 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
+[ext_resource type="PackedScene" uid="uid://yqlpgaqts46f" path="res://Deck.tscn" id="13_t238q"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
 tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
@@ -460,6 +461,9 @@ offset_bottom = 47.0
 [node name="TurnOrderTracker" type="Node2D" parent="SharedArea"]
 position = Vector2(160, 32)
 script = ExtResource("12_js350")
+
+[node name="Deck" parent="SharedArea" instance=ExtResource("13_t238q")]
+position = Vector2(1744, 858)
 
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(184, 757)
