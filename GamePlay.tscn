@@ -502,6 +502,33 @@ script = ExtResource("18_70l2p")
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("19_vtp22")
 
+[node name="Blue" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = -64.0
+offset_right = 112.0
+offset_bottom = -41.0
+text = "B: 4"
+
+[node name="Red" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = -33.0
+offset_right = 112.0
+offset_bottom = -10.0
+text = "R: 4"
+
+[node name="Green" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_right = 112.0
+offset_bottom = 23.0
+text = "G: 4"
+
+[node name="White" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = 32.0
+offset_right = 112.0
+offset_bottom = 55.0
+text = "W: 4"
+
 [connection signal="TurnOrder" from="PlayerArea/Tactics" to="SharedArea/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic1" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic2" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -513,6 +540,7 @@ texture = ExtResource("19_vtp22")
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea" method="NewRound"]
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
 [connection signal="pressed" from="PlayerArea/EndTurnButton" to="PlayerArea" method="OnEndTurnPressed"]
 [connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]

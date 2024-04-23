@@ -37,7 +37,7 @@ public partial class Tactics : Control
 	}
 
 	private void OnConfirmTacticPressed() {
-		if (GamePlay.NumPlayers == 1)
+		if (GameSettings.NumPlayers == 1)
 		{
 			SinglePlayerConquest();
 		} else {
