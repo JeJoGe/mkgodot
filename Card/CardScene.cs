@@ -6,8 +6,9 @@ using System.Collections.Generic;
 
 public partial class CardScene : Node2D
 {
-    private List<CardObj> deckOfCards {get; set;} = new List<CardObj>();
-    private int initialDeckLength {get; set;}
+    private List<CardObj> DeckOfCards {get; set;} = new List<CardObj>();
+    private int InitialDeckLength {get; set;}
+    private Random rand = new Random();
 
     public override void _Ready() {
         base._Ready();
@@ -15,10 +16,11 @@ public partial class CardScene : Node2D
         string jsonObj = sr.ReadToEnd();
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
 
+
         foreach (var card in cardsObj) {
                 Guid _id = Guid.NewGuid();
                 card.id = _id;
-                deckOfCards.Add(card); 
+                DeckOfCards.Add(card); 
             if (card.copies > 0) {
                 for (int i = 0; i < card.copies; i++) {
                     Guid _id1 = Guid.NewGuid();
@@ -31,27 +33,23 @@ public partial class CardScene : Node2D
                         topFunction = card.topFunction,
                         bottomFunction = card.bottomFunction
                     };
-                    deckOfCards.Add(newCard); 
+                    DeckOfCards.Add(newCard); 
                 }
             }
         };
-        initialDeckLength = deckOfCards.Count;
+        InitialDeckLength = DeckOfCards.Count;
     }
 
 
-    public void drawCard()
+    public void DrawCard()
     {
-        Random rand = new Random();
-        int indexToBeDrawn = rand.Next(0, deckOfCards.Count);
-        GD.Print(deckOfCards.Count);
-        GD.Print(indexToBeDrawn);
-        CardObj card = deckOfCards[indexToBeDrawn];
-        GD.Print(card.cardId);
-        int posMultiplier = initialDeckLength - deckOfCards.Count;
+        int indexToBeDrawn = rand.Next(0, DeckOfCards.Count);
+        CardObj card = DeckOfCards[indexToBeDrawn];
+        int posMultiplier = InitialDeckLength - DeckOfCards.Count;
         int xPos = -300 - (100 * posMultiplier);
         card.Position = new Vector2I(xPos, -500);
         AddChild(card);
-        deckOfCards.RemoveAt(indexToBeDrawn);
+        DeckOfCards.RemoveAt(indexToBeDrawn);
     }
 
 }
