@@ -73,24 +73,27 @@ public partial class MapGen : TileMap
 
 				if (currentAtlasCoords is (-1,-1)) // No tile from atlas exists here
 				{
-					GD.Print("No Pattern Detected");
-					if (this.tileStackState != 0)
+					if ((this.tileStackState != 0) & (posClicked.X > 0) & (posClicked.Y > (-3 * (posClicked.X + 1) - 1))  & (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
 					{
-						// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
-						var tilePos = this.DetermineMapPlacement(posClicked);
-						GD.Print("Add tile at " + tilePos.ToString());
-						SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop())); 
-						
-						if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
+						GD.Print("No Pattern Detected");
+						if (this.tileStackState != 0)
 						{
-							this.tileStack = new Stack<int>(this.brownTiles);
-							this.tileStackState--;
+							// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
+							var tilePos = this.DetermineMapPlacement(posClicked);
+							GD.Print("Add tile at " + tilePos.ToString());
+							SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop())); 
+							
+							if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
+							{
+								this.tileStack = new Stack<int>(this.brownTiles);
+								this.tileStackState--;
+							}
 						}
-					}
 
-					else
-					{
-						throw new InvalidOperationException("No tiles available");
+						else
+						{
+							throw new InvalidOperationException("No tiles available");
+						}
 					}
 				}
 
