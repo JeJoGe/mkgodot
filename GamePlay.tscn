@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=50 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -17,7 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
-
 [ext_resource type="PackedScene" uid="uid://yqlpgaqts46f" path="res://Deck.tscn" id="13_t238q"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
@@ -542,7 +541,6 @@ text = "W: 4"
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic5" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic6" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/ConfirmTactic" to="PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea" method="NewRound"]
 [connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea/Source" method="NewRound"]
