@@ -1,8 +1,9 @@
-[gd_scene load_steps=47 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=49 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
 [ext_resource type="ButtonGroup" uid="uid://bwjq78y5esejs" path="res://Tactics/TacticsGroup.tres" id="2_j6tl2"]
+[ext_resource type="Script" path="res://PlayerArea.cs" id="2_khnnw"]
 [ext_resource type="Script" path="res://Tactics.cs" id="2_o1npl"]
 [ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
 [ext_resource type="Texture2D" uid="uid://c0v7wfecp1b3v" path="res://assets/Tactics/day1.jpg" id="3_5mt76"]
@@ -16,7 +17,10 @@
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
+
 [ext_resource type="PackedScene" uid="uid://yqlpgaqts46f" path="res://Deck.tscn" id="13_t238q"]
+[ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
+[ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
 tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
@@ -351,6 +355,7 @@ pattern_26 = SubResource("TileMapPattern_nxmvw")
 script = ExtResource("1_m0gf8")
 
 [node name="PlayerArea" type="Node2D" parent="."]
+script = ExtResource("2_khnnw")
 
 [node name="Inventory" type="Sprite2D" parent="PlayerArea"]
 
@@ -446,6 +451,21 @@ offset_bottom = 336.0
 disabled = true
 text = "Confirm"
 
+[node name="NewRoundButton" type="Button" parent="PlayerArea"]
+offset_left = 198.937
+offset_top = 171.0
+offset_right = 296.937
+offset_bottom = 202.0
+text = "New Round"
+
+[node name="EndTurnButton" type="Button" parent="PlayerArea"]
+offset_left = 208.0
+offset_top = 240.0
+offset_right = 286.0
+offset_bottom = 271.0
+disabled = true
+text = "End Turn"
+
 [node name="SharedArea" type="Node2D" parent="."]
 script = ExtResource("10_bkisu")
 
@@ -479,19 +499,40 @@ script = ExtResource("4_jr7il")
 position = Vector2(213, 792)
 texture = ExtResource("5_w03ud")
 
-[node name="NewRoundButton" type="Button" parent="."]
-offset_left = 198.937
-offset_top = 171.0
-offset_right = 206.937
-offset_bottom = 179.0
-text = "New Round"
+[node name="DummyArea" type="Node2D" parent="."]
+position = Vector2(768, 80)
+script = ExtResource("18_70l2p")
 
-[node name="EndTurnButton" type="Button" parent="."]
-offset_left = 208.0
-offset_top = 240.0
-offset_right = 216.0
-offset_bottom = 248.0
-text = "End Turn"
+[node name="DummyDeck" type="Sprite2D" parent="DummyArea"]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("19_vtp22")
+
+[node name="Blue" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = -64.0
+offset_right = 112.0
+offset_bottom = -41.0
+text = "B: 4"
+
+[node name="Red" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = -33.0
+offset_right = 112.0
+offset_bottom = -10.0
+text = "R: 4"
+
+[node name="Green" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_right = 112.0
+offset_bottom = 23.0
+text = "G: 4"
+
+[node name="White" type="Label" parent="DummyArea"]
+offset_left = 72.0
+offset_top = 32.0
+offset_right = 112.0
+offset_bottom = 55.0
+text = "W: 4"
 
 [connection signal="TurnOrder" from="PlayerArea/Tactics" to="SharedArea/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic1" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -501,7 +542,14 @@ text = "End Turn"
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic5" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/Tactic6" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerArea/Tactics/ConfirmTactic" to="PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
-[connection signal="pressed" from="NewRoundButton" to="SharedArea" method="NewRound"]
-[connection signal="pressed" from="NewRoundButton" to="SharedArea/Source" method="NewRound"]
-[connection signal="pressed" from="EndTurnButton" to="SharedArea/Source" method="EndTurn"]
+
+[connection signal="pressed" from="PlayerArea/NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea" method="NewRound"]
+[connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="PlayerArea/EndTurnButton" to="PlayerArea" method="OnEndTurnPressed"]
+[connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/Source" method="EndTurn"]
+[connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="CurrentTurn" from="SharedArea/TurnOrderTracker" to="PlayerArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="SharedArea/TurnOrderTracker" to="DummyArea" method="OnCurrentTurn"]
+[connection signal="EndTurn" from="DummyArea" to="SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
