@@ -23,6 +23,6 @@ public partial class Deck : Node2D
 
 	private void OnDeckButtonPressed()
 	{
-		_cards.drawCard();
+		_cards.DrawCard();
 	}
 }
