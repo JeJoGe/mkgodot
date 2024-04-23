@@ -34,7 +34,6 @@ public partial class Source : Node2D
 	}
 	private int _diceTaken = 0;
 
-	private int _numPlayers = 1; // implementing solo game only for now
 	public enum Colour
 	{
 		Blue, Red, Green, White, Gold, Black
@@ -61,7 +60,7 @@ public partial class Source : Node2D
 		_white = 0;
 		_gold = 0;
 		_black = 0;
-		var numDice = _numPlayers + 2; //number of dice be default
+		var numDice = GameSettings.NumPlayers + 2; //number of dice be default
 		for (int i = 0; i < numDice; i++)
 		{
 			SetDie(RollDie());
