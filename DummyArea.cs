@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class DummyArea : Node2D
 {
@@ -13,9 +14,9 @@ public partial class DummyArea : Node2D
 	private int _red = 4;
 	private int _green = 4;
 	private int _white = 4;
-	private Dictionary<int, int> _crystals;
+	private Dictionary<int, int> _crystals; // colour -> number
 	private static readonly Dictionary<int, Dictionary<int, int>> _initCrystals = new Dictionary<int, Dictionary<int, int>>{
-		{0,new Dictionary<int,int>{
+		{0,new Dictionary<int,int>{ // hero -> numbers
 			{0,2},{1,1},{2,0},{3,0}
 		}},
 		{1,new Dictionary<int, int>{
@@ -44,7 +45,6 @@ public partial class DummyArea : Node2D
 		{
 			// perform dummy turn
 			DummyTurn();
-			GD.Print("Dummy takes its turn");
 			EmitSignal(SignalName.EndTurn);
 		}
 	}
@@ -58,6 +58,7 @@ public partial class DummyArea : Node2D
 		}
 		else
 		{
+			GD.Print("Dummy takes its turn");
 			var cardsToDraw = 3;
 			// draw 3 cards by default
 			for (int i = 0; i < cardsToDraw; i++)
@@ -99,6 +100,22 @@ public partial class DummyArea : Node2D
 			}
 			GD.Print("Cards remaining: " + stack.Count);
 		}
+		UpdateLabels();
+	}
+
+	private void UpdateLabels() {
+		GetNode<Label>("Total").Text = stack.Count.ToString();
+		GetNode<Label>("DeckPopup/BlueCount").Text = _blue.ToString();
+		GetNode<Label>("DeckPopup/RedCount").Text = _red.ToString();
+		GetNode<Label>("DeckPopup/GreenCount").Text = _green.ToString();
+		GetNode<Label>("DeckPopup/WhiteCount").Text = _white.ToString();
+	}
+
+	private void UpdateCrystals() {
+		GetNode<Label>("BlueCrystal/Count").Text = _crystals[0].ToString();
+		GetNode<Label>("RedCrystal/Count").Text = _crystals[1].ToString();
+		GetNode<Label>("GreenCrystal/Count").Text = _crystals[2].ToString();
+		GetNode<Label>("WhiteCrystal/Count").Text = _crystals[3].ToString();
 	}
 
 	private void ShuffleDeck()
@@ -108,8 +125,49 @@ public partial class DummyArea : Node2D
 
 	private void OnNewRound()
 	{
-		// add to card to deck then shuffle
+		// add card to deck then shuffle
+		if (SharedArea.Round != 1) { // skip for round 1
+			//TODO: add card/crystal according once offers are implemented
+			_deck = _deck.Append(random.Next(4)).ToArray(); // adding a random card
+			_crystals[random.Next(4)]++; // add random crystal to dummy inventory
+			_blue = 0;
+			_red = 0;
+			_green = 0;
+			_white = 0;
+			foreach (var card in _deck)
+			{
+				switch (card) {
+					case 0: {
+						_blue++;
+						break;
+					}
+					case 1: {
+						_red++;
+						break;
+					}
+					case 2: {
+						_green++;
+						break;
+					}
+					case 3: {
+						_white++;
+						break;
+					}
+					default:break;
+				}	
+			}
+		}
 		ShuffleDeck();
 		stack = new Stack<int>(_deck);
+		UpdateLabels();
+		UpdateCrystals();
+	}
+
+	private void OnMouseEntered() {
+		GetNode<Node2D>("DeckPopup").Visible = true;
+	}
+
+	private void OnMouseExited() {
+		GetNode<Node2D>("DeckPopup").Visible = false;
 	}
 }
