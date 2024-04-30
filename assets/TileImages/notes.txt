@@ -1,1 +1,4 @@
 tile is 61.1111111 x 70.57 height
+map wedge lower bound: x < ceil (-1.5y) + 2
+map wedge upper bound: y > (-3 * (x+1) ) - 1
+map wedge forwards from setupbound: x > 0

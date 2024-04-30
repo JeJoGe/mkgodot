@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=51 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
 [ext_resource type="Texture2D" uid="uid://c0v7wfecp1b3v" path="res://assets/Tactics/day1.jpg" id="3_5mt76"]
 [ext_resource type="Script" path="res://MapGen/MapGen.cs" id="3_hiwow"]
+[ext_resource type="Script" path="res://Camera2D.cs" id="4_15lwj"]
 [ext_resource type="Texture2D" uid="uid://dautabdtkq2tj" path="res://assets/Tactics/day2.jpg" id="4_b2aj0"]
 [ext_resource type="Script" path="res://Player/Player.cs" id="4_jr7il"]
 [ext_resource type="Texture2D" uid="uid://dnvqtapwrs4r" path="res://assets/Tactics/day3.jpg" id="5_2ng8m"]
@@ -107,208 +108,761 @@ texture = ExtResource("2_qbpyy")
 margins = Vector2i(1, 0)
 texture_region_size = Vector2i(61, 71)
 0:0/0 = 0
+0:0/0/z_index = -1
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
 1:0/0 = 0
+1:0/0/z_index = -1
 1:0/0/terrain_set = 0
 1:0/0/terrain = 1
 2:0/0 = 0
+2:0/0/z_index = -1
 2:0/0/terrain_set = 0
-2:0/0/terrain = 2
+2:0/0/terrain = 9
 3:0/0 = 0
+3:0/0/z_index = -1
 3:0/0/terrain_set = 0
 3:0/0/terrain = 0
 4:0/0 = 0
+4:0/0/z_index = -1
 4:0/0/terrain_set = 0
 4:0/0/terrain = 0
 5:0/0 = 0
+5:0/0/z_index = -1
 5:0/0/terrain_set = 0
-5:0/0/terrain = 2
+5:0/0/terrain = 9
 6:0/0 = 0
+6:0/0/z_index = -1
 6:0/0/terrain_set = 0
-6:0/0/terrain = 2
+6:0/0/terrain = 9
 0:1/0 = 0
+0:1/0/z_index = -1
+0:1/0/terrain_set = 0
+0:1/0/terrain = 0
 1:1/0 = 0
+1:1/0/z_index = -1
+1:1/0/terrain_set = 0
+1:1/0/terrain = 1
 2:1/0 = 0
+2:1/0/z_index = -1
+2:1/0/terrain_set = 0
+2:1/0/terrain = 9
 3:1/0 = 0
+3:1/0/z_index = -1
+3:1/0/terrain_set = 0
+3:1/0/terrain = 0
 4:1/0 = 0
+4:1/0/z_index = -1
+4:1/0/terrain_set = 0
+4:1/0/terrain = 0
 5:1/0 = 0
+5:1/0/z_index = -1
+5:1/0/terrain_set = 0
+5:1/0/terrain = 9
 6:1/0 = 0
+6:1/0/z_index = -1
+6:1/0/terrain_set = 0
+6:1/0/terrain = 0
 0:2/0 = 0
+0:2/0/z_index = -1
+0:2/0/terrain_set = 0
+0:2/0/terrain = 1
 1:2/0 = 0
+1:2/0/z_index = -1
+1:2/0/terrain_set = 0
+1:2/0/terrain = 8
 2:2/0 = 0
+2:2/0/z_index = -1
+2:2/0/terrain_set = 0
+2:2/0/terrain = 1
 3:2/0 = 0
+3:2/0/z_index = -1
+3:2/0/terrain_set = 0
+3:2/0/terrain = 1
 4:2/0 = 0
+4:2/0/z_index = -1
+4:2/0/terrain_set = 0
+4:2/0/terrain = 0
 6:2/0 = 0
+6:2/0/z_index = -1
+6:2/0/terrain_set = 0
+6:2/0/terrain = 0
 5:2/0 = 0
+5:2/0/z_index = -1
+5:2/0/terrain_set = 0
+5:2/0/terrain = 0
 6:3/0 = 0
+6:3/0/z_index = -1
+6:3/0/terrain_set = 0
+6:3/0/terrain = 0
 5:3/0 = 0
+5:3/0/z_index = -1
+5:3/0/terrain_set = 0
+5:3/0/terrain = 2
 4:3/0 = 0
+4:3/0/z_index = -1
+4:3/0/terrain_set = 0
+4:3/0/terrain = 0
 3:3/0 = 0
+3:3/0/z_index = -1
+3:3/0/terrain_set = 0
+3:3/0/terrain = 2
 2:3/0 = 0
+2:3/0/z_index = -1
+2:3/0/terrain_set = 0
+2:3/0/terrain = 0
 1:3/0 = 0
+1:3/0/z_index = -1
+1:3/0/terrain_set = 0
+1:3/0/terrain = 1
 0:3/0 = 0
+0:3/0/z_index = -1
+0:3/0/terrain_set = 0
+0:3/0/terrain = 2
 0:4/0 = 0
+0:4/0/z_index = -1
+0:4/0/terrain_set = 0
+0:4/0/terrain = 0
 1:4/0 = 0
+1:4/0/z_index = -1
+1:4/0/terrain_set = 0
+1:4/0/terrain = 2
 2:4/0 = 0
+2:4/0/z_index = -1
+2:4/0/terrain_set = 0
+2:4/0/terrain = 0
 3:4/0 = 0
+3:4/0/z_index = -1
+3:4/0/terrain_set = 0
+3:4/0/terrain = 1
 4:4/0 = 0
+4:4/0/z_index = -1
+4:4/0/terrain_set = 0
+4:4/0/terrain = 2
 5:4/0 = 0
+5:4/0/z_index = -1
+5:4/0/terrain_set = 0
+5:4/0/terrain = 0
 6:4/0 = 0
+6:4/0/z_index = -1
+6:4/0/terrain_set = 0
+6:4/0/terrain = 2
 6:5/0 = 0
+6:5/0/z_index = -1
+6:5/0/terrain_set = 0
+6:5/0/terrain = 0
 6:6/0 = 0
+6:6/0/z_index = -1
+6:6/0/terrain_set = 0
+6:6/0/terrain = 2
 5:6/0 = 0
+5:6/0/z_index = -1
+5:6/0/terrain_set = 0
+5:6/0/terrain = 1
 5:5/0 = 0
+5:5/0/z_index = -1
+5:5/0/terrain_set = 0
+5:5/0/terrain = 0
 4:5/0 = 0
+4:5/0/z_index = -1
+4:5/0/terrain_set = 0
+4:5/0/terrain = 7
 4:6/0 = 0
+4:6/0/z_index = -1
+4:6/0/terrain_set = 0
+4:6/0/terrain = 0
 3:6/0 = 0
+3:6/0/z_index = -1
+3:6/0/terrain_set = 0
+3:6/0/terrain = 8
 3:5/0 = 0
+3:5/0/z_index = -1
+3:5/0/terrain_set = 0
+3:5/0/terrain = 5
 2:5/0 = 0
+2:5/0/z_index = -1
+2:5/0/terrain_set = 0
+2:5/0/terrain = 2
 2:6/0 = 0
+2:6/0/z_index = -1
+2:6/0/terrain_set = 0
+2:6/0/terrain = 1
 1:6/0 = 0
+1:6/0/z_index = -1
+1:6/0/terrain_set = 0
+1:6/0/terrain = 0
 1:5/0 = 0
+1:5/0/z_index = -1
+1:5/0/terrain_set = 0
+1:5/0/terrain = 5
 0:5/0 = 0
+0:5/0/z_index = -1
+0:5/0/terrain_set = 0
+0:5/0/terrain = 5
 0:6/0 = 0
+0:6/0/z_index = -1
+0:6/0/terrain_set = 0
+0:6/0/terrain = 1
 0:7/0 = 0
+0:7/0/z_index = -1
+0:7/0/terrain_set = 0
+0:7/0/terrain = 7
 0:8/0 = 0
+0:8/0/z_index = -1
+0:8/0/terrain_set = 0
+0:8/0/terrain = 8
 1:8/0 = 0
+1:8/0/z_index = -1
+1:8/0/terrain_set = 0
+1:8/0/terrain = 1
 1:7/0 = 0
+1:7/0/z_index = -1
+1:7/0/terrain_set = 0
+1:7/0/terrain = 1
 2:7/0 = 0
+2:7/0/z_index = -1
+2:7/0/terrain_set = 0
+2:7/0/terrain = 2
 2:8/0 = 0
+2:8/0/z_index = -1
+2:8/0/terrain_set = 0
+2:8/0/terrain = 0
 3:8/0 = 0
+3:8/0/z_index = -1
+3:8/0/terrain_set = 0
+3:8/0/terrain = 3
 3:7/0 = 0
+3:7/0/z_index = -1
+3:7/0/terrain_set = 0
+3:7/0/terrain = 2
 4:7/0 = 0
+4:7/0/z_index = -1
+4:7/0/terrain_set = 0
+4:7/0/terrain = 0
 4:8/0 = 0
+4:8/0/z_index = -1
+4:8/0/terrain_set = 0
+4:8/0/terrain = 1
 5:8/0 = 0
+5:8/0/z_index = -1
+5:8/0/terrain_set = 0
+5:8/0/terrain = 0
 5:7/0 = 0
+5:7/0/z_index = -1
+5:7/0/terrain_set = 0
+5:7/0/terrain = 2
 6:7/0 = 0
+6:7/0/z_index = -1
+6:7/0/terrain_set = 0
+6:7/0/terrain = 1
 6:8/0 = 0
+6:8/0/z_index = -1
+6:8/0/terrain_set = 0
+6:8/0/terrain = 0
 6:9/0 = 0
+6:9/0/z_index = -1
+6:9/0/terrain_set = 0
+6:9/0/terrain = 3
 6:10/0 = 0
+6:10/0/z_index = -1
+6:10/0/terrain_set = 0
+6:10/0/terrain = 0
 5:10/0 = 0
+5:10/0/z_index = -1
+5:10/0/terrain_set = 0
+5:10/0/terrain = 4
 5:9/0 = 0
+5:9/0/z_index = -1
+5:9/0/terrain_set = 0
+5:9/0/terrain = 3
 4:9/0 = 0
+4:9/0/z_index = -1
+4:9/0/terrain_set = 0
+4:9/0/terrain = 0
 4:10/0 = 0
+4:10/0/z_index = -1
+4:10/0/terrain_set = 0
+4:10/0/terrain = 4
 3:9/0 = 0
+3:9/0/z_index = -1
+3:9/0/terrain_set = 0
+3:9/0/terrain = 3
 3:10/0 = 0
+3:10/0/z_index = -1
+3:10/0/terrain_set = 0
+3:10/0/terrain = 7
 2:10/0 = 0
+2:10/0/z_index = -1
+2:10/0/terrain_set = 0
+2:10/0/terrain = 0
 2:9/0 = 0
+2:9/0/z_index = -1
+2:9/0/terrain_set = 0
+2:9/0/terrain = 1
 1:9/0 = 0
+1:9/0/z_index = -1
+1:9/0/terrain_set = 0
+1:9/0/terrain = 1
 1:10/0 = 0
+1:10/0/z_index = -1
+1:10/0/terrain_set = 0
+1:10/0/terrain = 7
 0:10/0 = 0
+0:10/0/z_index = -1
+0:10/0/terrain_set = 0
+0:10/0/terrain = 4
 0:9/0 = 0
+0:9/0/z_index = -1
+0:9/0/terrain_set = 0
+0:9/0/terrain = 1
 0:11/0 = 0
+0:11/0/z_index = -1
+0:11/0/terrain_set = 0
+0:11/0/terrain = 2
 1:11/0 = 0
+1:11/0/z_index = -1
+1:11/0/terrain_set = 0
+1:11/0/terrain = 1
 2:11/0 = 0
+2:11/0/z_index = -1
+2:11/0/terrain_set = 0
+2:11/0/terrain = 2
 0:12/0 = 0
+0:12/0/z_index = -1
+0:12/0/terrain_set = 0
+0:12/0/terrain = 2
 1:12/0 = 0
+1:12/0/z_index = -1
+1:12/0/terrain_set = 0
+1:12/0/terrain = 8
 2:12/0 = 0
+2:12/0/z_index = -1
+2:12/0/terrain_set = 0
+2:12/0/terrain = 0
 3:12/0 = 0
+3:12/0/z_index = -1
+3:12/0/terrain_set = 0
+3:12/0/terrain = 0
 3:11/0 = 0
+3:11/0/z_index = -1
+3:11/0/terrain_set = 0
+3:11/0/terrain = 7
 4:11/0 = 0
+4:11/0/z_index = -1
+4:11/0/terrain_set = 0
+4:11/0/terrain = 0
 4:12/0 = 0
+4:12/0/z_index = -1
+4:12/0/terrain_set = 0
+4:12/0/terrain = 8
 5:12/0 = 0
+5:12/0/z_index = -1
+5:12/0/terrain_set = 0
+5:12/0/terrain = 8
 5:11/0 = 0
+5:11/0/z_index = -1
+5:11/0/terrain_set = 0
+5:11/0/terrain = 2
 6:11/0 = 0
+6:11/0/z_index = -1
+6:11/0/terrain_set = 0
+6:11/0/terrain = 2
 6:12/0 = 0
+6:12/0/z_index = -1
+6:12/0/terrain_set = 0
+6:12/0/terrain = 2
 6:13/0 = 0
+6:13/0/z_index = -1
+6:13/0/terrain_set = 0
+6:13/0/terrain = 7
 6:14/0 = 0
+6:14/0/z_index = -1
+6:14/0/terrain_set = 0
+6:14/0/terrain = 1
 5:14/0 = 0
+5:14/0/z_index = -1
+5:14/0/terrain_set = 0
+5:14/0/terrain = 0
 5:13/0 = 0
+5:13/0/z_index = -1
+5:13/0/terrain_set = 0
+5:13/0/terrain = 0
 4:13/0 = 0
+4:13/0/z_index = -1
+4:13/0/terrain_set = 0
+4:13/0/terrain = 2
 4:14/0 = 0
+4:14/0/z_index = -1
+4:14/0/terrain_set = 0
+4:14/0/terrain = 8
 3:13/0 = 0
+3:13/0/z_index = -1
+3:13/0/terrain_set = 0
+3:13/0/terrain = 0
 3:14/0 = 0
+3:14/0/z_index = -1
+3:14/0/terrain_set = 0
+3:14/0/terrain = 1
 2:14/0 = 0
+2:14/0/z_index = -1
+2:14/0/terrain_set = 0
+2:14/0/terrain = 3
 2:13/0 = 0
+2:13/0/z_index = -1
+2:13/0/terrain_set = 0
+2:13/0/terrain = 2
 1:13/0 = 0
+1:13/0/z_index = -1
+1:13/0/terrain_set = 0
+1:13/0/terrain = 3
 1:14/0 = 0
+1:14/0/z_index = -1
+1:14/0/terrain_set = 0
+1:14/0/terrain = 2
 0:13/0 = 0
+0:13/0/z_index = -1
+0:13/0/terrain_set = 0
+0:13/0/terrain = 7
 0:14/0 = 0
+0:14/0/z_index = -1
+0:14/0/terrain_set = 0
+0:14/0/terrain = 1
 0:15/0 = 0
+0:15/0/z_index = -1
+0:15/0/terrain_set = 0
+0:15/0/terrain = 5
 0:16/0 = 0
+0:16/0/z_index = -1
+0:16/0/terrain_set = 0
+0:16/0/terrain = 7
 1:16/0 = 0
+1:16/0/z_index = -1
+1:16/0/terrain_set = 0
+1:16/0/terrain = 5
 1:15/0 = 0
+1:15/0/z_index = -1
+1:15/0/terrain_set = 0
+1:15/0/terrain = 0
 2:15/0 = 0
+2:15/0/z_index = -1
+2:15/0/terrain_set = 0
+2:15/0/terrain = 5
 2:16/0 = 0
+2:16/0/z_index = -1
+2:16/0/terrain_set = 0
+2:16/0/terrain = 2
 3:16/0 = 0
+3:16/0/z_index = -1
+3:16/0/terrain_set = 0
+3:16/0/terrain = 5
 3:15/0 = 0
+3:15/0/z_index = -1
+3:15/0/terrain_set = 0
+3:15/0/terrain = 0
 4:15/0 = 0
+4:15/0/z_index = -1
+4:15/0/terrain_set = 0
+4:15/0/terrain = 4
 4:16/0 = 0
+4:16/0/z_index = -1
+4:16/0/terrain_set = 0
+4:16/0/terrain = 5
 5:16/0 = 0
+5:16/0/z_index = -1
+5:16/0/terrain_set = 0
+5:16/0/terrain = 2
 5:15/0 = 0
+5:15/0/z_index = -1
+5:15/0/terrain_set = 0
+5:15/0/terrain = 0
 6:15/0 = 0
+6:15/0/z_index = -1
+6:15/0/terrain_set = 0
+6:15/0/terrain = 2
 6:16/0 = 0
+6:16/0/z_index = -1
+6:16/0/terrain_set = 0
+6:16/0/terrain = 5
 6:17/0 = 0
+6:17/0/z_index = -1
+6:17/0/terrain_set = 0
+6:17/0/terrain = 3
 6:18/0 = 0
+6:18/0/z_index = -1
+6:18/0/terrain_set = 0
+6:18/0/terrain = 4
 5:18/0 = 0
+5:18/0/z_index = -1
+5:18/0/terrain_set = 0
+5:18/0/terrain = 2
 5:17/0 = 0
+5:17/0/z_index = -1
+5:17/0/terrain_set = 0
+5:17/0/terrain = 3
 4:17/0 = 0
+4:17/0/z_index = -1
+4:17/0/terrain_set = 0
+4:17/0/terrain = 2
 4:18/0 = 0
+4:18/0/z_index = -1
+4:18/0/terrain_set = 0
+4:18/0/terrain = 2
 3:18/0 = 0
+3:18/0/z_index = -1
+3:18/0/terrain_set = 0
+3:18/0/terrain = 4
 3:17/0 = 0
+3:17/0/z_index = -1
+3:17/0/terrain_set = 0
+3:17/0/terrain = 7
 2:17/0 = 0
+2:17/0/z_index = -1
+2:17/0/terrain_set = 0
+2:17/0/terrain = 1
 2:18/0 = 0
+2:18/0/z_index = -1
+2:18/0/terrain_set = 0
+2:18/0/terrain = 4
 1:18/0 = 0
+1:18/0/z_index = -1
+1:18/0/terrain_set = 0
+1:18/0/terrain = 4
 1:17/0 = 0
+1:17/0/z_index = -1
+1:17/0/terrain_set = 0
+1:17/0/terrain = 3
 0:17/0 = 0
+0:17/0/z_index = -1
+0:17/0/terrain_set = 0
+0:17/0/terrain = 8
 0:18/0 = 0
+0:18/0/z_index = -1
+0:18/0/terrain_set = 0
+0:18/0/terrain = 7
 0:19/0 = 0
+0:19/0/z_index = -1
+0:19/0/terrain_set = 0
+0:19/0/terrain = 2
 0:20/0 = 0
+0:20/0/z_index = -1
+0:20/0/terrain_set = 0
+0:20/0/terrain = 1
 1:20/0 = 0
+1:20/0/z_index = -1
+1:20/0/terrain_set = 0
+1:20/0/terrain = 3
 1:19/0 = 0
+1:19/0/z_index = -1
+1:19/0/terrain_set = 0
+1:19/0/terrain = 2
 2:20/0 = 0
+2:20/0/z_index = -1
+2:20/0/terrain_set = 0
+2:20/0/terrain = 8
 2:19/0 = 0
+2:19/0/z_index = -1
+2:19/0/terrain_set = 0
+2:19/0/terrain = 4
 3:19/0 = 0
+3:19/0/z_index = -1
+3:19/0/terrain_set = 0
+3:19/0/terrain = 7
 3:20/0 = 0
+3:20/0/z_index = -1
+3:20/0/terrain_set = 0
+3:20/0/terrain = 6
 4:20/0 = 0
+4:20/0/z_index = -1
+4:20/0/terrain_set = 0
+4:20/0/terrain = 3
 4:19/0 = 0
+4:19/0/z_index = -1
+4:19/0/terrain_set = 0
+4:19/0/terrain = 4
 5:19/0 = 0
+5:19/0/z_index = -1
+5:19/0/terrain_set = 0
+5:19/0/terrain = 4
 5:20/0 = 0
+5:20/0/z_index = -1
+5:20/0/terrain_set = 0
+5:20/0/terrain = 1
 6:19/0 = 0
+6:19/0/z_index = -1
+6:19/0/terrain_set = 0
+6:19/0/terrain = 4
 6:20/0 = 0
+6:20/0/z_index = -1
+6:20/0/terrain_set = 0
+6:20/0/terrain = 3
 6:21/0 = 0
+6:21/0/z_index = -1
+6:21/0/terrain_set = 0
+6:21/0/terrain = 8
 6:22/0 = 0
+6:22/0/z_index = -1
+6:22/0/terrain_set = 0
+6:22/0/terrain = 8
 5:21/0 = 0
+5:21/0/z_index = -1
+5:21/0/terrain_set = 0
+5:21/0/terrain = 2
 4:21/0 = 0
+4:21/0/z_index = -1
+4:21/0/terrain_set = 0
+4:21/0/terrain = 8
 3:21/0 = 0
+3:21/0/z_index = -1
+3:21/0/terrain_set = 0
+3:21/0/terrain = 6
 2:21/0 = 0
+2:21/0/z_index = -1
+2:21/0/terrain_set = 0
+2:21/0/terrain = 7
 1:21/0 = 0
+1:21/0/z_index = -1
+1:21/0/terrain_set = 0
+1:21/0/terrain = 0
 0:21/0 = 0
+0:21/0/z_index = -1
+0:21/0/terrain_set = 0
+0:21/0/terrain = 1
 0:22/0 = 0
+0:22/0/z_index = -1
+0:22/0/terrain_set = 0
+0:22/0/terrain = 4
 1:22/0 = 0
+1:22/0/z_index = -1
+1:22/0/terrain_set = 0
+1:22/0/terrain = 0
 2:22/0 = 0
+2:22/0/z_index = -1
+2:22/0/terrain_set = 0
+2:22/0/terrain = 4
 3:22/0 = 0
+3:22/0/z_index = -1
+3:22/0/terrain_set = 0
+3:22/0/terrain = 6
 4:22/0 = 0
+4:22/0/z_index = -1
+4:22/0/terrain_set = 0
+4:22/0/terrain = 1
 5:22/0 = 0
+5:22/0/z_index = -1
+5:22/0/terrain_set = 0
+5:22/0/terrain = 8
 6:23/0 = 0
+6:23/0/z_index = -1
+6:23/0/terrain_set = 0
+6:23/0/terrain = 5
 5:23/0 = 0
+5:23/0/z_index = -1
+5:23/0/terrain_set = 0
+5:23/0/terrain = 4
 4:23/0 = 0
+4:23/0/z_index = -1
+4:23/0/terrain_set = 0
+4:23/0/terrain = 5
 3:23/0 = 0
+3:23/0/z_index = -1
+3:23/0/terrain_set = 0
+3:23/0/terrain = 6
 2:23/0 = 0
+2:23/0/z_index = -1
+2:23/0/terrain_set = 0
+2:23/0/terrain = 4
 1:23/0 = 0
+1:23/0/z_index = -1
+1:23/0/terrain_set = 0
+1:23/0/terrain = 2
 0:23/0 = 0
+0:23/0/z_index = -1
+0:23/0/terrain_set = 0
+0:23/0/terrain = 5
 0:24/0 = 0
+0:24/0/z_index = -1
+0:24/0/terrain_set = 0
+0:24/0/terrain = 2
 1:24/0 = 0
+1:24/0/z_index = -1
+1:24/0/terrain_set = 0
+1:24/0/terrain = 2
 2:24/0 = 0
+2:24/0/z_index = -1
+2:24/0/terrain_set = 0
+2:24/0/terrain = 4
 3:24/0 = 0
+3:24/0/z_index = -1
+3:24/0/terrain_set = 0
+3:24/0/terrain = 0
 4:24/0 = 0
+4:24/0/z_index = -1
+4:24/0/terrain_set = 0
+4:24/0/terrain = 7
 5:24/0 = 0
+5:24/0/z_index = -1
+5:24/0/terrain_set = 0
+5:24/0/terrain = 5
 6:24/0 = 0
+6:24/0/z_index = -1
+6:24/0/terrain_set = 0
+6:24/0/terrain = 5
 6:25/0 = 0
+6:25/0/z_index = -1
+6:25/0/terrain_set = 0
+6:25/0/terrain = 2
 6:26/0 = 0
+6:26/0/z_index = -1
+6:26/0/terrain_set = 0
+6:26/0/terrain = 5
 5:26/0 = 0
+5:26/0/z_index = -1
+5:26/0/terrain_set = 0
+5:26/0/terrain = 2
 5:25/0 = 0
+5:25/0/z_index = -1
+5:25/0/terrain_set = 0
+5:25/0/terrain = 2
 4:25/0 = 0
+4:25/0/z_index = -1
+4:25/0/terrain_set = 0
+4:25/0/terrain = 1
 4:26/0 = 0
+4:26/0/z_index = -1
+4:26/0/terrain_set = 0
+4:26/0/terrain = 4
 3:26/0 = 0
+3:26/0/z_index = -1
+3:26/0/terrain_set = 0
+3:26/0/terrain = 6
 3:25/0 = 0
+3:25/0/z_index = -1
+3:25/0/terrain_set = 0
+3:25/0/terrain = 3
 2:25/0 = 0
+2:25/0/z_index = -1
+2:25/0/terrain_set = 0
+2:25/0/terrain = 1
 2:26/0 = 0
+2:26/0/z_index = -1
+2:26/0/terrain_set = 0
+2:26/0/terrain = 8
 1:26/0 = 0
+1:26/0/z_index = -1
+1:26/0/terrain_set = 0
+1:26/0/terrain = 7
 1:25/0 = 0
+1:25/0/z_index = -1
+1:25/0/terrain_set = 0
+1:25/0/terrain = 8
 0:25/0 = 0
+0:25/0/z_index = -1
+0:25/0/terrain_set = 0
+0:25/0/terrain = 3
 0:26/0 = 0
+0:26/0/z_index = -1
+0:26/0/terrain_set = 0
+0:26/0/terrain = 1
 
 [sub_resource type="TileSet" id="TileSet_cu01s"]
 tile_shape = 3
@@ -316,11 +870,27 @@ tile_layout = 2
 tile_size = Vector2i(61, 71)
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Plains"
-terrain_set_0/terrain_0/color = Color(0.360784, 0.415686, 0.145098, 1)
+terrain_set_0/terrain_0/color = Color(0.368627, 0.52549, 0.235294, 1)
 terrain_set_0/terrain_1/name = "Forest"
-terrain_set_0/terrain_1/color = Color(0.0823529, 0.172549, 0.0666667, 1)
-terrain_set_0/terrain_2/name = "Lake"
-terrain_set_0/terrain_2/color = Color(0.0392157, 0.317647, 0.572549, 1)
+terrain_set_0/terrain_1/color = Color(0.0666667, 0.219608, 0, 1)
+terrain_set_0/terrain_2/name = "Hills"
+terrain_set_0/terrain_2/color = Color(0.713726, 0.564706, 0.282353, 1)
+terrain_set_0/terrain_3/name = "Swamp"
+terrain_set_0/terrain_3/color = Color(0.258824, 0.192157, 0, 1)
+terrain_set_0/terrain_4/name = "Wasteland"
+terrain_set_0/terrain_4/color = Color(0.423529, 0.309804, 0.101961, 1)
+terrain_set_0/terrain_5/name = "Desert"
+terrain_set_0/terrain_5/color = Color(1, 0.952941, 0.588235, 1)
+terrain_set_0/terrain_6/name = "City"
+terrain_set_0/terrain_6/color = Color(0.541176, 0.556863, 0.513726, 1)
+terrain_set_0/terrain_7/name = "Mountain"
+terrain_set_0/terrain_7/color = Color(0.101961, 0.109804, 0.494118, 1)
+terrain_set_0/terrain_8/name = "Lake"
+terrain_set_0/terrain_8/color = Color(0.2, 0.592157, 0.964706, 1)
+terrain_set_0/terrain_9/name = "Nothing"
+terrain_set_0/terrain_9/color = Color(0, 0, 0, 1)
+custom_data_layer_0/name = "Event"
+custom_data_layer_0/type = 25
 sources/0 = SubResource("TileSetAtlasSource_rkkx8")
 pattern_0 = SubResource("TileMapPattern_7j6h4")
 pattern_1 = SubResource("TileMapPattern_t51yq")
@@ -351,14 +921,36 @@ pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
 [node name="GamePlay" type="Node2D"]
+z_index = -1
 script = ExtResource("1_m0gf8")
 
-[node name="PlayerArea" type="Node2D" parent="."]
+[node name="Player UI" type="CanvasLayer" parent="."]
+
+[node name="SharedArea" type="Node2D" parent="Player UI"]
+script = ExtResource("10_bkisu")
+
+[node name="Source" parent="Player UI/SharedArea" instance=ExtResource("1_fhj8j")]
+position = Vector2(968, 0)
+
+[node name="RoundMarker" type="Label" parent="Player UI/SharedArea"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+
+[node name="TurnOrderTracker" type="Node2D" parent="Player UI/SharedArea"]
+position = Vector2(160, 32)
+script = ExtResource("12_js350")
+
+[node name="Deck" parent="Player UI/SharedArea" instance=ExtResource("13_t238q")]
+position = Vector2(1744, 858)
+
+[node name="PlayerArea" type="Node2D" parent="Player UI"]
 script = ExtResource("2_khnnw")
 
-[node name="Inventory" type="Sprite2D" parent="PlayerArea"]
+[node name="Inventory" type="Sprite2D" parent="Player UI/PlayerArea"]
 
-[node name="Tactics" type="Control" parent="PlayerArea"]
+[node name="Tactics" type="Control" parent="Player UI/PlayerArea"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -369,7 +961,7 @@ offset_bottom = 200.0
 script = ExtResource("2_o1npl")
 metadata/_edit_group_ = true
 
-[node name="Tactic1" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic1" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
@@ -381,7 +973,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("3_5mt76")
 
-[node name="Tactic2" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic2" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 136.0
 offset_top = 8.0
@@ -393,7 +985,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("4_b2aj0")
 
-[node name="Tactic3" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic3" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 264.0
 offset_top = 8.0
@@ -405,7 +997,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("5_2ng8m")
 
-[node name="Tactic4" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic4" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 168.0
@@ -417,7 +1009,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("6_rt858")
 
-[node name="Tactic5" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic5" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 136.0
 offset_top = 168.0
@@ -429,7 +1021,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("7_bkwh1")
 
-[node name="Tactic6" type="Button" parent="PlayerArea/Tactics"]
+[node name="Tactic6" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 264.0
 offset_top = 168.0
@@ -441,7 +1033,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("8_1ear6")
 
-[node name="ConfirmTactic" type="Button" parent="PlayerArea/Tactics"]
+[node name="ConfirmTactic" type="Button" parent="Player UI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 152.0
 offset_top = 328.0
@@ -450,14 +1042,14 @@ offset_bottom = 336.0
 disabled = true
 text = "Confirm"
 
-[node name="NewRoundButton" type="Button" parent="PlayerArea"]
+[node name="NewRoundButton" type="Button" parent="Player UI/PlayerArea"]
 offset_left = 198.937
 offset_top = 171.0
 offset_right = 296.937
 offset_bottom = 202.0
 text = "New Round"
 
-[node name="EndTurnButton" type="Button" parent="PlayerArea"]
+[node name="EndTurnButton" type="Button" parent="Player UI/PlayerArea"]
 offset_left = 208.0
 offset_top = 240.0
 offset_right = 286.0
@@ -465,37 +1057,23 @@ offset_bottom = 271.0
 disabled = true
 text = "End Turn"
 
-[node name="SharedArea" type="Node2D" parent="."]
-script = ExtResource("10_bkisu")
-
-[node name="Source" parent="SharedArea" instance=ExtResource("1_fhj8j")]
-position = Vector2(968, 0)
-
-[node name="RoundMarker" type="Label" parent="SharedArea"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 64.0
-offset_bottom = 47.0
-
-[node name="TurnOrderTracker" type="Node2D" parent="SharedArea"]
-position = Vector2(160, 32)
-script = ExtResource("12_js350")
-
-[node name="Deck" parent="SharedArea" instance=ExtResource("13_t238q")]
-position = Vector2(1744, 858)
-
 [node name="MapGen" type="TileMap" parent="."]
-position = Vector2(184, 757)
+position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
 format = 2
-layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, -65536, 0, 0, 0, 196608, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0)
+layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0, -65536, 0, 0, 0, 196608, 0)
 script = ExtResource("3_hiwow")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(969, 543)
+process_callback = 0
+script = ExtResource("4_15lwj")
+
 [node name="Player" type="Node2D" parent="."]
+position = Vector2(672, 856)
 script = ExtResource("4_jr7il")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
-position = Vector2(213, 792)
 texture = ExtResource("5_w03ud")
 
 [node name="DummyArea" type="Node2D" parent="."]
@@ -533,21 +1111,21 @@ offset_right = 112.0
 offset_bottom = 55.0
 text = "W: 4"
 
-[connection signal="TurnOrder" from="PlayerArea/Tactics" to="SharedArea/TurnOrderTracker" method="OnTurnOrder"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic1" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic2" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic3" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic4" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic5" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/Tactic6" to="PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerArea/Tactics/ConfirmTactic" to="PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="PlayerArea/NewRoundButton" to="PlayerArea/Tactics" method="NewRound"]
-[connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea" method="NewRound"]
-[connection signal="pressed" from="PlayerArea/NewRoundButton" to="SharedArea/Source" method="NewRound"]
-[connection signal="pressed" from="PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
-[connection signal="pressed" from="PlayerArea/EndTurnButton" to="PlayerArea" method="OnEndTurnPressed"]
-[connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/Source" method="EndTurn"]
-[connection signal="pressed" from="PlayerArea/EndTurnButton" to="SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="CurrentTurn" from="SharedArea/TurnOrderTracker" to="PlayerArea" method="OnCurrentTurn"]
-[connection signal="CurrentTurn" from="SharedArea/TurnOrderTracker" to="DummyArea" method="OnCurrentTurn"]
-[connection signal="EndTurn" from="DummyArea" to="SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/PlayerArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="DummyArea" method="OnCurrentTurn"]
+[connection signal="TurnOrder" from="Player UI/PlayerArea/Tactics" to="Player UI/SharedArea/TurnOrderTracker" method="OnTurnOrder"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic1" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic2" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic3" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic4" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic5" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic6" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/Tactics/ConfirmTactic" to="Player UI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea" method="NewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
+[connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/PlayerArea" method="OnEndTurnPressed"]
+[connection signal="EndTurn" from="DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
