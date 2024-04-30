@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 public partial class PlayerArea : Node2D
-{
+{	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -14,13 +14,18 @@ public partial class PlayerArea : Node2D
 	}
 
 	private void OnCurrentTurn(long characterId) {
+		//GD.Print("start turn:" +characterId);
 		if (characterId == GameSettings.PlayerCharacter) {
+			//GD.Print("Disabled: " + GetNode<Button>("EndTurnButton").Disabled.ToString());
 			GetNode<Button>("EndTurnButton").Disabled = false;
+			//GD.Print("Disabled: " + GetNode<Button>("EndTurnButton").Disabled.ToString());
 			GD.Print("It's your turn!");
 		}
 	}
 
 	private void OnEndTurnPressed() {
+		//GD.Print("Disabled: " + GetNode<Button>("EndTurnButton").Disabled.ToString());
 		GetNode<Button>("EndTurnButton").Disabled = true;
+		//GD.Print("Disabled: " + GetNode<Button>("EndTurnButton").Disabled.ToString());
 	}
 }
