@@ -3,6 +3,12 @@ using System;
 
 public partial class Player : Node2D
 {
+	public override void _Ready()
+	{	
+		var mapGen = GetNode<TileMap>("../MapGen");
+		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
+		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0)));
+	}
 	public override void _Input(InputEvent @event)
     {
 		//if (@event is InputEventMouseButton eventMouseButton)

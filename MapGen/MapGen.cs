@@ -22,7 +22,6 @@ public partial class MapGen : TileMap
 		//brownTiles.Shuffle();
 		shuffleArray(rSeed, greenTiles);
 		tileStack = new Stack<int>(greenTiles);
-
 	}
 	
 	// Don't know where to place this as can reuse for many things
@@ -63,16 +62,18 @@ public partial class MapGen : TileMap
 			if (eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Left)
 			{
 				// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
-				var globalClicked = eventMouseButton.Position;
+				var globalClicked = GetGlobalMousePosition();
 				var posClicked = LocalToMap(ToLocal(globalClicked));
+				GD.Print("Global: " + globalClicked.ToString());
 				GD.Print("TileMap: " + posClicked.ToString());
-
 				// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
 				var currentAtlasCoords = GetCellAtlasCoords(MainLayer, posClicked);
-				GD.Print("Atlas: " + currentAtlasCoords.ToString());
+				//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
 				if (currentAtlasCoords is (-1,-1)) // No tile from atlas exists here
 				{
+					// Cant put tiles behind inital tiles (posClicked.X > 0), can't put tiles above upper bound (posClicked.Y > (-3 * (posClicked.X + 1) - 1)),
+					// can't put tiles below lower bound (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
 					if ((this.tileStackState != 0) & (posClicked.X > 0) & (posClicked.Y > (-3 * (posClicked.X + 1) - 1))  & (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
 					{
 						GD.Print("No Pattern Detected");
