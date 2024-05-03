@@ -3,10 +3,13 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public partial class CardScene : Node2D
 {
-    private List<CardObj> DeckOfCards {get; set;} = new List<CardObj>();
+    private CardObj[] InitialDeckOfCards {get; set;} 
+    private List<CardObj> RecordDeckOfCards = new List<CardObj>();
+    private Stack<CardObj> DeckOfCards {get; set;} = new Stack<CardObj>();
     private int InitialDeckLength {get; set;}
     private Random rand = new Random();
 
@@ -15,15 +18,16 @@ public partial class CardScene : Node2D
         StreamReader sr = new StreamReader("./Card/basicCard.json");
         string jsonObj = sr.ReadToEnd();
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
-
-
+        InitialDeckOfCards = new CardObj[cardsObj.Count * 2];
+        int index = 0;
         foreach (var card in cardsObj) {
-                Guid _id = Guid.NewGuid();
+                int _id = index;
                 card.id = _id;
-                DeckOfCards.Add(card); 
+                InitialDeckOfCards[index] = card;
+                index++;
             if (card.copies > 0) {
                 for (int i = 0; i < card.copies; i++) {
-                    Guid _id1 = Guid.NewGuid();
+                    int _id1 = index;
                     CardObj newCard = new CardObj() {
                         id = _id1,
                         cardId = card.cardId,
@@ -33,23 +37,30 @@ public partial class CardScene : Node2D
                         topFunction = card.topFunction,
                         bottomFunction = card.bottomFunction
                     };
-                    DeckOfCards.Add(newCard); 
+                    InitialDeckOfCards[index] = card;
+                    index++;
                 }
             }
         };
         InitialDeckLength = DeckOfCards.Count;
+        MapGen.shuffleArray(rand, InitialDeckOfCards);
+        foreach (var card in InitialDeckOfCards) {
+            if (card != null) {
+                DeckOfCards.Push(card);
+                RecordDeckOfCards.Add(card);
+            }
+        }
+        InitialDeckLength = RecordDeckOfCards.Count;
     }
 
 
     public void DrawCard()
     {
-        int indexToBeDrawn = rand.Next(0, DeckOfCards.Count);
-        CardObj card = DeckOfCards[indexToBeDrawn];
+        CardObj card = DeckOfCards.Pop();
         int posMultiplier = InitialDeckLength - DeckOfCards.Count;
         int xPos = -300 - (100 * posMultiplier);
         card.Position = new Vector2I(xPos, -500);
         AddChild(card);
-        DeckOfCards.RemoveAt(indexToBeDrawn);
     }
 
 }

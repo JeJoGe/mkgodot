@@ -8,7 +8,7 @@ using System.Security;
 
 public partial class CardObj : Sprite2D
 {
-    public Guid id {get; set;}
+    public int id {get; set;}
     public string cardId {get; set;}
     public string color {get; set;}
     public int xCoord {get; set;}
