@@ -506,12 +506,12 @@ texture = ExtResource("5_w03ud")
 [node name="DummyArea" type="Node2D" parent="."]
 position = Vector2(768, 80)
 script = ExtResource("18_70l2p")
+metadata/_edit_group_ = true
 
 [node name="Area2D" type="Area2D" parent="DummyArea"]
 scale = Vector2(0.1, 0.1)
 
 [node name="DummyDeck" type="Sprite2D" parent="DummyArea/Area2D"]
-scale = Vector2(1, 1)
 texture = ExtResource("19_vtp22")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DummyArea/Area2D"]
