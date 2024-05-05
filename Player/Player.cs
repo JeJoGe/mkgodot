@@ -39,13 +39,23 @@ public partial class Player : Node2D
 				{	
 					// Check if tile clicked is any tiles surrounding player position
 					if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
-					{
-						// Change position of player, update position vector
-						GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(posClicked));
-						playerPos = posClicked;
+					{	
+						var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
+						GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+
+						if (movePoints >= mapGen.terrainCosts[cellTerrain])
+						{
+							// Change position of player, update position vector
+							GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(posClicked));
+							playerPos = posClicked;
+							movePoints -= (int) mapGen.terrainCosts[cellTerrain]; // Reduce move points
+						}
+						
+						else
+						{
+							GD.Print("Terrain costs more movement than you currently have.");
+						}
 					}
-					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-					GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				}
 			}
 		}

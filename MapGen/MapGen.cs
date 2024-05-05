@@ -8,6 +8,18 @@ public partial class MapGen : TileMap
 	const int MainLayer = 0;
 	const int MainAtlasID = 0;
 	const int MainTerrainSet = 0;
+	public Dictionary<int, int?> terrainCosts = new Dictionary<int, int?>(){
+		{0,2}, // Plains
+		{1,3}, // Forest
+		{2,3}, // Hills
+		{3,5}, // Swamp
+		{4,4}, // Wasteland
+		{5,5}, // Desert
+		{6,2}, // City
+		{7,null}, // Mountain
+		{8,null}, // Lake
+		{9,null} // Nothing
+	};
 
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
