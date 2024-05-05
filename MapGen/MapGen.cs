@@ -8,6 +8,18 @@ public partial class MapGen : TileMap
 	const int MainLayer = 0;
 	const int MainAtlasID = 0;
 	const int MainTerrainSet = 0;
+	public Dictionary<int, int?> terrainCosts = new Dictionary<int, int?>(){
+		{0,2}, // Plains
+		{1,3}, // Forest
+		{2,3}, // Hills
+		{3,5}, // Swamp
+		{4,4}, // Wasteland
+		{5,5}, // Desert
+		{6,2}, // City
+		{7,null}, // Mountain
+		{8,null}, // Lake
+		{9,null} // Nothing
+	};
 
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
@@ -55,39 +67,32 @@ public partial class MapGen : TileMap
 	// On left click on Map tile, generate the 2x3x2 pattern of next random set of Map tiles 
 	public void generateTile(Vector2I currentAtlasCoords, Vector2I posClicked)
 	{
-		if (currentAtlasCoords is (-1, -1)) // No tile from atlas exists here
+
+		// Cant put tiles behind inital tiles (posClicked.X > 0), can't put tiles above upper bound (posClicked.Y > (-3 * (posClicked.X + 1) - 1)),
+		// can't put tiles below lower bound (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
+		if ((this.tileStackState != 0) & (posClicked.X > 0) & (posClicked.Y > (-3 * (posClicked.X + 1) - 1)) & (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
 		{
-			// Cant put tiles behind inital tiles (posClicked.X > 0), can't put tiles above upper bound (posClicked.Y > (-3 * (posClicked.X + 1) - 1)),
-			// can't put tiles below lower bound (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
-			if ((this.tileStackState != 0) & (posClicked.X > 0) & (posClicked.Y > (-3 * (posClicked.X + 1) - 1)) & (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
+			GD.Print("No Pattern Detected");
+			if (this.tileStackState != 0)
 			{
-				GD.Print("No Pattern Detected");
-				if (this.tileStackState != 0)
-				{
-					// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
-					var tilePos = this.DetermineMapPlacement(posClicked);
-					GD.Print("Add tile at " + tilePos.ToString());
-					SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop()));
+				// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
+				var tilePos = this.DetermineMapPlacement(posClicked);
+				GD.Print("Add tile at " + tilePos.ToString());
+				SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop()));
 
-					if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
-					{
-						this.tileStack = new Stack<int>(this.brownTiles);
-						this.tileStackState--;
-					}
-				}
-
-				else
+				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 				{
-					throw new InvalidOperationException("No tiles available");
+					this.tileStack = new Stack<int>(this.brownTiles);
+					this.tileStackState--;
 				}
+			}
+
+			else
+			{
+				throw new InvalidOperationException("No tiles available");
 			}
 		}
 
-		else
-		{
-			var cellTerrain = GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-			GD.Print("Terrain: " + TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-		}
 	}
 	// Using math to determine how to position tile. Don't understand why it works, it just does
 	private Vector2I DetermineMapPlacement(Vector2I posClicked)
