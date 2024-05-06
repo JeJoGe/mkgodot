@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=54 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -1148,7 +1148,6 @@ position = Vector2(8, 29)
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/PlayerArea" method="OnEndTurnPressed"]
 [connection signal="EndTurn" from="DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="mouse_entered" from="DummyArea/Area2D" to="DummyArea" method="OnMouseEntered"]
 [connection signal="mouse_exited" from="DummyArea/Area2D" to="DummyArea" method="OnMouseExited"]

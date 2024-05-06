@@ -18,23 +18,30 @@ public partial class Utils : Node
 	{
 	}
 
-	// shuffle using fisher-yates algo
-	public static IEnumerable<T> Shuffle<T>(IEnumerable<T> source) {
-		var buffer = source.ToList();
-		for (int i = 0; i < buffer.Count; i++)
-		{
-			int j = RandomNumber(i, buffer.Count);
-			yield return buffer[j];
-
-			buffer[j] = buffer[i];
-		}
-	}
-
 	public static int RandomNumber(int min, int max)
 	{
 		lock(syncLock)
 		{
 			return random.Next(min,max);
+		}
+	}
+}
+
+public static class EnumerableExtensions
+{
+	public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) {
+		return source.ShuffleIterator();
+	}
+
+	// shuffle using fisher-yates algo
+	public static IEnumerable<T> ShuffleIterator<T>(this IEnumerable<T> source) {
+		var buffer = source.ToList();
+		for (int i = 0; i < buffer.Count; i++)
+		{
+			int j = Utils.RandomNumber(i, buffer.Count);
+			yield return buffer[j];
+
+			buffer[j] = buffer[i];
 		}
 	}
 }

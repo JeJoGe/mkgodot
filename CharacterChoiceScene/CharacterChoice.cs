@@ -35,7 +35,7 @@ public partial class CharacterChoice : Control
 		// randomly select dummy character
 		_characters.Remove(playerId);
 		var characterIds = _characters.Keys.ToList(); 
-		GameSettings.DummyCharacter = characterIds[Source.RandomNumber(0,_characters.Count)];
+		GameSettings.DummyCharacter = characterIds[Utils.RandomNumber(0,_characters.Count)];
 		GD.Print( "Dummy: "+_characters[GameSettings.DummyCharacter]);
 		GD.Print("PLAY");
 		GetTree().ChangeSceneToFile("res://GamePlay.tscn");

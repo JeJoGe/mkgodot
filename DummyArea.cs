@@ -9,7 +9,6 @@ public partial class DummyArea : Node2D
 	public delegate void EndTurnEventHandler();
 	private int[] _deck = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
 	private Stack<int> stack;
-	private static readonly Random random = new Random();
 	private int _blue = 4;
 	private int _red = 4;
 	private int _green = 4;
@@ -118,18 +117,13 @@ public partial class DummyArea : Node2D
 		GetNode<Label>("WhiteCrystal/Count").Text = _crystals[3].ToString();
 	}
 
-	private void ShuffleDeck()
-	{
-		MapGen.shuffleArray(random, _deck);
-	}
-
 	private void OnNewRound()
 	{
 		// add card to deck then shuffle
 		if (SharedArea.Round != 1) { // skip for round 1
 			//TODO: add card/crystal according once offers are implemented
-			_deck = _deck.Append(random.Next(4)).ToArray(); // adding a random card
-			_crystals[random.Next(4)]++; // add random crystal to dummy inventory
+			_deck = _deck.Append(Utils.RandomNumber(0,4)).ToArray(); // adding a random card
+			_crystals[Utils.RandomNumber(0,4)]++; // add random crystal to dummy inventory
 			_blue = 0;
 			_red = 0;
 			_green = 0;
@@ -157,8 +151,7 @@ public partial class DummyArea : Node2D
 				}	
 			}
 		}
-		ShuffleDeck();
-		stack = new Stack<int>(_deck);
+		stack = new Stack<int>(_deck.Shuffle());
 		UpdateLabels();
 		UpdateCrystals();
 	}
