@@ -1,0 +1,24 @@
+[
+    {
+		"tokenId": 0,
+		"name": "Cursed Hags",
+        "xCoord": 0,
+        "yCoord": 0,
+		"elusive": 0,
+        "defense": 5,
+		"fortification": 0,
+		"resistances": 1,
+		"arcane Immunity": 0,
+		"summon": 0,
+		"attacks": [[3,7]],
+		"swift": 0,
+		"brutal": 0,
+		"poison": 0,
+		"paralyze": 0,
+		"assassination": 0,
+		"cumbersome": 0,
+		"vampiric": 0,
+        "copies": 2
+	},
+	
+]

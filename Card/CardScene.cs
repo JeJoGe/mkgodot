@@ -14,7 +14,7 @@ public partial class CardScene : Node2D
     private Random rand = new Random();
 
     public override void _Ready() {
-        base._Ready();
+        base._Ready(); // Confused about this line -G
         StreamReader sr = new StreamReader("./Card/basicCard.json");
         string jsonObj = sr.ReadToEnd();
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
@@ -43,7 +43,7 @@ public partial class CardScene : Node2D
             }
         };
         InitialDeckLength = DeckOfCards.Count;
-        MapGen.shuffleArray(rand, InitialDeckOfCards);
+        MapGen.ShuffleArray(rand, InitialDeckOfCards);
         foreach (var card in InitialDeckOfCards) {
             if (card != null) {
                 DeckOfCards.Push(card);

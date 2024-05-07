@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://yqlpgaqts46f"]
+[gd_scene load_steps=3 format=3 uid="uid://crmviyl8ejwvp"]
 
 [ext_resource type="Script" path="res://Deck.cs" id="1_dtned"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="2_w7aa5"]

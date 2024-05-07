@@ -32,13 +32,13 @@ public partial class MapGen : TileMap
 		Random rSeed = new Random();
 		//greenTiles.Shuffle(); // Commented out because Godot Arrays ARE ASS
 		//brownTiles.Shuffle();
-		shuffleArray(rSeed, greenTiles);
+		ShuffleArray(rSeed, greenTiles);
 		tileStack = new Stack<int>(greenTiles);
 	}
 
 	// Don't know where to place this as can reuse for many things
 	// Shuffle array function based on Fisher-Yate algorithm
-	public static void shuffleArray<T>(Random rSeed, T[] origArray)
+	public static void ShuffleArray<T>(Random rSeed, T[] origArray)
 	{
 		//Step 1: For each unshuffled item in the collection
 		for (int n = origArray.Count() - 1; n > 0; --n)
@@ -65,7 +65,7 @@ public partial class MapGen : TileMap
 	}
 
 	// On left click on Map tile, generate the 2x3x2 pattern of next random set of Map tiles 
-	public void generateTile(Vector2I currentAtlasCoords, Vector2I posClicked)
+	public void GenerateTile(Vector2I currentAtlasCoords, Vector2I posClicked)
 	{
 
 		// Cant put tiles behind inital tiles (posClicked.X > 0), can't put tiles above upper bound (posClicked.Y > (-3 * (posClicked.X + 1) - 1)),
@@ -79,6 +79,9 @@ public partial class MapGen : TileMap
 				var tilePos = this.DetermineMapPlacement(posClicked);
 				GD.Print("Add tile at " + tilePos.ToString());
 				SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop()));
+
+				// Generate tokens on pattern
+				
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 				{
