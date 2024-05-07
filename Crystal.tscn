@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dsjmy131k104w"]
+
+[node name="Crystal" type="Node2D"]
+
+[node name="Count" type="Label" parent="."]
+offset_left = 51.0
+offset_top = 104.0
+offset_right = 96.0
+offset_bottom = 127.0
+text = "0"
+horizontal_alignment = 1
+
+[node name="Polygon2D2" type="Polygon2D" parent="."]
+position = Vector2(0, 120)
+scale = Vector2(0.4, 0.4)
+polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)

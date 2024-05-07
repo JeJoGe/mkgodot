@@ -57,7 +57,7 @@ public partial class Tactics : Control
 		}
 		GetNode<Button>("ConfirmTactic").Disabled = true;
 		// get dummy tactic
-		int dummyNum = Source.RandomNumber(0,_availableDay.Count);
+		int dummyNum = Utils.RandomNumber(0,_availableDay.Count);
 		string dummyTurn = _availableDay[dummyNum].Substring(6);
 		GD.Print("Player: "+playerTurn + " Dummy: "+dummyTurn);
 		_availableDay.RemoveAt(dummyNum);
