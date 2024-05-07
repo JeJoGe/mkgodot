@@ -38,8 +38,6 @@ public partial class Source : Node2D
 	{
 		Blue, Red, Green, White, Gold, Black
 	}
-	private static readonly Random random = new Random();
-	private static readonly object syncLock = new object();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -301,15 +299,7 @@ public partial class Source : Node2D
 	public static Colour RollDie()
 	{
 		var faces = Enum.GetValues<Colour>();
-		return (Colour)faces.GetValue(RandomNumber(0,6));
-	}
-
-	public static int RandomNumber(int min, int max)
-	{
-		lock(syncLock)
-		{
-			return random.Next(min,max);
-		}
+		return (Colour)faces.GetValue(Utils.RandomNumber(0,6));
 	}
 
 	private void OnBlueDiePressed() {
