@@ -26,7 +26,7 @@ public partial class MapGen : TileMap
 
 	// Don't know where to place this as can reuse for many things
 	// Shuffle array function based on Fisher-Yate algorithm
-	public static void shuffleArray(Random rSeed, int[] origArray)
+	public static void shuffleArray<T>(Random rSeed, T[] origArray)
 	{
 		//Step 1: For each unshuffled item in the collection
 		for (int n = origArray.Count() - 1; n > 0; --n)

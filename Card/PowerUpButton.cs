@@ -3,8 +3,8 @@ using System;
 
 public partial class PowerUpButton : Button
 {
-    private Guid _cardId;
-    public PowerUpButton (Guid cardId, string text) {
+    private int _cardId;
+    public PowerUpButton (int cardId, string text) {
         _cardId = cardId;
         this.Text = text;
     }

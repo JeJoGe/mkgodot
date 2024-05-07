@@ -4,8 +4,8 @@ using System.Data.Common;
 
 public partial class PlayButton : Button
 {
-    private Guid _cardId;
-    public PlayButton (Guid cardId) {
+    private int _cardId;
+    public PlayButton (int cardId) {
         _cardId = cardId;
     }
     public override void _Ready()

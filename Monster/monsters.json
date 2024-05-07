@@ -1,0 +1,359 @@
+{
+    "1":{
+        "name":"Prowlers",
+        "colour": "orc",
+        "armour":3,
+        "attacks":[
+            {
+                "value":4,
+                "type":"physical"
+            }
+        ],
+        "fame":2,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "2":{
+        "name":"Diggers",
+        "colour": "orc",
+        "armour":3,
+        "attacks":[
+            {
+                "value":3,
+                "type":"physical"
+            }
+        ],
+        "fame":2,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "3":{
+        "name":"Cursed Hags",
+        "colour": "orc",
+        "armour":5,
+        "attacks":[
+            {
+                "value":3,
+                "type":"physical"
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["poison"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "4":{
+        "name":"Wolf Riders",
+        "colour": "orc",
+        "armour":4,
+        "attacks":[
+            {
+                "value":3,
+                "type":"physical"
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "5":{
+        "name":"Ironclads",
+        "colour": "orc",
+        "armour":3,
+        "attacks":[
+            {
+                "value":4,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":["physical"],
+        "abilities":["brutal"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "6":{
+        "name":"Orc Summoners",
+        "colour": "orc",
+        "armour":4,
+        "attacks":[
+            {
+                "value":1,
+                "type":"summon"
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "7":{
+        "name":"Crossbowmen",
+        "colour": "grey",
+        "armour":4,
+        "attacks":[
+            {
+                "value":4,
+                "type":"physical"
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "image":"",
+        "count": 3
+    },
+    "8":{
+        "name":"Guardsmen",
+        "colour": "grey",
+        "armour":7,
+        "attacks":[
+            {
+                "value":3,
+                "type":"physical"
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "image":"",
+        "count": 3
+    },
+    "9":{
+        "name":"Swordsmen",
+        "colour": "grey",
+        "armour":5,
+        "attacks":[
+            {
+                "value":6,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "10":{
+        "name":"Golems",
+        "colour": "grey",
+        "armour":5,
+        "attacks":[
+            {
+                "value":2,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":["physical"],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "11":{
+        "name":"Monks",
+        "colour": "violet",
+        "armour":5,
+        "attacks":[
+            {
+                "value":5,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":["physical"],
+        "abilities":["poison"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "12":{
+        "name":"Illusionists",
+        "colour": "violet",
+        "armour":3,
+        "attacks":[
+            {
+                "value":1,
+                "type":"summon"
+            }
+        ],
+        "fame":4,
+        "resistances":["physical"],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "13":{
+        "name":"Ice Mages",
+        "colour": "violet",
+        "armour":6,
+        "attacks":[
+            {
+                "value":5,
+                "type":"ice"
+            }
+        ],
+        "fame":4,
+        "resistances":["ice"],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "14":{
+        "name":"Ice Golems",
+        "colour": "violet",
+        "armour":4,
+        "attacks":[
+            {
+                "value":2,
+                "type":"ice"
+            }
+        ],
+        "fame":5,
+        "resistances":["physical","ice"],
+        "abilities":["paralyze"],
+        "version":"base",
+        "image":"",
+        "count": 1
+    },
+    "15":{
+        "name":"Fire Mages",
+        "colour": "violet",
+        "armour":5,
+        "attacks":[
+            {
+                "value":6,
+                "type":"fire"
+            }
+        ],
+        "fame":5,
+        "resistances":["fire"],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "16":{
+        "name":"Fire Golems",
+        "colour": "violet",
+        "armour":4,
+        "attacks":[
+            {
+                "value":3,
+                "type":"fire"
+            }
+        ],
+        "fame":5,
+        "resistances":["physical","fire"],
+        "abilities":["brutal"],
+        "version":"base",
+        "image":"",
+        "count": 1
+    },
+    "17":{
+        "name":"Minotaur",
+        "colour": "brown",
+        "armour":5,
+        "attacks":[
+            {
+                "value":5,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":["brutal"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "18":{
+        "name":"Gargoyle",
+        "colour": "brown",
+        "armour":4,
+        "attacks":[
+            {
+                "value":5,
+                "type":"physical"
+            }
+        ],
+        "fame":4,
+        "resistances":["physical"],
+        "abilities":[],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "19":{
+        "name":"Medusa",
+        "colour": "brown",
+        "armour":4,
+        "attacks":[
+            {
+                "value":6,
+                "type":"physical"
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["paralyze"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "20":{
+        "name":"Crypt Worm",
+        "colour": "brown",
+        "armour":6,
+        "attacks":[
+            {
+                "value":6,
+                "type":"physical"
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    },
+    "21":{
+        "name":"Werewolf",
+        "colour": "brown",
+        "armour":5,
+        "attacks":[
+            {
+                "value":7,
+                "type":"physical"
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "image":"",
+        "count": 2
+    }
+}

@@ -19,8 +19,4 @@ public partial class PlayerArea : Node2D
 			GD.Print("It's your turn!");
 		}
 	}
-
-	private void OnEndTurnPressed() {
-		GetNode<Button>("EndTurnButton").Disabled = true;
-	}
 }
