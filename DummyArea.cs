@@ -103,7 +103,7 @@ public partial class DummyArea : Node2D
 
 	private void ShuffleDeck()
 	{
-		MapGen.shuffleArray(random, _deck);
+		MapGen.ShuffleArray(random, _deck);
 	}
 
 	private void OnNewRound()
