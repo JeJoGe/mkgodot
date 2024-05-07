@@ -32,7 +32,7 @@ public partial class Player : Node2D
 			
 				if (currentAtlasCoords is (-1, -1)) // No tile from atlas exists here
 				{
-					mapGen.generateTile(currentAtlasCoords, posClicked);
+					mapGen.GenerateTile(currentAtlasCoords, posClicked);
 				}
 
 				else
