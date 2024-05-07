@@ -1035,9 +1035,6 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
-size = Vector2(960, 1440)
-
 [node name="GamePlay" type="Node2D"]
 z_index = -1
 script = ExtResource("1_m0gf8")
@@ -1194,7 +1191,6 @@ position = Vector2(7680, 800)
 texture = ExtResource("19_vtp22")
 
 [node name="Total" type="Label" parent="Player UI/SharedArea/DummyArea"]
-
 offset_left = -24.0
 offset_top = -24.0
 offset_right = 21.0
