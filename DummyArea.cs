@@ -102,7 +102,6 @@ public partial class DummyArea : Node2D
 		UpdateLabels();
 	}
 
-
 	private void UpdateLabels() {
 		GetNode<Label>("Total").Text = stack.Count.ToString();
 		GetNode<Label>("DeckPopup/BlueCount").Text = _blue.ToString();
