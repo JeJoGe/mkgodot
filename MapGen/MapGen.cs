@@ -78,7 +78,14 @@ public partial class MapGen : TileMap
 				// Take pattern from randomized set from mainlayer of tileset and position at tilePos coords
 				var tilePos = this.DetermineMapPlacement(posClicked);
 				GD.Print("Add tile at " + tilePos.ToString());
-				SetPattern(MainLayer, tilePos, TileSet.GetPattern(this.tileStack.Pop()));
+				var honeyComb = TileSet.GetPattern(this.tileStack.Pop());
+				SetPattern(MainLayer, tilePos, honeyComb);
+				
+				// Populate tokens on pattern if needed
+				foreach (var patternTile in honeyComb.GetUsedCells())
+				{
+					
+				}
 
 				// Generate tokens on pattern
 				

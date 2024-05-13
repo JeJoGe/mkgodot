@@ -35,7 +35,7 @@ public partial class Combat : Node2D
 		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 10;
 		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 10;
 		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 10;
-		GameSettings.EnemyList = new List<(int,int)>([(1,0),(2,0),(10,1),(13,0),(21,2)]);
+		GameSettings.EnemyList = new List<(int,int)>([(1,0),(2,0),(10,1),(13,0),(21,2)]); // what is site fortification 2?
 		Utils.PrintBestiary();
 		// create  enemy tokens
 		var monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
