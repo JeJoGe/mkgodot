@@ -6,14 +6,15 @@
         "attacks":[
             {
                 "value":4,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":2,
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":2,
         "count": 2
     },
     "2":{
@@ -23,14 +24,15 @@
         "attacks":[
             {
                 "value":3,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":2,
         "resistances":[],
         "abilities":["fortified"],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":1,
         "count": 2
     },
     "3":{
@@ -40,14 +42,15 @@
         "attacks":[
             {
                 "value":3,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":3,
         "resistances":[],
         "abilities":["poison"],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":0,
         "count": 2
     },
     "4":{
@@ -57,14 +60,15 @@
         "attacks":[
             {
                 "value":3,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":3,
         "resistances":[],
         "abilities":["swift"],
         "version":"base",
-        "image":"",
+        "x":3,
+        "y":0,
         "count": 2
     },
     "5":{
@@ -74,14 +78,15 @@
         "attacks":[
             {
                 "value":4,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
-        "resistances":["physical"],
+        "resistances":[0],
         "abilities":["brutal"],
         "version":"base",
-        "image":"",
+        "x":1,
+        "y":1,
         "count": 2
     },
     "6":{
@@ -91,14 +96,15 @@
         "attacks":[
             {
                 "value":1,
-                "type":"summon"
+                "element":9
             }
         ],
         "fame":4,
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":2,
         "count": 2
     },
     "7":{
@@ -108,14 +114,15 @@
         "attacks":[
             {
                 "value":4,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":3,
         "resistances":[],
         "abilities":["swift"],
         "version":"base",
-        "image":"",
+        "x":1,
+        "y":0,
         "count": 3
     },
     "8":{
@@ -125,14 +132,15 @@
         "attacks":[
             {
                 "value":3,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":3,
         "resistances":[],
         "abilities":["fortified"],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":1,
         "count": 3
     },
     "9":{
@@ -142,14 +150,15 @@
         "attacks":[
             {
                 "value":6,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":2,
         "count": 2
     },
     "10":{
@@ -159,14 +168,15 @@
         "attacks":[
             {
                 "value":2,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
-        "resistances":["physical"],
+        "resistances":[0],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":1,
         "count": 2
     },
     "11":{
@@ -176,14 +186,15 @@
         "attacks":[
             {
                 "value":5,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
-        "resistances":["physical"],
+        "resistances":[],
         "abilities":["poison"],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":2,
         "count": 2
     },
     "12":{
@@ -193,14 +204,15 @@
         "attacks":[
             {
                 "value":1,
-                "type":"summon"
+                "element":"summon"
             }
         ],
         "fame":4,
-        "resistances":["physical"],
+        "resistances":[0],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":0,
         "count": 2
     },
     "13":{
@@ -210,14 +222,15 @@
         "attacks":[
             {
                 "value":5,
-                "type":"ice"
+                "element":2
             }
         ],
         "fame":4,
-        "resistances":["ice"],
+        "resistances":[2],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":1,
+        "y":1,
         "count": 2
     },
     "14":{
@@ -227,14 +240,15 @@
         "attacks":[
             {
                 "value":2,
-                "type":"ice"
+                "element":2
             }
         ],
         "fame":5,
-        "resistances":["physical","ice"],
+        "resistances":[0,2],
         "abilities":["paralyze"],
         "version":"base",
-        "image":"",
+        "x":1,
+        "y":0,
         "count": 1
     },
     "15":{
@@ -244,14 +258,15 @@
         "attacks":[
             {
                 "value":6,
-                "type":"fire"
+                "element":1
             }
         ],
         "fame":5,
-        "resistances":["fire"],
+        "resistances":[1],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":1,
         "count": 2
     },
     "16":{
@@ -261,14 +276,15 @@
         "attacks":[
             {
                 "value":3,
-                "type":"fire"
+                "element":1
             }
         ],
         "fame":5,
-        "resistances":["physical","fire"],
+        "resistances":[0,1],
         "abilities":["brutal"],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":0,
         "count": 1
     },
     "17":{
@@ -278,14 +294,15 @@
         "attacks":[
             {
                 "value":5,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
         "resistances":[],
         "abilities":["brutal"],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":2,
         "count": 2
     },
     "18":{
@@ -295,14 +312,15 @@
         "attacks":[
             {
                 "value":5,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":4,
-        "resistances":["physical"],
+        "resistances":[0],
         "abilities":[],
         "version":"base",
-        "image":"",
+        "x":0,
+        "y":1,
         "count": 2
     },
     "19":{
@@ -312,14 +330,15 @@
         "attacks":[
             {
                 "value":6,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":5,
         "resistances":[],
         "abilities":["paralyze"],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":1,
         "count": 2
     },
     "20":{
@@ -329,14 +348,15 @@
         "attacks":[
             {
                 "value":6,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":5,
         "resistances":[],
         "abilities":["fortified"],
         "version":"base",
-        "image":"",
+        "x":1,
+        "y":0,
         "count": 2
     },
     "21":{
@@ -346,14 +366,15 @@
         "attacks":[
             {
                 "value":7,
-                "type":"physical"
+                "element":0
             }
         ],
         "fame":5,
         "resistances":[],
         "abilities":["swift"],
         "version":"base",
-        "image":"",
+        "x":2,
+        "y":2,
         "count": 2
     }
 }
