@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=54 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -18,9 +18,14 @@
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
-[ext_resource type="PackedScene" uid="uid://yqlpgaqts46f" path="res://Deck.tscn" id="13_t238q"]
+[ext_resource type="PackedScene" uid="uid://crmviyl8ejwvp" path="res://Deck.tscn" id="13_t238q"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
+[ext_resource type="PackedScene" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
+size = Vector2(100, 140)
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
 tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
@@ -167,6 +172,7 @@ texture_region_size = Vector2i(61, 71)
 0:2/0/z_index = -1
 0:2/0/terrain_set = 0
 0:2/0/terrain = 1
+0:2/0/custom_data_0 = "green"
 1:2/0 = 0
 1:2/0/z_index = -1
 1:2/0/terrain_set = 0
@@ -179,10 +185,12 @@ texture_region_size = Vector2i(61, 71)
 3:2/0/z_index = -1
 3:2/0/terrain_set = 0
 3:2/0/terrain = 1
+3:2/0/custom_data_1 = "glade"
 4:2/0 = 0
 4:2/0/z_index = -1
 4:2/0/terrain_set = 0
 4:2/0/terrain = 0
+4:2/0/custom_data_1 = "village"
 6:2/0 = 0
 6:2/0/z_index = -1
 6:2/0/terrain_set = 0
@@ -199,10 +207,12 @@ texture_region_size = Vector2i(61, 71)
 5:3/0/z_index = -1
 5:3/0/terrain_set = 0
 5:3/0/terrain = 2
+5:3/0/custom_data_1 = "gmine"
 4:3/0 = 0
 4:3/0/z_index = -1
 4:3/0/terrain_set = 0
 4:3/0/terrain = 0
+4:3/0/custom_data_1 = "village"
 3:3/0 = 0
 3:3/0/z_index = -1
 3:3/0/terrain_set = 0
@@ -215,10 +225,12 @@ texture_region_size = Vector2i(61, 71)
 1:3/0/z_index = -1
 1:3/0/terrain_set = 0
 1:3/0/terrain = 1
+1:3/0/custom_data_1 = "glade"
 0:3/0 = 0
 0:3/0/z_index = -1
 0:3/0/terrain_set = 0
 0:3/0/terrain = 2
+0:3/0/custom_data_0 = "green"
 0:4/0 = 0
 0:4/0/z_index = -1
 0:4/0/terrain_set = 0
@@ -227,6 +239,8 @@ texture_region_size = Vector2i(61, 71)
 1:4/0/z_index = -1
 1:4/0/terrain_set = 0
 1:4/0/terrain = 2
+1:4/0/custom_data_0 = "grey"
+1:4/0/custom_data_1 = "keep"
 2:4/0 = 0
 2:4/0/z_index = -1
 2:4/0/terrain_set = 0
@@ -243,18 +257,22 @@ texture_region_size = Vector2i(61, 71)
 5:4/0/z_index = -1
 5:4/0/terrain_set = 0
 5:4/0/terrain = 0
+5:4/0/custom_data_1 = "village"
 6:4/0 = 0
 6:4/0/z_index = -1
 6:4/0/terrain_set = 0
 6:4/0/terrain = 2
+6:4/0/custom_data_1 = "wmine"
 6:5/0 = 0
 6:5/0/z_index = -1
 6:5/0/terrain_set = 0
 6:5/0/terrain = 0
+6:5/0/custom_data_1 = "village"
 6:6/0 = 0
 6:6/0/z_index = -1
 6:6/0/terrain_set = 0
 6:6/0/terrain = 2
+6:6/0/custom_data_1 = "bmine"
 5:6/0 = 0
 5:6/0/z_index = -1
 5:6/0/terrain_set = 0
@@ -271,6 +289,7 @@ texture_region_size = Vector2i(61, 71)
 4:6/0/z_index = -1
 4:6/0/terrain_set = 0
 4:6/0/terrain = 0
+4:6/0/custom_data_0 = "green"
 3:6/0 = 0
 3:6/0/z_index = -1
 3:6/0/terrain_set = 0
@@ -279,18 +298,23 @@ texture_region_size = Vector2i(61, 71)
 3:5/0/z_index = -1
 3:5/0/terrain_set = 0
 3:5/0/terrain = 5
+3:5/0/custom_data_0 = "purple"
+3:5/0/custom_data_1 = "tower"
 2:5/0 = 0
 2:5/0/z_index = -1
 2:5/0/terrain_set = 0
 2:5/0/terrain = 2
+2:5/0/custom_data_0 = "green"
 2:6/0 = 0
 2:6/0/z_index = -1
 2:6/0/terrain_set = 0
 2:6/0/terrain = 1
+2:6/0/custom_data_1 = "glade"
 1:6/0 = 0
 1:6/0/z_index = -1
 1:6/0/terrain_set = 0
 1:6/0/terrain = 0
+1:6/0/custom_data_1 = "monastery"
 1:5/0 = 0
 1:5/0/z_index = -1
 1:5/0/terrain_set = 0
@@ -315,6 +339,7 @@ texture_region_size = Vector2i(61, 71)
 1:8/0/z_index = -1
 1:8/0/terrain_set = 0
 1:8/0/terrain = 1
+1:8/0/custom_data_0 = "green"
 1:7/0 = 0
 1:7/0/z_index = -1
 1:7/0/terrain_set = 0
@@ -323,10 +348,12 @@ texture_region_size = Vector2i(61, 71)
 2:7/0/z_index = -1
 2:7/0/terrain_set = 0
 2:7/0/terrain = 2
+2:7/0/custom_data_1 = "den"
 2:8/0 = 0
 2:8/0/z_index = -1
 2:8/0/terrain_set = 0
 2:8/0/terrain = 0
+2:8/0/custom_data_1 = "monastery"
 3:8/0 = 0
 3:8/0/z_index = -1
 3:8/0/terrain_set = 0
@@ -335,6 +362,7 @@ texture_region_size = Vector2i(61, 71)
 3:7/0/z_index = -1
 3:7/0/terrain_set = 0
 3:7/0/terrain = 2
+3:7/0/custom_data_1 = "rmine"
 4:7/0 = 0
 4:7/0/z_index = -1
 4:7/0/terrain_set = 0
@@ -343,6 +371,7 @@ texture_region_size = Vector2i(61, 71)
 4:8/0/z_index = -1
 4:8/0/terrain_set = 0
 4:8/0/terrain = 1
+4:8/0/custom_data_1 = "glade"
 5:8/0 = 0
 5:8/0/z_index = -1
 5:8/0/terrain_set = 0
@@ -355,14 +384,17 @@ texture_region_size = Vector2i(61, 71)
 6:7/0/z_index = -1
 6:7/0/terrain_set = 0
 6:7/0/terrain = 1
+6:7/0/custom_data_0 = "green"
 6:8/0 = 0
 6:8/0/z_index = -1
 6:8/0/terrain_set = 0
 6:8/0/terrain = 0
+6:8/0/custom_data_1 = "dungeon"
 6:9/0 = 0
 6:9/0/z_index = -1
 6:9/0/terrain_set = 0
 6:9/0/terrain = 3
+6:9/0/custom_data_1 = "village"
 6:10/0 = 0
 6:10/0/z_index = -1
 6:10/0/terrain_set = 0
@@ -371,6 +403,8 @@ texture_region_size = Vector2i(61, 71)
 5:10/0/z_index = -1
 5:10/0/terrain_set = 0
 5:10/0/terrain = 4
+5:10/0/custom_data_0 = "purple"
+5:10/0/custom_data_1 = "tower"
 5:9/0 = 0
 5:9/0/z_index = -1
 5:9/0/terrain_set = 0
@@ -383,10 +417,13 @@ texture_region_size = Vector2i(61, 71)
 4:10/0/z_index = -1
 4:10/0/terrain_set = 0
 4:10/0/terrain = 4
+4:10/0/custom_data_0 = "grey"
+4:10/0/custom_data_1 = "keep"
 3:9/0 = 0
 3:9/0/z_index = -1
 3:9/0/terrain_set = 0
 3:9/0/terrain = 3
+3:9/0/custom_data_0 = "green"
 3:10/0 = 0
 3:10/0/z_index = -1
 3:10/0/terrain_set = 0
@@ -403,6 +440,7 @@ texture_region_size = Vector2i(61, 71)
 1:9/0/z_index = -1
 1:9/0/terrain_set = 0
 1:9/0/terrain = 1
+1:9/0/custom_data_0 = "yellow"
 1:10/0 = 0
 1:10/0/z_index = -1
 1:10/0/terrain_set = 0
@@ -411,14 +449,17 @@ texture_region_size = Vector2i(61, 71)
 0:10/0/z_index = -1
 0:10/0/terrain_set = 0
 0:10/0/terrain = 4
+0:10/0/custom_data_1 = "dungeon"
 0:9/0 = 0
 0:9/0/z_index = -1
 0:9/0/terrain_set = 0
 0:9/0/terrain = 1
+0:9/0/custom_data_1 = "glade"
 0:11/0 = 0
 0:11/0/z_index = -1
 0:11/0/terrain_set = 0
 0:11/0/terrain = 2
+0:11/0/custom_data_1 = "den"
 1:11/0 = 0
 1:11/0/z_index = -1
 1:11/0/terrain_set = 0
@@ -439,10 +480,13 @@ texture_region_size = Vector2i(61, 71)
 2:12/0/z_index = -1
 2:12/0/terrain_set = 0
 2:12/0/terrain = 0
+2:12/0/custom_data_0 = "yellow"
 3:12/0 = 0
 3:12/0/z_index = -1
 3:12/0/terrain_set = 0
 3:12/0/terrain = 0
+3:12/0/custom_data_0 = "purple"
+3:12/0/custom_data_1 = "tower"
 3:11/0 = 0
 3:11/0/z_index = -1
 3:11/0/terrain_set = 0
@@ -463,14 +507,18 @@ texture_region_size = Vector2i(61, 71)
 5:11/0/z_index = -1
 5:11/0/terrain_set = 0
 5:11/0/terrain = 2
+5:11/0/custom_data_0 = "grey"
+5:11/0/custom_data_1 = "keep"
 6:11/0 = 0
 6:11/0/z_index = -1
 6:11/0/terrain_set = 0
 6:11/0/terrain = 2
+6:11/0/custom_data_0 = "yellow"
 6:12/0 = 0
 6:12/0/z_index = -1
 6:12/0/terrain_set = 0
 6:12/0/terrain = 2
+6:12/0/custom_data_0 = "green"
 6:13/0 = 0
 6:13/0/z_index = -1
 6:13/0/terrain_set = 0
@@ -479,6 +527,7 @@ texture_region_size = Vector2i(61, 71)
 6:14/0/z_index = -1
 6:14/0/terrain_set = 0
 6:14/0/terrain = 1
+6:14/0/custom_data_1 = "bgmine"
 5:14/0 = 0
 5:14/0/z_index = -1
 5:14/0/terrain_set = 0
@@ -487,10 +536,12 @@ texture_region_size = Vector2i(61, 71)
 5:13/0/z_index = -1
 5:13/0/terrain_set = 0
 5:13/0/terrain = 0
+5:13/0/custom_data_1 = "maze"
 4:13/0 = 0
 4:13/0/z_index = -1
 4:13/0/terrain_set = 0
 4:13/0/terrain = 2
+4:13/0/custom_data_1 = "monastery"
 4:14/0 = 0
 4:14/0/z_index = -1
 4:14/0/terrain_set = 0
@@ -499,18 +550,23 @@ texture_region_size = Vector2i(61, 71)
 3:13/0/z_index = -1
 3:13/0/terrain_set = 0
 3:13/0/terrain = 0
+3:13/0/custom_data_0 = "green"
 3:14/0 = 0
 3:14/0/z_index = -1
 3:14/0/terrain_set = 0
 3:14/0/terrain = 1
+3:14/0/custom_data_0 = "purple"
+3:14/0/custom_data_1 = "tower"
 2:14/0 = 0
 2:14/0/z_index = -1
 2:14/0/terrain_set = 0
 2:14/0/terrain = 3
+2:14/0/custom_data_1 = "glade"
 2:13/0 = 0
 2:13/0/z_index = -1
 2:13/0/terrain_set = 0
 2:13/0/terrain = 2
+2:13/0/custom_data_1 = "refugee"
 1:13/0 = 0
 1:13/0/z_index = -1
 1:13/0/terrain_set = 0
@@ -519,6 +575,7 @@ texture_region_size = Vector2i(61, 71)
 1:14/0/z_index = -1
 1:14/0/terrain_set = 0
 1:14/0/terrain = 2
+1:14/0/custom_data_0 = "green"
 0:13/0 = 0
 0:13/0/z_index = -1
 0:13/0/terrain_set = 0
@@ -539,22 +596,28 @@ texture_region_size = Vector2i(61, 71)
 1:16/0/z_index = -1
 1:16/0/terrain_set = 0
 1:16/0/terrain = 5
+1:16/0/custom_data_1 = "tomb"
 1:15/0 = 0
 1:15/0/z_index = -1
 1:15/0/terrain_set = 0
 1:15/0/terrain = 0
+1:15/0/custom_data_0 = "grey"
+1:15/0/custom_data_1 = "keep"
 2:15/0 = 0
 2:15/0/z_index = -1
 2:15/0/terrain_set = 0
 2:15/0/terrain = 5
+2:15/0/custom_data_1 = "rwmine"
 2:16/0 = 0
 2:16/0/z_index = -1
 2:16/0/terrain_set = 0
 2:16/0/terrain = 2
+2:16/0/custom_data_1 = "grounds"
 3:16/0 = 0
 3:16/0/z_index = -1
 3:16/0/terrain_set = 0
 3:16/0/terrain = 5
+3:16/0/custom_data_1 = "monastery"
 3:15/0 = 0
 3:15/0/z_index = -1
 3:15/0/terrain_set = 0
@@ -563,6 +626,7 @@ texture_region_size = Vector2i(61, 71)
 4:15/0/z_index = -1
 4:15/0/terrain_set = 0
 4:15/0/terrain = 4
+4:15/0/custom_data_1 = "maze"
 4:16/0 = 0
 4:16/0/z_index = -1
 4:16/0/terrain_set = 0
@@ -579,6 +643,7 @@ texture_region_size = Vector2i(61, 71)
 6:15/0/z_index = -1
 6:15/0/terrain_set = 0
 6:15/0/terrain = 2
+6:15/0/custom_data_1 = "village"
 6:16/0 = 0
 6:16/0/z_index = -1
 6:16/0/terrain_set = 0
@@ -587,6 +652,7 @@ texture_region_size = Vector2i(61, 71)
 6:17/0/z_index = -1
 6:17/0/terrain_set = 0
 6:17/0/terrain = 3
+6:17/0/custom_data_0 = "red"
 6:18/0 = 0
 6:18/0/z_index = -1
 6:18/0/terrain_set = 0
@@ -595,18 +661,24 @@ texture_region_size = Vector2i(61, 71)
 5:18/0/z_index = -1
 5:18/0/terrain_set = 0
 5:18/0/terrain = 2
+5:18/0/custom_data_1 = "wmine"
 5:17/0 = 0
 5:17/0/z_index = -1
 5:17/0/terrain_set = 0
 5:17/0/terrain = 3
+5:17/0/custom_data_0 = "purple"
+5:17/0/custom_data_1 = "tower"
 4:17/0 = 0
 4:17/0/z_index = -1
 4:17/0/terrain_set = 0
 4:17/0/terrain = 2
+4:17/0/custom_data_1 = "gmine"
 4:18/0 = 0
 4:18/0/z_index = -1
 4:18/0/terrain_set = 0
 4:18/0/terrain = 2
+4:18/0/custom_data_0 = "purple"
+4:18/0/custom_data_1 = "tower"
 3:18/0 = 0
 3:18/0/z_index = -1
 3:18/0/terrain_set = 0
@@ -623,14 +695,17 @@ texture_region_size = Vector2i(61, 71)
 2:18/0/z_index = -1
 2:18/0/terrain_set = 0
 2:18/0/terrain = 4
+2:18/0/custom_data_1 = "tomb"
 1:18/0 = 0
 1:18/0/z_index = -1
 1:18/0/terrain_set = 0
 1:18/0/terrain = 4
+1:18/0/custom_data_0 = "yellow"
 1:17/0 = 0
 1:17/0/z_index = -1
 1:17/0/terrain_set = 0
 1:17/0/terrain = 3
+1:17/0/custom_data_0 = "yellow"
 0:17/0 = 0
 0:17/0/z_index = -1
 0:17/0/terrain_set = 0
@@ -643,14 +718,17 @@ texture_region_size = Vector2i(61, 71)
 0:19/0/z_index = -1
 0:19/0/terrain_set = 0
 0:19/0/terrain = 2
+0:19/0/custom_data_1 = "bmine"
 0:20/0 = 0
 0:20/0/z_index = -1
 0:20/0/terrain_set = 0
 0:20/0/terrain = 1
+0:20/0/custom_data_1 = "glade"
 1:20/0 = 0
 1:20/0/z_index = -1
 1:20/0/terrain_set = 0
 1:20/0/terrain = 3
+1:20/0/custom_data_1 = "village"
 1:19/0 = 0
 1:19/0/z_index = -1
 1:19/0/terrain_set = 0
@@ -667,26 +745,33 @@ texture_region_size = Vector2i(61, 71)
 3:19/0/z_index = -1
 3:19/0/terrain_set = 0
 3:19/0/terrain = 7
+3:19/0/custom_data_0 = "red"
 3:20/0 = 0
 3:20/0/z_index = -1
 3:20/0/terrain_set = 0
 3:20/0/terrain = 6
+3:20/0/custom_data_1 = "gcastle"
 4:20/0 = 0
 4:20/0/z_index = -1
 4:20/0/terrain_set = 0
 4:20/0/terrain = 3
+4:20/0/custom_data_0 = "green"
 4:19/0 = 0
 4:19/0/z_index = -1
 4:19/0/terrain_set = 0
 4:19/0/terrain = 4
+4:19/0/custom_data_0 = "grey"
+4:19/0/custom_data_1 = "keep"
 5:19/0 = 0
 5:19/0/z_index = -1
 5:19/0/terrain_set = 0
 5:19/0/terrain = 4
+5:19/0/custom_data_0 = "yellow"
 5:20/0 = 0
 5:20/0/z_index = -1
 5:20/0/terrain_set = 0
 5:20/0/terrain = 1
+5:20/0/custom_data_0 = "green"
 6:19/0 = 0
 6:19/0/z_index = -1
 6:19/0/terrain_set = 0
@@ -703,6 +788,7 @@ texture_region_size = Vector2i(61, 71)
 6:22/0/z_index = -1
 6:22/0/terrain_set = 0
 6:22/0/terrain = 8
+6:22/0/custom_data_0 = "red"
 5:21/0 = 0
 5:21/0/z_index = -1
 5:21/0/terrain_set = 0
@@ -715,14 +801,17 @@ texture_region_size = Vector2i(61, 71)
 3:21/0/z_index = -1
 3:21/0/terrain_set = 0
 3:21/0/terrain = 6
+3:21/0/custom_data_1 = "bcastle"
 2:21/0 = 0
 2:21/0/z_index = -1
 2:21/0/terrain_set = 0
 2:21/0/terrain = 7
+2:21/0/custom_data_0 = "red"
 1:21/0 = 0
 1:21/0/z_index = -1
 1:21/0/terrain_set = 0
 1:21/0/terrain = 0
+1:21/0/custom_data_1 = "monastery"
 0:21/0 = 0
 0:21/0/z_index = -1
 0:21/0/terrain_set = 0
@@ -731,6 +820,7 @@ texture_region_size = Vector2i(61, 71)
 0:22/0/z_index = -1
 0:22/0/terrain_set = 0
 0:22/0/terrain = 4
+0:22/0/custom_data_1 = "grounds"
 1:22/0 = 0
 1:22/0/z_index = -1
 1:22/0/terrain_set = 0
@@ -739,10 +829,13 @@ texture_region_size = Vector2i(61, 71)
 2:22/0/z_index = -1
 2:22/0/terrain_set = 0
 2:22/0/terrain = 4
+2:22/0/custom_data_0 = "grey"
+2:22/0/custom_data_1 = "keep"
 3:22/0 = 0
 3:22/0/z_index = -1
 3:22/0/terrain_set = 0
 3:22/0/terrain = 6
+3:22/0/custom_data_1 = "wcastle"
 4:22/0 = 0
 4:22/0/z_index = -1
 4:22/0/terrain_set = 0
@@ -755,6 +848,7 @@ texture_region_size = Vector2i(61, 71)
 6:23/0/z_index = -1
 6:23/0/terrain_set = 0
 6:23/0/terrain = 5
+6:23/0/custom_data_0 = "red"
 5:23/0 = 0
 5:23/0/z_index = -1
 5:23/0/terrain_set = 0
@@ -767,26 +861,33 @@ texture_region_size = Vector2i(61, 71)
 3:23/0/z_index = -1
 3:23/0/terrain_set = 0
 3:23/0/terrain = 6
+3:23/0/custom_data_1 = "rcastle"
 2:23/0 = 0
 2:23/0/z_index = -1
 2:23/0/terrain_set = 0
 2:23/0/terrain = 4
+2:23/0/custom_data_0 = "red"
 1:23/0 = 0
 1:23/0/z_index = -1
 1:23/0/terrain_set = 0
 1:23/0/terrain = 2
+1:23/0/custom_data_1 = "rmine"
 0:23/0 = 0
 0:23/0/z_index = -1
 0:23/0/terrain_set = 0
 0:23/0/terrain = 5
+0:23/0/custom_data_0 = "yellow"
 0:24/0 = 0
 0:24/0/z_index = -1
 0:24/0/terrain_set = 0
 0:24/0/terrain = 2
+0:24/0/custom_data_1 = "labyrinth"
 1:24/0 = 0
 1:24/0/z_index = -1
 1:24/0/terrain_set = 0
 1:24/0/terrain = 2
+1:24/0/custom_data_0 = "purple"
+1:24/0/custom_data_1 = "tower"
 2:24/0 = 0
 2:24/0/z_index = -1
 2:24/0/terrain_set = 0
@@ -795,6 +896,7 @@ texture_region_size = Vector2i(61, 71)
 3:24/0/z_index = -1
 3:24/0/terrain_set = 0
 3:24/0/terrain = 0
+3:24/0/custom_data_0 = "red"
 4:24/0 = 0
 4:24/0/z_index = -1
 4:24/0/terrain_set = 0
@@ -807,14 +909,17 @@ texture_region_size = Vector2i(61, 71)
 6:24/0/z_index = -1
 6:24/0/terrain_set = 0
 6:24/0/terrain = 5
+6:24/0/custom_data_1 = "refugee"
 6:25/0 = 0
 6:25/0/z_index = -1
 6:25/0/terrain_set = 0
 6:25/0/terrain = 2
+6:25/0/custom_data_0 = "green"
 6:26/0 = 0
 6:26/0/z_index = -1
 6:26/0/terrain_set = 0
 6:26/0/terrain = 5
+6:26/0/custom_data_1 = "village"
 5:26/0 = 0
 5:26/0/z_index = -1
 5:26/0/terrain_set = 0
@@ -823,18 +928,22 @@ texture_region_size = Vector2i(61, 71)
 5:25/0/z_index = -1
 5:25/0/terrain_set = 0
 5:25/0/terrain = 2
+5:25/0/custom_data_0 = "green"
 4:25/0 = 0
 4:25/0/z_index = -1
 4:25/0/terrain_set = 0
 4:25/0/terrain = 1
+4:25/0/custom_data_1 = "labyrinth"
 4:26/0 = 0
 4:26/0/z_index = -1
 4:26/0/terrain_set = 0
 4:26/0/terrain = 4
+4:26/0/custom_data_0 = "red"
 3:26/0 = 0
 3:26/0/z_index = -1
 3:26/0/terrain_set = 0
 3:26/0/terrain = 6
+3:26/0/custom_data_1 = "volkare"
 3:25/0 = 0
 3:25/0/z_index = -1
 3:25/0/terrain_set = 0
@@ -843,6 +952,8 @@ texture_region_size = Vector2i(61, 71)
 2:25/0/z_index = -1
 2:25/0/terrain_set = 0
 2:25/0/terrain = 1
+2:25/0/custom_data_0 = "grey"
+2:25/0/custom_data_1 = "keep"
 2:26/0 = 0
 2:26/0/z_index = -1
 2:26/0/terrain_set = 0
@@ -859,10 +970,12 @@ texture_region_size = Vector2i(61, 71)
 0:25/0/z_index = -1
 0:25/0/terrain_set = 0
 0:25/0/terrain = 3
+0:25/0/custom_data_1 = "bgwrmine"
 0:26/0 = 0
 0:26/0/z_index = -1
 0:26/0/terrain_set = 0
 0:26/0/terrain = 1
+0:26/0/custom_data_0 = "green"
 
 [sub_resource type="TileSet" id="TileSet_cu01s"]
 tile_shape = 3
@@ -889,8 +1002,10 @@ terrain_set_0/terrain_8/name = "Lake"
 terrain_set_0/terrain_8/color = Color(0.2, 0.592157, 0.964706, 1)
 terrain_set_0/terrain_9/name = "Nothing"
 terrain_set_0/terrain_9/color = Color(0, 0, 0, 1)
-custom_data_layer_0/name = "Event"
-custom_data_layer_0/type = 25
+custom_data_layer_0/name = "Token"
+custom_data_layer_0/type = 4
+custom_data_layer_1/name = "Event"
+custom_data_layer_1/type = 4
 sources/0 = SubResource("TileSetAtlasSource_rkkx8")
 pattern_0 = SubResource("TileMapPattern_7j6h4")
 pattern_1 = SubResource("TileMapPattern_t51yq")
@@ -926,25 +1041,6 @@ script = ExtResource("1_m0gf8")
 
 [node name="Player UI" type="CanvasLayer" parent="."]
 
-[node name="SharedArea" type="Node2D" parent="Player UI"]
-script = ExtResource("10_bkisu")
-
-[node name="Source" parent="Player UI/SharedArea" instance=ExtResource("1_fhj8j")]
-position = Vector2(968, 0)
-
-[node name="RoundMarker" type="Label" parent="Player UI/SharedArea"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 64.0
-offset_bottom = 47.0
-
-[node name="TurnOrderTracker" type="Node2D" parent="Player UI/SharedArea"]
-position = Vector2(160, 32)
-script = ExtResource("12_js350")
-
-[node name="Deck" parent="Player UI/SharedArea" instance=ExtResource("13_t238q")]
-position = Vector2(1744, 858)
-
 [node name="PlayerArea" type="Node2D" parent="Player UI"]
 script = ExtResource("2_khnnw")
 
@@ -954,10 +1050,10 @@ script = ExtResource("2_khnnw")
 visible = false
 layout_mode = 3
 anchors_preset = 0
-offset_left = 384.0
-offset_top = 160.0
-offset_right = 424.0
-offset_bottom = 200.0
+offset_left = 336.0
+offset_top = 236.0
+offset_right = 376.0
+offset_bottom = 276.0
 script = ExtResource("2_o1npl")
 metadata/_edit_group_ = true
 
@@ -1057,6 +1153,78 @@ offset_bottom = 271.0
 disabled = true
 text = "End Turn"
 
+[node name="Deck" parent="Player UI/PlayerArea" instance=ExtResource("13_t238q")]
+position = Vector2(1744, 858)
+
+[node name="SharedArea" type="Node2D" parent="Player UI"]
+script = ExtResource("10_bkisu")
+
+[node name="Source" parent="Player UI/SharedArea" instance=ExtResource("1_fhj8j")]
+position = Vector2(968, 0)
+
+[node name="RoundMarker" type="Label" parent="Player UI/SharedArea"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+
+[node name="TurnOrderTracker" type="Node2D" parent="Player UI/SharedArea"]
+position = Vector2(160, 32)
+script = ExtResource("12_js350")
+
+[node name="DummyArea" type="Node2D" parent="Player UI/SharedArea"]
+position = Vector2(768, 80)
+script = ExtResource("18_70l2p")
+metadata/_edit_group_ = true
+
+[node name="Area2D" type="Area2D" parent="Player UI/SharedArea/DummyArea"]
+position = Vector2(-768, -80)
+scale = Vector2(0.1, 0.1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player UI/SharedArea/DummyArea/Area2D"]
+position = Vector2(7680, 800)
+scale = Vector2(9.99999, 9.99999)
+shape = SubResource("RectangleShape2D_e3iwm")
+
+[node name="DummyDeck" type="Sprite2D" parent="Player UI/SharedArea/DummyArea/Area2D"]
+position = Vector2(7680, 800)
+texture = ExtResource("19_vtp22")
+
+[node name="Total" type="Label" parent="Player UI/SharedArea/DummyArea"]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 21.0
+offset_bottom = 29.0
+theme_override_font_sizes/font_size = 32
+text = "16"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeckPopup" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("21_bdyk2")]
+visible = false
+position = Vector2(51, -64)
+
+[node name="BlueCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-144, 24)
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/BlueCrystal" index="1"]
+color = Color(0, 0, 1, 1)
+
+[node name="RedCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-93, 24)
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/RedCrystal" index="1"]
+color = Color(1, 0, 0, 1)
+
+[node name="GreenCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-42, 24)
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/GreenCrystal" index="1"]
+color = Color(0, 1, 0, 1)
+
+[node name="WhiteCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(8, 24)
+
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
@@ -1076,43 +1244,6 @@ script = ExtResource("4_jr7il")
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("5_w03ud")
 
-[node name="DummyArea" type="Node2D" parent="."]
-position = Vector2(768, 80)
-script = ExtResource("18_70l2p")
-
-[node name="DummyDeck" type="Sprite2D" parent="DummyArea"]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("19_vtp22")
-
-[node name="Blue" type="Label" parent="DummyArea"]
-offset_left = 72.0
-offset_top = -64.0
-offset_right = 112.0
-offset_bottom = -41.0
-text = "B: 4"
-
-[node name="Red" type="Label" parent="DummyArea"]
-offset_left = 72.0
-offset_top = -33.0
-offset_right = 112.0
-offset_bottom = -10.0
-text = "R: 4"
-
-[node name="Green" type="Label" parent="DummyArea"]
-offset_left = 72.0
-offset_right = 112.0
-offset_bottom = 23.0
-text = "G: 4"
-
-[node name="White" type="Label" parent="DummyArea"]
-offset_left = 72.0
-offset_top = 32.0
-offset_right = 112.0
-offset_bottom = 55.0
-text = "W: 4"
-
-[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/PlayerArea" method="OnCurrentTurn"]
-[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="DummyArea" method="OnCurrentTurn"]
 [connection signal="TurnOrder" from="Player UI/PlayerArea/Tactics" to="Player UI/SharedArea/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic1" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic2" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1121,11 +1252,18 @@ text = "W: 4"
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic5" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic6" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/ConfirmTactic" to="Player UI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/Source" method="NewRound"]
-[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
-[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/DummyArea" method="OnNewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/PlayerArea" method="OnEndTurnPressed"]
-[connection signal="EndTurn" from="DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/PlayerArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/SharedArea/DummyArea" method="OnCurrentTurn"]
+[connection signal="EndTurn" from="Player UI/SharedArea/DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="mouse_entered" from="Player UI/SharedArea/DummyArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseEntered"]
+[connection signal="mouse_exited" from="Player UI/SharedArea/DummyArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseExited"]
+
+[editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
+[editable path="Player UI/SharedArea/DummyArea/RedCrystal"]
+[editable path="Player UI/SharedArea/DummyArea/GreenCrystal"]

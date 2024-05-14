@@ -62,7 +62,7 @@ public partial class CardScene : Node2D
             }
         };
         InitialDeckLength = DeckOfCards.Count;
-        MapGen.shuffleArray(rand, InitialDeckOfCards);
+        MapGen.ShuffleArray(rand, InitialDeckOfCards);
         foreach (var card in InitialDeckOfCards) {
             if (card != null) {
                 DeckOfCards.Push(card);
