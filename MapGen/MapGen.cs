@@ -85,11 +85,10 @@ public partial class MapGen : TileMap
 				// Populate tokens on pattern if needed
 				foreach (var patternTile in patternMapCoords)
 				{
-					GD.Print("patternTile is " + patternTile);
-				}
-
-				// Generate tokens on pattern
-				
+					var patternTileData = GetCellTileData(MainLayer, patternTile);
+					//switch(patternTileData.GetCustomData("Token"));
+					GD.Print("patternTile custom data is " + patternTileData.GetCustomData("Token"));
+				}				
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 				{
@@ -105,7 +104,8 @@ public partial class MapGen : TileMap
 		}
 
 	}
-	// generate map coordinates for patttern given origin coordinates of pattern
+	// Generate map coordinates for patttern given origin coordinates of pattern
+	// Returns array of map coords of each tile in pattern
 	private Vector2I[] getPatternMapCoords(Vector2I patternOrigin)
 	{
 		Vector2I[] patternMapCoords = new Vector2I[7];

@@ -10,11 +10,11 @@ public partial class Utils : Node
 	private static readonly Random random = new Random();
 	private static readonly object syncLock = new object();
 	private static readonly Dictionary<string, string> _sheetPaths = new Dictionary<string, string>{
-		{"orc", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
+		{"green", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
 		{"grey","res://assets/TokenImages/GreyTokens/grey_tokens_sheet.png"},
-		{"violet","res://assets/TokenImages/PurpleTokens/purple_tokens_sheet.png"},
+		{"purple","res://assets/TokenImages/PurpleTokens/purple_tokens_sheet.png"},
 		{"brown","res://assets/TokenImages/BrownTokens/brown_tokens_sheet.png"},
-		{"draconum","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
+		{"red","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
 		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"}
 	};
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
