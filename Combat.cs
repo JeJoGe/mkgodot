@@ -6,7 +6,7 @@ using System.Linq;
 public partial class Combat : Node2D
 {
 	private List<Monster> _enemyList = new List<Monster>();
-	private Dictionary<int,int> _playerAttacks = new Dictionary<int,int>();
+	public Dictionary<int,int> _playerAttacks = new Dictionary<int,int>();
 	private int _block, _fireBlock, _iceBlock, _coldFireBlock;
 	private int _targetArmour, _totalAttack, _totalBlock;
 	private List<Element> _targetResistances = new List<Element>();
@@ -16,7 +16,14 @@ public partial class Combat : Node2D
 	{
 		Ranged,Block,Damage,Attack
 	}
-
+	// represented table here:
+	/*
+	*          Melee=0 Ranged=4  Siege=8
+	* Physical. 0		4			8		
+	* Fire		1		5			9
+	* Ice		2		6			10
+	* IceFire	3		7			11
+	*/
 	public enum AttackRange
 	{
 		Melee, Ranged = 4, Siege = 8
@@ -98,11 +105,12 @@ public partial class Combat : Node2D
 			if (_targetResistances.Contains((Element)element)) {
 				resistedAttack += _playerAttacks[(int)AttackRange.Siege + element] +
 				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
-				(int)CurrentPhase / 3 * _playerAttacks[element];
+				// current phase is ranged, melee attacks ignored
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
 			} else {
 				effectiveAttack += _playerAttacks[(int)AttackRange.Siege + element] +
 				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
-				(int)CurrentPhase / 3 * _playerAttacks[element];
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
 			}
 		}
 		_totalAttack = effectiveAttack + resistedAttack / 2; // integer math automatically rounds down
@@ -111,7 +119,7 @@ public partial class Combat : Node2D
 			GetNode<Button>("ConfirmButton").Disabled = false;
 		}
 	}
-
+	
 	private void OnNextButtonPressed()
 	{
 		switch (CurrentPhase)

@@ -10,6 +10,7 @@ public partial class Monster : Node2D
 	[Export]
 	public bool Selected { get; set; }
 	public bool Blocked { get; set; }
+	public bool Defeated {get; set; }
 	public int Armour { get; set; }
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
@@ -46,6 +47,7 @@ public partial class Monster : Node2D
             var mouseEvent = (InputEventMouseButton)inputEvent;
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed()) {
 				//PrintStats();
+				//Need to add in case for anti-fortification
 				if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
 				{
 					// can not target if double fortified during ranged phase

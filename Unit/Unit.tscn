@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://csblcvrl8fhnm"]
+
+[ext_resource type="Texture2D" uid="uid://5g46ps0sr2f5" path="res://assets/silverunits.jpg" id="1_18t5v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q05kk"]
+atlas = ExtResource("1_18t5v")
+region = Rect2(0, 0, 1000, 1400)
+
+[node name="Unit" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = SubResource("AtlasTexture_q05kk")

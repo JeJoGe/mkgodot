@@ -4,8 +4,8 @@
         "colour": "green",
         "xCoord": 0,
         "yCoord": 0,
-        "topFunction": {"NONE": 1, "move": 2},
-        "bottomFunction": {"NONE": 1, "move": 4},
+        "topFunction": "move-2",
+        "bottomFunction": "move-4",
         "copies": 1
     },
     {
@@ -13,8 +13,8 @@
         "colour": "green",
         "xCoord": 1,
         "yCoord": 0,
-        "topFunction": {"OR": 2, "heal": 1, "draw": 1},
-        "bottomFunction": {"OR": 2, "heal": 2, "draw": 2},
+        "topFunction":  "heal-1,draw-1",
+        "bottomFunction": "heal-2,draw-2",
         "copies": 0
     },
     {
@@ -22,8 +22,8 @@
         "colour": "green",
         "xCoord": 2,
         "yCoord": 0,
-        "topFunction": {"OR": 3, "manaTokens": "blue,white,red"},
-        "bottomFunction": {"NONE": 1, "_bottom": 2},
+        "topFunction": "gainManaTokens-blue/white/red",
+        "bottomFunction": "*enhanceBottom-2",
         "copies": 0
     },
     {
@@ -31,8 +31,8 @@
         "colour": "green",
         "xCoord": 3,
         "yCoord": 0,
-        "topFunction": {"AND": 2, "move": 2, "discard": "crystal"},
-        "bottomFunction": {"AND": 2, "move": 2, "discards":"crystals", "per_hex": 1},
+        "topFunction": "move-2&*discard-crystal",
+        "bottomFunction": "move-2&*discardsCards-crystals-per_hex-1",
         "copies": 0
     },
     {
@@ -40,8 +40,8 @@
         "colour": "green",
         "xCoord": 4,
         "yCoord": 0,
-        "topFunction": {"OR": 3,"move": 2,"heal": 1,"block": 2},
-        "bottomFunction": {"OR": 3, "move": 2, "heal": 2, "block": "per_hex"},
+        "topFunction":  "move-2,heal-1,block-2",
+        "bottomFunction":  "move-2,heal-2,*additionalBlock-per_hex",
         "copies": 0
     },
     {
@@ -49,8 +49,8 @@
         "colour": "green",
         "xCoord": 5,
         "yCoord": 0,
-        "topFunction": {"OR": 4,"heal": 1,"draw": 1,"manaToken": "green","ready": 2},
-        "bottomFunction": {"OR": 4, "heal": 2, "draw": 1, "manaToken": "green", "ready": 3},
+        "topFunction":  "heal-1,draw-1,manaToken-green,ready-2",
+        "bottomFunction": "heal-2,draw-1,gainManaTokens-green,ready-3",
         "copies": 0
     }, 
     {
@@ -58,8 +58,8 @@
         "colour": "green",
         "xCoord": 6,
         "yCoord": 0,
-        "topFunction": {"OR": 5, "manaTokens": "blue,white,red", "crystal": "green"},
-        "bottomFunction": {"OR": 1, "_bottom": 3},
+        "topFunction": "gainManaTokens-blue/white/red,crystal-green",
+        "bottomFunction": "*bottom-3",
         "copies": 0
     },
     {
@@ -67,8 +67,8 @@
         "colour": "white",
         "xCoord": 0,
         "yCoord": 1,
-        "topFunction": {"NONE": 1, "move": 2},
-        "bottomFunction": {"NONE": 1, "ranged_attack": 3},
+        "topFunction":  "move-2",
+        "bottomFunction":  "attack-ranged-3",
         "copies": 1
     },
     {
@@ -76,8 +76,8 @@
         "colour": "white",
         "xCoord": 1,
         "yCoord": 1,
-        "topFunction": {"NONE": 1, "influence": 2},
-        "bottomFunction": {"NONE": 1, "influence": 4},
+        "topFunction": "influence-2",
+        "bottomFunction": "influence-4",
         "copies": 0
     },
     {
@@ -85,8 +85,8 @@
         "colour": "white",
         "xCoord": 2,
         "yCoord": 1,
-        "topFunction": {"NONE": 1, "additonal_dice": 1},
-        "bottomFunction": {"NONE": 1, "manaToken": 2, "reroll_dice": false},
+        "topFunction": "useAdditionalDice-1",
+        "bottomFunction": "*gainManaTokens-2-",
         "copies": 0
     },
     {
@@ -94,8 +94,8 @@
         "colour": "white",
         "xCoord": 3,
         "yCoord": 1,
-        "topFunction": {"OR": 3, "move": 2, "ranged_attack": 1, "reduce_enemy_attack": 1},
-        "bottomFunction": {"OR": 3, "move": 4, "ranged_attack": 3, "reduce_enemy_attack": 2},
+        "topFunction": "move-2,attack-ranged-1,reduceEnemyAttack-1",
+        "bottomFunction":"move-4,attack-ranged-3,reduceEnemyAttack-2",
         "copies": 0
     },
     {
@@ -103,8 +103,8 @@
         "colour": "white",
         "xCoord": 4,
         "yCoord": 1,
-        "topFunction": {"OR": 2, "move": 2, "ranged_attack": 1, "reputation_if": 1},
-        "bottomFunction": {"SPECIAL": 2, "ranged_attack": 3, "discard_special": 1, "fame_if": 1},
+        "topFunction":  "move-2,attack-ranged-1,*reputation-1",
+        "bottomFunction": "attack-ranged-3,*discardsCards-1,*fame-1",
         "copies": 0
     },
     {
@@ -112,8 +112,8 @@
         "colour": "white",
         "xCoord": 5,
         "yCoord": 1,
-        "topFunction": {"NONE": 1, "influence": 2, "fame_if": 1},
-        "bottomFunction": {"NONE": 1, "influence": 4, "fame_if": 1, "reputation_if": 1},
+        "topFunction": "influence-2,*fame-1",
+        "bottomFunction": "influence-4,*fame-1,*reputation-1",
         "copies": 0
     },
     {
@@ -121,8 +121,8 @@
         "colour": "white",
         "xCoord": 6,
         "yCoord": 1,
-        "topFunction": {"SPECIAL": 1, "additional_dice": 1, "black_dice_special": "any"},
-        "bottomFunction": {"None": 1, "manaToken": 2, "reroll_dice": false},
+        "topFunction": "*useAdditionalDice-1",
+        "bottomFunction": "*gainManaTokens-2",
         "copies": 0
     },
     {
@@ -130,8 +130,8 @@
         "colour": "blue",
         "xCoord": 0,
         "yCoord": 2,
-        "topFunction": {"None": 1, "move": 2},
-        "bottomFunction": {"None": 1, "move": 4},
+        "topFunction": "move-2",
+        "bottomFunction": "move-4",
         "copies": 1
     },
     {
@@ -139,8 +139,8 @@
         "colour": "blue",
         "xCoord": 1,
         "yCoord": 2,
-        "topFunction": {"SPECIAL": 1, "pay_mana": 1, "crystal": "same_color"},
-        "bottomFunction": {"None": 1, "crystal": 1},
+        "topFunction": "payMana-1,gainCrystals-same_color",
+        "bottomFunction": "gainCrystals-1",
         "copies": 0
     },
     {
@@ -148,8 +148,8 @@
         "colour": "blue",
         "xCoord": 2,
         "yCoord": 2,
-        "topFunction": {"OR": 2, "attack": 2, "block": 2},
-        "bottomFunction": {"NONE": 1, "block": 5},
+        "topFunction": "attack-2,block-2",
+        "bottomFunction": "block-5",
         "copies": 0
     },
     {
@@ -157,8 +157,8 @@
         "colour": "blue",
         "xCoord": 3,
         "yCoord": 2, 
-        "topFunction": {"SPECIAL": 1, "move": 2, "next_move_special": 1 },
-        "bottomFunction": {"SPECIAL": 1, "move": 4, "each_move_special": 1},
+        "topFunction": "move-2,*moveSpecial-1-next",
+        "bottomFunction":  "move-4,*moveSpecial-1-each",
         "copies": 0
     },
     {
@@ -166,8 +166,8 @@
         "colour": "blue",
         "xCoord": 4,
         "yCoord": 2,
-        "topFunction": {"SPECIAL": 1, "move": 2, "move_cost_special_reduction": 1, "move_cost_special_tile": 1, "tile_minimum": 2},
-        "bottomFunction": {"SPECIAL": 1, "move": 4, "move_cost_special_reduction": 1, "move_cost_special_tile": "terraine", "tile_minimum": 2 },
+        "topFunction": "move-2,*moveSpecial-1-reduction",
+        "bottomFunction": "move-4,*moveSpecial-1-reduction",
         "copies": 0
     },
     {
@@ -175,8 +175,8 @@
         "colour": "blue",
         "xCoord": 5,
         "yCoord": 2,
-        "topFunction": {"SPECIAL": 1, "pay_mana": 1, "crystal": 1, "discard_special": "back_to_hand"},
-        "bottomFunction": {"SPECIAL": 1, "crystal": 1, "discard_special": "back_to_hand", "discard_include": "wound"},
+        "topFunction": "payMana-1,gainCrystals-1,*discardsCards",
+        "bottomFunction": "gainCrystals-1,*discardsCards",
         "copies": 0
     },
     {
@@ -184,8 +184,8 @@
         "colour": "blue",
         "xCoord": 6,
         "yCoord": 2,
-        "topFunction": {"OR": 2, "attack": 2, "ice_block": 3},
-        "bottomFunction": {"SPECIAL": 2, "ice_block": 5, "additonal_block": "*"},
+        "topFunction":  "attack-2,block-ice-3",
+        "bottomFunction": "block-ice-5,*additionalBlock",
         "copies": 0
     },
     {
@@ -193,8 +193,8 @@
         "colour": "red",
         "xCoord": 0,
         "yCoord": 3,
-        "topFunction": {"OR": 2, "attack": 2, "block": 2},
-        "bottomFunction": {"NONE": 1, "attack": 4},
+        "topFunction": "attack-2,block-2",
+        "bottomFunction": "attack-4",
         "copies": 1
     }, 
     {
@@ -202,8 +202,8 @@
         "colour": "red",
         "xCoord": 1,
         "yCoord": 3,
-        "topFunction": {"NONE": 1, "influence": 2},
-        "bottomFunction": {"AND": 1, "influence": 5, "reputation": -1},
+        "topFunction": "influence-2",
+        "bottomFunction": "influence-5&reputation-_1",
         "copies": 0
     },
     {
@@ -211,8 +211,8 @@
         "colour": "red",
         "xCoord": 2,
         "yCoord": 3,
-        "topFunction": {"AND_OR": 4, "discard": 1, "move": 3, "influence": 3, "attack": 3, "block": 3},
-        "bottomFunction": {"AND_OR": 4, "discard": 1, "move": 5, "influence": 5, "attack": 5, "block": 5},
+        "topFunction":  "discard-1&move-3,influence-3,attack-3,block-3",
+        "bottomFunction": "discard-1&move-5,influence-5,attack-5,block-5",
         "copies": 0
     },
     {
@@ -220,8 +220,8 @@
         "colour": "red",
         "xCoord": 3,
         "yCoord": 3,
-        "topFunction": {"OR": 3, "attack": 2, "block": 2, "ranged_attack": 1},
-        "bottomFunction": {"OR": 6, "attack": 4, "block": 4, "fire_attack": 3, "fire_block": 3, "ranged_attack": 3, "siege_attack": 2 },
+        "topFunction":  "attack-2,block-2,attack-ranged-1",
+        "bottomFunction": "attack-4,block-4,attack-fire-3,block-fire-3,attack-ranged-3,attack-siege-2",
         "copies": 0
     }, 
     {
@@ -229,26 +229,26 @@
         "colour": "red",
         "xCoord": 4,
         "yCoord": 3,
-        "topFunction": {"SPECIAL_OR": 2, "attack": 2, "block": 2, "discard": "wound"},
-        "bottomFunction": {"SPECIAL": 1, "attack": 4, "attack_special": 1, "card": 2},
-        "copies": 1
+        "topFunction":  "attack-2,block-2,*discard-wound",
+        "bottomFunction":  "attack-4,*attackSpecial",
+        "copies": 0
     }, 
     {
         "cardId": "RuthlessCoercion",
         "colour": "red",
         "xCoord": 5,
         "yCoord": 3,
-        "topFunction": {"NONE": 1, "influence": 2, "discount": 2, "reputation_if": -1},
-        "bottomFunction": {"NONE": 1, "influence": 6, "reputation": -1, "ready": "2_influence_per_level"},
-        "copies": 1
+        "topFunction": "influence-2,discount-2,*reputation-_1",
+        "bottomFunction": "influence-6,reputation-_1,ready-2_influence_per_level",
+        "copies": 0
     }, 
     {
         "cardId": "Instinct",
         "colour": "red",
         "xCoord": 6,
         "yCoord": 3,
-        "topFunction": {"OR": 4, "move": 2, "inflence": 2, "attack": 2, "block": 2},
-        "bottomFunction": {"OR": 4, "move": 4, "inflence": 4, "attack": 4, "block": 4},
-        "copies": 1
+        "topFunction":  "move-2,influence-2,attack-2,block-2",
+        "bottomFunction": "move-4,influence-4,attack-4,block-4",
+        "copies": 0
     }
 ]
