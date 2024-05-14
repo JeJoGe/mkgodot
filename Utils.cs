@@ -93,6 +93,21 @@ public class MonsterObject
 	public int Count { get; set; }
 }
 
+public class UnitObject
+{
+	public string Name { get; set; }
+	public int Armour { get; set; }
+	public List<string> Abilities { get; set; }
+	public List<Element> Resistances { get; set; }
+	public List<UnitType> Types { get; set; }
+	public int Level { get; set; }
+	public int Cost { get; set; }
+	public int X { get; set; }
+	public int Y { get; set; }
+	public string Version { get; set; }
+	public int Count { get; set; }
+}
+
 public class MonsterAttack
 {
 	public int Value { get; set; }
@@ -102,6 +117,11 @@ public class MonsterAttack
 public enum Element
 {
 	Physical, Fire, Ice, ColdFire, Summon = 9
+}
+
+public enum UnitType
+{
+	Village, Keep, MageTower, Monastery, City, Glade
 }
 
 public static class EnumerableExtensions
