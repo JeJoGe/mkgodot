@@ -46,6 +46,7 @@ public partial class Monster : Node2D
             var mouseEvent = (InputEventMouseButton)inputEvent;
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed()) {
 				//PrintStats();
+				//Need to add in case for anti-fortification
 				if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
 				{
 					// can not target if double fortified during ranged phase
