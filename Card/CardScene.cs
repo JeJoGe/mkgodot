@@ -12,9 +12,26 @@ public partial class CardScene : Node2D
     private Stack<CardObj> DeckOfCards {get; set;} = new Stack<CardObj>();
     private int InitialDeckLength {get; set;}
     private Random rand = new Random();
+    public Texture2D basicCardsAsset;
+
 
     public override void _Ready() {
         base._Ready();
+        var atlas = new AtlasTexture();
+
+    try {
+        var cardImage = Image.LoadFromFile("assets/basics.jpg");
+        var atlasTexture = ImageTexture.CreateFromImage(cardImage);
+        atlas.Atlas = atlasTexture;
+        GD.Print("WIDTH: ", atlasTexture.GetWidth(), " HEIGHT: ", atlasTexture.GetHeight());
+
+        var region = new Rect2(new Vector2(0, 0), new Vector2(atlasTexture.GetWidth(), atlasTexture.GetHeight()));
+        atlas.Region = region;
+    } catch {
+            GD.Print("Faild to load Basic Card Image");
+    
+    }
+
         StreamReader sr = new StreamReader("./Card/basicCard.json");
         string jsonObj = sr.ReadToEnd();
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
@@ -25,6 +42,7 @@ public partial class CardScene : Node2D
                 card.id = _id;
                 InitialDeckOfCards[index] = card;
                 index++;
+                card.ImageCropping(atlas);
             if (card.copies > 0) {
                 for (int i = 0; i < card.copies; i++) {
                     int _id1 = index;
@@ -37,6 +55,7 @@ public partial class CardScene : Node2D
                         topFunction = card.topFunction,
                         bottomFunction = card.bottomFunction
                     };
+                    newCard.ImageCropping(atlas);
                     InitialDeckOfCards[index] = card;
                     index++;
                 }
@@ -50,7 +69,7 @@ public partial class CardScene : Node2D
                 RecordDeckOfCards.Add(card);
             }
         }
-        InitialDeckLength = RecordDeckOfCards.Count;
+        InitialDeckLength = RecordDeckOfCards.Count;        
     }
 
 
