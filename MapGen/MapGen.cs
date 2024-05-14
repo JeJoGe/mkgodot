@@ -80,11 +80,12 @@ public partial class MapGen : TileMap
 				GD.Print("Add tile at " + tilePos.ToString());
 				var honeyComb = TileSet.GetPattern(this.tileStack.Pop());
 				SetPattern(MainLayer, tilePos, honeyComb);
-				
+				var patternMapCoords = getPatternMapCoords(tilePos);
+
 				// Populate tokens on pattern if needed
-				foreach (var patternTile in honeyComb.GetUsedCells())
+				foreach (var patternTile in patternMapCoords)
 				{
-					
+					GD.Print("patternTile is " + patternTile);
 				}
 
 				// Generate tokens on pattern
@@ -104,6 +105,21 @@ public partial class MapGen : TileMap
 		}
 
 	}
+	// generate map coordinates for patttern given origin coordinates of pattern
+	private Vector2I[] getPatternMapCoords(Vector2I patternOrigin)
+	{
+		Vector2I[] patternMapCoords = new Vector2I[7];
+		patternMapCoords[0] = new Vector2I(patternOrigin.X + 1, patternOrigin.Y);
+		patternMapCoords[1] = new Vector2I(patternOrigin.X + 2, patternOrigin.Y);
+		patternMapCoords[2] = new Vector2I(patternOrigin.X , patternOrigin.Y + 1);
+		patternMapCoords[3] = new Vector2I(patternOrigin.X + 1, patternOrigin.Y + 1);
+		patternMapCoords[4] = new Vector2I(patternOrigin.X + 2, patternOrigin.Y + 1);
+		patternMapCoords[5] = new Vector2I(patternOrigin.X, patternOrigin.Y + 2);
+		patternMapCoords[6] = new Vector2I(patternOrigin.X + 1, patternOrigin.Y + 2);
+
+		return patternMapCoords;
+	}
+
 	// Using math to determine how to position tile. Don't understand why it works, it just does
 	private Vector2I DetermineMapPlacement(Vector2I posClicked)
 	{
