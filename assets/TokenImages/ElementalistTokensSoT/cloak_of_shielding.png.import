@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://budqp1l50a76d"
-path="res://.godot/imported/healing_herbs.png-e6a3b3eac93075174880b12f672e2f54.ctex"
+uid="uid://dces2n1kphluc"
+path="res://.godot/imported/cloak_of_shielding.png-4f5d8b1629db1ceb83a1ca41376a16d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/TokenImages/ElementalistTokens/healing_herbs.png"
-dest_files=["res://.godot/imported/healing_herbs.png-e6a3b3eac93075174880b12f672e2f54.ctex"]
+source_file="res://assets/TokenImages/ElementalistTokensSoT/cloak_of_shielding.png"
+dest_files=["res://.godot/imported/cloak_of_shielding.png-4f5d8b1629db1ceb83a1ca41376a16d2.ctex"]
 
 [params]
 

@@ -21,43 +21,40 @@ public partial class Player : Node2D
 	{
 		var mapGen = GetNode<MapGen>("../MapGen");
 		// Called on Input Event. For now, should only process mouse event Leftclick
-		if (@event is InputEventMouseButton eventMouseButton)
+		if (Input.IsActionPressed("leftClick"))
 		{
-			if (eventMouseButton.Pressed && eventMouseButton.ButtonIndex == MouseButton.Left)
+			// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
+			var globalClicked = GetGlobalMousePosition();
+			var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
+			//GD.Print("TileMap: " + posClicked.ToString());
+			// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
+			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MainLayer, posClicked);
+			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
+
+			if (currentAtlasCoords is (-1, -1)) // No tile from atlas exists here
 			{
-				// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
-				var globalClicked = GetGlobalMousePosition();
-				var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
-				//GD.Print("TileMap: " + posClicked.ToString());
-				// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
-				var currentAtlasCoords = mapGen.GetCellAtlasCoords(MainLayer, posClicked);
-				//GD.Print("Atlas: " + currentAtlasCoords.ToString());
+				mapGen.GenerateTile(currentAtlasCoords, posClicked);
+			}
 
-				if (currentAtlasCoords is (-1, -1)) // No tile from atlas exists here
+			else
+			{
+				// Check if tile clicked is any tiles surrounding player position
+				if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
 				{
-					mapGen.GenerateTile(currentAtlasCoords, posClicked);
-				}
+					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
+					GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 
-				else
-				{
-					// Check if tile clicked is any tiles surrounding player position
-					if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
+					if (MovePoints >= mapGen.terrainCosts[cellTerrain])
 					{
-						var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-						GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+						// Change position of player, update position vector
+						GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(posClicked));
+						playerPos = posClicked;
+						MovePoints -= (int)mapGen.terrainCosts[cellTerrain]; // Reduce move points
+					}
 
-						if (MovePoints >= mapGen.terrainCosts[cellTerrain])
-						{
-							// Change position of player, update position vector
-							GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(posClicked));
-							playerPos = posClicked;
-							MovePoints -= (int)mapGen.terrainCosts[cellTerrain]; // Reduce move points
-						}
-
-						else
-						{
-							GD.Print("Terrain costs more movement than you currently have.");
-						}
+					else
+					{
+						GD.Print("Terrain costs more movement than you currently have.");
 					}
 				}
 			}

@@ -25,6 +25,7 @@ public partial class Utils : Node
 	{
 		LoadSprites();
 		LoadBestiary();
+		GameSettings.createMonsterStacks();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -135,12 +136,24 @@ public static class EnumerableExtensions
 	public static IEnumerable<T> ShuffleIterator<T>(this IEnumerable<T> source)
 	{
 		var buffer = source.ToList();
+		//Step 1: For each unshuffled item in the collection
 		for (int i = 0; i < buffer.Count; i++)
 		{
+			//Step 2: Randomly pick an item which has not been shuffled
 			int j = Utils.RandomNumber(i, buffer.Count);
 			yield return buffer[j];
 
+			//Step 3: Swap the selected item with the last "unstruck" letter in the collection
 			buffer[j] = buffer[i];
 		}
+	}
+
+	// Needed method for converting Stack type to Array, shuffling, then converting back.
+	public static Stack<T> shuffleStack<T>(Stack<T> stack)
+	{
+			Random rSeed = new Random();
+			T[] test = stack.ToArray();
+    		MapGen.ShuffleArray(rSeed, test);
+    		return new Stack<T>(test);
 	}
 }

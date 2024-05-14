@@ -33,6 +33,7 @@ public partial class MapGen : TileMap
 		//greenTiles.Shuffle(); // Commented out because Godot Arrays ARE ASS
 		//brownTiles.Shuffle();
 		ShuffleArray(rSeed, greenTiles);
+		//GD.Print("GreenTiles: " + string.Join("\n", greenTiles));
 		tileStack = new Stack<int>(greenTiles);
 	}
 
@@ -87,7 +88,7 @@ public partial class MapGen : TileMap
 				{
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
 					//switch(patternTileData.GetCustomData("Token"));
-					GD.Print("patternTile custom data is " + patternTileData.GetCustomData("Token"));
+					//GD.Print("patternTile custom data is " + patternTileData.GetCustomData("Token"));
 				}				
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles

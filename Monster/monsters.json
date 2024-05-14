@@ -1,5 +1,5 @@
 {
-    "1":{
+    "0":{
         "name":"Prowlers",
         "colour": "green",
         "armour":3,
@@ -13,11 +13,11 @@
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "x":2,
-        "y":2,
+        "x":1,
+        "y":1,
         "count": 2
     },
-    "2":{
+    "1":{
         "name":"Diggers",
         "colour": "green",
         "armour":3,
@@ -31,11 +31,11 @@
         "resistances":[],
         "abilities":["fortified"],
         "version":"base",
-        "x":0,
-        "y":1,
+        "x":2,
+        "y":0,
         "count": 2
     },
-    "3":{
+    "2":{
         "name":"Cursed Hags",
         "colour": "green",
         "armour":5,
@@ -49,11 +49,11 @@
         "resistances":[],
         "abilities":["poison"],
         "version":"base",
-        "x":0,
+        "x":1,
         "y":0,
         "count": 2
     },
-    "4":{
+    "3":{
         "name":"Wolf Riders",
         "colour": "green",
         "armour":4,
@@ -67,11 +67,11 @@
         "resistances":[],
         "abilities":["swift"],
         "version":"base",
-        "x":3,
-        "y":0,
+        "x":0,
+        "y":1,
         "count": 2
     },
-    "5":{
+    "4":{
         "name":"Ironclads",
         "colour": "green",
         "armour":3,
@@ -85,11 +85,11 @@
         "resistances":[0],
         "abilities":["brutal"],
         "version":"base",
-        "x":1,
-        "y":1,
+        "x":3,
+        "y":0,
         "count": 2
     },
-    "6":{
+    "5":{
         "name":"Orc Summoners",
         "colour": "green",
         "armour":4,
@@ -103,11 +103,11 @@
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "x":0,
-        "y":2,
+        "x":4,
+        "y":0,
         "count": 2
     },
-    "7":{
+    "500":{
         "name":"Crossbowmen",
         "colour": "grey",
         "armour":4,
@@ -125,7 +125,7 @@
         "y":0,
         "count": 3
     },
-    "8":{
+    "501":{
         "name":"Guardsmen",
         "colour": "grey",
         "armour":7,
@@ -139,11 +139,11 @@
         "resistances":[],
         "abilities":["fortified"],
         "version":"base",
-        "x":2,
-        "y":1,
+        "x":3,
+        "y":0,
         "count": 3
     },
-    "9":{
+    "502":{
         "name":"Swordsmen",
         "colour": "grey",
         "armour":5,
@@ -157,11 +157,11 @@
         "resistances":[],
         "abilities":[],
         "version":"base",
-        "x":2,
-        "y":2,
+        "x":0,
+        "y":1,
         "count": 2
     },
-    "10":{
+    "503":{
         "name":"Golems",
         "colour": "grey",
         "armour":5,
@@ -175,11 +175,11 @@
         "resistances":[0],
         "abilities":[],
         "version":"base",
-        "x":0,
-        "y":1,
+        "x":2,
+        "y":0,
         "count": 2
     },
-    "11":{
+    "1000":{
         "name":"Monks",
         "colour": "purple",
         "armour":5,
@@ -197,7 +197,7 @@
         "y":2,
         "count": 2
     },
-    "12":{
+    "1001":{
         "name":"Illusionists",
         "colour": "purple",
         "armour":3,
@@ -212,10 +212,10 @@
         "abilities":[],
         "version":"base",
         "x":2,
-        "y":0,
+        "y":1,
         "count": 2
     },
-    "13":{
+    "1002":{
         "name":"Ice Mages",
         "colour": "purple",
         "armour":6,
@@ -229,11 +229,11 @@
         "resistances":[2],
         "abilities":[],
         "version":"base",
-        "x":1,
-        "y":1,
+        "x":2,
+        "y":0,
         "count": 2
     },
-    "14":{
+    "1003":{
         "name":"Ice Golems",
         "colour": "purple",
         "armour":4,
@@ -248,10 +248,10 @@
         "abilities":["paralyze"],
         "version":"base",
         "x":1,
-        "y":0,
+        "y":1,
         "count": 1
     },
-    "15":{
+    "1004":{
         "name":"Fire Mages",
         "colour": "purple",
         "armour":5,
@@ -269,7 +269,7 @@
         "y":1,
         "count": 2
     },
-    "16":{
+    "1005":{
         "name":"Fire Golems",
         "colour": "purple",
         "armour":4,
@@ -283,11 +283,11 @@
         "resistances":[0,1],
         "abilities":["brutal"],
         "version":"base",
-        "x":0,
+        "x":1,
         "y":0,
         "count": 1
     },
-    "17":{
+    "2000":{
         "name":"Minotaur",
         "colour": "brown",
         "armour":5,
@@ -301,11 +301,11 @@
         "resistances":[],
         "abilities":["brutal"],
         "version":"base",
-        "x":0,
-        "y":2,
+        "x":4,
+        "y":0,
         "count": 2
     },
-    "18":{
+    "2001":{
         "name":"Gargoyle",
         "colour": "brown",
         "armour":4,
@@ -319,11 +319,11 @@
         "resistances":[0],
         "abilities":[],
         "version":"base",
-        "x":0,
-        "y":1,
+        "x":2,
+        "y":0,
         "count": 2
     },
-    "19":{
+    "2002":{
         "name":"Medusa",
         "colour": "brown",
         "armour":4,
@@ -337,11 +337,11 @@
         "resistances":[],
         "abilities":["paralyze"],
         "version":"base",
-        "x":2,
-        "y":1,
+        "x":3,
+        "y":0,
         "count": 2
     },
-    "20":{
+    "2003":{
         "name":"Crypt Worm",
         "colour": "brown",
         "armour":6,
@@ -359,7 +359,7 @@
         "y":0,
         "count": 2
     },
-    "21":{
+    "2004":{
         "name":"Werewolf",
         "colour": "brown",
         "armour":5,
@@ -373,8 +373,8 @@
         "resistances":[],
         "abilities":["swift"],
         "version":"base",
-        "x":2,
-        "y":2,
+        "x":0,
+        "y":1,
         "count": 2
     }
 }
