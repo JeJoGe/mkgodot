@@ -10,6 +10,7 @@ public partial class Monster : Node2D
 	[Export]
 	public bool Selected { get; set; }
 	public bool Blocked { get; set; }
+	public bool Defeated {get; set; }
 	public int Armour { get; set; }
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
