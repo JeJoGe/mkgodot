@@ -1,6 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3cy63d58f762"]
+[gd_scene load_steps=5 format=3 uid="uid://b3cy63d58f762"]
 
 [ext_resource type="Script" path="res://Monster/Monster.cs" id="1_m3i1r"]
+[ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="2_mspwl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7iqo"]
+atlas = ExtResource("2_mspwl")
+region = Rect2(0, 0, 258, 258)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cotig"]
+radius = 46.0
 
 [node name="Monster" type="Node2D"]
 script = ExtResource("1_m3i1r")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.4, 0.4)
+texture = SubResource("AtlasTexture_l7iqo")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_cotig")

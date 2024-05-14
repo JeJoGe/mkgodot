@@ -1,20 +1,36 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using System.Linq;
 
 public partial class Combat : Node2D
 {
 	private List<Monster> _enemyList = new List<Monster>();
-	private int _siegeFire, _siegeIce, _siegeColdFire, _siege, _ranged, _rangedFire, _rangedIce, _rangedColdFire;
+	public Dictionary<int,int> _playerAttacks = new Dictionary<int,int>();
 	private int _block, _fireBlock, _iceBlock, _coldFireBlock;
-	private int _attack, _fireAttack, _iceAttack, _coldFireAttack;
+	private int _targetArmour, _totalAttack, _totalBlock;
+	private List<Element> _targetResistances = new List<Element>();
+	private bool _targetFortified;
+	private int _totalFame = 0;
 	public enum Phase
 	{
 		Ranged,Block,Damage,Attack
 	}
+	// represented table here:
+	/*
+	*          Melee=0 Ranged=4  Siege=8
+	* Physical. 0		4			8		
+	* Fire		1		5			9
+	* Ice		2		6			10
+	* IceFire	3		7			11
+	*/
+	public enum AttackRange
+	{
+		Melee, Ranged = 4, Siege = 8
+	}
+
+	private static readonly int _spriteSize = 258;
+	private static readonly int _offset = 120;
 
 	public Phase CurrentPhase { get; set; }
 
@@ -22,68 +38,154 @@ public partial class Combat : Node2D
 	public override void _Ready()
 	{
 		// FOR INITIAL TESTING
-		_ranged = _rangedFire = _rangedIce = _rangedColdFire = 10;
-		_siege = _siegeColdFire = _siegeFire = _siegeIce = 10;
 		_block = _iceBlock = _fireBlock = _coldFireBlock = 10;
-		_attack = _fireAttack = _iceAttack = _coldFireAttack = 10;
-		GameSettings.EnemyList = new List<(int,bool)>([(1,false),(2,false),(2,true)]);
-		// get dictionary of enemy tokens
-		StreamReader sr = new StreamReader("./Monster/monsters.json");
-		string json = sr.ReadToEnd();
-		var monsters = JsonConvert.DeserializeObject<Dictionary<int,Monster>>(json);
-		// create enemy tokens
-		foreach (var enemy in GameSettings.EnemyList)
+		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 10;
+		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 10;
+		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 10;
+		GameSettings.EnemyList = new List<(int,int)>([(1,0),(2,0),(10,1),(13,0),(21,2)]);
+		Utils.PrintBestiary();
+		// create  enemy tokens
+		var monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
+		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
 		{
-			var monsterToken = new Monster(monsters[enemy.Item1]);
+			var enemy = GameSettings.EnemyList[i];
+			var monsterToken = (Monster)monsterScene.Instantiate();
 			monsterToken.SiteFortifications = enemy.Item2;
+			var monsterStats = Utils.Bestiary[enemy.Item1];
+			monsterToken.PopulateStats(monsterStats);
+			var enemySprite = monsterToken.GetNode<Sprite2D>("Sprite2D");
+			var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
+			atlas.Region = new Rect2(new Vector2(monsterStats.X * _spriteSize,monsterStats.Y * _spriteSize),new Vector2(_spriteSize,_spriteSize));
+			enemySprite.Texture = atlas;
+			enemySprite.Scale = new Vector2((float)0.4,(float)0.4);
+			monsterToken.Position = new Vector2(_offset*i+60,80);
+			AddChild(monsterToken);
 			_enemyList.Add(monsterToken);
 		}
-		//PrintBestiary(monsters);
-		PrintEnemies();
-
+ 
 		CurrentPhase = Phase.Ranged;
+	}
+
+	public void UpdateTargets()
+	{
+		_targetArmour = 0;
+		_targetResistances.Clear();
+		_targetFortified = false;
+		foreach (var enemy in _enemyList)
+		{
+			if (enemy.Selected) {
+				_targetArmour += enemy.Armour;
+				_targetResistances = _targetResistances.Union(enemy.Resistances).ToList();
+				// add coldfire resistance to simplify calculations
+				if (_targetResistances.Contains(Element.Fire) && _targetResistances.Contains(Element.Ice)) {
+					_targetResistances.Add(Element.ColdFire);
+				}
+				if (!_targetFortified && (enemy.SiteFortifications == 1 || enemy.Abilities.Contains("fortified"))) {
+					_targetFortified = true;
+				}
+			}
+		}
+		GD.Print("target armour: "+_targetArmour);
+		var resistances = "";
+		foreach (var item in _targetResistances)
+		{
+			resistances += item + " ";
+		}
+		GD.Print("targets resistances: "+ resistances);
+		GD.Print("targets fortified: "+_targetFortified.ToString());
+		UpdateAttack();
+	}
+
+	private void UpdateAttack()
+	{
+		var resistedAttack = 0;
+		var effectiveAttack = 0;
+		for (int element = 0; element < 4; element++)
+		{
+			if (_targetResistances.Contains((Element)element)) {
+				resistedAttack += _playerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
+				// current phase is ranged, melee attacks ignored
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
+			} else {
+				effectiveAttack += _playerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
+			}
+		}
+		_totalAttack = effectiveAttack + resistedAttack / 2; // integer math automatically rounds down
+		GD.Print("final attack: "+_totalAttack.ToString());
+		if (_totalAttack >= _targetArmour) {
+			GetNode<Button>("ConfirmButton").Disabled = false;
+		}
+	}
+	
+	private void OnNextButtonPressed()
+	{
+		switch (CurrentPhase)
+		{
+			//attacking/blocking is optional
+			case Phase.Ranged:
+			{
+				CurrentPhase = Phase.Block;
+				GetNode<Button>("NextButton").Text = "Skip Blocking";
+				break;
+			}
+			case Phase.Block:
+			{
+				CurrentPhase = Phase.Damage;
+				break;
+			}
+			case Phase.Attack:
+			{
+				// return to Map with results of combat (either all enemies defeated or not)
+				break;
+			}
+			default: break;
+		}
+	}
+
+	private void OnConfirmButtonPressed()
+	{
+		switch (CurrentPhase)
+		{
+			case Phase.Ranged:
+			{
+				// remove defeated enemies
+				DefeatEnemies();
+				GetNode<Button>("ConfirmButton").Disabled = true;
+				// TODO: 0 player attacks
+				break;
+			}
+			case Phase.Attack:
+			{
+				DefeatEnemies();
+				GetNode<Button>("ConfirmButton").Disabled = true;
+				// TODO: 0 player attacks
+				break;
+			}
+			default: break;
+		}
+	}
+
+	private void DefeatEnemies()
+	{
+		for (int i = _enemyList.Count - 1; i >= 0; i--)
+		{
+			var enemy = _enemyList[i];
+			if (enemy.Selected)
+			{
+				_totalFame += enemy.Fame;
+				_enemyList.RemoveAt(i);
+				enemy.QueueFree();
+			}
+		}
+		GD.Print("total fame: "+_totalFame.ToString());
+		GD.Print("enemies remaining: "+_enemyList.Count);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-	}
-
-	private void PrintBestiary(Dictionary<int,Monster> bestiary)
-	{
-		foreach (var kvp in bestiary)
-		{
-			GD.Print(string.Format("{0} {1}",kvp.Key,kvp.Value.Name));
-			if (kvp.Value.Abilities.Count > 0) {
-				GD.Print(string.Format("Abilities: {0}",kvp.Value.Abilities.First()));
-			}
-			var resistances = "";
-			foreach (var element in kvp.Value.Resistances)
-			{
-				resistances = resistances + element + " ";
-			}
-			GD.Print(string.Format("Armour: {0} Resists: {1}",kvp.Value.Armour,resistances));
-			GD.Print(string.Format("{0} {1}",kvp.Value.Attacks.First().Type, kvp.Value.Attacks.First().Value));
-			GD.Print("=====");
-		}
-	}
-
-	private void PrintEnemies() {
-		foreach (var enemy in _enemyList)
-		{
-			GD.Print(string.Format("{0}",enemy.Name));
-			if (enemy.Abilities.Count > 0) {
-				GD.Print(string.Format("Abilities: {0}",enemy.Abilities.First()));
-			}
-			var resistances = "";
-			foreach (var element in enemy.Resistances)
-			{
-				resistances = resistances + element + " ";
-			}
-			GD.Print(string.Format("Armour: {0} Resists: {1}",enemy.Armour,resistances));
-			GD.Print(string.Format("{0} {1}",enemy.Attacks.First().Type, enemy.Attacks.First().Value));
-			GD.Print("Fortified by site: "+enemy.SiteFortifications.ToString());
-			GD.Print("=====");
-		}
 	}
 }
