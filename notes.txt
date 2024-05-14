@@ -14,8 +14,9 @@ Yellows: 3500-3999
 Dark Crusader Rewards: 4200-4249
 Elementalist Rewards: 4250-4299
 
-Token Resistance values (multiply for multiple resistances):
-No Resistance: 1
+Token Resistance values:
+No Resistance: --
 Ice Resistance: 2
-Fire Resistance: 3
-Physical Resistance: 7
+Fire Resistance: 1
+Physical Resistance: 0
+Coldfire Resistance: 4 (only during combat)
