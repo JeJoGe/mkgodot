@@ -10,21 +10,25 @@ public partial class Utils : Node
 	private static readonly Random random = new Random();
 	private static readonly object syncLock = new object();
 	private static readonly Dictionary<string, string> _sheetPaths = new Dictionary<string, string>{
-		{"orc", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
+		{"green", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
 		{"grey","res://assets/TokenImages/GreyTokens/grey_tokens_sheet.png"},
 		{"violet","res://assets/TokenImages/PurpleTokens/purple_tokens_sheet.png"},
 		{"brown","res://assets/TokenImages/BrownTokens/brown_tokens_sheet.png"},
-		{"draconum","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
-		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"}
+		{"red","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
+		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"},
+		{"silver","res://assets/silverunits.jpg"},
+		{"gold","res://assets/goldunits.jpg"}
 	};
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
 	public static Dictionary<int,MonsterObject> Bestiary;
+	public static Dictionary<int,UnitObject> UnitStats;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		LoadSprites();
 		LoadBestiary();
+		LoadUnits();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,6 +59,13 @@ public partial class Utils : Node
 		StreamReader sr = new StreamReader("./Monster/monsters.json");
 		string json = sr.ReadToEnd();
 		Bestiary = JsonConvert.DeserializeObject<Dictionary<int, MonsterObject>>(json);
+	}
+
+	private void LoadUnits()
+	{
+		StreamReader sr = new StreamReader("./Unit/units.json");
+		string json = sr.ReadToEnd();
+		UnitStats = JsonConvert.DeserializeObject<Dictionary<int, UnitObject>>(json);
 	}
 
 	public static void PrintBestiary()
@@ -112,6 +123,7 @@ public class MonsterAttack
 {
 	public int Value { get; set; }
 	public Element Element { get; set; }
+	public bool Blocked { get; set; } = false;
 }
 
 public enum Element

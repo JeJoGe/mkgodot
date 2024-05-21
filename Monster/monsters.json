@@ -1,7 +1,7 @@
 {
     "1":{
         "name":"Prowlers",
-        "colour": "orc",
+        "colour": "green",
         "armour":3,
         "attacks":[
             {
@@ -19,7 +19,7 @@
     },
     "2":{
         "name":"Diggers",
-        "colour": "orc",
+        "colour": "green",
         "armour":3,
         "attacks":[
             {
@@ -37,7 +37,7 @@
     },
     "3":{
         "name":"Cursed Hags",
-        "colour": "orc",
+        "colour": "green",
         "armour":5,
         "attacks":[
             {
@@ -55,7 +55,7 @@
     },
     "4":{
         "name":"Wolf Riders",
-        "colour": "orc",
+        "colour": "green",
         "armour":4,
         "attacks":[
             {
@@ -73,7 +73,7 @@
     },
     "5":{
         "name":"Ironclads",
-        "colour": "orc",
+        "colour": "green",
         "armour":3,
         "attacks":[
             {
@@ -90,8 +90,8 @@
         "count": 2
     },
     "6":{
-        "name":"Orc Summoners",
-        "colour": "orc",
+        "name":"green Summoners",
+        "colour": "green",
         "armour":4,
         "attacks":[
             {
