@@ -6,12 +6,15 @@ using System.Linq;
 public partial class Combat : Node2D
 {
 	private List<Monster> _enemyList = new List<Monster>();
-	public Dictionary<int,int> _playerAttacks = new Dictionary<int,int>();
-	private int _block, _fireBlock, _iceBlock, _coldFireBlock;
+	private List<Unit> _unitList = new List<Unit>();
+	public ButtonGroup MonsterAttacks;
+	public Dictionary<int,int> PlayerAttacks = new Dictionary<int,int>();
+	public Dictionary<int,int> PlayerBlocks = new Dictionary<int, int>();
 	private int _targetArmour, _totalAttack, _totalBlock;
 	private List<Element> _targetResistances = new List<Element>();
 	private bool _targetFortified;
 	private int _totalFame = 0;
+	private MonsterAttack _targetAttack;
 	public enum Phase
 	{
 		Ranged,Block,Damage,Attack
@@ -22,7 +25,14 @@ public partial class Combat : Node2D
 	* Physical. 0		4			8		
 	* Fire		1		5			9
 	* Ice		2		6			10
-	* IceFire	3		7			11
+	* ColdFire	3		7			11
+	*
+	* for block here:
+	*			Normal=0 Swift=4
+	* Physical	0		4
+	* Fire		1		5
+	* Ice		2		6
+	* ColdFire	3		7
 	*/
 	public enum AttackRange
 	{
@@ -31,6 +41,7 @@ public partial class Combat : Node2D
 
 	private static readonly int _spriteSize = 258;
 	private static readonly int _offset = 120;
+	private static readonly int _cardOffset = 200;
 
 	public Phase CurrentPhase { get; set; }
 
@@ -38,12 +49,14 @@ public partial class Combat : Node2D
 	public override void _Ready()
 	{
 		// FOR INITIAL TESTING
-		_block = _iceBlock = _fireBlock = _coldFireBlock = 10;
-		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 10;
-		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 10;
-		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 10;
+		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
+		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
+		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
+		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
+		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
 		GameSettings.EnemyList = new List<(int,int)>([(0,0),(1,0),(500,1),(501,0),(2004,2)]);
-		Utils.PrintBestiary();
+		GameSettings.UnitList = new List<(int,int)>([(1,0),(2,0),(6,2)]);
+		//Utils.PrintBestiary();
 		// create  enemy tokens
 		var monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
 		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
@@ -61,6 +74,27 @@ public partial class Combat : Node2D
 			monsterToken.Position = new Vector2(_offset*i+60,80);
 			AddChild(monsterToken);
 			_enemyList.Add(monsterToken);
+		}
+		// instantiate units
+		var unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
+		for (int i = 0; i < GameSettings.UnitList.Count; i++)
+		{
+			var unit = GameSettings.UnitList[i];
+			var unitCard = (Unit)unitScene.Instantiate();
+			// get unit stats
+			unitCard.Wounds = unit.Item2;
+			var unitStats = Utils.UnitStats[unit.Item1];
+			unitCard.PopulateStats(unitStats);
+			var unitSprite = unitCard.GetNode<Sprite2D>("Sprite2D");
+			var atlas = (AtlasTexture)Utils.SpriteSheets[unitCard.Level > 2 ? "gold" : "silver"].Duplicate();
+			atlas.Region = new Rect2(
+				new Vector2(unitStats.X * GameSettings.CardWidth,unitStats.Y * GameSettings.CardLength),
+				new Vector2(GameSettings.CardWidth,GameSettings.CardLength));
+			unitSprite.Texture = atlas;
+			unitSprite.Scale = new Vector2((float)0.2,(float)0.2);
+			unitCard.Position = new Vector2(_cardOffset*i+100,400);
+			AddChild(unitCard);
+			_unitList.Add(unitCard);
 		}
  
 		CurrentPhase = Phase.Ranged;
@@ -80,7 +114,8 @@ public partial class Combat : Node2D
 				if (_targetResistances.Contains(Element.Fire) && _targetResistances.Contains(Element.Ice)) {
 					_targetResistances.Add(Element.ColdFire);
 				}
-				if (!_targetFortified && (enemy.SiteFortifications == 1 || enemy.Abilities.Contains("fortified"))) {
+				// only need to check for fortififcations during ranged phase
+				if (CurrentPhase == Phase.Ranged && !_targetFortified && (enemy.SiteFortifications == 1 || enemy.Abilities.Contains("fortified"))) {
 					_targetFortified = true;
 				}
 			}
@@ -96,6 +131,47 @@ public partial class Combat : Node2D
 		UpdateAttack();
 	}
 
+	public void UpdateBlock(MonsterAttack attack, bool swift)
+	{
+		_targetAttack = attack;
+		var inefficientBlock = 0;
+		var efficientBlock = PlayerBlocks[(int)Element.ColdFire] + (swift ? PlayerBlocks[7] : 0); // cold fire block is always efficient
+		//GD.Print(string.Format("{0} {1}",attackElement.ToString("F"),attackValue));
+		switch (attack.Element)
+		{
+			case Element.Physical: {
+				// all blocks are efficient
+				efficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] + PlayerBlocks[(int)Element.Ice] +
+				(swift ? PlayerBlocks[(int)Element.Physical+4] + PlayerBlocks[(int)Element.Fire+4] + PlayerBlocks[(int)Element.Ice+4] : 0);
+				break;
+			}
+			case Element.Fire: {
+				// ice is efficient
+				efficientBlock += PlayerBlocks[(int)Element.Ice] + (swift ? PlayerBlocks[(int)Element.Ice+4] : 0);
+				inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] +
+				(swift ? PlayerBlocks[(int)Element.Physical+4] + PlayerBlocks[(int)Element.Fire+4] : 0);
+				break;
+			}
+			case Element.Ice: {
+				// fire is efficient
+				efficientBlock += PlayerBlocks[(int)Element.Fire] + (swift ? PlayerBlocks[(int)Element.Fire+4] : 0);
+				inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Ice] +
+				(swift ? PlayerBlocks[(int)Element.Physical+4] + PlayerBlocks[(int)Element.Ice+4] : 0);
+				break;
+			}
+			case Element.ColdFire:{
+				// all blocks are inefficient
+				inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] + PlayerBlocks[(int)Element.Ice] +
+				(swift ? PlayerBlocks[(int)Element.Physical+4] + PlayerBlocks[(int)Element.Fire+4] + PlayerBlocks[(int)Element.Ice+4] : 0);
+				break;
+			}
+			default: break;
+		}
+		_totalBlock = efficientBlock + inefficientBlock / 2;
+		GD.Print("total block: "+_totalBlock.ToString());
+		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < attack.Value + (swift ? attack.Value : 0);
+	}
+
 	private void UpdateAttack()
 	{
 		var resistedAttack = 0;
@@ -103,21 +179,19 @@ public partial class Combat : Node2D
 		for (int element = 0; element < 4; element++)
 		{
 			if (_targetResistances.Contains((Element)element)) {
-				resistedAttack += _playerAttacks[(int)AttackRange.Siege + element] +
-				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
+				resistedAttack += PlayerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * PlayerAttacks[(int)AttackRange.Ranged + element] +
 				// current phase is ranged, melee attacks ignored
-				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * PlayerAttacks[element];
 			} else {
-				effectiveAttack += _playerAttacks[(int)AttackRange.Siege + element] +
-				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
-				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
+				effectiveAttack += PlayerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * PlayerAttacks[(int)AttackRange.Ranged + element] +
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * PlayerAttacks[element];
 			}
 		}
 		_totalAttack = effectiveAttack + resistedAttack / 2; // integer math automatically rounds down
 		GD.Print("final attack: "+_totalAttack.ToString());
-		if (_totalAttack >= _targetArmour) {
-			GetNode<Button>("ConfirmButton").Disabled = false;
-		}
+		GetNode<Button>("ConfirmButton").Disabled = _totalAttack < _targetArmour;
 	}
 	
 	private void OnNextButtonPressed()
@@ -129,15 +203,35 @@ public partial class Combat : Node2D
 			{
 				CurrentPhase = Phase.Block;
 				GetNode<Button>("NextButton").Text = "Skip Blocking";
+				GetNode<Button>("ConfirmButton").Text = "Confirm Block";
+				MonsterAttacks = new ButtonGroup();
+				// create enemy attacks for undefeated enemies
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Defeated) {
+						enemy.Attack();
+					}
+				}
 				break;
 			}
 			case Phase.Block:
 			{
 				CurrentPhase = Phase.Damage;
+				GetNode<Button>("NextButton").Text = "Assign All Remaining Damage to Hero";
+				GetNode<Button>("ConfirmButton").Text = "Confirm Damage";
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Defeated && !enemy.Blocked) {
+						enemy.Damage();
+					}
+				}
 				break;
 			}
 			case Phase.Attack:
 			{
+				GetNode<Button>("NextButton").Text = "Skip Attacking";
 				// return to Map with results of combat (either all enemies defeated or not)
 				break;
 			}
@@ -153,35 +247,102 @@ public partial class Combat : Node2D
 			{
 				// remove defeated enemies
 				DefeatEnemies();
+				// exit combat if all enemies defeated		
+				if (CheckVictory()) {
+					GD.Print("all enemies defeated");
+					// exit combat
+				}
 				GetNode<Button>("ConfirmButton").Disabled = true;
-				// TODO: 0 player attacks
+				foreach (var kvp in PlayerAttacks)
+				{
+					PlayerAttacks[kvp.Key] = 0;
+				}
+				_totalAttack = 0;
+				break;
+			}
+			case Phase.Block: {
+				// block attack
+				_targetAttack.Blocked = true;
+				MonsterAttacks.GetPressedButton().QueueFree();
+				GetNode<Button>("ConfirmButton").Disabled = true;
+				foreach (var kvp in PlayerBlocks)
+				{
+					PlayerBlocks[kvp.Key] = 0;
+				}
+				_totalBlock = 0;
+				// check if all enemies blocked
+				var allBlocked = true;
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Defeated && !enemy.Blocked) {
+						allBlocked = false;
+						break;
+					}
+				}
+				if (allBlocked) {
+					// skip damage phase
+					CurrentPhase = Phase.Attack;
+					GetNode<Button>("ConfirmButton").Text = "Confirm Attack";
+					GetNode<Button>("NextButton").Text = "Skip Attacking";
+				}
+				break;
+			}
+			case Phase.Damage: {
 				break;
 			}
 			case Phase.Attack:
 			{
 				DefeatEnemies();
+				// exit combat if all enemies defeated
+				if (CheckVictory()) {
+					GD.Print("all enemies defeated");
+					// exit combat
+				}
 				GetNode<Button>("ConfirmButton").Disabled = true;
-				// TODO: 0 player attacks
+				foreach (var kvp in PlayerAttacks)
+				{
+					PlayerAttacks[kvp.Key] = 0;
+				}
+				_totalAttack = 0;
 				break;
 			}
 			default: break;
 		}
 	}
 
+	private bool CheckVictory()
+	{
+		var result = true;
+		for (int i = 0; i < _enemyList.Count; i++)
+		{
+			if (!_enemyList[i].Defeated) {
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+
 	private void DefeatEnemies()
 	{
+		var remaining = _enemyList.Count; // just for debugging
 		for (int i = _enemyList.Count - 1; i >= 0; i--)
 		{
 			var enemy = _enemyList[i];
 			if (enemy.Selected)
 			{
 				_totalFame += enemy.Fame;
-				_enemyList.RemoveAt(i);
-				enemy.QueueFree();
+				enemy.Defeated = true;
+				enemy.Visible = false;
+				enemy.Selected = false;
+			}
+			if (enemy.Defeated) {
+				remaining--;
 			}
 		}
 		GD.Print("total fame: "+_totalFame.ToString());
-		GD.Print("enemies remaining: "+_enemyList.Count);
+		GD.Print("enemies remaining: "+remaining);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
