@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 public partial class GamePlay : Node2D
 {
 	PackedScene monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
-	public string test = "This is test";
 	public List<Monster> _enemyList = new List<Monster>();
 	
 	private static readonly int _monsterSpriteSize = 258;
