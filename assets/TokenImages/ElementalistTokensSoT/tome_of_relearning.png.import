@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dces2n1kphluc"
-path="res://.godot/imported/cloak_of_shielding.png-30d12123839e826484b903e0e22155dc.ctex"
+uid="uid://hlrlot16fw1b"
+path="res://.godot/imported/tome_of_relearning.png-bab803e6c83462c6151fad206663d7a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/TokenImages/ElementalistTokens/cloak_of_shielding.png"
-dest_files=["res://.godot/imported/cloak_of_shielding.png-30d12123839e826484b903e0e22155dc.ctex"]
+source_file="res://assets/TokenImages/ElementalistTokensSoT/tome_of_relearning.png"
+dest_files=["res://.godot/imported/tome_of_relearning.png-bab803e6c83462c6151fad206663d7a6.ctex"]
 
 [params]
 

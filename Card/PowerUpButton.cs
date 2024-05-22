@@ -10,7 +10,7 @@ public partial class PowerUpButton : Button
     }
     public override void _Ready()
     {
-        base._Ready();
+        base._Ready(); //is this needed?
         this.Size = new Vector2I(50, 30);
         this.Scale = new Vector2I(3, 3);
         this.Position = new Vector2I(-100, 330);

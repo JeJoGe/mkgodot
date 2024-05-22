@@ -26,7 +26,7 @@ public partial class CardObj : Sprite2D
 
     public override void _Ready()
     {
-        base._Ready();
+        base._Ready(); // is this needed?
         PlayButton play = new PlayButton(id);
         PowerUpButton powerUp = new PowerUpButton(id, "Using Top Action");
         AddChild(play);

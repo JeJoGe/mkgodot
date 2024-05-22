@@ -10,7 +10,7 @@ public partial class PlayButton : Button
     }
     public override void _Ready()
     {
-        base._Ready();
+        base._Ready(); // is this needed?
         this.Text = "Play";
         this.Size = new Vector2I(50, 30);
         this.Scale = new Vector2I(3, 3);

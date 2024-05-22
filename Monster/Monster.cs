@@ -24,6 +24,8 @@ public partial class Monster : Node2D
 	public string Colour { get; set; }
 	private static readonly int _attackOffset = 20;
 
+	public Vector2I mapPos { get; set; }
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -125,4 +127,6 @@ public partial class Monster : Node2D
 		GD.Print("Site fortifications: "+SiteFortifications.ToString());
 		GD.Print(string.Format("blocked: {0}",Blocked));
 	}
+
+	
 }

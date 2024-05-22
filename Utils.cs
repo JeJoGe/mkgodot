@@ -12,7 +12,7 @@ public partial class Utils : Node
 	private static readonly Dictionary<string, string> _sheetPaths = new Dictionary<string, string>{
 		{"green", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
 		{"grey","res://assets/TokenImages/GreyTokens/grey_tokens_sheet.png"},
-		{"violet","res://assets/TokenImages/PurpleTokens/purple_tokens_sheet.png"},
+		{"purple","res://assets/TokenImages/PurpleTokens/purple_tokens_sheet.png"},
 		{"brown","res://assets/TokenImages/BrownTokens/brown_tokens_sheet.png"},
 		{"red","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
 		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"},
@@ -28,6 +28,7 @@ public partial class Utils : Node
 	{
 		LoadSprites();
 		LoadBestiary();
+		GameSettings.createMonsterStacks();
 		LoadUnits();
 	}
 
@@ -147,11 +148,14 @@ public static class EnumerableExtensions
 	public static IEnumerable<T> ShuffleIterator<T>(this IEnumerable<T> source)
 	{
 		var buffer = source.ToList();
+		//Step 1: For each unshuffled item in the collection
 		for (int i = 0; i < buffer.Count; i++)
 		{
+			//Step 2: Randomly pick an item which has not been shuffled
 			int j = Utils.RandomNumber(i, buffer.Count);
 			yield return buffer[j];
 
+			//Step 3: Swap the selected item with the last "unstruck" letter in the collection
 			buffer[j] = buffer[i];
 		}
 	}

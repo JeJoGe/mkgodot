@@ -49,13 +49,12 @@ public partial class Combat : Node2D
 	public override void _Ready()
 	{
 		// FOR INITIAL TESTING
-		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
+		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
+		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
 		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
 		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
 		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
-		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
-		GameSettings.EnemyList = new List<(int,int)>([(1,0),(17,0),(10,1),(13,0),(21,2)]);
+		GameSettings.EnemyList = new List<(int,int)>([(0,0),(1,0),(500,1),(501,0),(2004,2)]);
 		GameSettings.UnitList = new List<(int,int)>([(1,0),(2,0),(6,2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens

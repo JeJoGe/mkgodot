@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbmwjqcbkwow5"
-path="res://.godot/imported/skeletal_warriors_ll.png-05cea8099d2d4a971d3abf5f806cc9d0.ctex"
+uid="uid://dajjmsjfh8y4v"
+path="res://.godot/imported/skeletal_warriors_ll.png-40dfabb51829b92a01b730f90594f3c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/TokenImages/GreenTokens/skeletal_warriors_ll.png"
-dest_files=["res://.godot/imported/skeletal_warriors_ll.png-05cea8099d2d4a971d3abf5f806cc9d0.ctex"]
+source_file="res://assets/TokenImages/GreenTokensSoT/skeletal_warriors_ll.png"
+dest_files=["res://.godot/imported/skeletal_warriors_ll.png-40dfabb51829b92a01b730f90594f3c1.ctex"]
 
 [params]
 

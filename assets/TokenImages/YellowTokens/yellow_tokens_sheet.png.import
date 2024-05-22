@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkr5e62u7mxtf"
-path="res://.godot/imported/ice_shard.png-f5b2abdd5c9fdb1b074243968d7abfa8.ctex"
+uid="uid://divgowb06iruk"
+path="res://.godot/imported/yellow_tokens_sheet.png-d4550f04cb2ab046f5203ab5c0a0df08.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/TokenImages/ElementalistTokens/ice_shard.png"
-dest_files=["res://.godot/imported/ice_shard.png-f5b2abdd5c9fdb1b074243968d7abfa8.ctex"]
+source_file="res://assets/TokenImages/YellowTokens/yellow_tokens_sheet.png"
+dest_files=["res://.godot/imported/yellow_tokens_sheet.png-d4550f04cb2ab046f5203ab5c0a0df08.ctex"]
 
 [params]
 
