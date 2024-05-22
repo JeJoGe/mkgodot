@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://pjyh4ihqssl7"]
+
+[ext_resource type="Script" path="res://MapToken.cs" id="1_yl16r"]
+[ext_resource type="Script" path="res://MapTokenControl.cs" id="2_w3sm5"]
+[ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="3_dk54g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h80h3"]
+atlas = ExtResource("3_dk54g")
+region = Rect2(0, 0, 258, 258)
+
+[node name="MapToken" type="Node2D"]
+script = ExtResource("1_yl16r")
+
+[node name="MapTokenControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+script = ExtResource("2_w3sm5")
+
+[node name="Sprite2D" type="Sprite2D" parent="MapTokenControl"]
+position = Vector2(32, 32)
+scale = Vector2(0.25, 0.25)
+texture = SubResource("AtlasTexture_h80h3")
+
+[connection signal="mouse_entered" from="MapTokenControl" to="MapTokenControl" method="OnMouseEntered"]
+[connection signal="mouse_exited" from="MapTokenControl" to="MapTokenControl" method="OnMouseExited"]

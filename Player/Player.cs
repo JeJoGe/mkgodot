@@ -43,10 +43,10 @@ public partial class Player : Node2D
 				{	
 					// Check if next to any enemy
 					var gamePlay = GetNode<GamePlay>("..");
-					foreach (var enemy in gamePlay._enemyList)
+					foreach (var enemy in gamePlay.EnemyList)
 					{	
 						// Enemy adjacent and moving to another tile adjacent to enemy
-						if (mapGen.GetSurroundingCells(playerPos).Contains(enemy.mapPos) && mapGen.GetSurroundingCells(enemy.mapPos).Contains(posClicked)
+						if (mapGen.GetSurroundingCells(playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red"))
 						{
 							InitiateCombat();

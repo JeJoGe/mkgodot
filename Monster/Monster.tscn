@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3cy63d58f762"]
+[gd_scene load_steps=5 format=3 uid="uid://b3cy63d58f762"]
 
 [ext_resource type="Script" path="res://Monster/Monster.cs" id="1_m3i1r"]
-[ext_resource type="Script" path="res://Monster/MonsterSpriteControl.cs" id="2_4mmlp"]
 [ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="2_mspwl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7iqo"]
@@ -14,26 +13,11 @@ radius = 46.0
 [node name="Monster" type="Node2D"]
 script = ExtResource("1_m3i1r")
 
-[node name="MonsterSpriteControl" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_force_pass_scroll_events = false
-script = ExtResource("2_4mmlp")
-
-[node name="Sprite2D" type="Sprite2D" parent="MonsterSpriteControl"]
-position = Vector2(40, 40)
+[node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.4, 0.4)
 texture = SubResource("AtlasTexture_l7iqo")
 
-[node name="Area2D" type="Area2D" parent="MonsterSpriteControl"]
-position = Vector2(40, 40)
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MonsterSpriteControl/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_cotig")
-
-[connection signal="mouse_entered" from="MonsterSpriteControl" to="MonsterSpriteControl" method="OnMouseEntered"]
-[connection signal="mouse_exited" from="MonsterSpriteControl" to="MonsterSpriteControl" method="OnMouseExited"]
