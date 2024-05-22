@@ -49,7 +49,7 @@ public partial class Player : Node2D
 						if (mapGen.GetSurroundingCells(playerPos).Contains(enemy.mapPos) && mapGen.GetSurroundingCells(enemy.mapPos).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red"))
 						{
-							GD.Print("Combat Start!");
+							InitiateCombat();
 						}
 						// Need another else if for if enemy is facedown and time of day
 					}
@@ -71,5 +71,13 @@ public partial class Player : Node2D
 				}
 			}
 		}
+	}
+
+	private void InitiateCombat()
+	{
+		GD.Print("Combat Start!");
+		// instantiate Combat scene
+		// set player level
+		// set enemies
 	}
 }
