@@ -1041,6 +1041,85 @@ script = ExtResource("1_m0gf8")
 
 [node name="Player UI" type="CanvasLayer" parent="."]
 
+[node name="SharedArea" type="Node2D" parent="Player UI"]
+script = ExtResource("10_bkisu")
+
+[node name="Area2D" type="Area2D" parent="Player UI/SharedArea"]
+scale = Vector2(0.1, 0.1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player UI/SharedArea/Area2D"]
+position = Vector2(7680, 800)
+scale = Vector2(9.99999, 9.99999)
+shape = SubResource("RectangleShape2D_e3iwm")
+
+[node name="DummyDeck" type="Sprite2D" parent="Player UI/SharedArea/Area2D"]
+position = Vector2(7680, 800)
+texture = ExtResource("19_vtp22")
+
+[node name="DummyArea" type="Node2D" parent="Player UI/SharedArea"]
+position = Vector2(768, 80)
+script = ExtResource("18_70l2p")
+metadata/_edit_group_ = true
+
+[node name="Total" type="Label" parent="Player UI/SharedArea/DummyArea"]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 21.0
+offset_bottom = 29.0
+theme_override_font_sizes/font_size = 32
+text = "16"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DeckPopup" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("21_bdyk2")]
+visible = false
+position = Vector2(51, -64)
+
+[node name="BlueCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-144, 24)
+
+[node name="Count" parent="Player UI/SharedArea/DummyArea/BlueCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/BlueCrystal" index="1"]
+color = Color(0, 0, 1, 1)
+
+[node name="RedCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-93, 24)
+
+[node name="Count" parent="Player UI/SharedArea/DummyArea/RedCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/RedCrystal" index="1"]
+color = Color(1, 0, 0, 1)
+
+[node name="GreenCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-42, 24)
+
+[node name="Count" parent="Player UI/SharedArea/DummyArea/GreenCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/GreenCrystal" index="1"]
+color = Color(0, 1, 0, 1)
+
+[node name="WhiteCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(8, 24)
+
+[node name="Source" parent="Player UI/SharedArea" instance=ExtResource("1_fhj8j")]
+position = Vector2(968, 0)
+
+[node name="RoundMarker" type="Label" parent="Player UI/SharedArea"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 64.0
+offset_bottom = 47.0
+metadata/_edit_use_anchors_ = true
+
+[node name="TurnOrderTracker" type="Node2D" parent="Player UI/SharedArea"]
+position = Vector2(160, 32)
+script = ExtResource("12_js350")
+
 [node name="PlayerArea" type="Node2D" parent="Player UI"]
 script = ExtResource("2_khnnw")
 
@@ -1144,6 +1223,7 @@ offset_top = 171.0
 offset_right = 296.937
 offset_bottom = 202.0
 text = "New Round"
+metadata/_edit_use_anchors_ = true
 
 [node name="EndTurnButton" type="Button" parent="Player UI/PlayerArea"]
 offset_left = 208.0
@@ -1152,78 +1232,10 @@ offset_right = 286.0
 offset_bottom = 271.0
 disabled = true
 text = "End Turn"
+metadata/_edit_use_anchors_ = true
 
 [node name="Deck" parent="Player UI/PlayerArea" instance=ExtResource("13_t238q")]
 position = Vector2(1744, 858)
-
-[node name="SharedArea" type="Node2D" parent="Player UI"]
-script = ExtResource("10_bkisu")
-
-[node name="Source" parent="Player UI/SharedArea" instance=ExtResource("1_fhj8j")]
-position = Vector2(968, 0)
-
-[node name="RoundMarker" type="Label" parent="Player UI/SharedArea"]
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 64.0
-offset_bottom = 47.0
-
-[node name="TurnOrderTracker" type="Node2D" parent="Player UI/SharedArea"]
-position = Vector2(160, 32)
-script = ExtResource("12_js350")
-
-[node name="DummyArea" type="Node2D" parent="Player UI/SharedArea"]
-position = Vector2(768, 80)
-script = ExtResource("18_70l2p")
-metadata/_edit_group_ = true
-
-[node name="Area2D" type="Area2D" parent="Player UI/SharedArea/DummyArea"]
-position = Vector2(-768, -80)
-scale = Vector2(0.1, 0.1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player UI/SharedArea/DummyArea/Area2D"]
-position = Vector2(7680, 800)
-scale = Vector2(9.99999, 9.99999)
-shape = SubResource("RectangleShape2D_e3iwm")
-
-[node name="DummyDeck" type="Sprite2D" parent="Player UI/SharedArea/DummyArea/Area2D"]
-position = Vector2(7680, 800)
-texture = ExtResource("19_vtp22")
-
-[node name="Total" type="Label" parent="Player UI/SharedArea/DummyArea"]
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 21.0
-offset_bottom = 29.0
-theme_override_font_sizes/font_size = 32
-text = "16"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="DeckPopup" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("21_bdyk2")]
-visible = false
-position = Vector2(51, -64)
-
-[node name="BlueCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
-position = Vector2(-144, 24)
-
-[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/BlueCrystal" index="1"]
-color = Color(0, 0, 1, 1)
-
-[node name="RedCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
-position = Vector2(-93, 24)
-
-[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/RedCrystal" index="1"]
-color = Color(1, 0, 0, 1)
-
-[node name="GreenCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
-position = Vector2(-42, 24)
-
-[node name="Polygon2D2" parent="Player UI/SharedArea/DummyArea/GreenCrystal" index="1"]
-color = Color(0, 1, 0, 1)
-
-[node name="WhiteCrystal" parent="Player UI/SharedArea/DummyArea" instance=ExtResource("22_7fhxe")]
-position = Vector2(8, 24)
 
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(482, 912)
@@ -1244,6 +1256,11 @@ script = ExtResource("4_jr7il")
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("5_w03ud")
 
+[connection signal="mouse_entered" from="Player UI/SharedArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseEntered"]
+[connection signal="mouse_exited" from="Player UI/SharedArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseExited"]
+[connection signal="EndTurn" from="Player UI/SharedArea/DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/SharedArea/DummyArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/PlayerArea" method="OnCurrentTurn"]
 [connection signal="TurnOrder" from="Player UI/PlayerArea/Tactics" to="Player UI/SharedArea/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic1" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic2" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1252,17 +1269,12 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic5" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/Tactic6" to="Player UI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="Player UI/PlayerArea/Tactics/ConfirmTactic" to="Player UI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea" method="NewRound"]
-[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/PlayerArea" method="OnCurrentTurn"]
-[connection signal="CurrentTurn" from="Player UI/SharedArea/TurnOrderTracker" to="Player UI/SharedArea/DummyArea" method="OnCurrentTurn"]
-[connection signal="EndTurn" from="Player UI/SharedArea/DummyArea" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="mouse_entered" from="Player UI/SharedArea/DummyArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseEntered"]
-[connection signal="mouse_exited" from="Player UI/SharedArea/DummyArea/Area2D" to="Player UI/SharedArea/DummyArea" method="OnMouseExited"]
 
 [editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
 [editable path="Player UI/SharedArea/DummyArea/RedCrystal"]

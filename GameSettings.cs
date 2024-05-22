@@ -20,6 +20,7 @@ public partial class GameSettings : Node
 	public static Stack<int> brownMonsterStack = new Stack<int>();
 	public static Stack<int> redMonsterStack = new Stack<int>();
 	public static Stack<int> whiteMonsterStack = new Stack<int>();
+	public static Dictionary<String,Stack<int>> MonsterStacks = new Dictionary<string, Stack<int>>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -32,8 +33,11 @@ public partial class GameSettings : Node
 	{
 	}
 
+	// Creates a stack of shuffled monster IDs (ints) for each color of monster
+	// Creates dictionary with kvp color (string) and stack<int>. Called after loading bestiary in Utils
 	public static void createMonsterStacks()
 	{
+		// Takes monsters from Bestiary
 		foreach (var monster in Utils.Bestiary)
 		{
 
@@ -73,11 +77,11 @@ public partial class GameSettings : Node
 					}
 			}
 		}
-		greenMonsterStack = EnumerableExtensions.shuffleStack(greenMonsterStack);
-		greyMonsterStack = EnumerableExtensions.shuffleStack(greyMonsterStack);
-		purpleMonsterStack = EnumerableExtensions.shuffleStack(purpleMonsterStack);
-		brownMonsterStack = EnumerableExtensions.shuffleStack(brownMonsterStack);
-		redMonsterStack = EnumerableExtensions.shuffleStack(redMonsterStack);
-		whiteMonsterStack = EnumerableExtensions.shuffleStack(whiteMonsterStack);
+		MonsterStacks.Add("green", new Stack<int> (greenMonsterStack.Shuffle()));
+		MonsterStacks.Add("grey", new Stack<int> (greyMonsterStack.Shuffle()));
+		MonsterStacks.Add("purple", new Stack<int> (purpleMonsterStack.Shuffle()));
+		MonsterStacks.Add("brown", new Stack<int> (brownMonsterStack.Shuffle()));
+		MonsterStacks.Add("red", new Stack<int> (redMonsterStack.Shuffle()));
+		MonsterStacks.Add("white", new Stack<int> (whiteMonsterStack.Shuffle()));
 	}
 }

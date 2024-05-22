@@ -147,13 +147,4 @@ public static class EnumerableExtensions
 			buffer[j] = buffer[i];
 		}
 	}
-
-	// Needed method for converting Stack type to Array, shuffling, then converting back.
-	public static Stack<T> shuffleStack<T>(Stack<T> stack)
-	{
-			Random rSeed = new Random();
-			T[] test = stack.ToArray();
-    		MapGen.ShuffleArray(rSeed, test);
-    		return new Stack<T>(test);
-	}
 }

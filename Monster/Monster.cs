@@ -18,6 +18,8 @@ public partial class Monster : Node2D
 	public List<Element> Resistances { get; set; }
 	public string Colour { get; set; }
 
+	public Vector2I mapPos { get; set; }
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -80,6 +82,8 @@ public partial class Monster : Node2D
 		}
 		GD.Print(string.Format("resists: {0}", resistances));
 		GD.Print(string.Format("{0} {1}",Attacks.First().Element, Attacks.First().Value.ToString("F")));
-		GD.Print("Site fortifications: "+SiteFortifications.ToString());
+		GD.Print("Site fortifications: "+ SiteFortifications.ToString());
 	}
+
+	
 }

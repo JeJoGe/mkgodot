@@ -7,7 +7,7 @@ public partial class Player : Node2D
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	Vector2I playerPos = new Vector2I(0, 0);
-	private int movePoints = 20;
+	private int movePoints = 40;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
 
@@ -31,7 +31,7 @@ public partial class Player : Node2D
 			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MainLayer, posClicked);
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
-			if (currentAtlasCoords is (-1, -1)) // No tile from atlas exists here
+			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
 			}
@@ -40,7 +40,19 @@ public partial class Player : Node2D
 			{
 				// Check if tile clicked is any tiles surrounding player position
 				if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
-				{
+				{	
+					// Check if next to any enemy
+					var gamePlay = GetNode<GamePlay>("..");
+					foreach (var enemy in gamePlay._enemyList)
+					{	
+						// Enemy adjacent and moving to another tile adjacent to enemy
+						if (mapGen.GetSurroundingCells(playerPos).Contains(enemy.mapPos) && mapGen.GetSurroundingCells(enemy.mapPos).Contains(posClicked)
+						&& (enemy.Colour == "green" || enemy.Colour == "red"))
+						{
+							GD.Print("Combat Start!");
+						}
+						// Need another else if for if enemy is facedown and time of day
+					}
 					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 					GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 

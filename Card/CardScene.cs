@@ -16,7 +16,7 @@ public partial class CardScene : Node2D
 
 
     public override void _Ready() {
-        base._Ready();
+        base._Ready(); // is this needed?
         var atlas = new AtlasTexture();
 
     try {
@@ -28,7 +28,7 @@ public partial class CardScene : Node2D
         var region = new Rect2(new Vector2(0, 0), new Vector2(atlasTexture.GetWidth(), atlasTexture.GetHeight()));
         atlas.Region = region;
     } catch {
-            GD.Print("Faild to load Basic Card Image");
+            GD.Print("Failed to load Basic Card Image");
     
     }
 

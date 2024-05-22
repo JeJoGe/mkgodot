@@ -30,11 +30,10 @@ public partial class MapGen : TileMap
 	{
 		GD.Randomize();
 		Random rSeed = new Random();
-		//greenTiles.Shuffle(); // Commented out because Godot Arrays ARE ASS
-		//brownTiles.Shuffle();
-		ShuffleArray(rSeed, greenTiles);
+		//ShuffleArray(rSeed, greenTiles);
+		tileStack = new Stack<int> (greenTiles.Shuffle());
 		//GD.Print("GreenTiles: " + string.Join("\n", greenTiles));
-		tileStack = new Stack<int>(greenTiles);
+		//tileStack = new Stack<int>(greenTiles);
 	}
 
 	// Don't know where to place this as can reuse for many things
@@ -68,7 +67,6 @@ public partial class MapGen : TileMap
 	// On left click on Map tile, generate the 2x3x2 pattern of next random set of Map tiles 
 	public void GenerateTile(Vector2I currentAtlasCoords, Vector2I posClicked)
 	{
-
 		// Cant put tiles behind inital tiles (posClicked.X > 0), can't put tiles above upper bound (posClicked.Y > (-3 * (posClicked.X + 1) - 1)),
 		// can't put tiles below lower bound (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
 		if ((this.tileStackState != 0) & (posClicked.X > 0) & (posClicked.Y > (-3 * (posClicked.X + 1) - 1)) & (posClicked.X < (int)Math.Ceiling(-1.5 * posClicked.Y) + 2))
@@ -86,14 +84,23 @@ public partial class MapGen : TileMap
 				// Populate tokens on pattern if needed
 				foreach (var patternTile in patternMapCoords)
 				{
+					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
-					//switch(patternTileData.GetCustomData("Token"));
-					//GD.Print("patternTile custom data is " + patternTileData.GetCustomData("Token"));
+					string tokenData = patternTileData.GetCustomData("Token").ToString();
+					//GD.Print("Point 1: "+ tokenData);
+					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
+					if (tokenData != "" && tokenData != "yellow")
+					{
+						var gamePlay = GetNode<GamePlay>("..");
+						// May need to add in switch statement for whether token is flipped
+						// Generate monster from color stack, site fortifications from what site it's on, on what tile
+						gamePlay.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
+					}
 				}				
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 				{
-					this.tileStack = new Stack<int>(this.brownTiles);
+					this.tileStack = new Stack<int>(this.brownTiles.Shuffle());
 					this.tileStackState--;
 				}
 			}
