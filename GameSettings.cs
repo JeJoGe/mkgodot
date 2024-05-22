@@ -11,6 +11,9 @@ public partial class GameSettings : Node
 	public static int PlayerCharacter { get; set; }
 	public static int DummyCharacter { get; set; }
 	public static List<(int,int)> EnemyList { get; set; } // monster id, site fortifications: 0 - 2
+	public static List<(int,int)> UnitList { get; set; } // unit id, wounds
+	public static readonly int CardWidth = 1000;
+	public static readonly int CardLength = 1400;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

@@ -8,21 +8,26 @@ public partial class Monster : Node2D
 	[Export]
 	public int SiteFortifications { get; set; }
 	[Export]
-	public bool Selected { get; set; }
-	public bool Blocked { get; set; }
-	public bool Defeated {get; set; }
+	public bool Selected { get; set; } = false;
+	public bool Blocked {
+		get
+		{
+			return !Attacks.Any(attack => !attack.Blocked);
+		} 
+	}
+	public bool Defeated { get; set; } = false;
 	public int Armour { get; set; }
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public string Colour { get; set; }
+	private static readonly int _attackOffset = 20;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
-		Blocked = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,13 +45,50 @@ public partial class Monster : Node2D
 		Fame = data.Fame;
 	}
 
+	public void Attack()
+	{
+		for (int i = 0; i < Attacks.Count; i++)
+		{
+			var attack = Attacks[i];
+			if (attack.Element == Element.Summon) {
+				// draw brown tokens
+				for (int j = 0; j < attack.Value; j++)
+				{
+					GD.Print("summon brown token");
+				}
+			}
+			var swift = Abilities.Contains("swift");
+			var button = new Button();
+			button.ButtonGroup = GetParent<Combat>().MonsterAttacks;
+			button.Text = string.Format("{0} {1}",attack.Element,attack.Value + (swift ? attack.Value : 0));
+			button.Position = new Vector2(-46,100+_attackOffset*i);
+			button.ToggleMode = true;
+			button.Name = string.Format("AttackButton{0}",i);
+			button.Pressed += () => GetParent<Combat>().UpdateBlock(attack,swift);
+			AddChild(button);
+		}
+	}
+
+	public void Damage()
+	{
+		for (int i = 0; i < Attacks.Count; i++)
+		{
+			var attack = Attacks[i];
+			var brutal = Abilities.Contains("brutal");
+			if (!attack.Blocked) {
+				var button = GetNode<Button>("AttackButton"+i.ToString());
+				button.Text = string.Format("{0} {1}",attack.Element, attack.Value + (brutal ? attack.Value : 0));
+			}
+		}
+	}
+
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
         if (typeof(InputEventMouseButton) == inputEvent.GetType())
         {
             var mouseEvent = (InputEventMouseButton)inputEvent;
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed()) {
-				//PrintStats();
+				PrintStats();
 				//Need to add in case for anti-fortification
 				if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
 				{
@@ -79,7 +121,8 @@ public partial class Monster : Node2D
 			resistances = resistances + element.ToString("F") + " ";
 		}
 		GD.Print(string.Format("resists: {0}", resistances));
-		GD.Print(string.Format("{0} {1}",Attacks.First().Element, Attacks.First().Value.ToString("F")));
+		GD.Print(string.Format("{0} {1}",Attacks.First().Element, Attacks.First().Value));
 		GD.Print("Site fortifications: "+SiteFortifications.ToString());
+		GD.Print(string.Format("blocked: {0}",Blocked));
 	}
 }
