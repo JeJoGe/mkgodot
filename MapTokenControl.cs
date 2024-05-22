@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class MonsterSpriteControl : Control
+public partial class MapTokenControl : Control
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -12,6 +12,7 @@ public partial class MonsterSpriteControl : Control
 	public override void _Process(double delta)
 	{
 	}
+
 	private void OnMouseEntered() {
 		if (Input.IsActionPressed("shift"))
 		{
