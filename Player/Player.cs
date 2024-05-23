@@ -10,16 +10,16 @@ public partial class Player : Node2D
 	private int movePoints = 100;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
+	MapGen mapGen;
 
 	public override void _Ready()
 	{
-		var mapGen = GetNode<MapGen>("../MapGen");
+		mapGen = GetNode<MapGen>("../MapGen");
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
 		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(playerPos));
 	}
 	public override void _Input(InputEvent @event)
 	{
-		var mapGen = GetNode<MapGen>("../MapGen");
 		// Called on Input Event. For now, should only process mouse event Leftclick
 		if (@event.IsActionPressed("leftClick"))
 		{
@@ -55,7 +55,8 @@ public partial class Player : Node2D
 						// Need another else if for if enemy is facedown and time of day
 					}
 					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-					GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+					// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+					GD.Print("Wall is between: " + IsWallBetween(posClicked).ToString());
 
 					if (MovePoints >= mapGen.terrainCosts[cellTerrain])
 					{
@@ -80,5 +81,20 @@ public partial class Player : Node2D
 		// instantiate Combat scene
 		// set player level
 		// set enemies
+	}
+
+	// Check walls unique data in current tile and iterate. if Destination vector - Any Walls vector == Source vector, then wall between
+	private bool IsWallBetween(Vector2I Destination)
+	{
+		// Get array of walls in current player tile
+		var wallArray = mapGen.GetCellTileData(MainLayer, playerPos).GetCustomData("Walls").As<Vector2[]>();
+		foreach (var wall in wallArray)
+		{
+			if (Destination - wall == playerPos)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
