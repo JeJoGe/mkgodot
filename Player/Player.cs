@@ -7,7 +7,7 @@ public partial class Player : Node2D
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	Vector2I playerPos = new Vector2I(0, 0);
-	private int movePoints = 40;
+	private int movePoints = 100;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
 
@@ -21,8 +21,9 @@ public partial class Player : Node2D
 	{
 		var mapGen = GetNode<MapGen>("../MapGen");
 		// Called on Input Event. For now, should only process mouse event Leftclick
-		if (Input.IsActionPressed("leftClick"))
+		if (@event.IsActionPressed("leftClick"))
 		{
+			//GD.Print("CLICK");
 			// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
 			var globalClicked = GetGlobalMousePosition();
 			var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
