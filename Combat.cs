@@ -14,7 +14,33 @@ public partial class Combat : Node2D
 	private List<Element> _targetResistances = new List<Element>();
 	private bool _targetFortified;
 	private int _totalFame = 0;
+	private int _armour = 2;
+	private int _maxHandSize = 5;
 	private MonsterAttack _targetAttack;
+	public MonsterAttack TargetAttack
+	{
+		get => _targetAttack;
+		set
+		{
+			_targetAttack = value;
+			if (CurrentPhase == Phase.Block)
+			{
+				UpdateBlock();
+			} else {
+				UpdateDamage();
+			}
+		}
+	}
+	private Unit _targetUnit = null;
+	public Unit TargetUnit
+	{
+		get => _targetUnit;
+		set
+		{
+			_targetUnit = value;
+			UpdateDamage();
+		}
+	}
 	public enum Phase
 	{
 		Ranged,Block,Damage,Attack
@@ -131,13 +157,13 @@ public partial class Combat : Node2D
 		UpdateAttack();
 	}
 
-	public void UpdateBlock(MonsterAttack attack, bool swift)
+	private void UpdateBlock()
 	{
-		_targetAttack = attack;
+		var swift = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities.Contains("swift");
 		var inefficientBlock = 0;
 		var efficientBlock = PlayerBlocks[(int)Element.ColdFire] + (swift ? PlayerBlocks[7] : 0); // cold fire block is always efficient
 		//GD.Print(string.Format("{0} {1}",attackElement.ToString("F"),attackValue));
-		switch (attack.Element)
+		switch (TargetAttack.Element)
 		{
 			case Element.Physical: {
 				// all blocks are efficient
@@ -169,7 +195,61 @@ public partial class Combat : Node2D
 		}
 		_totalBlock = efficientBlock + inefficientBlock / 2;
 		GD.Print("total block: "+_totalBlock.ToString());
-		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < attack.Value + (swift ? attack.Value : 0);
+		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < TargetAttack.Value + (swift ? TargetAttack.Value : 0);
+	}
+
+	private void UpdateDamage()
+	{
+		var abilities = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities;
+		var brutal = abilities.Contains("brutal") ? 1 : 0;
+		var paralyze = abilities.Contains("paralyze");
+		var poison = abilities.Contains("poison") ? 1 : 0;
+		var assassin = abilities.Contains("assassin");
+		var attackValue = _targetAttack.Value + brutal * _targetAttack.Value;
+		var wounds = 0;
+		// check if any unit selected otherwise assume hero takes damage
+		Unit selectedUnit = null;
+		for (int i = 0; i < _unitList.Count; i++)
+		{
+			var unit = _unitList[i];
+			if (unit.Selected) {
+				selectedUnit = unit;
+				break;
+			}
+		}
+		if (selectedUnit != null && !assassin) // unit selected and enemy does not have assassination ability
+		{
+			
+			selectedUnit.Damaged = true;
+			// check if unit resists attack
+			if (selectedUnit.Resistances.Contains(_targetAttack.Element)) {
+				attackValue -= selectedUnit.Armour;
+			}
+			if (attackValue > 0) { // wound unit
+				attackValue -= selectedUnit.Armour;
+				if (paralyze) {
+					// destroy unit
+					GD.Print("unit destroyed");
+					selectedUnit.Visible = false;
+				} else {
+					selectedUnit.Wounds = 1 + poison;
+				}
+			}
+			if (attackValue > 0) { // wound hero
+				wounds = DamageHero(attackValue);
+			}
+		} else {
+			wounds = DamageHero(attackValue);
+		}
+		GD.Print(string.Format("wounds received: {0}",wounds));
+		if (wounds >= _maxHandSize) {
+			GD.Print("hero is knocked out");
+		}
+	}
+
+	private int DamageHero(int damage) // damage must always be greater than 0
+	{
+		return (damage - 1) / _armour + 1; // integer division without having to use Math.Ceiling
 	}
 
 	private void UpdateAttack()
