@@ -22,8 +22,8 @@
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Script" path="res://Undo.cs" id="19_tk5qu"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
-[ext_resource type="PackedScene" path="res://DeckPopup.tscn" id="21_bdyk2"]
-[ext_resource type="PackedScene" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
 size = Vector2(100, 140)
@@ -1316,9 +1316,9 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="button_down" from="Player UI/Undo" to="Player" method="_OnUndoButtonDown"]
 [connection signal="child_entered_tree" from="Player UI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="Player UI/PlayerArea/Deck/TextureButton" to="Player UI/PlayerArea/Deck" method="OnDeckButtonPressed"]
+[connection signal="button_down" from="Player UI/Undo" to="Player" method="_OnUndoButtonDown"]
 
 [editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
 [editable path="Player UI/SharedArea/DummyArea/RedCrystal"]
