@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://3jcm54xnbvu7"]
-
-[node name="Card" type="Node2D"]
-position = Vector2(640, 128)
-scale = Vector2(0.00137828, 0.00137049)
