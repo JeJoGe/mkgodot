@@ -125,6 +125,7 @@ public class MonsterAttack
 	public int Value { get; set; }
 	public Element Element { get; set; }
 	public bool Blocked { get; set; } = false;
+	public bool Attacked { get; set; } = false;
 }
 
 public enum Element
