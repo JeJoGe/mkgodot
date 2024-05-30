@@ -5,6 +5,12 @@ using System.Linq;
 
 public partial class Combat : Node2D
 {
+	[Signal]
+	public delegate void KnockoutEventHandler();
+	[Signal]
+	public delegate void PoisonEventHandler(int wounds);
+	[Signal]
+	public delegate void WoundEventHandler(int wounds);
 	private List<Monster> _enemyList = new List<Monster>();
 	private List<Unit> _unitList = new List<Unit>();
 	public ButtonGroup MonsterAttacks;
@@ -14,7 +20,38 @@ public partial class Combat : Node2D
 	private List<Element> _targetResistances = new List<Element>();
 	private bool _targetFortified;
 	private int _totalFame = 0;
+	private int _totalWounds = 0;
+	private int _unitWounds = 0;
+	private bool _unitDestroyed = false;
+	private (int,int) _currentAttackWounds = (0,0); // include poison damage
+	private int _armour = 2;
+	private bool _knockout = false;
+	private int _maxHandSize = 5;
 	private MonsterAttack _targetAttack;
+	public MonsterAttack TargetAttack
+	{
+		get => _targetAttack;
+		set
+		{
+			_targetAttack = value;
+			if (CurrentPhase == Phase.Block)
+			{
+				UpdateBlock();
+			} else {
+				UpdateDamage();
+			}
+		}
+	}
+	private Unit _targetUnit = null;
+	public Unit TargetUnit
+	{
+		get => _targetUnit;
+		set
+		{
+			_targetUnit = value;
+			UpdateDamage();
+		}
+	}
 	public enum Phase
 	{
 		Ranged,Block,Damage,Attack
@@ -131,13 +168,13 @@ public partial class Combat : Node2D
 		UpdateAttack();
 	}
 
-	public void UpdateBlock(MonsterAttack attack, bool swift)
+	private void UpdateBlock()
 	{
-		_targetAttack = attack;
+		var swift = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities.Contains("swift");
 		var inefficientBlock = 0;
 		var efficientBlock = PlayerBlocks[(int)Element.ColdFire] + (swift ? PlayerBlocks[7] : 0); // cold fire block is always efficient
 		//GD.Print(string.Format("{0} {1}",attackElement.ToString("F"),attackValue));
-		switch (attack.Element)
+		switch (TargetAttack.Element)
 		{
 			case Element.Physical: {
 				// all blocks are efficient
@@ -169,7 +206,54 @@ public partial class Combat : Node2D
 		}
 		_totalBlock = efficientBlock + inefficientBlock / 2;
 		GD.Print("total block: "+_totalBlock.ToString());
-		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < attack.Value + (swift ? attack.Value : 0);
+		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < TargetAttack.Value + (swift ? TargetAttack.Value : 0);
+	}
+
+	private void UpdateDamage()
+	{
+		var abilities = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities;
+		CalculateDamage(abilities);
+	}
+
+	private void UpdateDamage(Monster monster)
+	{
+		var abilities = monster.Abilities;
+		CalculateDamage(abilities);
+	}
+
+	private void CalculateDamage(List<string> abilities)
+	{
+		var brutal = abilities.Contains("brutal") ? 1 : 0;
+		var paralyze = abilities.Contains("paralyze");
+		var poison = abilities.Contains("poison") ? 1 : 0;
+		var assassin = abilities.Contains("assassin");
+		var attackValue = _targetAttack.Value + brutal * _targetAttack.Value;
+		// check if any unit selected otherwise assume hero takes damage
+		if (TargetUnit != null && !assassin) // unit selected and enemy does not have assassination ability
+		{			
+			// check if unit resists attack
+			if (TargetUnit.Resistances.Contains(_targetAttack.Element)) {
+				attackValue -= TargetUnit.Armour;
+			}
+			if (attackValue > 0) { // wound unit
+				attackValue -= TargetUnit.Armour;
+				if (paralyze) {
+					// print warning that unit will be destroyed
+					GD.Print("unit will be destroyed");
+					_unitDestroyed = true;
+				} else {
+					_unitWounds = 1 + poison;
+				}
+			}
+			if (attackValue > 0) { // wound hero
+				DamageHero(attackValue, poison, paralyze);
+			}
+		} else {
+			DamageHero(attackValue, poison, paralyze);
+		}
+		//GD.Print(string.Format("wounds to hand: {0}",_currentAttackWounds));
+		GetNode<Label>("WoundsLabel").Text = string.Format("Wounds {0}",_currentAttackWounds.Item1);
+		GD.Print(string.Format("wounds to discard: {0}",_currentAttackWounds.Item2));
 	}
 
 	private void UpdateAttack()
@@ -227,6 +311,29 @@ public partial class Combat : Node2D
 						enemy.Damage();
 					}
 				}
+				break;
+			}
+			case Phase.Damage:
+			{
+				// perform all attacks
+				_targetUnit = null;
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					for (int j = 0; j < enemy.Attacks.Count; j++)
+					{
+						var attack = enemy.Attacks[j];
+						if (!attack.Blocked && !attack.Attacked)
+						{
+							_targetAttack = attack;
+							UpdateDamage(enemy);
+							OnConfirmButtonPressed();
+						}
+					}
+				}
+				CurrentPhase = Phase.Attack;
+				GetNode<Button>("NextButton").Text = "Skip Attacking";
+				GetNode<Button>("ConfirmButton").Text = "Confirm Attack";
 				break;
 			}
 			case Phase.Attack:
@@ -289,6 +396,56 @@ public partial class Combat : Node2D
 				break;
 			}
 			case Phase.Damage: {
+				if (_currentAttackWounds.Item1 > 0)
+				{
+					_totalWounds += _currentAttackWounds.Item1;
+					GetNode<Label>("TotalWoundsLabel").Text = string.Format("Total Wounds {0}",_totalWounds);
+					// add wounds to hand
+					EmitSignal(SignalName.Wound, _currentAttackWounds.Item1);
+					if (_currentAttackWounds.Item2 > 0)
+					{
+						// add wounds to discard
+						EmitSignal(SignalName.Poison, _currentAttackWounds.Item2);
+					}
+					_currentAttackWounds = (0,0);
+				}
+				if (_unitDestroyed) {
+					// destroy unit
+					TargetUnit.Visible = false;
+					_unitDestroyed = false;
+				} else if (_unitWounds > 0) {
+					TargetUnit.Wounds = _unitWounds;
+					TargetUnit.Damaged = true;
+					_unitWounds = 0;
+					TargetUnit.Selected = false;
+				}
+				// check for ko
+				if (_knockout) {
+					// discard hand of all non wounds
+					EmitSignal(SignalName.Knockout);
+				}
+				_targetUnit = null;
+				MonsterAttacks.GetPressedButton().QueueFree();
+				TargetAttack.Attacked = true;
+				// go to attack phase if no attacks remaining
+				var skipDamage = true;
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					for (int j = 0; j < enemy.Attacks.Count; j++)
+					{
+						var attack = enemy.Attacks[j];
+						if (!attack.Blocked && !attack.Attacked) {
+							i = _enemyList.Count; // break out of outer loop
+							skipDamage = false;
+						}
+					}
+				}
+				if (skipDamage) {
+					CurrentPhase = Phase.Attack;
+					GetNode<Button>("ConfirmButton").Text = "Confirm Attack";
+					GetNode<Button>("NextButton").Text = "Skip Attacking";
+				}
 				break;
 			}
 			case Phase.Attack:
@@ -343,6 +500,16 @@ public partial class Combat : Node2D
 		}
 		GD.Print("total fame: "+_totalFame.ToString());
 		GD.Print("enemies remaining: "+remaining);
+	}
+
+	private void DamageHero(int damage, int poison, bool paralyze) // damage must always be greater than 0
+	{
+		var wounds = (damage - 1) / _armour + 1; // integer division without having to use Math.Ceiling
+		_currentAttackWounds.Item1 = wounds;
+		_currentAttackWounds.Item2 = wounds * poison;
+		if (wounds + _totalWounds >= _maxHandSize || paralyze) {
+			_knockout = true;
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

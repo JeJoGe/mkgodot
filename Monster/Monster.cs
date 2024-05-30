@@ -66,7 +66,7 @@ public partial class Monster : Node2D
 			button.Position = new Vector2(-46, 100 + _attackOffset * i);
 			button.ToggleMode = true;
 			button.Name = string.Format("AttackButton{0}", i);
-			button.Pressed += () => GetParent<Combat>().UpdateBlock(attack, swift);
+			button.Pressed += () => OnAttackButtonToggled(attack);
 			AddChild(button);
 		}
 	}
@@ -85,29 +85,38 @@ public partial class Monster : Node2D
 		}
 	}
 
+	private void OnAttackButtonToggled(MonsterAttack attack)
+	{
+		GetParent<Combat>().TargetAttack = attack;
+	}
+
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
-		if (inputEvent.IsActionPressed("leftClick"))
+		if (typeof(InputEventMouseButton) == inputEvent.GetType())
 		{
-			//PrintStats();
-			//Need to add in case for anti-fortification
-			if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
+			var mouseEvent = (InputEventMouseButton)inputEvent;
+			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed())
 			{
-				// can not target if double fortified during ranged phase
-				GD.Print("untargetable");
-			}
-			else
-			{
-				Selected = !Selected;
-				if (Selected)
+				//PrintStats();
+				//Need to add in case for anti-fortification
+				if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
 				{
-					GD.Print("Selected");
+					// can not target if double fortified during ranged phase
+					GD.Print("untargetable");
 				}
 				else
 				{
-					GD.Print("unselected");
+					Selected = !Selected;
+					if (Selected)
+					{
+						GD.Print("Selected");
+					}
+					else
+					{
+						GD.Print("unselected");
+					}
+					GetParent<Combat>().UpdateTargets();
 				}
-				GetParent<Combat>().UpdateTargets();
 			}
 		}
 	}
