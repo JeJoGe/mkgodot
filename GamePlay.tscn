@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=55 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
 [ext_resource type="PackedScene" uid="uid://crmviyl8ejwvp" path="res://Deck.tscn" id="13_t238q"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
+[ext_resource type="Script" path="res://Undo.cs" id="19_tk5qu"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
 [ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
 [ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
@@ -1259,6 +1260,14 @@ metadata/_edit_use_anchors_ = true
 [node name="Deck" parent="Player UI/PlayerArea" instance=ExtResource("13_t238q")]
 position = Vector2(1744, 858)
 
+[node name="Undo" type="Button" parent="Player UI"]
+offset_left = 217.0
+offset_top = 295.0
+offset_right = 279.0
+offset_bottom = 323.0
+text = "Undo"
+script = ExtResource("19_tk5qu")
+
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
@@ -1297,6 +1306,7 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="button_down" from="Player UI/Undo" to="Player" method="_OnUndoButtonDown"]
 
 [editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
 [editable path="Player UI/SharedArea/DummyArea/RedCrystal"]
