@@ -112,7 +112,7 @@ public partial class GamePlay : Node2D
 			var currCard = (CardObj) card;
 			currCard.CardPlayed += cardAction => OnCardPlayed(cardAction);
 		} catch {
-			GD.Print("ONCARDPLAYED signal not conneted; ", card);
+			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
 	}
 
