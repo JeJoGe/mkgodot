@@ -10,7 +10,7 @@ public partial class GamePlay : Node2D
 	private static readonly int _monsterSpriteSize = 258;
 
 	// Called when the node enters the scene tree for the first time.
-	public override async void _Ready()
+	public override void _Ready()
 	{
 
 	}

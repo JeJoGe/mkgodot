@@ -10,7 +10,7 @@ public partial class CardScene : Node2D
     public List<CardObj> RecordDeckOfCards {get; set;} = new List<CardObj>();
     public Stack<CardObj> DeckOfCards {get; set;} = new Stack<CardObj>();
     private int InitialDeckLength {get; set;}
-    public Stack<CardObj> discardPile {get; set;} = new Stack<CardObj>();
+    public List<CardObj> discardPile {get; set;} = new List<CardObj>();
     public override void _Ready() {
         var atlas = new AtlasTexture();
 
@@ -52,9 +52,7 @@ public partial class CardScene : Node2D
                 }
             }
         }
-        foreach (var card in  new Stack<CardObj>(InitialDeckOfCards.Shuffle())) {
-            DeckOfCards.Push(card);
-        }
+        DeckOfCards = new Stack<CardObj>(InitialDeckOfCards.Shuffle());
         InitialDeckLength = InitialDeckOfCards.Count;        
     }
 
@@ -63,9 +61,9 @@ public partial class CardScene : Node2D
     {
         CardObj card = DeckOfCards.Pop();
         int posMultiplier = InitialDeckLength - DeckOfCards.Count;
-        int xPos = 1500 - (100 * posMultiplier);
-        int yPos = posMultiplier > 14 ? 200 : 500;
-        card.Position = new Vector2I(posMultiplier > 14 ? xPos - 1500 : xPos, yPos);
+        int xPos = 1500 - (100 * posMultiplier) - (posMultiplier > 14 ? 0 : 1500);
+        int yPos = posMultiplier > 14 ? 800 : 500;
+        card.Position = new Vector2I(xPos, yPos);
         return card;
     }
 

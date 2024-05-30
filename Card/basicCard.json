@@ -22,7 +22,7 @@
         "colour": "green",
         "xCoord": 2,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue/white/red",
+        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red",
         "bottomFunction": "*enhanceBottom-2",
         "copies": 0
     },
@@ -58,7 +58,7 @@
         "colour": "green",
         "xCoord": 6,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue/white/red/crystal-green",
+        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red,gainCrystal-green",
         "bottomFunction": "*bottom-3",
         "copies": 0
     },
@@ -86,7 +86,7 @@
         "xCoord": 2,
         "yCoord": 1,
         "topFunction": "useAdditionalDice-1",
-        "bottomFunction": "*gainManaTokens-2-",
+        "bottomFunction": "*gainManaTokens-2",
         "copies": 0
     },
     {
