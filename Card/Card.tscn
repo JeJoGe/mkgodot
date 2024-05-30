@@ -1,41 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://dw4y4svunisx6"]
-
-[ext_resource type="Texture2D" uid="uid://drtmvnnioa3kt" path="res://assets/basics.jpg" id="1_6wdps"]
-[ext_resource type="Script" path="res://Card/CardScene.cs" id="1_yljqn"]
-[ext_resource type="Script" path="res://Card/CardObj.cs" id="3_gm5s1"]
-[ext_resource type="Script" path="res://Card/PlayButton.cs" id="4_khdyh"]
-[ext_resource type="Script" path="res://Card/PowerUpButton.cs" id="5_j8kib"]
+[gd_scene format=3 uid="uid://3jcm54xnbvu7"]
 
 [node name="Card" type="Node2D"]
 position = Vector2(640, 128)
 scale = Vector2(0.00137828, 0.00137049)
-script = ExtResource("1_yljqn")
-
-[node name="CardObj" type="Sprite2D" parent="."]
-position = Vector2(119447, 345147)
-scale = Vector2(342.922, 342.922)
-texture = ExtResource("1_6wdps")
-hframes = 7
-vframes = 4
-script = ExtResource("3_gm5s1")
-
-[node name="Play" type="Button" parent="CardObj"]
-offset_left = 369.081
-offset_top = -682.989
-offset_right = 410.081
-offset_bottom = -651.989
-scale = Vector2(2.42777, 2.42777)
-text = "Play"
-script = ExtResource("4_khdyh")
-
-[node name="PowerUp" type="Button" parent="CardObj"]
-offset_left = -68.2451
-offset_top = 335.894
-offset_right = 10.7549
-offset_bottom = 366.894
-scale = Vector2(2.35842, 2.35842)
-text = "PowerUp"
-script = ExtResource("5_j8kib")
-
-[connection signal="pressed" from="CardObj/Play" to="CardObj" method="OnPlayButtonPressed"]
-[connection signal="pressed" from="CardObj/PowerUp" to="CardObj" method="OnPowerUpPressed"]
