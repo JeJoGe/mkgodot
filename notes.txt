@@ -20,3 +20,10 @@ Ice Resistance: 2
 Fire Resistance: 1
 Physical Resistance: 0
 Coldfire Resistance: 4 (only during combat)
+
+map tokens scaling: 0.25, 0.25
+combat token scaling: 0.4, 0.4
+combat unit card scaling: 0.2, 0.2
+card scene scaling: 0.25, 0.25
+
+map tile unique data walls: array of directions where walls are. Determine whether moving through wall by if (Destination - any_wall_vector_in_data == source). Example: if start at 0,0 and going right one tile (1,0) and wall is inbetween, 0,0 will have (1,0) in wall_data so (1, 0) - (1, 0) = (0 , 0) which is the source therefore there is a wall between.

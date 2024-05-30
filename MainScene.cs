@@ -9,7 +9,6 @@ public partial class MainScene : Node2D
 	private void _on_credits_pressed()
 	{	
 		GetTree().ChangeSceneToFile("res://Credits.tscn");
-		GD.Print("Hello, JJG!");
 	}
 	private void _on_quit_pressed()
 	{
