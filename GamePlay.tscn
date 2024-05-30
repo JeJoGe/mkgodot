@@ -18,11 +18,11 @@
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
-[ext_resource type="PackedScene" uid="uid://crmviyl8ejwvp" path="res://Deck.tscn" id="13_t238q"]
+[ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
-[ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
-[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="PackedScene" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" path="res://Crystal.tscn" id="22_7fhxe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
 size = Vector2(100, 140)
@@ -1234,8 +1234,18 @@ disabled = true
 text = "End Turn"
 metadata/_edit_use_anchors_ = true
 
-[node name="Deck" parent="Player UI/PlayerArea" instance=ExtResource("13_t238q")]
-position = Vector2(1744, 858)
+[node name="Deck" type="Node2D" parent="Player UI/PlayerArea"]
+position = Vector2(3, 7)
+script = ExtResource("18_4oofl")
+
+[node name="TextureButton" type="TextureButton" parent="Player UI/PlayerArea/Deck"]
+offset_left = 1779.0
+offset_top = 869.0
+offset_right = 2779.0
+offset_bottom = 2269.0
+scale = Vector2(0.14402, 0.14402)
+texture_normal = ExtResource("19_vtp22")
+stretch_mode = 0
 
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(482, 912)
@@ -1275,6 +1285,8 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="Player UI/PlayerArea/NewRoundButton" to="Player UI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="child_entered_tree" from="Player UI/PlayerArea/Deck" to="." method="OnCardEntered"]
+[connection signal="pressed" from="Player UI/PlayerArea/Deck/TextureButton" to="Player UI/PlayerArea/Deck" method="OnDeckButtonPressed"]
 
 [editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
 [editable path="Player UI/SharedArea/DummyArea/RedCrystal"]

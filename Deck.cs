@@ -1,13 +1,10 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using static CardScene;
 
 public partial class Deck : Node2D
-{
-    private Stack<int> _deck = new Stack<int>();
-	private CardScene _cards = new CardScene();
+{   
+    public List<CardObj> currentHand = new List<CardObj>();
+	public CardScene _cards = new CardScene();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -21,8 +18,10 @@ public partial class Deck : Node2D
 	{
 	}
 
-	private void OnDeckButtonPressed()
+	public void OnDeckButtonPressed()
 	{
-		_cards.DrawCard();
+		CardObj card = _cards.DrawCard();
+		AddChild(card);
+		currentHand.Add(card);
 	}
 }
