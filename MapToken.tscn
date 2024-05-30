@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://pjyh4ihqssl7"]
+[gd_scene load_steps=5 format=3 uid="uid://c1c2oi2pm4jyx"]
 
 [ext_resource type="Script" path="res://MapToken.cs" id="1_yl16r"]
 [ext_resource type="Script" path="res://MapTokenControl.cs" id="2_w3sm5"]

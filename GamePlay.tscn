@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=55 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -20,9 +20,10 @@
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
 [ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
+[ext_resource type="Script" path="res://Undo.cs" id="19_tk5qu"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
-[ext_resource type="PackedScene" path="res://DeckPopup.tscn" id="21_bdyk2"]
-[ext_resource type="PackedScene" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
 size = Vector2(100, 140)
@@ -537,11 +538,13 @@ texture_region_size = Vector2i(61, 71)
 5:13/0/terrain_set = 0
 5:13/0/terrain = 0
 5:13/0/custom_data_1 = "maze"
+5:13/0/custom_data_2 = [Vector2i(1, -1)]
 4:13/0 = 0
 4:13/0/z_index = -1
 4:13/0/terrain_set = 0
 4:13/0/terrain = 2
 4:13/0/custom_data_1 = "monastery"
+4:13/0/custom_data_2 = [Vector2i(-1, 0)]
 4:14/0 = 0
 4:14/0/z_index = -1
 4:14/0/terrain_set = 0
@@ -551,12 +554,14 @@ texture_region_size = Vector2i(61, 71)
 3:13/0/terrain_set = 0
 3:13/0/terrain = 0
 3:13/0/custom_data_0 = "green"
+3:13/0/custom_data_2 = [Vector2i(1, 0), Vector2i(-1, 1), Vector2i(-1, 0), Vector2i(0, -1)]
 3:14/0 = 0
 3:14/0/z_index = -1
 3:14/0/terrain_set = 0
 3:14/0/terrain = 1
 3:14/0/custom_data_0 = "purple"
 3:14/0/custom_data_1 = "tower"
+3:14/0/custom_data_2 = [Vector2i(1, -1)]
 2:14/0 = 0
 2:14/0/z_index = -1
 2:14/0/terrain_set = 0
@@ -567,6 +572,7 @@ texture_region_size = Vector2i(61, 71)
 2:13/0/terrain_set = 0
 2:13/0/terrain = 2
 2:13/0/custom_data_1 = "refugee"
+2:13/0/custom_data_2 = [Vector2i(1, 0)]
 1:13/0 = 0
 1:13/0/z_index = -1
 1:13/0/terrain_set = 0
@@ -576,14 +582,17 @@ texture_region_size = Vector2i(61, 71)
 1:14/0/terrain_set = 0
 1:14/0/terrain = 2
 1:14/0/custom_data_0 = "green"
+1:14/0/custom_data_2 = [Vector2i(-1, 1), Vector2i(-1, 0)]
 0:13/0 = 0
 0:13/0/z_index = -1
 0:13/0/terrain_set = 0
 0:13/0/terrain = 7
+0:13/0/custom_data_2 = [Vector2i(0, 1)]
 0:14/0 = 0
 0:14/0/z_index = -1
 0:14/0/terrain_set = 0
 0:14/0/terrain = 1
+0:14/0/custom_data_2 = [Vector2i(1, 0)]
 0:15/0 = 0
 0:15/0/z_index = -1
 0:15/0/terrain_set = 0
@@ -603,6 +612,7 @@ texture_region_size = Vector2i(61, 71)
 1:15/0/terrain = 0
 1:15/0/custom_data_0 = "grey"
 1:15/0/custom_data_1 = "keep"
+1:15/0/custom_data_2 = [Vector2i(-1, 1)]
 2:15/0 = 0
 2:15/0/z_index = -1
 2:15/0/terrain_set = 0
@@ -622,6 +632,7 @@ texture_region_size = Vector2i(61, 71)
 3:15/0/z_index = -1
 3:15/0/terrain_set = 0
 3:15/0/terrain = 0
+3:15/0/custom_data_2 = [Vector2i(1, -1)]
 4:15/0 = 0
 4:15/0/z_index = -1
 4:15/0/terrain_set = 0
@@ -882,6 +893,7 @@ texture_region_size = Vector2i(61, 71)
 0:24/0/terrain_set = 0
 0:24/0/terrain = 2
 0:24/0/custom_data_1 = "labyrinth"
+0:24/0/custom_data_2 = [Vector2i(-1, 1)]
 1:24/0 = 0
 1:24/0/z_index = -1
 1:24/0/terrain_set = 0
@@ -892,24 +904,29 @@ texture_region_size = Vector2i(61, 71)
 2:24/0/z_index = -1
 2:24/0/terrain_set = 0
 2:24/0/terrain = 4
+2:24/0/custom_data_2 = [Vector2i(1, -1), Vector2i(1, 0)]
 3:24/0 = 0
 3:24/0/z_index = -1
 3:24/0/terrain_set = 0
 3:24/0/terrain = 0
 3:24/0/custom_data_0 = "red"
+3:24/0/custom_data_2 = [Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
 4:24/0 = 0
 4:24/0/z_index = -1
 4:24/0/terrain_set = 0
 4:24/0/terrain = 7
+4:24/0/custom_data_2 = [Vector2i(-1, 1)]
 5:24/0 = 0
 5:24/0/z_index = -1
 5:24/0/terrain_set = 0
 5:24/0/terrain = 5
+5:24/0/custom_data_2 = [Vector2i(1, -1)]
 6:24/0 = 0
 6:24/0/z_index = -1
 6:24/0/terrain_set = 0
 6:24/0/terrain = 5
 6:24/0/custom_data_1 = "refugee"
+6:24/0/custom_data_2 = [Vector2i(1, -1), Vector2i(0, -1)]
 6:25/0 = 0
 6:25/0/z_index = -1
 6:25/0/terrain_set = 0
@@ -920,10 +937,12 @@ texture_region_size = Vector2i(61, 71)
 6:26/0/terrain_set = 0
 6:26/0/terrain = 5
 6:26/0/custom_data_1 = "village"
+6:26/0/custom_data_2 = [Vector2i(1, -1), Vector2i(0, -1)]
 5:26/0 = 0
 5:26/0/z_index = -1
 5:26/0/terrain_set = 0
 5:26/0/terrain = 2
+5:26/0/custom_data_2 = [Vector2i(1, -1)]
 5:25/0 = 0
 5:25/0/z_index = -1
 5:25/0/terrain_set = 0
@@ -939,11 +958,13 @@ texture_region_size = Vector2i(61, 71)
 4:26/0/terrain_set = 0
 4:26/0/terrain = 4
 4:26/0/custom_data_0 = "red"
+4:26/0/custom_data_2 = [Vector2i(-1, 1)]
 3:26/0 = 0
 3:26/0/z_index = -1
 3:26/0/terrain_set = 0
 3:26/0/terrain = 6
 3:26/0/custom_data_1 = "volkare"
+3:26/0/custom_data_2 = [Vector2i(0, 1), Vector2i(-1, 1)]
 3:25/0 = 0
 3:25/0/z_index = -1
 3:25/0/terrain_set = 0
@@ -1006,6 +1027,8 @@ custom_data_layer_0/name = "Token"
 custom_data_layer_0/type = 4
 custom_data_layer_1/name = "Event"
 custom_data_layer_1/type = 4
+custom_data_layer_2/name = "Walls"
+custom_data_layer_2/type = 28
 sources/0 = SubResource("TileSetAtlasSource_rkkx8")
 pattern_0 = SubResource("TileMapPattern_7j6h4")
 pattern_1 = SubResource("TileMapPattern_t51yq")
@@ -1247,6 +1270,14 @@ scale = Vector2(0.14402, 0.14402)
 texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
 
+[node name="Undo" type="Button" parent="Player UI"]
+offset_left = 217.0
+offset_top = 295.0
+offset_right = 279.0
+offset_bottom = 323.0
+text = "Undo"
+script = ExtResource("19_tk5qu")
+
 [node name="MapGen" type="TileMap" parent="."]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
@@ -1287,6 +1318,7 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="Player UI/PlayerArea/EndTurnButton" to="Player UI/SharedArea/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="child_entered_tree" from="Player UI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="Player UI/PlayerArea/Deck/TextureButton" to="Player UI/PlayerArea/Deck" method="OnDeckButtonPressed"]
+[connection signal="button_down" from="Player UI/Undo" to="Player" method="_OnUndoButtonDown"]
 
 [editable path="Player UI/SharedArea/DummyArea/BlueCrystal"]
 [editable path="Player UI/SharedArea/DummyArea/RedCrystal"]
