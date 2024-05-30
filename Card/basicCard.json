@@ -22,7 +22,7 @@
         "colour": "green",
         "xCoord": 2,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue/white/red",
+        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red",
         "bottomFunction": "*enhanceBottom-2",
         "copies": 0
     },
@@ -32,7 +32,7 @@
         "xCoord": 3,
         "yCoord": 0,
         "topFunction": "move-2&*discard-crystal",
-        "bottomFunction": "move-2&*discardsCards-crystals-per_hex-1",
+        "bottomFunction": "move-2&*discard-crystals-per_hex-1",
         "copies": 0
     },
     {
@@ -58,7 +58,7 @@
         "colour": "green",
         "xCoord": 6,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue/white/red,crystal-green",
+        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red,gainCrystal-green",
         "bottomFunction": "*bottom-3",
         "copies": 0
     },
@@ -68,7 +68,7 @@
         "xCoord": 0,
         "yCoord": 1,
         "topFunction":  "move-2",
-        "bottomFunction":  "attack-ranged-3",
+        "bottomFunction":  "attack-physical-ranged-3",
         "copies": 1
     },
     {
@@ -86,7 +86,7 @@
         "xCoord": 2,
         "yCoord": 1,
         "topFunction": "useAdditionalDice-1",
-        "bottomFunction": "*gainManaTokens-2-",
+        "bottomFunction": "*gainManaTokens-2",
         "copies": 0
     },
     {
@@ -94,8 +94,8 @@
         "colour": "white",
         "xCoord": 3,
         "yCoord": 1,
-        "topFunction": "move-2,attack-ranged-1,reduceEnemyAttack-1",
-        "bottomFunction":"move-4,attack-ranged-3,reduceEnemyAttack-2",
+        "topFunction": "move-2,attack-physical-ranged-1,reduceEnemyAttack-1",
+        "bottomFunction":"move-4,attack-physical-ranged-3,reduceEnemyAttack-2",
         "copies": 0
     },
     {
@@ -103,8 +103,8 @@
         "colour": "white",
         "xCoord": 4,
         "yCoord": 1,
-        "topFunction":  "move-2,attack-ranged-1,*reputation-1",
-        "bottomFunction": "attack-ranged-3,*discardsCards-1,*fame-1",
+        "topFunction":  "move-2,attack-physical-ranged-1&*reputation-1",
+        "bottomFunction": "attack-physical-ranged-3&*discardsCards-1,*fame-1",
         "copies": 0
     },
     {
@@ -112,8 +112,8 @@
         "colour": "white",
         "xCoord": 5,
         "yCoord": 1,
-        "topFunction": "influence-2,*fame-1",
-        "bottomFunction": "influence-4,*fame-1,*reputation-1",
+        "topFunction": "influence-2&*fame-1",
+        "bottomFunction": "influence-4&*fame-1&*reputation-1",
         "copies": 0
     },
     {
@@ -139,7 +139,7 @@
         "colour": "blue",
         "xCoord": 1,
         "yCoord": 2,
-        "topFunction": "payMana-1,gainCrystals-same_color",
+        "topFunction": "gainCrystals-same_color&payMana-1",
         "bottomFunction": "gainCrystals-1",
         "copies": 0
     },
@@ -148,7 +148,7 @@
         "colour": "blue",
         "xCoord": 2,
         "yCoord": 2,
-        "topFunction": "attack-2,block-2",
+        "topFunction": "attack-physical-melee-2,block-2",
         "bottomFunction": "block-5",
         "copies": 0
     },
@@ -157,8 +157,8 @@
         "colour": "blue",
         "xCoord": 3,
         "yCoord": 2, 
-        "topFunction": "move-2,*moveSpecial-1-next",
-        "bottomFunction":  "move-4,*moveSpecial-1-each",
+        "topFunction": "move-2&*moveSpecial-1-next",
+        "bottomFunction":  "move-4&*moveSpecial-1-each",
         "copies": 0
     },
     {
@@ -166,8 +166,8 @@
         "colour": "blue",
         "xCoord": 4,
         "yCoord": 2,
-        "topFunction": "move-2,*moveSpecial-1-reduction",
-        "bottomFunction": "move-4,*moveSpecial-1-reduction",
+        "topFunction": "move-2&*moveSpecial-1-reduction",
+        "bottomFunction": "move-4&*moveSpecial-1-reduction",
         "copies": 0
     },
     {
@@ -175,8 +175,8 @@
         "colour": "blue",
         "xCoord": 5,
         "yCoord": 2,
-        "topFunction": "payMana-1,gainCrystals-1,*discardsCards",
-        "bottomFunction": "gainCrystals-1,*discardsCards",
+        "topFunction": "payMana-1&gainCrystals-1&*discardsCards",
+        "bottomFunction": "gainCrystals-1&*discardsCards",
         "copies": 0
     },
     {
@@ -184,8 +184,8 @@
         "colour": "blue",
         "xCoord": 6,
         "yCoord": 2,
-        "topFunction":  "attack-2,block-ice-3",
-        "bottomFunction": "block-ice-5,*additionalBlock",
+        "topFunction":  "attack-physical-melee-2,block-ice-3",
+        "bottomFunction": "block-ice-5&*additionalBlock",
         "copies": 0
     },
     {
@@ -193,8 +193,8 @@
         "colour": "red",
         "xCoord": 0,
         "yCoord": 3,
-        "topFunction": "attack-2,block-2",
-        "bottomFunction": "attack-4",
+        "topFunction": "attack-physical-melee-2,block-2",
+        "bottomFunction": "attack-physical-melee-4",
         "copies": 1
     }, 
     {
@@ -211,8 +211,8 @@
         "colour": "red",
         "xCoord": 2,
         "yCoord": 3,
-        "topFunction":  "discard-1&move-3,influence-3,attack-3,block-3",
-        "bottomFunction": "discard-1&move-5,influence-5,attack-5,block-5",
+        "topFunction":  "move-3,influence-3,attack-physical-melee-3,block-3&discard-1",
+        "bottomFunction": "move-5,influence-5,attack-physical-melee-5,block-5&discard-1",
         "copies": 0
     },
     {
@@ -220,8 +220,8 @@
         "colour": "red",
         "xCoord": 3,
         "yCoord": 3,
-        "topFunction":  "attack-2,block-2,attack-ranged-1",
-        "bottomFunction": "attack-4,block-4,attack-fire-3,block-fire-3,attack-ranged-3,attack-siege-2",
+        "topFunction":  "attack-physical-melee-2,block-2,attack-physical-ranged-1",
+        "bottomFunction": "attack-physical-melee-4,block-4,attack-fire-melee-3,block-fire-3,attack-physical-ranged-3,attack-physical-siege-2",
         "copies": 0
     }, 
     {
@@ -229,8 +229,8 @@
         "colour": "red",
         "xCoord": 4,
         "yCoord": 3,
-        "topFunction":  "attack-2,block-2,*discard-wound",
-        "bottomFunction":  "attack-4,*attackSpecial",
+        "topFunction":  "attack-physical-melee-2,block-2&*discard-wound",
+        "bottomFunction":  "attack-physical-melee-4&*attackSpecial",
         "copies": 0
     }, 
     {
@@ -238,8 +238,8 @@
         "colour": "red",
         "xCoord": 5,
         "yCoord": 3,
-        "topFunction": "influence-2,discount-2,*reputation-_1",
-        "bottomFunction": "influence-6,reputation-_1,ready-2_influence_per_level",
+        "topFunction": "influence-2&discount-2&*reputation-_1",
+        "bottomFunction": "influence-6&reputation-_1&*ready-2_influence_per_level",
         "copies": 0
     }, 
     {
@@ -247,8 +247,8 @@
         "colour": "red",
         "xCoord": 6,
         "yCoord": 3,
-        "topFunction":  "move-2,influence-2,attack-2,block-2",
-        "bottomFunction": "move-4,influence-4,attack-4,block-4",
+        "topFunction":  "move-2,influence-2,attack-physical-melee-2,block-2",
+        "bottomFunction": "move-4,influence-4,attack-physical-melee-4,block-4",
         "copies": 0
     }
 ]

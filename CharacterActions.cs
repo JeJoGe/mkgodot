@@ -29,4 +29,11 @@ public enum SpecialCardActions {
     moveSpecial,
     attackSpecial,
     discount
-}   
+}
+
+public enum CharacterPhases {
+    movement,
+    interaction,
+    combat,
+    postEffects
+}

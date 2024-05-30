@@ -59,7 +59,7 @@ public partial class Combat : Node2D
 	// represented table here:
 	/*
 	*          Melee=0 Ranged=4  Siege=8
-	* Physical. 0		4			8		
+	* Physical  0		4			8		
 	* Fire		1		5			9
 	* Ice		2		6			10
 	* ColdFire	3		7			11
