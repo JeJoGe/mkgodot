@@ -20,5 +20,19 @@ offset_bottom = 119.0
 disabled = true
 text = "Confirm Attack"
 
+[node name="WoundsLabel" type="Label" parent="."]
+offset_left = 640.0
+offset_top = 136.0
+offset_right = 703.0
+offset_bottom = 159.0
+text = "Wounds 0"
+
+[node name="TotalWoundsLabel" type="Label" parent="."]
+offset_left = 640.0
+offset_top = 176.0
+offset_right = 717.0
+offset_bottom = 199.0
+text = "Total Wounds 0"
+
 [connection signal="pressed" from="NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="ConfirmButton" to="." method="OnConfirmButtonPressed"]

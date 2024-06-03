@@ -4,14 +4,20 @@ using System.Collections.Generic;
 
 public partial class Unit : Node2D
 {
+	[Signal]
+	public delegate void DeselectEventHandler();
 	public int Armour { get; set; }
 	public int Level { get; set; }
 	public List<Element> Resistances { get; set; }
 	public int Wounds { get; set; }
+	public bool Selected { get; set; } = false;
+	public bool Damaged { get; set; } = false;
+	private bool _flag { get; set; } = false;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
+		Deselect += OnDeselect;
 	}
 
 	public void PopulateStats(UnitObject data)
@@ -19,6 +25,9 @@ public partial class Unit : Node2D
 		Armour = data.Armour;
 		Level = data.Level;
 		Resistances = data.Resistances;
+		if (data.Resistances.Contains(Element.Fire) && data.Resistances.Contains(Element.Ice)) {
+			Resistances.Add(Element.ColdFire);
+		}
 	}
 
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
@@ -26,9 +35,26 @@ public partial class Unit : Node2D
 		if (typeof(InputEventMouseButton) == inputEvent.GetType())
         {
             var mouseEvent = (InputEventMouseButton)inputEvent;
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed()) {	
-				GD.Print("unit clicked");
+			//can only select if not damaged this combat and not wounded
+            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed() && !Damaged && Wounds == 0) {
+				GetParent<Combat>().TargetUnit = Selected ? null : this; // if currently selected deselect current unit
+				Selected = !Selected;
+				GD.Print(string.Format("{0} armour unit {1}",Armour,Selected ? "selected" : "unselected"));
+				if (Selected) {
+					// deselect all other units
+					_flag = true;
+					EmitSignal(SignalName.Deselect);
+				}
 			}
+		}
+	}
+
+	private void OnDeselect()
+	{
+		if (!_flag) {
+			Selected = false;
+		} else {
+			_flag = false;
 		}
 	}
 
