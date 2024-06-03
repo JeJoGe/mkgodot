@@ -11,7 +11,6 @@ public partial class Player : Node2D
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
 	MapGen mapGen;
-	UndoRedo UndoRedoObj;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
 
@@ -20,7 +19,6 @@ public partial class Player : Node2D
 		mapGen = GetNode<MapGen>("../MapGen");
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
 		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(playerPos));
-		UndoRedoObj = new UndoRedo();
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
 	}
 	public override void _Input(InputEvent @event)
@@ -28,7 +26,6 @@ public partial class Player : Node2D
 		// Called on Input Event. For now, should only process mouse event Leftclick
 		if (@event.IsActionPressed("leftClick"))
 		{
-			//GD.Print(UndoRedoObj.GetHistoryCount());
 			// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
 			var globalClicked = GetGlobalMousePosition();
 			var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
@@ -37,44 +34,42 @@ public partial class Player : Node2D
 			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MainLayer, posClicked);
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
+			//-------------------------------------------------Movement Phase-----------------------------------------------------------
 			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
-				UndoRedoObj.ClearHistory();
+				Utils.undoRedo.ClearHistory();
 			}
-
-			else
+			// Check if tile clicked is any tiles surrounding player position
+			else if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
 			{
-				// Check if tile clicked is any tiles surrounding player position
-				if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
+				// Check if next to any enemy
+				var gamePlay = GetNode<GamePlay>("..");
+				foreach (var enemy in gamePlay.EnemyList)
 				{
-					// Check if next to any enemy
-					var gamePlay = GetNode<GamePlay>("..");
-					foreach (var enemy in gamePlay.EnemyList)
+					// Enemy adjacent and moving to another tile adjacent to enemy
+					if ((mapGen.GetSurroundingCells(playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
+					&& (enemy.Colour == "green" || enemy.Colour == "red") && IsWallBetween(enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 					{
-						// Enemy adjacent and moving to another tile adjacent to enemy
-						if (mapGen.GetSurroundingCells(playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
-						&& (enemy.Colour == "green" || enemy.Colour == "red"))
-						{
-							InitiateCombat();
-						}
-						// Need another else if for if enemy is facedown and time of day
+						InitiateCombat();
 					}
-					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-																							 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-					GD.Print("Wall is between: " + IsWallBetween(posClicked).ToString());
+					// Need another else if for if enemy is facedown and time of day
+				}
+				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
+				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+				GD.Print("Wall is between: " + IsWallBetween(posClicked).ToString());
 
-					if (MovePoints >= mapGen.terrainCosts[cellTerrain])
-					{
-						PerformMovement(posClicked, cellTerrain);
-					}
+				if (MovePoints >= mapGen.terrainCosts[cellTerrain])
+				{
+					PerformMovement(posClicked, cellTerrain);
+				}
 
-					else
-					{
-						GD.Print("Terrain costs more movement than you currently have.");
-					}
+				else
+				{
+					GD.Print("Terrain costs more movement than you currently have.");
 				}
 			}
+
 		}
 		else if (@event.IsActionPressed("escape"))
 		{
@@ -90,21 +85,21 @@ public partial class Player : Node2D
 		// set enemies
 	}
 
-// Change position of player, update position vector
+	// Change position of player, update position vector
 	private void PerformMovement(Vector2I posClicked, int cellTerrain)
 	{
-		UndoRedoObj.CreateAction("Move Player");
-		UndoRedoObj.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-		UndoRedoObj.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
-		UndoRedoObj.AddDoMethod(ChangeGlobalPos);
-		UndoRedoObj.AddUndoMethod(ChangeGlobalPos);
-		//UndoRedoObj.AddDoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-		//UndoRedoObj.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
-		UndoRedoObj.AddDoProperty(this, "playerPos", posClicked);
-		UndoRedoObj.AddUndoProperty(this, "playerPos", playerPos);
-		UndoRedoObj.AddDoProperty(this, "MovePoints", MovePoints - (int)mapGen.terrainCosts[cellTerrain]); // Reduce move points
-		UndoRedoObj.AddUndoProperty(this, "MovePoints", MovePoints + (int)mapGen.terrainCosts[cellTerrain]);
-		UndoRedoObj.CommitAction();
+		Utils.undoRedo.CreateAction("Move Player");
+		Utils.undoRedo.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
+		Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
+		Utils.undoRedo.AddDoMethod(ChangeGlobalPos);
+		Utils.undoRedo.AddUndoMethod(ChangeGlobalPos);
+		//Utils.undoRedo.AddDoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
+		//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
+		Utils.undoRedo.AddDoProperty(this, "playerPos", posClicked);
+		Utils.undoRedo.AddUndoProperty(this, "playerPos", playerPos);
+		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - (int)mapGen.terrainCosts[cellTerrain]); // Reduce move points
+		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + (int)mapGen.terrainCosts[cellTerrain]);
+		Utils.undoRedo.CommitAction();
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		//GD.Print(GlobalPosition);
 	}
@@ -131,6 +126,6 @@ public partial class Player : Node2D
 
 	private void _OnUndoButtonDown()
 	{
-		UndoRedoObj.Undo();
+		Utils.undoRedo.Undo();
 	}
 }
