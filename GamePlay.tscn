@@ -1062,30 +1062,30 @@ z_index = -1
 script = ExtResource("1_m0gf8")
 
 [node name="TurnOrderTracker" type="Node2D" parent="."]
-position = Vector2(160, 32)
+position = Vector2(208, 480)
 script = ExtResource("12_js350")
 
 [node name="RoundMarker" type="Label" parent="."]
-offset_left = 24.0001
-offset_top = 24.0
-offset_right = 64.0001
-offset_bottom = 47.0
+offset_left = 72.0
+offset_top = 472.0
+offset_right = 112.0
+offset_bottom = 495.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Area2D" type="Area2D" parent="."]
 scale = Vector2(0.1, 0.1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(7680, 800)
+position = Vector2(2390, 8460)
 scale = Vector2(9.99999, 9.99999)
 shape = SubResource("RectangleShape2D_e3iwm")
 
 [node name="DummyDeck" type="Sprite2D" parent="Area2D"]
-position = Vector2(7680, 800)
+position = Vector2(2390, 8460)
 texture = ExtResource("19_vtp22")
 
 [node name="DummyArea" type="Node2D" parent="Area2D"]
-position = Vector2(7680, 800)
+position = Vector2(2390, 8460)
 scale = Vector2(10, 10)
 script = ExtResource("18_70l2p")
 metadata/_edit_group_ = true
@@ -1309,12 +1309,12 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic5" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic6" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/ConfirmTactic" to="PlayerUI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/SharedArea" method="NewRound"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="Area2D/DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/SharedArea" method="NewRound"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/PlayerArea/Tactics" method="NewRound"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/EndTurnButton" to="PlayerUI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/EndTurnButton" to="TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="pressed" from="PlayerUI/PlayerArea/EndTurnButton" to="PlayerUI/SharedArea/Source" method="EndTurn"]
 [connection signal="child_entered_tree" from="PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="PlayerUI/PlayerArea/Deck/TextureButton" to="PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
 [connection signal="button_down" from="PlayerUI/Undo" to="Player" method="_OnUndoButtonDown"]

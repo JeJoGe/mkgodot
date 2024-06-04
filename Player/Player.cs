@@ -14,6 +14,7 @@ public partial class Player : Node2D
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
+	PackedScene CombatScene;
 
 	public override void _Ready()
 	{
@@ -21,6 +22,7 @@ public partial class Player : Node2D
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
 		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(playerPos));
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
+		CombatScene = GD.Load<PackedScene>("res://Combat.tscn");
 	}
 	public override void _Input(InputEvent @event)
 	{
@@ -36,7 +38,7 @@ public partial class Player : Node2D
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
 			//-------------------------------------------------Movement Phase-----------------------------------------------------------
-			if (currentAtlasCoords is (-1, -1) || mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
+			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
 				Utils.undoRedo.ClearHistory();
@@ -84,6 +86,8 @@ public partial class Player : Node2D
 		// instantiate Combat scene
 		// set player level
 		// set enemies
+		var CombatStart = CombatScene.Instantiate();
+		AddChild(CombatStart);
 	}
 
 	// Change position of player, update position vector

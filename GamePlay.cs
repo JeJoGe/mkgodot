@@ -115,6 +115,4 @@ public partial class GamePlay : Node2D
 			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
 	}
-
-
 }
