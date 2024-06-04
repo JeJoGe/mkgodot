@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Numerics;
 
 public partial class Player : Node2D
 {
@@ -35,7 +36,7 @@ public partial class Player : Node2D
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
 			//-------------------------------------------------Movement Phase-----------------------------------------------------------
-			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
+			if (currentAtlasCoords is (-1, -1) || mapGen.GetSurroundingCells(playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
 				Utils.undoRedo.ClearHistory();
@@ -49,7 +50,7 @@ public partial class Player : Node2D
 				{
 					// Enemy adjacent and moving to another tile adjacent to enemy
 					if ((mapGen.GetSurroundingCells(playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
-					&& (enemy.Colour == "green" || enemy.Colour == "red") && IsWallBetween(enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
+					&& (enemy.Colour == "green" || enemy.Colour == "red") && IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 					{
 						InitiateCombat();
 					}
@@ -57,7 +58,7 @@ public partial class Player : Node2D
 				}
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-				GD.Print("Wall is between: " + IsWallBetween(posClicked).ToString());
+				GD.Print("Wall is between: " + IsWallBetween(playerPos, posClicked).ToString());
 
 				if (MovePoints >= mapGen.terrainCosts[cellTerrain])
 				{
@@ -105,13 +106,13 @@ public partial class Player : Node2D
 	}
 
 	// Check walls unique data in current tile and iterate. if Destination vector - Any Walls vector == Source vector, then wall between
-	private bool IsWallBetween(Vector2I Destination)
+	private bool IsWallBetween(Vector2I Start, Vector2I Destination)
 	{
 		// Get array of walls in current player tile
-		var wallArray = mapGen.GetCellTileData(MainLayer, playerPos).GetCustomData("Walls").As<Vector2[]>();
+		var wallArray = mapGen.GetCellTileData(MainLayer, Start).GetCustomData("Walls").As<Godot.Vector2[]>();
 		foreach (var wall in wallArray)
 		{
-			if (Destination - wall == playerPos)
+			if (Destination - wall == Start)
 			{
 				return true;
 			}
@@ -119,7 +120,7 @@ public partial class Player : Node2D
 		return false;
 	}
 
-	public void ChangeGlobalPosition(Vector2 GPosition)
+	public void ChangeGlobalPosition(Vector2I GPosition)
 	{
 		this.GlobalPosition = GPosition;
 	}
