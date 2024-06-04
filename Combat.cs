@@ -20,10 +20,11 @@ public partial class Combat : Node2D
 	private List<Element> _targetResistances = new List<Element>();
 	private bool _targetFortified;
 	private int _totalFame = 0;
+	// total wounds added to hand this combat
 	private int _totalWounds = 0;
 	private int _unitWounds = 0;
 	private bool _unitDestroyed = false;
-	private (int,int) _currentAttackWounds = (0,0); // include poison damage
+	private (int,int) _currentAttackWounds = (0,0); // includes wounds added to discard by poison
 	private int _armour = 2;
 	private bool _knockout = false;
 	private int _maxHandSize = 5;
@@ -49,7 +50,10 @@ public partial class Combat : Node2D
 		set
 		{
 			_targetUnit = value;
-			UpdateDamage();
+			// check if attack is selected before updating
+			if (MonsterAttacks.GetPressedButton() != null) {
+				UpdateDamage();
+			}
 		}
 	}
 	public enum Phase
@@ -213,6 +217,7 @@ public partial class Combat : Node2D
 	{
 		var abilities = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities;
 		CalculateDamage(abilities);
+		GetNode<Button>("ConfirmButton").Disabled = false;
 	}
 
 	private void UpdateDamage(Monster monster)
@@ -230,7 +235,14 @@ public partial class Combat : Node2D
 		var attackValue = _targetAttack.Value + brutal * _targetAttack.Value;
 		// check if any unit selected otherwise assume hero takes damage
 		if (TargetUnit != null && !assassin) // unit selected and enemy does not have assassination ability
-		{			
+		{
+			GD.Print(string.Format("unit armour: {0}",TargetUnit.Armour));
+			var resistances = "";
+			foreach (var element in TargetUnit.Resistances)
+			{
+				resistances = resistances + element.ToString("F") + " ";
+			}
+			GD.Print(string.Format("unit resistances: {0}",resistances));
 			// check if unit resists attack
 			if (TargetUnit.Resistances.Contains(_targetAttack.Element)) {
 				attackValue -= TargetUnit.Armour;
@@ -243,16 +255,18 @@ public partial class Combat : Node2D
 					_unitDestroyed = true;
 				} else {
 					_unitWounds = 1 + poison;
+					GD.Print(string.Format("wounds to unit: {0}",_unitWounds));
 				}
 			}
 			if (attackValue > 0) { // wound hero
-				DamageHero(attackValue, poison, paralyze);
+				CalculateHeroWounds(attackValue, poison, paralyze);
 			}
 		} else {
-			DamageHero(attackValue, poison, paralyze);
+			CalculateHeroWounds(attackValue, poison, paralyze);
 		}
 		//GD.Print(string.Format("wounds to hand: {0}",_currentAttackWounds));
 		GetNode<Label>("WoundsLabel").Text = string.Format("Wounds {0}",_currentAttackWounds.Item1);
+		GD.Print(string.Format("wounds to hand: {0}",_currentAttackWounds.Item1));
 		GD.Print(string.Format("wounds to discard: {0}",_currentAttackWounds.Item2));
 	}
 
@@ -285,6 +299,8 @@ public partial class Combat : Node2D
 			//attacking/blocking is optional
 			case Phase.Ranged:
 			{
+				// zero any remaining attack
+				ResetAttacks();
 				CurrentPhase = Phase.Block;
 				GetNode<Button>("NextButton").Text = "Skip Blocking";
 				GetNode<Button>("ConfirmButton").Text = "Confirm Block";
@@ -315,7 +331,7 @@ public partial class Combat : Node2D
 			}
 			case Phase.Damage:
 			{
-				// perform all attacks
+				// assign all damage to hero
 				_targetUnit = null;
 				for (int i = 0; i < _enemyList.Count; i++)
 				{
@@ -327,7 +343,7 @@ public partial class Combat : Node2D
 						{
 							_targetAttack = attack;
 							UpdateDamage(enemy);
-							OnConfirmButtonPressed();
+							ApplyWounds();
 						}
 					}
 				}
@@ -338,8 +354,8 @@ public partial class Combat : Node2D
 			}
 			case Phase.Attack:
 			{
-				GetNode<Button>("NextButton").Text = "Skip Attacking";
 				// return to Map with results of combat (either all enemies defeated or not)
+				GD.Print("return to map");
 				break;
 			}
 			default: break;
@@ -360,11 +376,7 @@ public partial class Combat : Node2D
 					// exit combat
 				}
 				GetNode<Button>("ConfirmButton").Disabled = true;
-				foreach (var kvp in PlayerAttacks)
-				{
-					PlayerAttacks[kvp.Key] = 0;
-				}
-				_totalAttack = 0;
+				ResetAttacks();
 				break;
 			}
 			case Phase.Block: {
@@ -396,36 +408,9 @@ public partial class Combat : Node2D
 				break;
 			}
 			case Phase.Damage: {
-				if (_currentAttackWounds.Item1 > 0)
-				{
-					_totalWounds += _currentAttackWounds.Item1;
-					GetNode<Label>("TotalWoundsLabel").Text = string.Format("Total Wounds {0}",_totalWounds);
-					// add wounds to hand
-					EmitSignal(SignalName.Wound, _currentAttackWounds.Item1);
-					if (_currentAttackWounds.Item2 > 0)
-					{
-						// add wounds to discard
-						EmitSignal(SignalName.Poison, _currentAttackWounds.Item2);
-					}
-					_currentAttackWounds = (0,0);
-				}
-				if (_unitDestroyed) {
-					// destroy unit
-					TargetUnit.Visible = false;
-					_unitDestroyed = false;
-				} else if (_unitWounds > 0) {
-					TargetUnit.Wounds = _unitWounds;
-					TargetUnit.Damaged = true;
-					_unitWounds = 0;
-					TargetUnit.Selected = false;
-				}
-				// check for ko
-				if (_knockout) {
-					// discard hand of all non wounds
-					EmitSignal(SignalName.Knockout);
-				}
+				ApplyWounds();
 				_targetUnit = null;
-				MonsterAttacks.GetPressedButton().QueueFree();
+				MonsterAttacks.GetPressedButton().Visible = false;
 				TargetAttack.Attacked = true;
 				// go to attack phase if no attacks remaining
 				var skipDamage = true;
@@ -457,14 +442,45 @@ public partial class Combat : Node2D
 					// exit combat
 				}
 				GetNode<Button>("ConfirmButton").Disabled = true;
-				foreach (var kvp in PlayerAttacks)
-				{
-					PlayerAttacks[kvp.Key] = 0;
-				}
-				_totalAttack = 0;
+				ResetAttacks();
 				break;
 			}
 			default: break;
+		}
+	}
+
+	private void ApplyWounds()
+	{
+		if (_currentAttackWounds.Item1 > 0)
+		{
+			_totalWounds += _currentAttackWounds.Item1;
+			GetNode<Label>("TotalWoundsLabel").Text = string.Format("Total Wounds {0}",_totalWounds);
+			// add wounds to hand
+			EmitSignal(SignalName.Wound, _currentAttackWounds.Item1);
+			if (_currentAttackWounds.Item2 > 0)
+			{
+				// add wounds to discard
+				EmitSignal(SignalName.Poison, _currentAttackWounds.Item2);
+			}
+			_currentAttackWounds = (0,0);
+		}
+		if (_unitDestroyed) {
+			// destroy unit
+			TargetUnit.Visible = false;
+			_unitDestroyed = false;
+		} else if (_unitWounds > 0) {
+			TargetUnit.Wounds = _unitWounds;
+			TargetUnit.Damaged = true;
+			_unitWounds = 0;
+		} else if (_targetUnit != null) {
+			_targetUnit.Selected = false;
+			_targetUnit = null;
+		}
+		// check for ko
+		if (_knockout) {
+			GD.Print("knocked out");
+			// discard hand of all non wounds
+			EmitSignal(SignalName.Knockout);
 		}
 	}
 
@@ -502,7 +518,7 @@ public partial class Combat : Node2D
 		GD.Print("enemies remaining: "+remaining);
 	}
 
-	private void DamageHero(int damage, int poison, bool paralyze) // damage must always be greater than 0
+	private void CalculateHeroWounds(int damage, int poison, bool paralyze) // damage must always be greater than 0
 	{
 		var wounds = (damage - 1) / _armour + 1; // integer division without having to use Math.Ceiling
 		_currentAttackWounds.Item1 = wounds;
@@ -510,6 +526,15 @@ public partial class Combat : Node2D
 		if (wounds + _totalWounds >= _maxHandSize || paralyze) {
 			_knockout = true;
 		}
+	}
+
+	private void ResetAttacks()
+	{
+		foreach (var kvp in PlayerAttacks)
+		{
+			PlayerAttacks[kvp.Key] = 0;
+		}
+		_totalAttack = 0;		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
