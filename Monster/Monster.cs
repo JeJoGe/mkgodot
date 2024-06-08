@@ -17,6 +17,7 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Defeated { get; set; } = false;
+	public bool Summoned { get; set; } = false;
 	public int Armour { get; set; }
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
@@ -60,13 +61,15 @@ public partial class Monster : Node2D
 				}
 			}
 			var swift = Abilities.Contains("swift");
-			var button = new Button();
-			button.ButtonGroup = GetParent<Combat>().MonsterAttacks;
-			button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0));
-			button.Position = new Vector2(-46, 100 + _attackOffset * i);
-			button.ToggleMode = true;
-			button.Name = string.Format("AttackButton{0}", i);
-			button.Pressed += () => OnAttackButtonToggled(attack);
+            var button = new Button
+            {
+                ButtonGroup = GetParent<Combat>().MonsterAttacks,
+                Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
+				ToggleMode = true,
+                Position = new Vector2(-46, 100 + _attackOffset * i),
+                Name = string.Format("AttackButton{0}", i)
+            };
+            button.Pressed += () => OnAttackButtonToggled(attack);
 			AddChild(button);
 		}
 	}
