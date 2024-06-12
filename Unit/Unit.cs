@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public partial class Unit : Node2D
 {
+	[Signal]
+	public delegate void DeselectEventHandler();
 	public int Armour { get; set; }
 	public int Level { get; set; }
 	public List<Element> Resistances { get; set; }
@@ -15,6 +17,7 @@ public partial class Unit : Node2D
 	public override void _Ready()
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
+		Deselect += OnDeselect;
 	}
 
 	public void PopulateStats(UnitObject data)
