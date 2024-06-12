@@ -86,7 +86,7 @@ public partial class Player : Node2D
 		// instantiate Combat scene
 		// set player level
 		// set enemies
-		Node2D CombatStart = (Node2D)CombatScene.Instantiate();
+		var CombatStart = (Combat)CombatScene.Instantiate();
 		AddChild(CombatStart);
 		CombatStart.GlobalPosition = new Godot.Vector2(0,0);
 	}
