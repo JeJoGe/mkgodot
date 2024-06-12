@@ -30,7 +30,7 @@ public partial class CardObj : Sprite2D
 
     public override void _Ready()
     {
-        base._Ready(); // is this needed?
+        this.Position = new Vector2(500, 700);
         PlayButton play = new PlayButton(id);
         PowerUpButton powerUp = new PowerUpButton(id, "Using Top Action");
         AddChild(play);
@@ -142,7 +142,6 @@ public partial class CardObj : Sprite2D
         var frame = (AtlasTexture) atlas.Duplicate();
         frame.Region = new Rect2(new Vector2(1000 * xCoord, 1400 * yCoord), new Vector2(1000, 1400));
         this.Texture = frame;
-        this.Scale = new Godot.Vector2((float) 0.25, (float) 0.25);
     }
 
 }
