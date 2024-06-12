@@ -23,7 +23,7 @@ public partial class GamePlay : Node2D
 	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{	
 		var mapGen = GetNode<MapGen>("MapGen");
-		var enemy = GameSettings.MonsterStacks[colour].Pop();
+		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
 		var monsterToken = (MapToken)monsterScene.Instantiate();
 		monsterToken.MapPosition = localPos;
 		monsterToken.SiteFortifications = siteFortifications;

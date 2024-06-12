@@ -86,6 +86,7 @@ public partial class Combat : Node2D
 	private static readonly int _spriteSize = 258;
 	private static readonly int _offset = 120;
 	private static readonly int _cardOffset = 200;
+	private PackedScene _monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
 
 	public Phase CurrentPhase { get; set; }
 
@@ -98,26 +99,15 @@ public partial class Combat : Node2D
 		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
 		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
 		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (2000, 0), (1000, 1), (501, 0), (2004, 2)]);
+		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1500, 0), (1000, 1), (501, 0), (2002, 0)]);
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
-		var monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
 		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
 		{
 			var enemy = GameSettings.EnemyList[i];
-			var monsterToken = (Monster)monsterScene.Instantiate();
+			var monsterToken = CreateMonsterToken(enemy.Item1);
 			monsterToken.SiteFortifications = enemy.Item2;
-			var monsterStats = Utils.Bestiary[enemy.Item1];
-			monsterToken.PopulateStats(monsterStats);
-			var enemySprite = monsterToken.GetNode<Sprite2D>("Sprite2D");
-			var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-			atlas.Region = new Rect2(new Vector2(monsterStats.X * _spriteSize, monsterStats.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
-			enemySprite.Texture = atlas;
-			enemySprite.Scale = new Vector2((float)0.4, (float)0.4);
-			monsterToken.Position = new Vector2(_offset * i + 60, 80);
-			AddChild(monsterToken);
-			_enemyList.Add(monsterToken);
 		}
 		// instantiate units
 		var unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
@@ -143,6 +133,22 @@ public partial class Combat : Node2D
 		}
 
 		CurrentPhase = Phase.Ranged;
+	}
+
+	public Monster CreateMonsterToken(int id)
+	{
+		var monsterToken = (Monster)_monsterScene.Instantiate();
+		var monsterStats = Utils.Bestiary[id];
+		monsterToken.PopulateStats(monsterStats, id);
+		var enemySprite = monsterToken.GetNode<Sprite2D>("Sprite2D");
+		var atlas = (AtlasTexture)Utils.SpriteSheets[Utils.ConvertMonsterColourToString(monsterToken.Colour)].Duplicate();
+		atlas.Region = new Rect2(new Vector2(monsterStats.X * _spriteSize, monsterStats.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
+		enemySprite.Texture = atlas;
+		enemySprite.Scale = new Vector2((float)0.4, (float)0.4);
+		monsterToken.Position = new Vector2(_offset * _enemyList.Count + 60, 80);
+		AddChild(monsterToken);
+		_enemyList.Add(monsterToken);
+		return monsterToken;
 	}
 
 	public void UpdateTargets()
@@ -521,6 +527,17 @@ public partial class Combat : Node2D
 				}
 			case Phase.Attack:
 				{
+					// discard all summoned enemies
+					for (int i = _enemyList.Count - 1; i >= 0; i--)
+					{
+						var enemy = _enemyList[i];
+						if (enemy.Summoned)
+						{
+							enemy.Visible = false;
+							_enemyList.RemoveAt(i);
+							GameSettings.DiscardToken(enemy.MonsterId);
+						}
+					}
 					GetNode<Button>("NextButton").Text = "Skip Attacking";
 					GetNode<Button>("ConfirmButton").Text = "Confirm Attack";
 					GetNode<Button>("ConfirmButton").Disabled = true;
