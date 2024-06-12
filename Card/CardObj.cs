@@ -30,7 +30,6 @@ public partial class CardObj : Sprite2D
 
     public override void _Ready()
     {
-        base._Ready(); // is this needed?
         this.Position = new Vector2(500, 700);
         PlayButton play = new PlayButton(id);
         PowerUpButton powerUp = new PowerUpButton(id, "Using Top Action");
