@@ -17,12 +17,14 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Defeated { get; set; } = false;
+	public bool Summoned { get; set; } = false;
 	public int Armour { get; set; }
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
-	public string Colour { get; set; }
+	public MonsterColour Colour { get; set; }
+	public int MonsterId { get; set; }
 	private static readonly int _attackOffset = 20;
 
 	// Called when the node enters the scene tree for the first time.
@@ -36,7 +38,7 @@ public partial class Monster : Node2D
 	{
 	}
 
-	public void PopulateStats(MonsterObject data)
+	public void PopulateStats(MonsterObject data, int id)
 	{
 		Armour = data.Armour;
 		Attacks = data.Attacks;
@@ -44,6 +46,7 @@ public partial class Monster : Node2D
 		Colour = data.Colour;
 		Resistances = data.Resistances;
 		Fame = data.Fame;
+		MonsterId = id;
 	}
 
 	public void Attack()
@@ -57,16 +60,22 @@ public partial class Monster : Node2D
 				for (int j = 0; j < attack.Value; j++)
 				{
 					GD.Print("summon brown token");
+					var monsterID = GameSettings.DrawMonster(MonsterColour.Brown);
+					GetParent<Combat>().CreateMonsterToken(monsterID);
 				}
+				Visible = false;
+				break;
 			}
 			var swift = Abilities.Contains("swift");
-			var button = new Button();
-			button.ButtonGroup = GetParent<Combat>().MonsterAttacks;
-			button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0));
-			button.Position = new Vector2(-46, 100 + _attackOffset * i);
-			button.ToggleMode = true;
-			button.Name = string.Format("AttackButton{0}", i);
-			button.Pressed += () => OnAttackButtonToggled(attack);
+            var button = new Button
+            {
+                ButtonGroup = GetParent<Combat>().MonsterAttacks,
+                Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
+				ToggleMode = true,
+                Position = new Vector2(-46, 100 + _attackOffset * i),
+                Name = string.Format("AttackButton{0}", i)
+            };
+            button.Pressed += () => OnAttackButtonToggled(attack);
 			AddChild(button);
 		}
 	}

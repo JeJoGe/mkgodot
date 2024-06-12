@@ -1,7 +1,7 @@
 {
     "0":{
         "name":"Prowlers",
-        "colour": "green",
+        "colour": 0,
         "armour":3,
         "attacks":[
             {
@@ -19,7 +19,7 @@
     },
     "1":{
         "name":"Diggers",
-        "colour": "green",
+        "colour": 0,
         "armour":3,
         "attacks":[
             {
@@ -37,7 +37,7 @@
     },
     "2":{
         "name":"Cursed Hags",
-        "colour": "green",
+        "colour": 0,
         "armour":5,
         "attacks":[
             {
@@ -55,7 +55,7 @@
     },
     "3":{
         "name":"Wolf Riders",
-        "colour": "green",
+        "colour": 0,
         "armour":4,
         "attacks":[
             {
@@ -73,7 +73,7 @@
     },
     "4":{
         "name":"Ironclads",
-        "colour": "green",
+        "colour": 0,
         "armour":3,
         "attacks":[
             {
@@ -91,7 +91,7 @@
     },
     "5":{
         "name":"Orc Summoners",
-        "colour": "green",
+        "colour": 0,
         "armour":4,
         "attacks":[
             {
@@ -109,7 +109,7 @@
     },
     "500":{
         "name":"Crossbowmen",
-        "colour": "grey",
+        "colour": 1,
         "armour":4,
         "attacks":[
             {
@@ -127,7 +127,7 @@
     },
     "501":{
         "name":"Guardsmen",
-        "colour": "grey",
+        "colour": 1,
         "armour":7,
         "attacks":[
             {
@@ -145,7 +145,7 @@
     },
     "502":{
         "name":"Swordsmen",
-        "colour": "grey",
+        "colour": 1,
         "armour":5,
         "attacks":[
             {
@@ -163,7 +163,7 @@
     },
     "503":{
         "name":"Golems",
-        "colour": "grey",
+        "colour": 1,
         "armour":5,
         "attacks":[
             {
@@ -181,7 +181,7 @@
     },
     "1000":{
         "name":"Monks",
-        "colour": "purple",
+        "colour": 2,
         "armour":5,
         "attacks":[
             {
@@ -199,7 +199,7 @@
     },
     "1001":{
         "name":"Illusionists",
-        "colour": "purple",
+        "colour": 2,
         "armour":3,
         "attacks":[
             {
@@ -217,7 +217,7 @@
     },
     "1002":{
         "name":"Ice Mages",
-        "colour": "purple",
+        "colour": 2,
         "armour":6,
         "attacks":[
             {
@@ -235,7 +235,7 @@
     },
     "1003":{
         "name":"Ice Golems",
-        "colour": "purple",
+        "colour": 2,
         "armour":4,
         "attacks":[
             {
@@ -253,7 +253,7 @@
     },
     "1004":{
         "name":"Fire Mages",
-        "colour": "purple",
+        "colour": 2,
         "armour":5,
         "attacks":[
             {
@@ -271,7 +271,7 @@
     },
     "1005":{
         "name":"Fire Golems",
-        "colour": "purple",
+        "colour": 2,
         "armour":4,
         "attacks":[
             {
@@ -287,9 +287,9 @@
         "y":0,
         "count": 1
     },
-    "2000":{
+    "1500":{
         "name":"Minotaur",
-        "colour": "brown",
+        "colour": 3,
         "armour":5,
         "attacks":[
             {
@@ -305,9 +305,9 @@
         "y":0,
         "count": 2
     },
-    "2001":{
+    "1501":{
         "name":"Gargoyle",
-        "colour": "brown",
+        "colour": 3,
         "armour":4,
         "attacks":[
             {
@@ -323,9 +323,9 @@
         "y":0,
         "count": 2
     },
-    "2002":{
+    "1502":{
         "name":"Medusa",
-        "colour": "brown",
+        "colour": 3,
         "armour":4,
         "attacks":[
             {
@@ -341,9 +341,9 @@
         "y":0,
         "count": 2
     },
-    "2003":{
+    "1503":{
         "name":"Crypt Worm",
-        "colour": "brown",
+        "colour": 3,
         "armour":6,
         "attacks":[
             {
@@ -359,9 +359,9 @@
         "y":0,
         "count": 2
     },
-    "2004":{
+    "1504":{
         "name":"Werewolf",
-        "colour": "brown",
+        "colour": 3,
         "armour":5,
         "attacks":[
             {
@@ -376,5 +376,23 @@
         "x":0,
         "y":1,
         "count": 2
+    },
+    "2002":{
+        "name":"Dragon Summoner",
+        "colour": 4,
+        "armour":8,
+        "attacks":[
+            {
+                "value":2,
+                "element":9
+            }
+        ],
+        "fame":9,
+        "resistances":[0],
+        "abilities":["immunity"],
+        "version":"ll",
+        "x":3,
+        "y":1,
+        "count":2
     }
 }

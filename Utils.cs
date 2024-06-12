@@ -19,6 +19,22 @@ public partial class Utils : Node
 		{"silver","res://assets/silverunits.jpg"},
 		{"gold","res://assets/goldunits.jpg"}
 	};
+	private static readonly Dictionary<string,MonsterColour> _stringToColours = new Dictionary<string, MonsterColour>{
+		{"green", MonsterColour.Green},
+		{"grey", MonsterColour.Grey},
+		{"purple", MonsterColour.Purple},
+		{"brown", MonsterColour.Brown},
+		{"red", MonsterColour.Red},
+		{"white", MonsterColour.White}
+	};
+	private static readonly Dictionary<MonsterColour,string> _coloursToStrings = new Dictionary<MonsterColour,string>{
+		{MonsterColour.Green, "green"},
+		{MonsterColour.Grey, "grey"},
+		{MonsterColour.Purple, "purple"},
+		{MonsterColour.Brown, "brown"},
+		{MonsterColour.Red, "red"},
+		{MonsterColour.White, "white"}
+	};	
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
 	public static Dictionary<int,MonsterObject> Bestiary;
 	public static Dictionary<int,UnitObject> UnitStats;
@@ -30,6 +46,16 @@ public partial class Utils : Node
 		LoadBestiary();
 		GameSettings.createMonsterStacks();
 		LoadUnits();
+	}
+
+	public static MonsterColour ConvertStringToMonsterColour(string colour)
+	{
+		return _stringToColours[colour];
+	}
+
+	public static string ConvertMonsterColourToString(MonsterColour colour)
+	{
+		return _coloursToStrings[colour];
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -98,7 +124,7 @@ public class MonsterObject
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public List<MonsterAttack> Attacks { get; set; }
-	public string Colour { get; set; }
+	public MonsterColour Colour { get; set; }
 	public int X { get; set; } // this corresponds to the x offset on its corresponding spritesheet
 	public int Y { get; set; } // this corresponds to the y offset on its corresponding spritesheet
 	public string Version { get; set; }
@@ -126,6 +152,11 @@ public class MonsterAttack
 	public Element Element { get; set; }
 	public bool Blocked { get; set; } = false;
 	public bool Attacked { get; set; } = false;
+}
+
+public enum MonsterColour
+{
+	Green, Grey, Purple, Brown, Red, White
 }
 
 public enum Element
