@@ -25,7 +25,8 @@ public partial class Unit : Node2D
 		Armour = data.Armour;
 		Level = data.Level;
 		Resistances = data.Resistances;
-		if (data.Resistances.Contains(Element.Fire) && data.Resistances.Contains(Element.Ice)) {
+		if (data.Resistances.Contains(Element.Fire) && data.Resistances.Contains(Element.Ice))
+		{
 			Resistances.Add(Element.ColdFire);
 		}
 	}
@@ -33,27 +34,34 @@ public partial class Unit : Node2D
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
 		if (typeof(InputEventMouseButton) == inputEvent.GetType())
-        {
-            var mouseEvent = (InputEventMouseButton)inputEvent;
+		{
+			var mouseEvent = (InputEventMouseButton)inputEvent;
 			//can only select if not damaged this combat and not wounded
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed() && !Damaged && Wounds == 0) {
+			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed() &&
+			GetParent<Combat>().CurrentPhase == Combat.Phase.Damage && !Damaged && Wounds == 0)
+			{
 				GetParent<Combat>().TargetUnit = Selected ? null : this; // if currently selected deselect current unit
 				Selected = !Selected;
-				GD.Print(string.Format("{0} armour unit {1}",Armour,Selected ? "selected" : "unselected"));
-				if (Selected) {
+				GD.Print(string.Format("{0} armour unit {1}", Armour, Selected ? "selected" : "deselected"));
+				if (Selected)
+				{
 					// deselect all other units
 					_flag = true;
-					EmitSignal(SignalName.Deselect);
+					GetParent<Combat>().DeselectUnits();
 				}
 			}
 		}
 	}
 
-	private void OnDeselect()
+	public void Deselect()
 	{
-		if (!_flag) {
+		if (!_flag)
+		{
 			Selected = false;
-		} else {
+			GD.Print(string.Format("{0} armour unit {1}", Armour, Selected ? "selected" : "deselected"));
+		}
+		else
+		{
 			_flag = false;
 		}
 	}
