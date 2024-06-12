@@ -7,9 +7,9 @@ map wedge forwards from setupbound: x > 0
 Greens : 0-499 (0-99 is base, 100-199 is LL, 200-299 is tezla (200-249 is Elementalist, 250-299 is DC), 300-349 is krang, 450-499 is apocalypse dragon)
 Greys: 500-999
 Purples: 1000-1499
-Browns: 2000-2499
-Reds: 2500-2999
-Whites: 3000-3499
+Browns: 1500-1999
+Reds: 2000-2499
+Whites: 2500-2999
 Yellows: 3500-3999
 Dark Crusader Rewards: 4200-4249
 Elementalist Rewards: 4250-4299

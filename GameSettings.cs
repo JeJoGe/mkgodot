@@ -18,13 +18,14 @@ public partial class GameSettings : Node
 	public static readonly int CardWidth = 1000;
 	public static readonly int CardLength = 1400;
 
-	public static Stack<int> greenMonsterStack = new Stack<int>();
-	public static Stack<int> greyMonsterStack = new Stack<int>();
-	public static Stack<int> purpleMonsterStack = new Stack<int>();
-	public static Stack<int> brownMonsterStack = new Stack<int>();
-	public static Stack<int> redMonsterStack = new Stack<int>();
-	public static Stack<int> whiteMonsterStack = new Stack<int>();
-	public static Dictionary<String, Stack<int>> MonsterStacks = new Dictionary<string, Stack<int>>();
+	private static Stack<int> greenMonsterStack = new Stack<int>();
+	private static Dictionary<MonsterColour, List<int>> _discardPiles = [];
+	private static Stack<int> greyMonsterStack = new Stack<int>();
+	private static Stack<int> purpleMonsterStack = new Stack<int>();
+	private static Stack<int> brownMonsterStack = new Stack<int>();
+	private static Stack<int> redMonsterStack = new Stack<int>();
+	private static Stack<int> whiteMonsterStack = new Stack<int>();
+	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -99,11 +100,44 @@ public partial class GameSettings : Node
 					}
 			}
 		}
-		MonsterStacks.Add("green", new Stack<int>(greenMonsterStack.Shuffle()));
-		MonsterStacks.Add("grey", new Stack<int>(greyMonsterStack.Shuffle()));
-		MonsterStacks.Add("purple", new Stack<int>(purpleMonsterStack.Shuffle()));
-		MonsterStacks.Add("brown", new Stack<int>(brownMonsterStack.Shuffle()));
-		MonsterStacks.Add("red", new Stack<int>(redMonsterStack.Shuffle()));
-		MonsterStacks.Add("white", new Stack<int>(whiteMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.Green, new Stack<int>(greenMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.Grey, new Stack<int>(greyMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.Purple, new Stack<int>(purpleMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.Brown, new Stack<int>(brownMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.Red, new Stack<int>(redMonsterStack.Shuffle()));
+		MonsterStacks.Add(MonsterColour.White, new Stack<int>(whiteMonsterStack.Shuffle()));
+		// create discard piles for each stack
+		_discardPiles.Add(MonsterColour.Green,new List<int>());
+		_discardPiles.Add(MonsterColour.Grey,new List<int>());
+		_discardPiles.Add(MonsterColour.Purple,new List<int>());
+		_discardPiles.Add(MonsterColour.Brown,new List<int>());
+		_discardPiles.Add(MonsterColour.Red,new List<int>());
+		_discardPiles.Add(MonsterColour.White,new List<int>());
+	}
+
+	public static int DrawMonster(MonsterColour colour)
+	{
+		if (!MonsterStacks[colour].TryPop(out int id))
+		{
+			if (_discardPiles[colour].Count > 0)
+			{
+				// reshuffle discard piles of colour and draw again
+				MonsterStacks[colour] = new Stack<int>(_discardPiles[colour].Shuffle());
+				_discardPiles[colour].Clear();
+				id = MonsterStacks[colour].Pop();
+			}
+			else
+			{
+				// TODO: need to handle case where stack is empty and no discarded tokens are available
+				id = -1;
+			}
+		}
+		return id;
+	}
+
+	public static void DiscardToken(int id)
+	{
+		MonsterColour colour = (MonsterColour)(id / 500);
+		_discardPiles[colour].Add(id);
 	}
 }

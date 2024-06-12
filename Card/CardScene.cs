@@ -7,10 +7,10 @@ using System;
 public partial class CardScene : Node2D
 {
     public Stack<CardObj> InitialDeckOfCards {get; set;} = new Stack<CardObj>();
-    public List<CardObj> RecordDeckOfCards {get; set;} = new List<CardObj>();
-    public Stack<CardObj> DeckOfCards {get; set;} = new Stack<CardObj>();
+    public List<CardControl> RecordDeckOfCards {get; set;} = new List<CardControl>();
+    public Stack<CardControl> DeckOfCards {get; set;} = new Stack<CardControl>();
     private int InitialDeckLength {get; set;}
-    public List<CardObj> discardPile {get; set;} = new List<CardObj>();
+    public List<CardControl> discardPile {get; set;} = new List<CardControl>();
     public override void _Ready() {
         var atlas = new AtlasTexture();
 
@@ -52,14 +52,19 @@ public partial class CardScene : Node2D
                 }
             }
         }
-        DeckOfCards = new Stack<CardObj>(InitialDeckOfCards.Shuffle());
+        foreach (var card in InitialDeckOfCards) {
+            CardControl cardControl = new CardControl(card.cardId, card.Texture.GetSize());
+            cardControl.AddChild(card);
+            RecordDeckOfCards.Add(cardControl);
+        }
+        DeckOfCards = new Stack<CardControl>(RecordDeckOfCards.Shuffle());
         InitialDeckLength = InitialDeckOfCards.Count;        
     }
 
 
-    public CardObj DrawCard()
+    public CardControl DrawCard()
     {
-        CardObj card = DeckOfCards.Pop();
+        CardControl card = DeckOfCards.Pop();
         int posMultiplier = InitialDeckLength - DeckOfCards.Count;
         int xPos = 1500 - (100 * posMultiplier);
         int yPos = posMultiplier > 14 ? 800 : 500;
