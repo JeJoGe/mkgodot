@@ -78,7 +78,7 @@ public partial class TurnOrderTracker : Node2D
 	private void OnEndTurnPressed() {
 		// Disable End Turn button for player whose turn is ending
 		if (_tracker[_currentTurn] == GameSettings.PlayerCharacter) {
-			GetNode<Button>("../../PlayerArea/EndTurnButton").Disabled = true;
+			GetNode<Button>("../PlayerUI/PlayerArea/EndTurnButton").Disabled = true;
 		}
 		if (_currentTurn == GameSettings.NumPlayers) {
 			_currentTurn = 0;
