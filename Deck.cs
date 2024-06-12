@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class Deck : Node2D
 {   
-    public List<CardObj> currentHand = new List<CardObj>();
+    public List<CardControl> currentHand = new List<CardControl>();
 	public CardScene _cards = new CardScene();
 
 	// Called when the node enters the scene tree for the first time.
@@ -20,7 +20,7 @@ public partial class Deck : Node2D
 
 	public void OnDeckButtonPressed()
 	{
-		CardObj card = _cards.DrawCard();
+		CardControl card = _cards.DrawCard();
 		AddChild(card);
 		currentHand.Add(card);
 	}

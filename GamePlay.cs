@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Security;
 
 public partial class GamePlay : Node2D
 {
@@ -109,7 +111,8 @@ public partial class GamePlay : Node2D
 	public void OnCardEntered(Node card) {
 		GD.Print("OnCardEnteredTree: ", card);
 		try {
-			var currCard = (CardObj) card;
+			var currCardFrame = (CardControl) card;
+			var currCard = (CardObj) currCardFrame.GetChild(0);
 			currCard.CardPlayed += cardAction => OnCardPlayed(cardAction);
 		} catch {
 			GD.Print("ONCARDPLAYED signal not connected; ", card);
