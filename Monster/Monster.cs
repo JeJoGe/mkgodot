@@ -20,12 +20,12 @@ public partial class Monster : Node2D
 	public bool Summoned { get; set; } = false;
 	public int Armour { get; set; }
 	public int Fame { get; set; }
-	public List<MonsterAttack> Attacks { get; set; }
+	public List<MonsterAttack> Attacks { get; set; } = new List<MonsterAttack>();
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public MonsterColour Colour { get; set; }
 	public int MonsterId { get; set; }
-	private static readonly int _attackOffset = 20;
+	private static readonly int _attackOffset = 40;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -41,10 +41,18 @@ public partial class Monster : Node2D
 	public void PopulateStats(MonsterObject data, int id)
 	{
 		Armour = data.Armour;
-		Attacks = data.Attacks;
-		Abilities = data.Abilities;
+		foreach (var attackData in data.Attacks)
+		{
+            var monsterAttack = new MonsterAttack
+            {
+                Element = attackData.Element,
+                Value = attackData.Value
+            };
+			Attacks.Add(monsterAttack);
+        }
+		Abilities = new List<string>(data.Abilities);
 		Colour = data.Colour;
-		Resistances = data.Resistances;
+		Resistances = new List<Element>(data.Resistances);
 		Fame = data.Fame;
 		MonsterId = id;
 	}
@@ -64,6 +72,7 @@ public partial class Monster : Node2D
 					GetParent<Combat>().CreateMonsterToken(monsterID);
 				}
 				Visible = false;
+				attack.Attacked = true;
 				break;
 			}
 			var swift = Abilities.Contains("swift");
@@ -72,7 +81,8 @@ public partial class Monster : Node2D
                 ButtonGroup = GetParent<Combat>().MonsterAttacks,
                 Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
 				ToggleMode = true,
-                Position = new Vector2(-46, 100 + _attackOffset * i),
+                Position = new Vector2(-46, 60 + _attackOffset * i),
+				Scale = new Vector2(1,1),
                 Name = string.Format("AttackButton{0}", i)
             };
             button.Pressed += () => OnAttackButtonToggled(attack);
@@ -86,7 +96,7 @@ public partial class Monster : Node2D
 		{
 			var attack = Attacks[i];
 			var brutal = Abilities.Contains("brutal");
-			if (!attack.Blocked)
+			if (!attack.Blocked && attack.Element != Element.Summon)
 			{
 				var button = GetNode<Button>("AttackButton" + i.ToString());
 				button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (brutal ? attack.Value : 0));

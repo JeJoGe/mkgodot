@@ -8,13 +8,13 @@ atlas = ExtResource("1_18t5v")
 region = Rect2(0, 0, 1000, 1400)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3pdd"]
-size = Vector2(208, 288)
+size = Vector2(176, 256)
 
 [node name="Unit" type="Node2D"]
 script = ExtResource("1_7qnqd")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.18, 0.18)
 texture = SubResource("AtlasTexture_q05kk")
 
 [node name="Area2D" type="Area2D" parent="."]

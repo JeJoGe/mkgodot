@@ -99,7 +99,7 @@ public partial class Combat : Node2D
 		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
 		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
 		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1500, 0), (1000, 1), (501, 0), (2002, 0)]);
+		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
@@ -125,7 +125,6 @@ public partial class Combat : Node2D
 				new Vector2(unitStats.X * GameSettings.CardWidth, unitStats.Y * GameSettings.CardLength),
 				new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
 			unitSprite.Texture = atlas;
-			unitSprite.Scale = new Vector2((float)0.2, (float)0.2);
 			unitCard.Position = new Vector2(_cardOffset * i + 100, 400);
 			//add child to control
 			AddChild(unitCard);
@@ -144,7 +143,6 @@ public partial class Combat : Node2D
 		var atlas = (AtlasTexture)Utils.SpriteSheets[Utils.ConvertMonsterColourToString(monsterToken.Colour)].Duplicate();
 		atlas.Region = new Rect2(new Vector2(monsterStats.X * _spriteSize, monsterStats.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
 		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.4, (float)0.4);
 		monsterToken.Position = new Vector2(_offset * _enemyList.Count + 60, 80);
 		AddChild(monsterToken);
 		_enemyList.Add(monsterToken);

@@ -6,32 +6,32 @@
 script = ExtResource("1_2aaos")
 
 [node name="NextButton" type="Button" parent="."]
-offset_left = 640.0
-offset_top = 40.0
-offset_right = 743.0
-offset_bottom = 71.0
+offset_left = 40.0
+offset_top = 568.0
+offset_right = 143.0
+offset_bottom = 599.0
 text = "Skip Ranged"
 
 [node name="ConfirmButton" type="Button" parent="."]
-offset_left = 640.0
-offset_top = 88.0
-offset_right = 765.0
-offset_bottom = 119.0
+offset_left = 40.0
+offset_top = 616.0
+offset_right = 165.0
+offset_bottom = 647.0
 disabled = true
 text = "Confirm Attack"
 
 [node name="WoundsLabel" type="Label" parent="."]
-offset_left = 640.0
-offset_top = 136.0
-offset_right = 703.0
-offset_bottom = 159.0
+offset_left = 40.0
+offset_top = 664.0
+offset_right = 117.0
+offset_bottom = 687.0
 text = "Wounds 0"
 
 [node name="TotalWoundsLabel" type="Label" parent="."]
-offset_left = 640.0
-offset_top = 176.0
-offset_right = 717.0
-offset_bottom = 199.0
+offset_left = 40.0
+offset_top = 704.0
+offset_right = 160.0
+offset_bottom = 727.0
 text = "Total Wounds 0"
 
 [connection signal="pressed" from="NextButton" to="." method="OnNextButtonPressed"]
