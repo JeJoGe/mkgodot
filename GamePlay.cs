@@ -22,7 +22,7 @@ public partial class GamePlay : Node2D
 	// Generate Monster Token and stats, may need to add in variable for whether flipped
 	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{	
-		var mapGen = GetNode<MapGen>("MapGen");
+		var mapGen = GetNode<MapGen>("GameplayControl/MapGen");
 		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
 		var monsterToken = (MapToken)monsterScene.Instantiate();
 		monsterToken.MapPosition = localPos;
@@ -92,7 +92,7 @@ public partial class GamePlay : Node2D
 	}
 
     private void drawConversion(int quantity) {
-        var deck = GetNode<Deck>("Player UI/PlayerArea/Deck");
+        var deck = GetNode<Deck>("GamePlay/GameplayControl/Player UI/PlayerArea/Deck");
 
         for (int i = 0; i < quantity; i++) {
             deck.OnDeckButtonPressed();
@@ -100,7 +100,7 @@ public partial class GamePlay : Node2D
     }
 
     private void moveConversion(int quantity) {
-        var player = GetNode<Player>("Player");
+        var player = GetNode<Player>("/GameplayControl/Player");
         player.MovePoints += quantity;
         GD.Print(player.MovePoints);
     }

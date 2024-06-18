@@ -47,7 +47,7 @@ public partial class Player : Node2D
 			else if (mapGen.GetSurroundingCells(playerPos).Contains(posClicked))
 			{
 				// Check if next to any enemy
-				var gamePlay = GetNode<GamePlay>("..");
+				var gamePlay = GetNode<GamePlay>("../..");
 				foreach (var enemy in gamePlay.EnemyList)
 				{
 					// Enemy adjacent and moving to another tile adjacent to enemy
@@ -72,7 +72,6 @@ public partial class Player : Node2D
 					GD.Print("Terrain costs more movement than you currently have.");
 				}
 			}
-
 		}
 		else if (@event.IsActionPressed("escape"))
 		{

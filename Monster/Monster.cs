@@ -67,15 +67,15 @@ public partial class Monster : Node2D
 				break;
 			}
 			var swift = Abilities.Contains("swift");
-            var button = new Button
-            {
-                ButtonGroup = GetParent<Combat>().MonsterAttacks,
-                Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
+			var button = new Button
+			{
+				ButtonGroup = GetParent<Combat>().MonsterAttacks,
+				Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
 				ToggleMode = true,
-                Position = new Vector2(-46, 100 + _attackOffset * i),
-                Name = string.Format("AttackButton{0}", i)
-            };
-            button.Pressed += () => OnAttackButtonToggled(attack);
+				Position = new Vector2(-46, 100 + _attackOffset * i),
+				Name = string.Format("AttackButton{0}", i)
+			};
+			button.Pressed += () => OnAttackButtonToggled(attack);
 			AddChild(button);
 		}
 	}
@@ -101,32 +101,29 @@ public partial class Monster : Node2D
 
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
-		if (typeof(InputEventMouseButton) == inputEvent.GetType())
+		if (Input.IsActionPressed("leftClick"))
 		{
-			var mouseEvent = (InputEventMouseButton)inputEvent;
-			if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.IsPressed())
+			//PrintStats();
+			//Need to add in case for anti-fortification
+			if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
 			{
-				//PrintStats();
-				//Need to add in case for anti-fortification
-				if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
+				// can not target if double fortified during ranged phase
+				GD.Print("untargetable");
+			}
+			else
+			{
+				Selected = !Selected;
+				if (Selected)
 				{
-					// can not target if double fortified during ranged phase
-					GD.Print("untargetable");
+					GD.Print("Selected");
 				}
 				else
 				{
-					Selected = !Selected;
-					if (Selected)
-					{
-						GD.Print("Selected");
-					}
-					else
-					{
-						GD.Print("unselected");
-					}
-					GetParent<Combat>().UpdateTargets();
+					GD.Print("unselected");
 				}
+				GetParent<Combat>().UpdateTargets();
 			}
+
 		}
 	}
 

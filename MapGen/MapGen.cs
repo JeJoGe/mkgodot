@@ -91,7 +91,7 @@ public partial class MapGen : TileMap
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
 					if (tokenData != "" && tokenData != "yellow")
 					{
-						var gamePlay = GetNode<GamePlay>("..");
+						var gamePlay = GetNode<GamePlay>("../..");
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						gamePlay.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);

@@ -1,7 +1,8 @@
-[gd_scene load_steps=54 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=55 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
+[ext_resource type="Script" path="res://GameplayControl.cs" id="2_7jlcl"]
 [ext_resource type="ButtonGroup" uid="uid://bwjq78y5esejs" path="res://Tactics/TacticsGroup.tres" id="2_j6tl2"]
 [ext_resource type="Script" path="res://PlayerArea.cs" id="2_khnnw"]
 [ext_resource type="Script" path="res://Tactics.cs" id="2_o1npl"]
@@ -1061,36 +1062,46 @@ pattern_26 = SubResource("TileMapPattern_nxmvw")
 z_index = -1
 script = ExtResource("1_m0gf8")
 
-[node name="TurnOrderTracker" type="Node2D" parent="."]
+[node name="GameplayControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_7jlcl")
+
+[node name="TurnOrderTracker" type="Node2D" parent="GameplayControl"]
 position = Vector2(208, 480)
 script = ExtResource("12_js350")
 
-[node name="RoundMarker" type="Label" parent="."]
+[node name="RoundMarker" type="Label" parent="GameplayControl"]
+layout_mode = 0
 offset_left = 72.0
 offset_top = 472.0
 offset_right = 112.0
 offset_bottom = 495.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="GameplayControl"]
 scale = Vector2(0.1, 0.1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayControl/Area2D"]
 position = Vector2(2390, 8460)
 scale = Vector2(9.99999, 9.99999)
 shape = SubResource("RectangleShape2D_e3iwm")
 
-[node name="DummyDeck" type="Sprite2D" parent="Area2D"]
+[node name="DummyDeck" type="Sprite2D" parent="GameplayControl/Area2D"]
 position = Vector2(2390, 8460)
 texture = ExtResource("19_vtp22")
 
-[node name="DummyArea" type="Node2D" parent="Area2D"]
+[node name="DummyArea" type="Node2D" parent="GameplayControl/Area2D"]
 position = Vector2(2390, 8460)
 scale = Vector2(10, 10)
 script = ExtResource("18_70l2p")
 metadata/_edit_group_ = true
 
-[node name="Total" type="Label" parent="Area2D/DummyArea"]
+[node name="Total" type="Label" parent="GameplayControl/Area2D/DummyArea"]
 offset_left = -24.0
 offset_top = -24.0
 offset_right = 21.0
@@ -1101,54 +1112,54 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="DeckPopup" parent="Area2D/DummyArea" instance=ExtResource("21_bdyk2")]
+[node name="DeckPopup" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("21_bdyk2")]
 visible = false
 position = Vector2(51, -64)
 
-[node name="BlueCrystal" parent="Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+[node name="BlueCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
 position = Vector2(-144, 24)
 
-[node name="Count" parent="Area2D/DummyArea/BlueCrystal" index="0"]
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/BlueCrystal" index="0"]
 metadata/_edit_use_anchors_ = true
 
-[node name="Polygon2D2" parent="Area2D/DummyArea/BlueCrystal" index="1"]
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/BlueCrystal" index="1"]
 color = Color(0, 0, 1, 1)
 
-[node name="RedCrystal" parent="Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+[node name="RedCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
 position = Vector2(-93, 24)
 
-[node name="Count" parent="Area2D/DummyArea/RedCrystal" index="0"]
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/RedCrystal" index="0"]
 metadata/_edit_use_anchors_ = true
 
-[node name="Polygon2D2" parent="Area2D/DummyArea/RedCrystal" index="1"]
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/RedCrystal" index="1"]
 color = Color(1, 0, 0, 1)
 
-[node name="GreenCrystal" parent="Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+[node name="GreenCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
 position = Vector2(-42, 24)
 
-[node name="Count" parent="Area2D/DummyArea/GreenCrystal" index="0"]
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/GreenCrystal" index="0"]
 metadata/_edit_use_anchors_ = true
 
-[node name="Polygon2D2" parent="Area2D/DummyArea/GreenCrystal" index="1"]
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/GreenCrystal" index="1"]
 color = Color(0, 1, 0, 1)
 
-[node name="WhiteCrystal" parent="Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+[node name="WhiteCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
 position = Vector2(8, 24)
 
-[node name="PlayerUI" type="CanvasLayer" parent="."]
+[node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
 
-[node name="SharedArea" type="Node2D" parent="PlayerUI"]
+[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI"]
 script = ExtResource("10_bkisu")
 
-[node name="Source" parent="PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
+[node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
-[node name="PlayerArea" type="Node2D" parent="PlayerUI"]
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI"]
 script = ExtResource("2_khnnw")
 
-[node name="Inventory" type="Sprite2D" parent="PlayerUI/PlayerArea"]
+[node name="Inventory" type="Sprite2D" parent="GameplayControl/PlayerUI/PlayerArea"]
 
-[node name="Tactics" type="Control" parent="PlayerUI/PlayerArea"]
+[node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -1159,7 +1170,7 @@ offset_bottom = 276.0
 script = ExtResource("2_o1npl")
 metadata/_edit_group_ = true
 
-[node name="Tactic1" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic1" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
@@ -1171,7 +1182,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("3_5mt76")
 
-[node name="Tactic2" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic2" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 136.0
 offset_top = 8.0
@@ -1183,7 +1194,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("4_b2aj0")
 
-[node name="Tactic3" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic3" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 264.0
 offset_top = 8.0
@@ -1195,7 +1206,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("5_2ng8m")
 
-[node name="Tactic4" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic4" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 168.0
@@ -1207,7 +1218,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("6_rt858")
 
-[node name="Tactic5" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic5" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 136.0
 offset_top = 168.0
@@ -1219,7 +1230,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("7_bkwh1")
 
-[node name="Tactic6" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="Tactic6" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 264.0
 offset_top = 168.0
@@ -1231,7 +1242,7 @@ toggle_mode = true
 button_group = ExtResource("2_j6tl2")
 icon = ExtResource("8_1ear6")
 
-[node name="ConfirmTactic" type="Button" parent="PlayerUI/PlayerArea/Tactics"]
+[node name="ConfirmTactic" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
 layout_mode = 0
 offset_left = 152.0
 offset_top = 328.0
@@ -1240,7 +1251,7 @@ offset_bottom = 336.0
 disabled = true
 text = "Confirm"
 
-[node name="NewRoundButton" type="Button" parent="PlayerUI/PlayerArea"]
+[node name="NewRoundButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
 offset_left = 37.0
 offset_top = 25.0
 offset_right = 135.0
@@ -1248,7 +1259,7 @@ offset_bottom = 56.0
 text = "New Round"
 metadata/_edit_use_anchors_ = true
 
-[node name="EndTurnButton" type="Button" parent="PlayerUI/PlayerArea"]
+[node name="EndTurnButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
 offset_left = 46.0
 offset_top = 71.0
 offset_right = 124.0
@@ -1257,11 +1268,11 @@ disabled = true
 text = "End Turn"
 metadata/_edit_use_anchors_ = true
 
-[node name="Deck" type="Node2D" parent="PlayerUI/PlayerArea"]
+[node name="Deck" type="Node2D" parent="GameplayControl/PlayerUI/PlayerArea"]
 position = Vector2(3, 7)
 script = ExtResource("18_4oofl")
 
-[node name="TextureButton" type="TextureButton" parent="PlayerUI/PlayerArea/Deck"]
+[node name="TextureButton" type="TextureButton" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
 offset_left = 1779.0
 offset_top = 869.0
 offset_right = 2779.0
@@ -1269,56 +1280,58 @@ offset_bottom = 2269.0
 scale = Vector2(0.14402, 0.14402)
 texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
+metadata/_edit_use_anchors_ = true
 
-[node name="Undo" type="Button" parent="PlayerUI"]
+[node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
 offset_left = 56.0
 offset_top = 116.0
 offset_right = 118.0
 offset_bottom = 147.0
 text = "Undo"
+metadata/_edit_use_anchors_ = true
 
-[node name="MapGen" type="TileMap" parent="."]
+[node name="MapGen" type="TileMap" parent="GameplayControl"]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
 format = 2
 layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0, -65536, 0, 0, 0, 196608, 0)
 script = ExtResource("3_hiwow")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="GameplayControl"]
 position = Vector2(969, 543)
 process_callback = 0
 script = ExtResource("4_15lwj")
 
-[node name="Player" type="Node2D" parent="."]
+[node name="Player" type="Node2D" parent="GameplayControl"]
 position = Vector2(672, 856)
 script = ExtResource("4_jr7il")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
+[node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")
 
-[connection signal="CurrentTurn" from="TurnOrderTracker" to="Area2D/DummyArea" method="OnCurrentTurn"]
-[connection signal="CurrentTurn" from="TurnOrderTracker" to="PlayerUI/PlayerArea" method="OnCurrentTurn"]
-[connection signal="mouse_entered" from="Area2D" to="Area2D/DummyArea" method="OnMouseEntered"]
-[connection signal="mouse_exited" from="Area2D" to="Area2D/DummyArea" method="OnMouseExited"]
-[connection signal="EndTurn" from="Area2D/DummyArea" to="TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="TurnOrder" from="PlayerUI/PlayerArea/Tactics" to="TurnOrderTracker" method="OnTurnOrder"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic1" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic2" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic3" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic4" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic5" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/Tactic6" to="PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Tactics/ConfirmTactic" to="PlayerUI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="Area2D/DummyArea" method="OnNewRound"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/SharedArea" method="NewRound"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/SharedArea/Source" method="NewRound"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/NewRoundButton" to="PlayerUI/PlayerArea/Tactics" method="NewRound"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/EndTurnButton" to="TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/EndTurnButton" to="PlayerUI/SharedArea/Source" method="EndTurn"]
-[connection signal="child_entered_tree" from="PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
-[connection signal="pressed" from="PlayerUI/PlayerArea/Deck/TextureButton" to="PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
-[connection signal="button_down" from="PlayerUI/Undo" to="Player" method="_OnUndoButtonDown"]
+[connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/Area2D/DummyArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/PlayerUI/PlayerArea" method="OnCurrentTurn"]
+[connection signal="mouse_entered" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseEntered"]
+[connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
+[connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic3" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic4" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic5" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic6" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/ConfirmTactic" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/Area2D/DummyArea" method="OnNewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="EndTurn"]
+[connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
+[connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
 
-[editable path="Area2D/DummyArea/BlueCrystal"]
-[editable path="Area2D/DummyArea/RedCrystal"]
-[editable path="Area2D/DummyArea/GreenCrystal"]
+[editable path="GameplayControl/Area2D/DummyArea/BlueCrystal"]
+[editable path="GameplayControl/Area2D/DummyArea/RedCrystal"]
+[editable path="GameplayControl/Area2D/DummyArea/GreenCrystal"]
