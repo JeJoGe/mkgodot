@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 
 public partial class GamePlay : Node2D
 {
@@ -10,10 +9,7 @@ public partial class GamePlay : Node2D
 	private Deck deck;
 	[Export]
 	private Player player;
-	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
-	public List<MapToken> EnemyList = new List<MapToken>();
 	
-	private static readonly int _monsterSpriteSize = 258;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -32,24 +28,6 @@ public partial class GamePlay : Node2D
 			GetTree().Quit();
 		}
     }
-    // Generate Monster Token and stats, may need to add in variable for whether flipped
-    public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
-	{
-		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
-		var monsterToken = (MapToken)monsterScene.Instantiate();
-		monsterToken.MapPosition = localPos;
-		monsterToken.SiteFortifications = siteFortifications;
-		monsterToken.Colour = colour;
-		var monsterStats = Utils.Bestiary[enemy];
-		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
-		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize,monsterStats.Y * _monsterSpriteSize),new Vector2(_monsterSpriteSize,_monsterSpriteSize));
-		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.25,(float)0.25);
-		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
-		AddChild(monsterToken);
-		EnemyList.Add(monsterToken);
-	}
 
 	public void OnCardPlayed(string cardAction) {
 		// GD.Print("INONCARDPLAYED: ", cardAction);

@@ -3,6 +3,7 @@ using System;
 
 public partial class MapTokenControl : Control
 {
+
 	private bool hover;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,7 +37,7 @@ public partial class MapTokenControl : Control
 	private void OnMouseExited() {
 		hover = false;
 	}
-	/*public override void _GuiInput(InputEvent @event)
+	public override void _GuiInput(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mb)
 		{
@@ -45,5 +46,5 @@ public partial class MapTokenControl : Control
 				GD.Print("Monster been clicked D:");
 			}
 		}
-	}*/
+	}
 }
