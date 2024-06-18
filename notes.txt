@@ -21,6 +21,9 @@ Fire Resistance: 1
 Physical Resistance: 0
 Coldfire Resistance: 4 (only during combat)
 
+Combat notes:
+Can not cancel attacks by removing attack from Attacks list
+
 map tokens scaling: 0.25, 0.25
 combat token scaling: 0.4, 0.4
 combat unit card scaling: 0.2, 0.2

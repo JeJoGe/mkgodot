@@ -377,6 +377,32 @@
         "y":1,
         "count": 2
     },
+    "1600":{
+        "name":"Hydra",
+        "colour": 3,
+        "armour":6,
+        "attacks":[
+            {
+                "value":2,
+                "element":0
+            },
+            {
+                "value":2,
+                "element":0
+            },
+            {
+                "value":2,
+                "element":0
+            }
+        ],
+        "fame":5,
+        "resistances":[2],
+        "abilities":[],
+        "version":"ll",
+        "x":1,
+        "y":1,
+        "count": 2
+    },
     "2002":{
         "name":"Dragon Summoner",
         "colour": 4,
