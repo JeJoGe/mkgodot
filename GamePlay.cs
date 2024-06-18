@@ -4,6 +4,12 @@ using System.Collections.Generic;
 
 public partial class GamePlay : Node2D
 {
+	[Export]
+	private MapGen mapGen;
+	[Export]
+	private Deck deck;
+	[Export]
+	private Player player;
 	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
 	
@@ -19,10 +25,16 @@ public partial class GamePlay : Node2D
 	public override void _Process(double delta)
 	{
 	}
-	// Generate Monster Token and stats, may need to add in variable for whether flipped
-	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
-	{	
-		var mapGen = GetNode<MapGen>("MapGen");
+    public override void _Input(InputEvent @event)
+    {
+        if (@event.IsActionPressed("escape"))
+		{
+			GetTree().Quit();
+		}
+    }
+    // Generate Monster Token and stats, may need to add in variable for whether flipped
+    public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
+	{
 		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
 		var monsterToken = (MapToken)monsterScene.Instantiate();
 		monsterToken.MapPosition = localPos;
@@ -92,15 +104,12 @@ public partial class GamePlay : Node2D
 	}
 
     private void drawConversion(int quantity) {
-        var deck = GetNode<Deck>("Player UI/PlayerArea/Deck");
-
         for (int i = 0; i < quantity; i++) {
             deck.OnDeckButtonPressed();
         }
     }
 
     private void moveConversion(int quantity) {
-        var player = GetNode<Player>("Player");
         player.MovePoints += quantity;
         GD.Print(player.MovePoints);
     }
