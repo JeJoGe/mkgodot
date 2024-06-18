@@ -3,6 +3,8 @@ using System;
 
 public partial class SharedArea : Node2D
 {
+	[Export]
+	private Label _roundMarker { get; set;}
 	public static int Round { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
@@ -18,6 +20,6 @@ public partial class SharedArea : Node2D
 
 	private void NewRound() {
 		Round++;
-		GetNode<Label>("RoundMarker").Text = "Round " + Round;
+		_roundMarker.Text = "Round " + Round;
 	}
 }

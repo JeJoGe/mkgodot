@@ -363,6 +363,7 @@ public partial class Combat : Node2D
 				{
 					// return to Map with results of combat (either all enemies defeated or not)
 					GD.Print("return to map");
+					EndCombat(false);
 					break;
 				}
 			default: break;
@@ -382,6 +383,7 @@ public partial class Combat : Node2D
 					{
 						GD.Print("all enemies defeated");
 						// exit combat
+						EndCombat(true);
 					}
 					GetNode<Button>("ConfirmButton").Disabled = true;
 					ResetAttacks();
@@ -452,6 +454,7 @@ public partial class Combat : Node2D
 					{
 						GD.Print("all enemies defeated");
 						// exit combat
+						EndCombat(true);
 					}
 					GetNode<Button>("ConfirmButton").Disabled = true;
 					ResetAttacks();
@@ -644,6 +647,12 @@ public partial class Combat : Node2D
 		if (wounds + _totalWounds >= _maxHandSize || paralyze) {
 			_knockout = true;
 		}
+	}
+
+	private void EndCombat(bool victory)
+	{
+		GetParent<Player>().CombatCleanup(victory);
+		QueueFree();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
