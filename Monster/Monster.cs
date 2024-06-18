@@ -69,7 +69,8 @@ public partial class Monster : Node2D
 				{
 					GD.Print("summon brown token");
 					var monsterID = GameSettings.DrawMonster(MonsterColour.Brown);
-					GetParent<Combat>().CreateMonsterToken(monsterID);
+					var monster = GetParent<Combat>().CreateMonsterToken(monsterID);
+					monster.Summoned = true;
 				}
 				Visible = false;
 				attack.Attacked = true;
