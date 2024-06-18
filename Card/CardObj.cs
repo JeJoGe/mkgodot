@@ -50,10 +50,6 @@ public partial class CardObj : Sprite2D
         AddChild(topOptionsButton);
         bottomOptionsButton.Visible = false;
         AddChild(bottomOptionsButton);
-        
-        // var gamePlay = GetNode<GamePlay>(".");
-        // GD.Print("GAMEPLAY:", gamePlay);
-        // this.CardPlayed += cardAction => gamePlay.OnCardPlayed(cardAction);
     }
 
 
@@ -67,7 +63,6 @@ public partial class CardObj : Sprite2D
     * 5. The quantity of an action is denoted by (-) followed by a number. ie: move-4***** attack-fire-3
     */
     public void parseFunction(string cardFunction, CardObjOption position) {
-        GD.Print("cardFunction", cardFunction);
        string[] function = cardFunction.Split(",");
        if (function.Count() > 1) {
             for (int i = 0; i < function.Count(); ++i) {
@@ -124,14 +119,12 @@ public partial class CardObj : Sprite2D
     public void toggleActionPressed() {
         var getPowerUp = GetChild<Button>(1);
         if(currentOption == CardObjOption.top) {
-            GD.Print("Using Bottom Action" + id);
             getPowerUp.Text = "Use Top Option";
             currentOption = CardObjOption.bottom;
             topOptionsButton.Visible = false;
             bottomOptionsButton.Visible = bottomOptionExists && true; 
         } else {
             getPowerUp.Text = "Use Bottom Option";
-            GD.Print("Using Top Action" + id);
             currentOption = CardObjOption.top;
             bottomOptionsButton.Visible = false; 
             topOptionsButton.Visible = topOptionExists && true;

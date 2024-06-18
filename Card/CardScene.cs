@@ -67,7 +67,7 @@ public partial class CardScene : Node2D
         CardControl card = DeckOfCards.Pop();
         int posMultiplier = InitialDeckLength - DeckOfCards.Count;
         int xPos = 1500 - (100 * posMultiplier);
-        int yPos = posMultiplier > 14 ? 800 : 500;
+        int yPos = 300;
         card.Position = new Vector2I(xPos, yPos);
         return card;
     }

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
@@ -8,13 +9,16 @@ public partial class Player : Node2D
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	public Vector2I playerPos = new Vector2I(0, 0);
-	private int movePoints = 100;
+	public int movePoints = 100;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
 	PackedScene CombatScene;
+	public Combat Combat;
+	public bool isCombatSceneActive = false;
+	public int influence = 0;
 
 	public override void _Ready()
 	{
@@ -35,6 +39,8 @@ public partial class Player : Node2D
 		// set player level
 		// set enemies
 		var CombatStart = (Combat)CombatScene.Instantiate();
+		isCombatSceneActive = true;
+		Combat = CombatStart;
 		AddChild(CombatStart);
 		CombatStart.GlobalPosition = new Godot.Vector2(0,0);
 	}
