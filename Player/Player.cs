@@ -39,6 +39,18 @@ public partial class Player : Node2D
 		CombatStart.GlobalPosition = new Godot.Vector2(0,0);
 	}
 
+	public void CombatCleanup(bool victory)
+	{
+		if (victory)
+		{
+			// do something
+		}
+		else
+		{
+			// do something else
+		}		
+	}
+
 	// Change position of player, update position vector
 	public void PerformMovement(Vector2I posClicked, int cellTerrain)
 	{

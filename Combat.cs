@@ -99,7 +99,7 @@ public partial class Combat : Node2D
 		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
 		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
 		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1500, 0), (1000, 1), (501, 0), (2002, 0)]);
+		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
@@ -125,7 +125,6 @@ public partial class Combat : Node2D
 				new Vector2(unitStats.X * GameSettings.CardWidth, unitStats.Y * GameSettings.CardLength),
 				new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
 			unitSprite.Texture = atlas;
-			unitSprite.Scale = new Vector2((float)0.2, (float)0.2);
 			unitCard.Position = new Vector2(_cardOffset * i + 100, 400);
 			//add child to control
 			AddChild(unitCard);
@@ -144,7 +143,6 @@ public partial class Combat : Node2D
 		var atlas = (AtlasTexture)Utils.SpriteSheets[Utils.ConvertMonsterColourToString(monsterToken.Colour)].Duplicate();
 		atlas.Region = new Rect2(new Vector2(monsterStats.X * _spriteSize, monsterStats.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
 		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.4, (float)0.4);
 		monsterToken.Position = new Vector2(_offset * _enemyList.Count + 60, 80);
 		AddChild(monsterToken);
 		_enemyList.Add(monsterToken);
@@ -365,6 +363,7 @@ public partial class Combat : Node2D
 				{
 					// return to Map with results of combat (either all enemies defeated or not)
 					GD.Print("return to map");
+					EndCombat(false);
 					break;
 				}
 			default: break;
@@ -384,6 +383,7 @@ public partial class Combat : Node2D
 					{
 						GD.Print("all enemies defeated");
 						// exit combat
+						EndCombat(true);
 					}
 					GetNode<Button>("ConfirmButton").Disabled = true;
 					ResetAttacks();
@@ -454,6 +454,7 @@ public partial class Combat : Node2D
 					{
 						GD.Print("all enemies defeated");
 						// exit combat
+						EndCombat(true);
 					}
 					GetNode<Button>("ConfirmButton").Disabled = true;
 					ResetAttacks();
@@ -514,6 +515,11 @@ public partial class Combat : Node2D
 							enemy.Visible = false;
 							_enemyList.RemoveAt(i);
 							GameSettings.DiscardToken(enemy.MonsterId);
+						}
+						else if (enemy.Attacks.First().Element == Element.Summon)
+						{
+							// reveal summoners
+							enemy.Visible = true;
 						}
 					}
 					GetNode<Button>("NextButton").Text = "Skip Attacking";
@@ -641,6 +647,12 @@ public partial class Combat : Node2D
 		if (wounds + _totalWounds >= _maxHandSize || paralyze) {
 			_knockout = true;
 		}
+	}
+
+	private void EndCombat(bool victory)
+	{
+		GetParent<Player>().CombatCleanup(victory);
+		QueueFree();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
