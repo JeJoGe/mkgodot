@@ -61,18 +61,27 @@ public partial class GamePlay : Node2D
 			quantity = Convert.ToInt16(action[1]);
 		}
 		switch(action[0]) {
-			case "attack": attackConversion(action[1], action[2], quantity);
+			case "attack": combatConversion("attack", action[1], action[2], quantity);
 				break;
-			case "heal": GD.Print("HEALING: ", quantity);
+			case "heal": healingConversion(quantity);
 				break;
 			case "draw": drawConversion(quantity);
 				break;
 			case "move": moveConversion(quantity);
 				break;
+			case "influence": influenceConversion(quantity);
+				break;
+			case "block": combatConversion("block", action[1], action[2], quantity);
+				break;
+
 		}
     }
 
-    private void attackConversion(string element, string attackRange, int quantity) {
+    private void combatConversion(string phase, string element, string attackRange, int quantity) {
+		var player = GetNode<Player>("Player");
+		var combatScene =  player.Combat;
+		if (combatScene == null) { GD.Print("Currently not in Combat"); return;}
+		
 		int index = 0;
 		switch(element) {
 			case "fire":
@@ -95,12 +104,13 @@ public partial class GamePlay : Node2D
 				break;
 		}
 
-		GD.Print("Attack Index: ", index);
-        // var combat = GetNode<Combat>("Combat");
-        // int attackQuantity = combat.PlayerAttacks[index];
+		if (phase == "attack") {
+			combatScene.PlayerAttacks[index] = quantity;
+		} else {
+			combatScene.PlayerBlocks[index] = quantity;
+		}
 
-        // combat.PlayerAttacks.Add(index, attackQuantity + quantity);
-        // GD.Print("PlayerAttacks: ", combat.PlayerAttacks[index]);
+		GD.Print("Index: ", index);
 	}
 
     private void drawConversion(int quantity) {
@@ -113,6 +123,17 @@ public partial class GamePlay : Node2D
         player.MovePoints += quantity;
         GD.Print(player.MovePoints);
     }
+
+	private void influenceConversion(int quantity){
+		var player = GetNode<Player>("Player");
+		player.influence = quantity;
+		GD.Print("Influence Points: ", quantity);
+	}
+
+	private void healingConversion(int quantity) {
+		var deck = GetNode<Deck>("Player UI/PlayerArea/Deck");
+		
+	}
 
 	// When card enters the tree, tie the signal CardPlayed to OnCard
 	public void OnCardEntered(Node card) {

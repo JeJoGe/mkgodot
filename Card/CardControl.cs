@@ -32,10 +32,12 @@ public partial class CardControl : Control
 		if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover)
 		{
 			this.Scale = new Vector2((float)0.5, (float)0.5);
+			this.ZIndex = 1;
 		}
 		else if (Input.IsActionJustReleased("shift"))
 		{
 			this.Scale = new Vector2((float)0.25, (float)0.25);
+			this.ZIndex = 0;
 		}
 		
 	}
