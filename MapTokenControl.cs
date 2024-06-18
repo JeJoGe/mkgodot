@@ -7,6 +7,7 @@ public partial class MapTokenControl : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		//this.MouseFilter = MouseFilterEnum.Stop;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,6 +27,7 @@ public partial class MapTokenControl : Control
 			GetNode<Node2D>("Sprite2D").Scale = new Vector2((float)0.25,(float)0.25);
 			GetNode<Sprite2D>("Sprite2D").ZIndex = 0;
 		}
+		
 	}
 	private void OnMouseEntered() {
 		hover = true;
@@ -33,5 +35,15 @@ public partial class MapTokenControl : Control
 
 	private void OnMouseExited() {
 		hover = false;
+	}
+	public override void _GuiInput(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton mb)
+		{
+			if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+			{
+				GD.Print("Monster been clicked D:");
+			}
+		}
 	}
 }

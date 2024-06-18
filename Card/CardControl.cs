@@ -6,19 +6,20 @@ public partial class CardControl : Control
 	private bool hover;
 	private string cardId;
 	private Vector2 size;
-	
+
 	// Called when the node enters the scene tree for the first time.
-    public CardControl(string _cardId, Vector2 _size) {
+	public CardControl(string _cardId, Vector2 _size)
+	{
 		cardId = _cardId;
 		size = _size;
 	}
 	public override void _Ready()
 	{
 		this.Size = size;
-		this.Scale = new Vector2((float)0.25,(float)0.25);
+		this.Scale = new Vector2((float)0.25, (float)0.25);
 		this.MouseEntered += OnMouseEntered;
 		this.MouseExited += OnMouseExited;
-
+		this.MouseFilter = MouseFilterEnum.Pass;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,19 +29,35 @@ public partial class CardControl : Control
 	// Zoom if shift pressed and hovering token
 	public override void _Input(InputEvent @event)
 	{
-        if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover) {
+		if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover)
+		{
 			this.Scale = new Vector2((float)0.5, (float)0.5);
 			this.ZIndex = 1;
-        } else if (Input.IsActionJustReleased("shift")) {
-			this.Scale = new Vector2((float) 0.25, (float) 0.25);
+		}
+		else if (Input.IsActionJustReleased("shift"))
+		{
+			this.Scale = new Vector2((float)0.25, (float)0.25);
 			this.ZIndex = 0;
-        } 
+		}
+		
 	}
-	private void OnMouseEntered() {
+	private void OnMouseEntered()
+	{
 		hover = true;
 	}
 
-	private void OnMouseExited() {
+	private void OnMouseExited()
+	{
 		hover = false;
+	}
+	public override void _GuiInput(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton mb)
+		{
+			if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+			{
+				GD.Print("Card been clicked D:");
+			}
+		}
 	}
 }
