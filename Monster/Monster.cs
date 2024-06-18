@@ -83,7 +83,6 @@ public partial class Monster : Node2D
                 Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
 				ToggleMode = true,
                 Position = new Vector2(-46, 60 + _attackOffset * i),
-				Scale = new Vector2(1,1),
                 Name = string.Format("AttackButton{0}", i)
             };
             button.Pressed += () => OnAttackButtonToggled(attack);
