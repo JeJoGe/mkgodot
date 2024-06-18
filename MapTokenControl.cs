@@ -36,7 +36,7 @@ public partial class MapTokenControl : Control
 	private void OnMouseExited() {
 		hover = false;
 	}
-	public override void _GuiInput(InputEvent @event)
+	/*public override void _GuiInput(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mb)
 		{
@@ -45,5 +45,5 @@ public partial class MapTokenControl : Control
 				GD.Print("Monster been clicked D:");
 			}
 		}
-	}
+	}*/
 }
