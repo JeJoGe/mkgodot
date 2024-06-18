@@ -61,7 +61,7 @@ public partial class GamePlay : Node2D
 			quantity = Convert.ToInt16(action[1]);
 		}
 		switch(action[0]) {
-			case "attack": combatConversion("attacK", action[1], action[2], quantity);
+			case "attack": combatConversion("attack", action[1], action[2], quantity);
 				break;
 			case "heal": healingConversion(quantity);
 				break;
