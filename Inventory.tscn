@@ -1,0 +1,65 @@
+[gd_scene load_steps=8 format=3 uid="uid://ddlsl1mpmfruu"]
+
+[ext_resource type="Script" path="res://Inventory.cs" id="1_hlfkb"]
+[ext_resource type="Texture2D" uid="uid://c21wal60lfrgg" path="res://assets/bluemana.png" id="2_nauwr"]
+[ext_resource type="Texture2D" uid="uid://sd7tow3lbh58" path="res://assets/redmana.png" id="3_2r60u"]
+[ext_resource type="Texture2D" uid="uid://cyx0axcr7kmq5" path="res://assets/greenmana.png" id="4_bur5q"]
+[ext_resource type="Texture2D" uid="uid://1j3xe57laucl" path="res://assets/whitemana.png" id="5_pjxpy"]
+[ext_resource type="Texture2D" uid="uid://diy081yegwmp3" path="res://assets/goldmana.png" id="6_enxnv"]
+[ext_resource type="Texture2D" uid="uid://cbh5wxp2pxap1" path="res://assets/blackmana.png" id="7_03d11"]
+
+[node name="Inventory" type="Node2D"]
+script = ExtResource("1_hlfkb")
+
+[node name="Polygon2D2" type="Polygon2D" parent="."]
+position = Vector2(0, 120)
+scale = Vector2(0.4, 0.4)
+color = Color(0, 0, 1, 1)
+polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)
+
+[node name="Polygon2D3" type="Polygon2D" parent="."]
+position = Vector2(51, 120)
+scale = Vector2(0.4, 0.4)
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)
+
+[node name="Polygon2D4" type="Polygon2D" parent="."]
+position = Vector2(102, 120)
+scale = Vector2(0.4, 0.4)
+color = Color(0, 1, 0, 1)
+polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)
+
+[node name="Polygon2D5" type="Polygon2D" parent="."]
+position = Vector2(152, 120)
+scale = Vector2(0.4, 0.4)
+polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(72, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_nauwr")
+
+[node name="Sprite2D4" type="Sprite2D" parent="."]
+position = Vector2(128, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_2r60u")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+position = Vector2(184, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_bur5q")
+
+[node name="Sprite2D5" type="Sprite2D" parent="."]
+position = Vector2(245, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_pjxpy")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(304, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_enxnv")
+
+[node name="Sprite2D6" type="Sprite2D" parent="."]
+position = Vector2(360, 144)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("7_03d11")

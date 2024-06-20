@@ -118,7 +118,7 @@ public partial class DummyArea : Node2D
 		GetNode<Label>("WhiteCrystal/Count").Text = _crystals[3].ToString();
 	}
 
-	private void OnNewRound()
+	private void NewRound()
 	{
 		// add card to deck then shuffle
 		if (SharedArea.Round != 1) { // skip for round 1

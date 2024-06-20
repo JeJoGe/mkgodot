@@ -3,6 +3,8 @@ using System;
 
 public partial class SharedArea : Node2D
 {
+	[Signal]
+	public delegate void NewRoundEventHandler();
 	[Export]
 	private Label _roundMarker { get; set;}
 	public static int Round { get; set; }
@@ -18,8 +20,9 @@ public partial class SharedArea : Node2D
 	{
 	}
 
-	private void NewRound() {
+	private void OnNewRoundButtonPressed() {
 		Round++;
 		_roundMarker.Text = "Round " + Round;
+		EmitSignal(SignalName.NewRound);
 	}
 }
