@@ -18,7 +18,6 @@ offset_left = -32.0
 offset_top = -32.0
 offset_right = 32.0
 offset_bottom = 32.0
-mouse_filter = 1
 script = ExtResource("2_w3sm5")
 
 [node name="Sprite2D" type="Sprite2D" parent="MapTokenControl"]

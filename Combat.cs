@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Combat : Node2D
+public partial class Combat : Control
 {
 	[Signal]
 	public delegate void KnockoutEventHandler();
