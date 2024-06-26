@@ -5,6 +5,8 @@ using System.Linq;
 
 public partial class Combat : Control
 {
+	[Export]
+	private ConfirmationDialog _confirmDialog;
 	[Signal]
 	public delegate void KnockoutEventHandler();
 	[Signal]
@@ -651,7 +653,13 @@ public partial class Combat : Control
 
 	private void EndCombat(bool victory)
 	{
-		GetParent<Player>().CombatCleanup(victory);
+		_confirmDialog.Visible = true;
+	}
+
+	private void OnFinishCombatConfirmed()
+	{
+		GD.Print("Combat finished");
+		GetParent<Player>().CombatCleanup(false); //pass victory status to player
 		QueueFree();
 	}
 
