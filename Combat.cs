@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class Combat : Control
+public partial class Combat : Node2D
 {
 	[Export]
 	private ConfirmationDialog _confirmDialog;

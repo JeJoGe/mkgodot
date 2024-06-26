@@ -1059,9 +1059,12 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D"]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player")]
 z_index = -1
 script = ExtResource("1_m0gf8")
+mapGen = NodePath("GameplayControl/MapGen")
+deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
+player = NodePath("GameplayControl/Player")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay")]
 layout_mode = 3
@@ -1090,6 +1093,7 @@ offset_bottom = 495.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Area2D" type="Area2D" parent="GameplayControl"]
+position = Vector2(0, 1)
 scale = Vector2(0.1, 0.1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayControl/Area2D"]
@@ -1154,8 +1158,9 @@ position = Vector2(8, 24)
 
 [node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
 
-[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI"]
+[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker")]
 script = ExtResource("10_bkisu")
+_roundMarker = NodePath("../../RoundMarker")
 
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
@@ -1297,12 +1302,13 @@ offset_bottom = 147.0
 text = "Undo"
 metadata/_edit_use_anchors_ = true
 
-[node name="MapGen" type="TileMap" parent="GameplayControl"]
+[node name="MapGen" type="TileMap" parent="GameplayControl" node_paths=PackedStringArray("gameplayControl")]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
 format = 2
 layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0, -65536, 0, 0, 0, 196608, 0)
 script = ExtResource("3_hiwow")
+gameplayControl = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="GameplayControl"]
 position = Vector2(969, 543)
@@ -1321,6 +1327,7 @@ texture = ExtResource("5_w03ud")
 [connection signal="mouse_entered" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseEntered"]
 [connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
