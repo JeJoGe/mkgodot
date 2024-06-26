@@ -1,10 +1,6 @@
 using Godot;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Numerics;
-using System.Text.RegularExpressions;
-
 public enum CardObjOption {
     top,
     bottom

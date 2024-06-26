@@ -97,7 +97,7 @@ public partial class CardControl : Control
     {
         switch (cardState) {
             case CardStates.InHand:
-                break;
+            	break;
 			case CardStates.InFocusEnlarged:
 				break;
             case CardStates.MoveDrawnCardToHand:

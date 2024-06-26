@@ -2,9 +2,6 @@ using Godot;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System;
-using System.Data;
-using System.Text.RegularExpressions;
 
 public partial class CardScene : Node2D
 {
