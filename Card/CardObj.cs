@@ -1,6 +1,9 @@
 using Godot;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 public enum CardObjOption {
     top,
@@ -27,13 +30,12 @@ public partial class CardObj : Sprite2D
     public string effects;
     public Dictionary<int, string> topOptionActions = new Dictionary<int, string>();
     public Dictionary<int, string> bottomOptionActions = new Dictionary<int, string>();
-
     public override void _Ready()
     {
-        this.Position = new Vector2(500, 700);
+        this.Position = new Godot.Vector2(500, 700);
         PlayButton play = new PlayButton(id);
         PowerUpButton powerUp = new PowerUpButton(id, "Using Top Action");
-        AddChild(play);
+        AddChild(play); 
         AddChild(powerUp);
         play.Pressed += onPlayButtonPressed;
         powerUp.Pressed += toggleActionPressed;
@@ -133,8 +135,8 @@ public partial class CardObj : Sprite2D
 
     public void ImageCropping(AtlasTexture atlas) {
         var frame = (AtlasTexture) atlas.Duplicate();
-        frame.Region = new Rect2(new Vector2(1000 * xCoord, 1400 * yCoord), new Vector2(1000, 1400));
+        frame.Region = new Rect2(new Godot.Vector2(1000 * xCoord, 1400 * yCoord), new Godot.Vector2(1000, 1400));
         this.Texture = frame;
     }
-
+        
 }
