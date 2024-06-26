@@ -1,15 +1,19 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class GameplayControl : Control
 {
-	[Export] 
+	[Export]
 	private MapGen mapGen;
 	[Export]
 	private Player player;
 	[Export]
 	private GamePlay gamePlay;
 	const int MainLayer = 0;
+	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
+	public List<MapToken> EnemyList = new List<MapToken>();
+	private static readonly int _monsterSpriteSize = 258;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -21,9 +25,9 @@ public partial class GameplayControl : Control
 	{
 	}
 
-    public override void _GuiInput(InputEvent @event)
-    {
-        // Process mouse event Leftclick on gameplay screen
+	public override void _GuiInput(InputEvent @event)
+	{
+		// Process mouse event Leftclick on gameplay screen
 		if (@event.IsActionPressed("leftClick"))
 		{
 			// Converting global pixel coordinates to coordinates on the MapGen node then converting to the Hex coordinates of MapGen
@@ -44,24 +48,24 @@ public partial class GameplayControl : Control
 			// Check if tile clicked is any tiles surrounding player position
 			else if (mapGen.GetSurroundingCells(player.playerPos).Contains(posClicked))
 			{
-				// Check if next to any enemy
-				foreach (var enemy in gamePlay.EnemyList)
-				{
-					// Enemy adjacent and moving to another tile adjacent to enemy
-					if ((mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
-					&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
-					{
-						player.InitiateCombat();
-					}
-					// Need another else if for if enemy is facedown and time of day
-				}
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-				GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
-
-				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
-				{
+				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain]) // ***Need to make it not move if moving into red or green token***
+				{	
+					var prevPos = player.playerPos;
 					player.PerformMovement(posClicked, cellTerrain);
+					// Check if next to any enemy
+					foreach (var enemy in EnemyList)
+					{
+						// Enemy adjacent and moving to another tile adjacent to enemy
+						if ((mapGen.GetSurroundingCells(prevPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
+						&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
+						{
+							player.InitiateCombat();
+						}
+						// Need another else if for if enemy is facedown and time of day
+					}
+					GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
 				}
 
 				else
@@ -70,6 +74,24 @@ public partial class GameplayControl : Control
 				}
 			}
 
-    	}
+		}
+	}
+	// Generate Monster Token and stats, may need to add in variable for whether flipped
+    public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
+	{
+		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
+		var monsterToken = (MapToken)monsterScene.Instantiate();
+		monsterToken.MapPosition = localPos;
+		monsterToken.SiteFortifications = siteFortifications;
+		monsterToken.Colour = colour;
+		var monsterStats = Utils.Bestiary[enemy];
+		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
+		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
+		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize,monsterStats.Y * _monsterSpriteSize),new Vector2(_monsterSpriteSize,_monsterSpriteSize));
+		enemySprite.Texture = atlas;
+		enemySprite.Scale = new Vector2((float)0.25,(float)0.25);
+		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
+		AddChild(monsterToken);
+		EnemyList.Add(monsterToken);
 	}
 }

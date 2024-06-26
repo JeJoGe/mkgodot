@@ -3,11 +3,18 @@ using System;
 
 public partial class MapTokenControl : Control
 {
+	Player player;
+	MapGen mapGen;
+	MapToken mapToken;
 	private bool hover;
+	const int MainLayer = 0;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		//this.MouseFilter = MouseFilterEnum.Stop;
+		player = GetNode<Player>("../../Player");
+		mapGen = GetNode<MapGen>("../../MapGen");
+		mapToken = GetNode<MapToken>("..");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,12 +45,19 @@ public partial class MapTokenControl : Control
 	}
 	public override void _GuiInput(InputEvent @event)
 	{
-		if (@event is InputEventMouseButton mb)
+		if (@event.IsActionPressed("leftClick"))
 		{
-			if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
+			if (mapGen.GetSurroundingCells(player.playerPos).Contains(mapToken.MapPosition))
 			{
-				GD.Print("Monster been clicked D:");
-			}
+				if(mapToken.Colour != "green" && mapToken.Colour != "red")
+				{
+					var globalClicked = GetGlobalMousePosition();
+					var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
+					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain;
+					player.PerformMovement(posClicked, cellTerrain);
+				}
+				player.InitiateCombat();
+			}	
 		}
 	}
 }
