@@ -20,6 +20,20 @@ public partial class Inventory : Node2D
 		{Source.Colour.Gold,(2,2)},
 		{Source.Colour.Black,(0,2)}
 	};
+	private Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
+		{Source.Colour.Blue,0},
+		{Source.Colour.Red,0},
+		{Source.Colour.Green,0},
+		{Source.Colour.White,0}
+	};
+	private Dictionary<Source.Colour, int> _tokens =  new Dictionary<Source.Colour, int>{
+		{Source.Colour.Blue,0},
+		{Source.Colour.Red,0},
+		{Source.Colour.Green,0},
+		{Source.Colour.White,0},
+		{Source.Colour.Gold,0},
+		{Source.Colour.Black,0}
+	};
 	private Dictionary<Source.Colour, ManaDie> _diceScenes = new Dictionary<Source.Colour, ManaDie>();
 	private PackedScene _dieScene = GD.Load<PackedScene>("res://ManaDie.tscn");
 	private static readonly float _diceSize = 682.66F;
@@ -58,6 +72,25 @@ public partial class Inventory : Node2D
 					AddChild(manaDie);
 				}
 				_diceScenes[die.Key].Count = die.Value;
+			}
+		}
+	}
+
+	private void OnEndTurn()
+	{
+		// tokens disappear at end of turn
+		foreach (var colour in _tokens)
+		{
+			_tokens[colour.Key] = 0;
+		}
+		// dice is returned at end of turn
+		foreach (var colour in _dice)
+		{
+			_dice[colour.Key] = 0;
+			if (_diceScenes.ContainsKey(colour.Key))
+			{
+				_diceScenes[colour.Key].Count = 0;
+				_diceScenes[colour.Key].Visible = false;
 			}
 		}
 	}

@@ -1341,6 +1341,7 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="EndTurn"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
