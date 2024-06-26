@@ -2,7 +2,6 @@ using Godot;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System;
 
 public partial class CardScene : Node2D
 {
@@ -65,10 +64,6 @@ public partial class CardScene : Node2D
     public CardControl DrawCard()
     {
         CardControl card = DeckOfCards.Pop();
-        int posMultiplier = InitialDeckLength - DeckOfCards.Count;
-        int xPos = 1500 - (100 * posMultiplier);
-        int yPos = 300;
-        card.Position = new Vector2I(xPos, yPos);
         return card;
     }
 

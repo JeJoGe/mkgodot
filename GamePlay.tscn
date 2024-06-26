@@ -1273,14 +1273,14 @@ text = "End Turn"
 metadata/_edit_use_anchors_ = true
 
 [node name="Deck" type="Node2D" parent="GameplayControl/PlayerUI/PlayerArea"]
-position = Vector2(3, 7)
+position = Vector2(1, -2)
 script = ExtResource("18_4oofl")
 
 [node name="TextureButton" type="TextureButton" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
-offset_left = 1779.0
-offset_top = 869.0
-offset_right = 2779.0
-offset_bottom = 2269.0
+offset_left = 1770.0
+offset_top = 864.0
+offset_right = 2770.0
+offset_bottom = 2264.0
 scale = Vector2(0.14402, 0.14402)
 texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
