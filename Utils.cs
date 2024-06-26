@@ -18,7 +18,8 @@ public partial class Utils : Node
 		{"red","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
 		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"},
 		{"silver","res://assets/silverunits.jpg"},
-		{"gold","res://assets/goldunits.jpg"}
+		{"gold","res://assets/goldunits.jpg"},
+		{"dice","res://assets/dice.jpg"}
 	};
 	private static readonly Dictionary<string,MonsterColour> _stringToColours = new Dictionary<string, MonsterColour>{
 		{"green", MonsterColour.Green},

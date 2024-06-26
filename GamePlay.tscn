@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=56 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
+[ext_resource type="PackedScene" uid="uid://ddlsl1mpmfruu" path="res://Inventory.tscn" id="20_4h2of"]
 [ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
 [ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
 
@@ -1166,8 +1167,6 @@ position = Vector2(968, 0)
 [node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI"]
 script = ExtResource("2_khnnw")
 
-[node name="Inventory" type="Sprite2D" parent="GameplayControl/PlayerUI/PlayerArea"]
-
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
 layout_mode = 3
@@ -1291,6 +1290,9 @@ texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
 metadata/_edit_use_anchors_ = true
 
+[node name="Inventory" parent="GameplayControl/PlayerUI/PlayerArea" instance=ExtResource("20_4h2of")]
+position = Vector2(1528, 680)
+
 [node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
 offset_left = 56.0
 offset_top = 116.0
@@ -1324,6 +1326,8 @@ texture = ExtResource("5_w03ud")
 [connection signal="mouse_entered" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseEntered"]
 [connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
+[connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1332,12 +1336,12 @@ texture = ExtResource("5_w03ud")
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic5" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic6" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/ConfirmTactic" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
-[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/Area2D/DummyArea" method="OnNewRound"]
-[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea" method="OnNewRoundButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="NewRound"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="EndTurn"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
