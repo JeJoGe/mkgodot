@@ -1059,12 +1059,9 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player")]
+[node name="GamePlay" type="Node2D"]
 z_index = -1
 script = ExtResource("1_m0gf8")
-mapGen = NodePath("GameplayControl/MapGen")
-deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
-player = NodePath("GameplayControl/Player")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay")]
 layout_mode = 3
@@ -1157,9 +1154,8 @@ position = Vector2(8, 24)
 
 [node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
 
-[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker")]
+[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI"]
 script = ExtResource("10_bkisu")
-_roundMarker = NodePath("../../RoundMarker")
 
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
@@ -1277,14 +1273,14 @@ text = "End Turn"
 metadata/_edit_use_anchors_ = true
 
 [node name="Deck" type="Node2D" parent="GameplayControl/PlayerUI/PlayerArea"]
-position = Vector2(3, 7)
+position = Vector2(1, -2)
 script = ExtResource("18_4oofl")
 
 [node name="TextureButton" type="TextureButton" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
-offset_left = 1779.0
-offset_top = 869.0
-offset_right = 2779.0
-offset_bottom = 2269.0
+offset_left = 1770.0
+offset_top = 864.0
+offset_right = 2770.0
+offset_bottom = 2264.0
 scale = Vector2(0.14402, 0.14402)
 texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
@@ -1301,13 +1297,12 @@ offset_bottom = 147.0
 text = "Undo"
 metadata/_edit_use_anchors_ = true
 
-[node name="MapGen" type="TileMap" parent="GameplayControl" node_paths=PackedStringArray("gamePlay")]
+[node name="MapGen" type="TileMap" parent="GameplayControl"]
 position = Vector2(482, 912)
 tile_set = SubResource("TileSet_cu01s")
 format = 2
 layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0, -65536, 0, 0, 0, 196608, 0)
 script = ExtResource("3_hiwow")
-gamePlay = NodePath("../..")
 
 [node name="Camera2D" type="Camera2D" parent="GameplayControl"]
 position = Vector2(969, 543)
