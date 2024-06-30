@@ -94,6 +94,7 @@ public partial class Player : Node2D
 	public void ChangeGlobalPosition(Vector2I GPosition)
 	{
 		this.GlobalPosition = GPosition;
+		GD.Print("It's working");
 	}
 
 	private void _OnUndoButtonDown()
