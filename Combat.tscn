@@ -1,19 +1,34 @@
-[gd_scene load_steps=2 format=3 uid="uid://n50ddjgcmc5n"]
+[gd_scene load_steps=3 format=3 uid="uid://n50ddjgcmc5n"]
 
 [ext_resource type="Script" path="res://Combat.cs" id="1_2aaos"]
+[ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 
 [node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog")]
 script = ExtResource("1_2aaos")
-_confirmDialog = NodePath("ConfirmationDialog")
+_confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 
-[node name="NextButton" type="Button" parent="."]
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+show_behind_parent = true
+z_index = 1
+offset_right = 1404.0
+offset_bottom = 798.0
+mouse_filter = 1
+texture = ExtResource("2_06y1k")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[node name="NextButton" type="Button" parent="NinePatchRect"]
+layout_mode = 0
 offset_left = 40.0
 offset_top = 568.0
 offset_right = 143.0
 offset_bottom = 599.0
 text = "Skip Ranged"
 
-[node name="ConfirmButton" type="Button" parent="."]
+[node name="ConfirmButton" type="Button" parent="NinePatchRect"]
+layout_mode = 0
 offset_left = 40.0
 offset_top = 616.0
 offset_right = 165.0
@@ -21,26 +36,28 @@ offset_bottom = 647.0
 disabled = true
 text = "Confirm Attack"
 
-[node name="WoundsLabel" type="Label" parent="."]
+[node name="WoundsLabel" type="Label" parent="NinePatchRect"]
+layout_mode = 0
 offset_left = 40.0
 offset_top = 664.0
 offset_right = 117.0
 offset_bottom = 687.0
 text = "Wounds 0"
 
-[node name="TotalWoundsLabel" type="Label" parent="."]
+[node name="TotalWoundsLabel" type="Label" parent="NinePatchRect"]
+layout_mode = 0
 offset_left = 40.0
 offset_top = 704.0
 offset_right = 160.0
 offset_bottom = 727.0
 text = "Total Wounds 0"
 
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="NinePatchRect"]
 title = ""
 initial_position = 1
 size = Vector2i(271, 106)
 dialog_text = "Finish combat and return to map"
 
-[connection signal="pressed" from="NextButton" to="." method="OnNextButtonPressed"]
-[connection signal="pressed" from="ConfirmButton" to="." method="OnConfirmButtonPressed"]
-[connection signal="confirmed" from="ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
+[connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
+[connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
+[connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]

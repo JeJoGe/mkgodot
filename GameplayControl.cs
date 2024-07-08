@@ -11,6 +11,7 @@ public partial class GameplayControl : Control
 	[Export]
 	private GamePlay gamePlay;
 	const int MainLayer = 0;
+	const int MainTerrainSet = 0;
 	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
 	private static readonly int _monsterSpriteSize = 258;
@@ -50,22 +51,44 @@ public partial class GameplayControl : Control
 			{
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain]) // ***Need to make it not move if moving into red or green token***
+				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain]) 
 				{	
 					var prevPos = player.playerPos;
-					player.PerformMovement(posClicked, cellTerrain);
 					// Check if next to any enemy
+					bool clickedRampage = false;
 					foreach (var enemy in EnemyList)
 					{
+						if (posClicked == enemy.MapPosition && (enemy.Colour == "green" || enemy.Colour == "red"))
+						{
+							clickedRampage = true;
+							break;
+						}
 						// Enemy adjacent and moving to another tile adjacent to enemy
 						if ((mapGen.GetSurroundingCells(prevPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 						{
-							player.InitiateCombat();
+							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.playerPos, enemy.MapPosition);
+							var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, enemy.MapPosition).Terrain);
+							if (wallBetweenPlayerAndEnemy == true && (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))) // double fortified
+							{
+								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 2));
+							}
+							else if (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))
+							{
+								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 1));
+							}
+							else
+							{
+								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 0));
+							}
 						}
 						// Need another else if for if enemy is facedown and time of day
 					}
-					GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
+					if (!clickedRampage)
+					{
+						player.PerformMovement(posClicked, cellTerrain);
+					}
+					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
 				}
 
 				else
@@ -84,6 +107,7 @@ public partial class GameplayControl : Control
 		monsterToken.MapPosition = localPos;
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
+		monsterToken.MonsterId = enemy;
 		var monsterStats = Utils.Bestiary[enemy];
 		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
 		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();

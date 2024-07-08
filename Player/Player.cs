@@ -34,7 +34,7 @@ public partial class Player : Node2D
 
 	public void InitiateCombat()
 	{
-		GD.Print("Combat Start!");
+		//GD.Print("Combat Start!");
 		// instantiate Combat scene
 		// set player level
 		// set enemies
@@ -42,7 +42,7 @@ public partial class Player : Node2D
 		isCombatSceneActive = true;
 		Combat = CombatStart;
 		AddChild(CombatStart);
-		CombatStart.GlobalPosition = new Godot.Vector2(0,0);
+		CombatStart.GlobalPosition = new Godot.Vector2(270,0);
 	}
 
 	public void CombatCleanup(bool victory)
@@ -74,6 +74,10 @@ public partial class Player : Node2D
 		Utils.undoRedo.CommitAction();
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		//GD.Print(GlobalPosition);
+		if (GameSettings.EnemyList.Count != 0)
+		{
+			InitiateCombat();
+		}
 	}
 
 	// Check walls unique data in current tile and iterate. if Destination vector - Any Walls vector == Source vector, then wall between
@@ -94,7 +98,7 @@ public partial class Player : Node2D
 	public void ChangeGlobalPosition(Vector2I GPosition)
 	{
 		this.GlobalPosition = GPosition;
-		GD.Print("It's working");
+		//GD.Print("It's working");
 	}
 
 	private void _OnUndoButtonDown()

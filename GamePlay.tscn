@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=57 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" path="res://Inventory.tscn" id="20_4h2of"]
 [ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
 [ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="26_j3ivl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
 size = Vector2(100, 140)
@@ -1322,12 +1323,22 @@ script = ExtResource("4_jr7il")
 [node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")
 
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+show_behind_parent = true
+z_index = -1
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("26_j3ivl")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
 [connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/Area2D/DummyArea" method="OnCurrentTurn"]
 [connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/PlayerUI/PlayerArea" method="OnCurrentTurn"]
 [connection signal="mouse_entered" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseEntered"]
 [connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
-[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
