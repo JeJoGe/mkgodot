@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -19,6 +20,8 @@ public partial class Player : Node2D
 	public Combat Combat;
 	public bool isCombatSceneActive = false;
 	public int influence = 0;
+	public bool besideRampage = false;
+	private List<int> enemiesBeside = new List<int>();
 
 	public override void _Ready()
 	{
@@ -38,6 +41,7 @@ public partial class Player : Node2D
 		// instantiate Combat scene
 		// set player level
 		// set enemies
+		//GetTree().Paused = true;
 		var CombatStart = (Combat)CombatScene.Instantiate();
 		isCombatSceneActive = true;
 		Combat = CombatStart;
@@ -47,6 +51,7 @@ public partial class Player : Node2D
 
 	public void CombatCleanup(bool victory)
 	{
+		GetTree().Paused = false;
 		if (victory)
 		{
 			// do something

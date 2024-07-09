@@ -1067,7 +1067,8 @@ mapGen = NodePath("GameplayControl/MapGen")
 deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
 player = NodePath("GameplayControl/Player")
 
-[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay")]
+[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton")]
+process_mode = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1080,6 +1081,7 @@ script = ExtResource("2_7jlcl")
 mapGen = NodePath("MapGen")
 player = NodePath("Player")
 gamePlay = NodePath("..")
+challengeButton = NodePath("ChallengeButton")
 
 [node name="TurnOrderTracker" type="Node2D" parent="GameplayControl"]
 position = Vector2(208, 480)
@@ -1296,10 +1298,10 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(1528, 680)
 
 [node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
-offset_left = 56.0
-offset_top = 116.0
-offset_right = 118.0
-offset_bottom = 147.0
+offset_left = 55.0
+offset_top = 117.0
+offset_right = 117.0
+offset_bottom = 148.0
 text = "Undo"
 metadata/_edit_use_anchors_ = true
 
@@ -1322,6 +1324,15 @@ script = ExtResource("4_jr7il")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")
+
+[node name="ChallengeButton" type="Button" parent="GameplayControl"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 423.0
+offset_right = 120.0
+offset_bottom = 454.0
+text = "Challenge
+"
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -1357,6 +1368,7 @@ patch_margin_bottom = 30
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
+[connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
 
 [editable path="GameplayControl/Area2D/DummyArea/BlueCrystal"]
 [editable path="GameplayControl/Area2D/DummyArea/RedCrystal"]

@@ -44,7 +44,7 @@ public partial class MapTokenControl : Control
 	private void OnMouseExited() {
 		hover = false;
 	}
-	public override void _GuiInput(InputEvent @event)
+	/*public override void _GuiInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("leftClick"))
 		{
@@ -80,5 +80,5 @@ public partial class MapTokenControl : Control
 				}
 			}	
 		}
-	}
+	}*/
 }

@@ -10,15 +10,20 @@ public partial class GameplayControl : Control
 	private Player player;
 	[Export]
 	private GamePlay gamePlay;
+	[Export]
+	private Button challengeButton;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
 	private static readonly int _monsterSpriteSize = 258;
+	PackedScene ChallengeScene;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		challengeButton.Disabled = true;
+		ChallengeScene = GD.Load<PackedScene>("res://ChallengePopUp/ChallengePopUp.tscn");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,18 +49,29 @@ public partial class GameplayControl : Control
 			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(player.playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
+				foreach (var enemy in EnemyList)
+				{
+					if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition))
+					{
+						if (player.besideRampage != true)
+						{
+							player.besideRampage = true;
+							challengeButton.Disabled = false;
+						}
+					}
+				}
 				Utils.undoRedo.ClearHistory();
 			}
 			// Check if tile clicked is any tiles surrounding player position
 			else if (mapGen.GetSurroundingCells(player.playerPos).Contains(posClicked))
 			{
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
-				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
-				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain]) 
-				{	
-					var prevPos = player.playerPos;
+																						 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
+				{
 					// Check if next to any enemy
 					bool clickedRampage = false;
+					bool clickedBesideRampage = false;
 					foreach (var enemy in EnemyList)
 					{
 						if (posClicked == enemy.MapPosition && (enemy.Colour == "green" || enemy.Colour == "red"))
@@ -64,7 +80,7 @@ public partial class GameplayControl : Control
 							break;
 						}
 						// Enemy adjacent and moving to another tile adjacent to enemy
-						if ((mapGen.GetSurroundingCells(prevPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
+						if ((mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 						{
 							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.playerPos, enemy.MapPosition);
@@ -83,14 +99,28 @@ public partial class GameplayControl : Control
 							}
 						}
 						// Need another else if for if enemy is facedown and time of day
+
+						if (clickedBesideRampage == false && mapGen.GetSurroundingCells(posClicked).Contains(enemy.MapPosition) && (enemy.Colour == "green" || enemy.Colour == "red"))
+						{
+							clickedBesideRampage = true;
+						}
 					}
 					if (!clickedRampage)
 					{
+						if (clickedBesideRampage == true && player.besideRampage != true)
+						{
+							player.besideRampage = true;
+							challengeButton.Disabled = false;
+						}
+						else if (clickedBesideRampage == false && player.besideRampage != false)
+						{
+							player.besideRampage = false;
+							challengeButton.Disabled = true;
+						}
 						player.PerformMovement(posClicked, cellTerrain);
 					}
 					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
 				}
-
 				else
 				{
 					GD.Print("Terrain costs more movement than you currently have.");
@@ -100,7 +130,7 @@ public partial class GameplayControl : Control
 		}
 	}
 	// Generate Monster Token and stats, may need to add in variable for whether flipped
-    public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
+	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{
 		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
 		var monsterToken = (MapToken)monsterScene.Instantiate();
@@ -111,11 +141,34 @@ public partial class GameplayControl : Control
 		var monsterStats = Utils.Bestiary[enemy];
 		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
 		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize,monsterStats.Y * _monsterSpriteSize),new Vector2(_monsterSpriteSize,_monsterSpriteSize));
+		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize, monsterStats.Y * _monsterSpriteSize), new Vector2(_monsterSpriteSize, _monsterSpriteSize));
 		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.25,(float)0.25);
+		enemySprite.Scale = new Vector2((float)0.25, (float)0.25);
 		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
 		AddChild(monsterToken);
 		EnemyList.Add(monsterToken);
+	}
+
+	private void _on_challenge_button_pressed()
+	{
+		foreach (var enemy in EnemyList)
+		{
+			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition))
+			{
+				if (player.IsWallBetween(player.playerPos, enemy.MapPosition))
+				{
+					GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 1));
+				}
+				else
+				{
+					GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 0));
+				}
+			}
+			var ChallengeStart = (ChallengePopUp)ChallengeScene.Instantiate();
+			AddChild(ChallengeStart);
+			ChallengeStart.GlobalPosition = new Godot.Vector2(300, 500);
+			//GetTree().Paused = true;
+		}
+
 	}
 }
