@@ -76,5 +76,18 @@
         "x":1,
         "y":1,
         "count":1
+    },
+    "7":{
+        "name":"Red Cape Monks",
+        "level":2,
+        "armour":4,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "types":[3],
+        "cost":7,
+        "x":3,
+        "y":1,
+        "count":1
     }
 }

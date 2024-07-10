@@ -17,6 +17,23 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Defeated { get; set; } = false;
+	public bool Attacking
+	{
+		get
+		{
+			return Attacks.Any(attack => attack.Attacking);
+		}
+		set
+		{
+			if (!value)
+			{
+				foreach (var attack in Attacks)
+				{
+					attack.Attacking = false;
+				}
+			}
+		}
+	}
 	public bool Summoned { get; set; } = false;
 	public int Armour { get; set; }
 	public int Fame { get; set; }
@@ -43,13 +60,13 @@ public partial class Monster : Node2D
 		Armour = data.Armour;
 		foreach (var attackData in data.Attacks)
 		{
-            var monsterAttack = new MonsterAttack
-            {
-                Element = attackData.Element,
-                Value = attackData.Value
-            };
+			var monsterAttack = new MonsterAttack
+			{
+				Element = attackData.Element,
+				Value = attackData.Value
+			};
 			Attacks.Add(monsterAttack);
-        }
+		}
 		Abilities = new List<string>(data.Abilities);
 		Colour = data.Colour;
 		Resistances = new List<Element>(data.Resistances);
@@ -62,31 +79,34 @@ public partial class Monster : Node2D
 		for (int i = 0; i < Attacks.Count; i++)
 		{
 			var attack = Attacks[i];
-			if (attack.Element == Element.Summon)
+			if (attack.Attacking)
 			{
-				// draw brown tokens
-				for (int j = 0; j < attack.Value; j++)
+				if (attack.Element == Element.Summon)
 				{
-					GD.Print("summon brown token");
-					var monsterID = GameSettings.DrawMonster(MonsterColour.Brown);
-					var monster = GetParent<Combat>().CreateMonsterToken(monsterID);
-					monster.Summoned = true;
+					// draw brown tokens
+					for (int j = 0; j < attack.Value; j++)
+					{
+						GD.Print("summon brown token");
+						var monsterID = GameSettings.DrawMonster(MonsterColour.Brown);
+						var monster = GetParent<Combat>().CreateMonsterToken(monsterID);
+						monster.Summoned = true;
+					}
+					Visible = false;
+					attack.Attacked = true;
+					break;
 				}
-				Visible = false;
-				attack.Attacked = true;
-				break;
+				var swift = Abilities.Contains("swift");
+				var button = new Button
+				{
+					ButtonGroup = GetParent<Combat>().MonsterAttacks,
+					Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
+					ToggleMode = true,
+					Position = new Vector2(-46, 60 + _attackOffset * i),
+					Name = string.Format("AttackButton{0}", i)
+				};
+				button.Pressed += () => OnAttackButtonToggled(attack);
+				AddChild(button);
 			}
-			var swift = Abilities.Contains("swift");
-			var button = new Button
-			{
-				ButtonGroup = GetParent<Combat>().MonsterAttacks,
-				Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
-				ToggleMode = true,
-                Position = new Vector2(-46, 60 + _attackOffset * i),
-                Name = string.Format("AttackButton{0}", i)
-            };
-            button.Pressed += () => OnAttackButtonToggled(attack);
-			AddChild(button);
 		}
 	}
 
@@ -111,27 +131,68 @@ public partial class Monster : Node2D
 
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
+		var combatInstance = GetParent<Combat>();
 		if (Input.IsActionPressed("leftClick"))
 		{
-			//PrintStats();
-			//Need to add in case for anti-fortification
-			if (GetParent<Combat>().CurrentPhase == Combat.Phase.Ranged && (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1)))
+			switch (combatInstance.CurrentPhase)
 			{
-				// can not target if double fortified during ranged phase
-				GD.Print("untargetable");
-			}
-			else
-			{
-				Selected = !Selected;
-				if (Selected)
-				{
-					GD.Print("Selected");
-				}
-				else
-				{
-					GD.Print("unselected");
-				}
-				GetParent<Combat>().UpdateTargets();
+				case Combat.Phase.Ranged:
+					{
+						if (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1))
+						{
+							// can not target if double fortified during ranged phase
+							GD.Print("untargetable");
+						}
+						else
+						{
+							Selected = !Selected;
+							combatInstance.UpdateTargets();
+						}
+						break;
+					}
+				case Combat.Phase.PreventAttacks:
+					{
+						if (combatInstance.ResolvingAction && !Abilities.Contains("immunity") &&
+						(!combatInstance.PreventOnlyUnfortified || Abilities.Contains("unfortified") ||
+						(SiteFortifications == 0 && !Abilities.Contains("fortified"))))
+						{
+							if (combatInstance.EnemiesNotAttacking == 0)
+							{
+								// delist any other attacks already created
+								combatInstance.HideAttackButtons();
+								// list all attacks to be cancelled
+								for (int i = 0; i < Attacks.Count; i++)
+								{
+									var attack = Attacks[i];
+									var button = new Button
+									{
+										ButtonGroup = combatInstance.MonsterAttacks,
+										Text = string.Format("{0} {1}", attack.Element, attack.Value),
+										ToggleMode = true,
+										Position = new Vector2(-46, 60 + _attackOffset * i),
+										Name = string.Format("AttackButton{0}", i)
+									};
+									button.Pressed += () => OnAttackButtonToggled(attack);
+									AddChild(button);
+								}
+
+							}
+							else
+							{
+								Selected = !Selected;
+								combatInstance.UpdateCancelledAttacks();
+							}
+						}
+						// otherwise do nothing
+						break;
+					}
+				case Combat.Phase.Attack:
+					{
+						Selected = !Selected;
+						combatInstance.UpdateTargets();
+						break;
+					}
+				default: break;
 			}
 
 		}
