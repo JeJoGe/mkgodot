@@ -18,7 +18,7 @@ public partial class ChallengeOptions : VBoxContainer
 		var enemyCheckBox = new CheckBox
 		{
 			Text = enemyId.ToString(),
-			Position = new Vector2(0, optionOffset),
+			Position = new Vector2(1000, optionOffset),// realized vbox means x position doesn't matter
 			Name = string.Format("Monster{0}", enemyId)
 		};
 		enemyCheckBox.SetPressedNoSignal(true);

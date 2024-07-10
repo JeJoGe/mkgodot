@@ -52,6 +52,7 @@ public partial class Player : Node2D
 	public void CombatCleanup(bool victory)
 	{
 		GetTree().Paused = false;
+		GameSettings.EnemyList.Clear();
 		if (victory)
 		{
 			// do something

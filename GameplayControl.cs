@@ -23,7 +23,7 @@ public partial class GameplayControl : Control
 	public override void _Ready()
 	{
 		challengeButton.Disabled = true;
-		ChallengeScene = GD.Load<PackedScene>("res://ChallengePopUp/ChallengePopUp.tscn");
+		ChallengeScene = GD.Load<PackedScene>("res://ChallengePopUp/ChallengeWindow.tscn");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -164,11 +164,10 @@ public partial class GameplayControl : Control
 					GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 0));
 				}
 			}
-			var ChallengeStart = (ChallengePopUp)ChallengeScene.Instantiate();
-			AddChild(ChallengeStart);
-			ChallengeStart.GlobalPosition = new Godot.Vector2(300, 500);
-			//GetTree().Paused = true;
 		}
-
+		var ChallengeStart = (Window)ChallengeScene.Instantiate();
+		AddChild(ChallengeStart);
+		ChallengeStart.Position = new Godot.Vector2I(300, 500);
+		//GetTree().Paused = true;
 	}
 }
