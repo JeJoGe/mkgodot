@@ -81,7 +81,7 @@ public partial class CardObj : Sprite2D
                 }
             }
        } else {
-            if(position == CardObjOption.top) {
+            if (position == CardObjOption.top) {
                 topOptionExists = false;
                 topOptionActions.Add(0, function[0]);
             } else {
