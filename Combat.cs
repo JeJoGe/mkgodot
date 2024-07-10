@@ -603,7 +603,7 @@ public partial class Combat : Node2D
 							_enemyList.RemoveAt(i);
 							GameSettings.DiscardToken(enemy.MonsterId);
 						}
-						else if (enemy.Attacks.First().Element == Element.Summon)
+						else if (!enemy.Defeated && enemy.Attacks.First().Element == Element.Summon)
 						{
 							// reveal summoners
 							enemy.Visible = true;
