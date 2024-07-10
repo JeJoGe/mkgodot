@@ -87,7 +87,6 @@ public partial class GamePlay : Node2D
 				Utils.undoRedo.CommitAction();
 				break;
 			case nameof(BasicCardActions.influence): 
-				influenceConversion(quantity);
 				Callable influenceConversionAdd = Callable.From(() => influenceConversion(quantity));
 				Callable influenceConversionMinus = Callable.From(() => influenceConversion(-quantity));
 				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
