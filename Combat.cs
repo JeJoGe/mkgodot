@@ -200,17 +200,17 @@ public partial class Combat : Node2D
 
 	public void UpdateCancelledAttacks()
 	{
-		GetNode<Button>("ConfirmButton").Disabled = true;
+		GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 		if (EnemiesNotAttacking == 0)
 		{
 			// cancel single attack
-			GetNode<Button>("ConfirmButton").Disabled = MonsterAttacks.GetPressedButton() == null;
+			GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = MonsterAttacks.GetPressedButton() == null;
 		}
 		else
 		{
 			// cancel all attacks of specified units
 			var selectedEnemies = _enemyList.Count(enemy => enemy.Selected);
-			GetNode<Button>("ConfirmButton").Disabled = selectedEnemies > EnemiesNotAttacking;
+			GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = selectedEnemies > EnemiesNotAttacking;
 		}
 	}
 
@@ -456,7 +456,7 @@ public partial class Combat : Node2D
 						GD.Print("no enemies attacking");
 						NextCombatPhase(Phase.Attack);
 					}
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					break;
 				}
 			case Phase.Block:
@@ -543,8 +543,8 @@ public partial class Combat : Node2D
 				{
 					// zero any remaining attack
 					ResetAttacks();
-					GetNode<Button>("NextButton").Text = "Enemies Attack";
-					GetNode<Button>("ConfirmButton").Text = "Target Enemy Will Not Attack";
+					GetNode<Button>("NinePatchRect/NextButton").Text = "Enemies Attack";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Text = "Target Enemy Will Not Attack";
 					MonsterAttacks = new ButtonGroup();
 					foreach (var enemy in _enemyList)
 					{
@@ -675,7 +675,7 @@ public partial class Combat : Node2D
 			{
 				str = "Cancel Single Attack";
 			}
-			GetNode<Button>("ConfirmButton").Text = str;
+			GetNode<Button>("NinePatchRect/ConfirmButton").Text = str;
 		}
 		return result;
 	}
