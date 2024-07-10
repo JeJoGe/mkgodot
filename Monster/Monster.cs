@@ -43,6 +43,7 @@ public partial class Monster : Node2D
 	public MonsterColour Colour { get; set; }
 	public int MonsterId { get; set; }
 	private static readonly int _attackOffset = 40;
+	private bool _flag { get; set; } = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -158,22 +159,31 @@ public partial class Monster : Node2D
 						{
 							if (combatInstance.EnemiesNotAttacking == 0)
 							{
-								// delist any other attacks already created
-								combatInstance.HideAttackButtons();
-								// list all attacks to be cancelled
-								for (int i = 0; i < Attacks.Count; i++)
+								if (!Selected)
 								{
-									var attack = Attacks[i];
-									var button = new Button
+									// delist any other attacks already created
+									var pressedButton = combatInstance.MonsterAttacks.GetPressedButton();
+									pressedButton?.SetPressedNoSignal(false);
+									combatInstance.HideAttackButtons();
+									_flag = true;
+									Selected = !Selected;
+									combatInstance.DeselectMonsters();
+									// list all attacks to be cancelled
+									for (int i = 0; i < Attacks.Count; i++)
 									{
-										ButtonGroup = combatInstance.MonsterAttacks,
-										Text = string.Format("{0} {1}", attack.Element, attack.Value),
-										ToggleMode = true,
-										Position = new Vector2(-46, 60 + _attackOffset * i),
-										Name = string.Format("AttackButton{0}", i)
-									};
-									button.Pressed += () => OnAttackButtonToggled(attack);
-									AddChild(button);
+										var attack = Attacks[i];
+										var button = new Button
+										{
+											ButtonGroup = combatInstance.MonsterAttacks,
+											Text = string.Format("{0} {1}", attack.Element, attack.Value),
+											ToggleMode = true,
+											Position = new Vector2(-46, 60 + _attackOffset * i),
+											Name = string.Format("AttackButton{0}", i)
+										};
+										button.Pressed += () => OnAttackButtonToggled(attack);
+										AddChild(button);
+									}
+									combatInstance.UpdateCancelledAttacks();
 								}
 
 							}
@@ -195,6 +205,18 @@ public partial class Monster : Node2D
 				default: break;
 			}
 
+		}
+	}
+
+	public void Deselect()
+	{
+		if (!_flag)
+		{
+			Selected = false;
+		}
+		else
+		{
+			_flag = false;
 		}
 	}
 

@@ -197,10 +197,11 @@ public partial class Combat : Node2D
 
 	public void UpdateCancelledAttacks()
 	{
-		if (EnemiesNotAttacking == 0 && MonsterAttacks.GetPressedButton() != null)
+		GetNode<Button>("ConfirmButton").Disabled = true;
+		if (EnemiesNotAttacking == 0)
 		{
 			// cancel single attack
-			GetNode<Button>("ConfirmButton").Disabled = false;
+			GetNode<Button>("ConfirmButton").Disabled = MonsterAttacks.GetPressedButton() == null;
 		}
 		else
 		{
@@ -424,6 +425,7 @@ public partial class Combat : Node2D
 					{
 						_targetAttack.Attacking = false;
 						_resolvingAction = false;
+						MonsterAttacks.GetPressedButton().QueueFree();
 					}
 					else
 					{
@@ -540,12 +542,13 @@ public partial class Combat : Node2D
 					ResetAttacks();
 					GetNode<Button>("NextButton").Text = "Enemies Attack";
 					GetNode<Button>("ConfirmButton").Text = "Target Enemy Will Not Attack";
+					MonsterAttacks = new ButtonGroup();
 					foreach (var enemy in _enemyList)
 					{
 						enemy.Selected = false;
 					}
 					// FOR TESTING ONLY
-					PreventAttack(0);
+					PreventAttack(2);
 					break;
 				}
 			case Phase.Block:
@@ -734,6 +737,14 @@ public partial class Combat : Node2D
 		foreach (var unit in _unitList)
 		{
 			unit.Deselect();
+		}
+	}
+
+	public void DeselectMonsters()
+	{
+		foreach (var enemy in _enemyList)
+		{
+			enemy.Deselect();
 		}
 	}
 
