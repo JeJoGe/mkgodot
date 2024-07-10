@@ -154,6 +154,7 @@ public class MonsterAttack
 	public Element Element { get; set; }
 	public bool Blocked { get; set; } = false;
 	public bool Attacked { get; set; } = false;
+	public bool Attacking { get; set; } = true;
 }
 
 public enum MonsterColour
