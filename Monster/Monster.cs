@@ -153,6 +153,9 @@ public partial class Monster : Node2D
 					}
 				case Combat.Phase.PreventAttacks:
 					{
+						// only allowed to select monster to be cancelled if cancel action is resolving and
+						// the monster does not have arcane immunity and check for fortifications if cancel
+						// effect only works on unfortified enemies
 						if (combatInstance.ResolvingAction && !Abilities.Contains("immunity") &&
 						(!combatInstance.PreventOnlyUnfortified || Abilities.Contains("unfortified") ||
 						(SiteFortifications == 0 && !Abilities.Contains("fortified"))))

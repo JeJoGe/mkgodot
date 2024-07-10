@@ -548,7 +548,7 @@ public partial class Combat : Node2D
 						enemy.Selected = false;
 					}
 					// FOR TESTING ONLY
-					PreventAttack(2);
+					PreventAttack(3);
 					break;
 				}
 			case Phase.Block:
