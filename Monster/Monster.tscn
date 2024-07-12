@@ -11,6 +11,7 @@ region = Rect2(0, 0, 258, 258)
 radius = 46.0
 
 [node name="Monster" type="Node2D"]
+z_index = 1
 script = ExtResource("1_m3i1r")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -11,6 +11,7 @@ region = Rect2(0, 0, 1000, 1400)
 size = Vector2(176, 256)
 
 [node name="Unit" type="Node2D"]
+z_index = 1
 script = ExtResource("1_7qnqd")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

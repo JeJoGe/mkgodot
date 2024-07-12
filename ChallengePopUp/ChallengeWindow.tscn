@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpkfg3i2uq1dl"]
+
+[ext_resource type="Script" path="res://ChallengePopUp/ChallengePopUp.cs" id="1_55dua"]
+[ext_resource type="Script" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
+
+[node name="ChallengeWindow" type="Window"]
+size = Vector2i(350, 100)
+
+[node name="ChallengePopUp" type="Control" parent="." node_paths=PackedStringArray("ChallengeOptions", "Challenge", "Cancel")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_55dua")
+ChallengeOptions = NodePath("PanelContainer/ChallengeOptions")
+Challenge = NodePath("ColorRect/Challenge")
+Cancel = NodePath("ColorRect/Cancel")
+
+[node name="ColorRect" type="ColorRect" parent="ChallengePopUp"]
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 60.0
+color = Color(0.364706, 0.0823529, 0.0235294, 1)
+
+[node name="Challenge" type="Button" parent="ChallengePopUp/ColorRect"]
+layout_mode = 2
+offset_top = 60.0
+offset_right = 175.0
+offset_bottom = 92.0
+text = "Challenge
+"
+
+[node name="Cancel" type="Button" parent="ChallengePopUp/ColorRect"]
+layout_mode = 2
+offset_top = 60.0
+offset_right = 175.0
+offset_bottom = 92.0
+text = "Cancel
+"
+
+[node name="PanelContainer" type="PanelContainer" parent="ChallengePopUp"]
+layout_mode = 0
+offset_top = 60.0
+offset_right = 350.0
+offset_bottom = 92.0
+
+[node name="ChallengeOptions" type="VBoxContainer" parent="ChallengePopUp/PanelContainer"]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_yya27")
+
+[node name="Label" type="Label" parent="ChallengePopUp"]
+layout_mode = 0
+offset_left = 10.0
+offset_right = 341.0
+offset_bottom = 51.0
+text = "More than one monster can be challenged. 
+Select which monsters to challenge below:"
+
+[connection signal="pressed" from="ChallengePopUp/ColorRect/Challenge" to="ChallengePopUp" method="_on_challenge_pressed"]
+[connection signal="pressed" from="ChallengePopUp/ColorRect/Cancel" to="ChallengePopUp" method="_on_cancel_pressed"]

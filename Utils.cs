@@ -9,7 +9,7 @@ public partial class Utils : Node
 {
 	private static readonly Random random = new Random();
 	private static readonly object syncLock = new object();
-	public static readonly UndoRedo undoRedo = new UndoRedo();
+	public static UndoRedo undoRedo = new UndoRedo();
 	private static readonly Dictionary<string, string> _sheetPaths = new Dictionary<string, string>{
 		{"green", "res://assets/TokenImages/GreenTokens/green_tokens_sheet.png"},
 		{"grey","res://assets/TokenImages/GreyTokens/grey_tokens_sheet.png"},
@@ -154,6 +154,7 @@ public class MonsterAttack
 	public Element Element { get; set; }
 	public bool Blocked { get; set; } = false;
 	public bool Attacked { get; set; } = false;
+	public bool Attacking { get; set; } = true;
 }
 
 public enum MonsterColour

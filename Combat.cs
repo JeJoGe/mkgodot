@@ -30,6 +30,11 @@ public partial class Combat : Node2D
 	private int _armour = 2;
 	private bool _knockout = false;
 	private int _maxHandSize = 5;
+	private bool _resolvingAction = false;
+	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
+	private int _enemiesNotAttacking;
+	public int EnemiesNotAttacking { get => _enemiesNotAttacking; } // number of enemies to be prevented from attacking, 0 -> cancel single attack
+	public bool PreventOnlyUnfortified { get; set; } // only cancel attacks from unfortified enemy
 	private MonsterAttack _targetAttack;
 	public MonsterAttack TargetAttack
 	{
@@ -37,13 +42,18 @@ public partial class Combat : Node2D
 		set
 		{
 			_targetAttack = value;
-			if (CurrentPhase == Phase.Block)
+			switch (CurrentPhase)
 			{
-				UpdateBlock();
-			}
-			else
-			{
-				UpdateDamage();
+				case Phase.PreventAttacks:
+					UpdateCancelledAttacks();
+					break;
+				case Phase.Block:
+					UpdateBlock();
+					break;
+				case Phase.Damage:
+					UpdateDamage();
+					break;
+				default: break;
 			}
 		}
 	}
@@ -63,7 +73,7 @@ public partial class Combat : Node2D
 	}
 	public enum Phase
 	{
-		Ranged, Block, Damage, Attack
+		Ranged, PreventAttacks, Block, Damage, Attack
 	}
 	// represented table here:
 	/*
@@ -96,20 +106,23 @@ public partial class Combat : Node2D
 	public override void _Ready()
 	{
 		// FOR INITIAL TESTING
+		//GD.Print("Combat Start!");
+		//GD.Print("TEST: " + GameSettings.EnemyList.Count.ToString());
 		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
 		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
 		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
 		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
 		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
+		//GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
 		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
 		{
 			var enemy = GameSettings.EnemyList[i];
-			var monsterToken = CreateMonsterToken(enemy.Item1);
-			monsterToken.SiteFortifications = enemy.Item2;
+			GD.Print("Monster ID: " + enemy.X.ToString());
+			var monsterToken = CreateMonsterToken(enemy.X);
+			monsterToken.SiteFortifications = enemy.Y;
 		}
 		// instantiate units
 		var unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
@@ -185,6 +198,22 @@ public partial class Combat : Node2D
 		UpdateAttack();
 	}
 
+	public void UpdateCancelledAttacks()
+	{
+		GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
+		if (EnemiesNotAttacking == 0)
+		{
+			// cancel single attack
+			GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = MonsterAttacks.GetPressedButton() == null;
+		}
+		else
+		{
+			// cancel all attacks of specified units
+			var selectedEnemies = _enemyList.Count(enemy => enemy.Selected);
+			GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = selectedEnemies > EnemiesNotAttacking;
+		}
+	}
+
 	private void UpdateBlock()
 	{
 		var swift = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities.Contains("swift");
@@ -225,14 +254,14 @@ public partial class Combat : Node2D
 			default: break;
 		}
 		_totalBlock = efficientBlock + inefficientBlock / 2;
-		GetNode<Button>("ConfirmButton").Disabled = _totalBlock < TargetAttack.Value + (swift ? TargetAttack.Value : 0);
+		GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = _totalBlock < TargetAttack.Value + (swift ? TargetAttack.Value : 0);
 	}
 
 	private void UpdateDamage()
 	{
 		var abilities = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities;
 		CalculateDamage(abilities);
-		GetNode<Button>("ConfirmButton").Disabled = false;
+		GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = false;
 	}
 
 	private void UpdateDamage(Monster monster)
@@ -288,7 +317,7 @@ public partial class Combat : Node2D
 		{
 			CalculateHeroWounds(attackValue, poison, paralyze);
 		}
-		GetNode<Label>("WoundsLabel").Text = string.Format("Wounds {0}", _currentAttackWounds.Item1);
+		GetNode<Label>("NinePatchRect/WoundsLabel").Text = string.Format("Wounds {0}", _currentAttackWounds.Item1);
 		GD.Print(string.Format("wounds to hand: {0}", _currentAttackWounds.Item1));
 		GD.Print(string.Format("wounds to discard: {0}", _currentAttackWounds.Item2));
 	}
@@ -315,7 +344,7 @@ public partial class Combat : Node2D
 		}
 		_totalAttack = effectiveAttack + resistedAttack / 2; // integer math automatically rounds down
 		GD.Print("final attack: " + _totalAttack.ToString());
-		GetNode<Button>("ConfirmButton").Disabled = _totalAttack < _targetArmour || _targetArmour == 0;
+		GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = _totalAttack < _targetArmour || _targetArmour == 0;
 	}
 
 	private void OnNextButtonPressed()
@@ -324,6 +353,11 @@ public partial class Combat : Node2D
 		{
 			//attacking/blocking is optional
 			case Phase.Ranged:
+				{
+					NextCombatPhase(Phase.PreventAttacks);
+					break;
+				}
+			case Phase.PreventAttacks:
 				{
 					NextCombatPhase(Phase.Block);
 					break;
@@ -344,7 +378,7 @@ public partial class Combat : Node2D
 						for (int j = 0; j < enemy.Attacks.Count; j++)
 						{
 							var attack = enemy.Attacks[j];
-							if (!attack.Blocked && !attack.Attacked)
+							if (!attack.Blocked && !attack.Attacked && attack.Attacking)
 							{
 								_targetAttack = attack;
 								UpdateDamage(enemy);
@@ -353,11 +387,7 @@ public partial class Combat : Node2D
 						}
 					}
 					// hide all remaining attack buttons
-					var buttons = MonsterAttacks.GetButtons();
-					foreach (var button in buttons)
-					{
-						button.QueueFree();
-					}
+					HideAttackButtons();
 					NextCombatPhase(Phase.Attack);
 					break;
 				}
@@ -387,8 +417,46 @@ public partial class Combat : Node2D
 						// exit combat
 						EndCombat(true);
 					}
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					ResetAttacks();
+					break;
+				}
+			case Phase.PreventAttacks:
+				{
+					// prevent selected attack from happening or prevent selected monsters from attacking
+					if (EnemiesNotAttacking == 0)
+					{
+						_targetAttack.Attacking = false;
+						_resolvingAction = false;
+						MonsterAttacks.GetPressedButton().QueueFree();
+					}
+					else
+					{
+						foreach (var enemy in _enemyList)
+						{
+							if (enemy.Selected)
+							{
+								enemy.Attacking = false;
+							}
+						}
+					}
+					// skip to attack phase if no attacks remaining
+					var noAttacks = true;
+					for (int i = 0; i < _enemyList.Count; i++)
+					{
+						var enemy = _enemyList[i];
+						if (!enemy.Defeated && enemy.Attacking)
+						{
+							noAttacks = false;
+							break;
+						}
+					}
+					if (noAttacks)
+					{
+						GD.Print("no enemies attacking");
+						NextCombatPhase(Phase.Attack);
+					}
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					break;
 				}
 			case Phase.Block:
@@ -397,7 +465,7 @@ public partial class Combat : Node2D
 					_targetAttack.Blocked = true;
 					var button = MonsterAttacks.GetPressedButton();
 					button.QueueFree();
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					foreach (var kvp in PlayerBlocks)
 					{
 						PlayerBlocks[kvp.Key] = 0;
@@ -426,7 +494,7 @@ public partial class Combat : Node2D
 					ApplyWounds();
 					var button = MonsterAttacks.GetPressedButton();
 					button.QueueFree();
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					// go to attack phase if no attacks remaining
 					var skipDamage = true;
 					for (int i = 0; i < _enemyList.Count; i++)
@@ -458,7 +526,7 @@ public partial class Combat : Node2D
 						// exit combat
 						EndCombat(true);
 					}
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					ResetAttacks();
 					break;
 				}
@@ -471,20 +539,37 @@ public partial class Combat : Node2D
 		CurrentPhase = nextPhase;
 		switch (CurrentPhase)
 		{
+			case Phase.PreventAttacks:
+				{
+					// zero any remaining attack
+					ResetAttacks();
+					GetNode<Button>("NinePatchRect/NextButton").Text = "Enemies Attack";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Text = "Target Enemy Will Not Attack";
+					MonsterAttacks = new ButtonGroup();
+					foreach (var enemy in _enemyList)
+					{
+						enemy.Selected = false;
+					}
+					// FOR TESTING ONLY
+					PreventAttack(3);
+					break;
+				}
 			case Phase.Block:
 				{
 					// zero any remaining attack
 					ResetAttacks();
-					CurrentPhase = Phase.Block;
-					GetNode<Button>("NextButton").Text = "Skip Blocking";
-					GetNode<Button>("ConfirmButton").Text = "Confirm Block";
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					// reset monster attack buttons
+					HideAttackButtons();
+					GetNode<Button>("NinePatchRect/NextButton").Text = "Skip Blocking";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Text = "Confirm Block";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
+
 					MonsterAttacks = new ButtonGroup();
 					// create enemy attacks for undefeated enemies
 					for (int i = 0; i < _enemyList.Count; i++)
 					{
 						var enemy = _enemyList[i];
-						if (!enemy.Defeated)
+						if (!enemy.Defeated && enemy.Attacking)
 						{
 							enemy.Attack();
 						}
@@ -493,13 +578,13 @@ public partial class Combat : Node2D
 				}
 			case Phase.Damage:
 				{
-					GetNode<Button>("NextButton").Text = "Assign All Remaining Damage to Hero";
-					GetNode<Button>("ConfirmButton").Text = "Confirm Damage";
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/NextButton").Text = "Assign All Remaining Damage to Hero";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Text = "Confirm Damage";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					for (int i = 0; i < _enemyList.Count; i++)
 					{
 						var enemy = _enemyList[i];
-						if (!enemy.Defeated && !enemy.Blocked)
+						if (!enemy.Defeated && !enemy.Blocked && enemy.Attacking)
 						{
 							enemy.Damage();
 						}
@@ -524,9 +609,9 @@ public partial class Combat : Node2D
 							enemy.Visible = true;
 						}
 					}
-					GetNode<Button>("NextButton").Text = "Skip Attacking";
-					GetNode<Button>("ConfirmButton").Text = "Confirm Attack";
-					GetNode<Button>("ConfirmButton").Disabled = true;
+					GetNode<Button>("NinePatchRect/NextButton").Text = "Skip Attacking";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Text = "Confirm Attack";
+					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
 					break;
 				}
 			default: break;
@@ -538,7 +623,7 @@ public partial class Combat : Node2D
 		if (_currentAttackWounds.Item1 > 0)
 		{
 			_totalWounds += _currentAttackWounds.Item1;
-			GetNode<Label>("TotalWoundsLabel").Text = string.Format("Total Wounds {0}", _totalWounds);
+			GetNode<Label>("NinePatchRect/TotalWoundsLabel").Text = string.Format("Total Wounds {0}", _totalWounds);
 			// add wounds to hand
 			EmitSignal(SignalName.Wound, _currentAttackWounds.Item1);
 			if (_currentAttackWounds.Item2 > 0)
@@ -547,7 +632,7 @@ public partial class Combat : Node2D
 				EmitSignal(SignalName.Poison, _currentAttackWounds.Item2);
 			}
 			_currentAttackWounds = (0, 0);
-			GetNode<Label>("WoundsLabel").Text = string.Format("Wounds {0}", _currentAttackWounds.Item1);
+			GetNode<Label>("NinePatchRect/WoundsLabel").Text = string.Format("Wounds {0}", _currentAttackWounds.Item1);
 		}
 		if (_unitDestroyed)
 		{
@@ -575,6 +660,24 @@ public partial class Combat : Node2D
 		}
 		TargetAttack.Attacked = true;
 		_targetAttack = null;
+	}
+
+	public bool PreventAttack(int numAttacksPrevented, bool targetUnfortified = false)
+	{
+		var result = false; // return false if still in middle of resolving a cancel attack action
+		if (!ResolvingAction)
+		{
+			_resolvingAction = result = true;
+			PreventOnlyUnfortified = targetUnfortified;
+			_enemiesNotAttacking = numAttacksPrevented; // if 0 then cancel single attack
+			var str = "Target Enemies Will Not Attack";
+			if (numAttacksPrevented == 0)
+			{
+				str = "Cancel Single Attack";
+			}
+			GetNode<Button>("NinePatchRect/ConfirmButton").Text = str;
+		}
+		return result;
 	}
 
 	private bool CheckVictory()
@@ -641,12 +744,21 @@ public partial class Combat : Node2D
 		}
 	}
 
+	public void DeselectMonsters()
+	{
+		foreach (var enemy in _enemyList)
+		{
+			enemy.Deselect();
+		}
+	}
+
 	private void DamageHero(int damage, int poison, bool paralyze) // damage must always be greater than 0
 	{
 		var wounds = (damage - 1) / _armour + 1; // integer division without having to use Math.Ceiling
 		_currentAttackWounds.Item1 = wounds;
 		_currentAttackWounds.Item2 = wounds * poison;
-		if (wounds + _totalWounds >= _maxHandSize || paralyze) {
+		if (wounds + _totalWounds >= _maxHandSize || paralyze)
+		{
 			_knockout = true;
 		}
 	}
@@ -661,6 +773,15 @@ public partial class Combat : Node2D
 		GD.Print("Combat finished");
 		GetParent<Player>().CombatCleanup(false); //pass victory status to player
 		QueueFree();
+	}
+
+	public void HideAttackButtons()
+	{
+		var buttons = MonsterAttacks.GetButtons();
+		foreach (var button in buttons)
+		{
+			button.QueueFree();
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

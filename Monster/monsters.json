@@ -403,7 +403,115 @@
         "y":1,
         "count": 2
     },
+    "2000":{
+        "name":"Swamp Dragon",
+        "colour": 4,
+        "armour":9,
+        "attacks":[
+            {
+                "value":5,
+                "element":0
+            }
+        ],
+        "fame":7,
+        "resistances":[],
+        "abilities":["poison","swift"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count":2
+    },
+    "2001":{
+        "name":"Fire Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":9,
+                "element":1
+            }
+        ],
+        "fame":8,
+        "resistances":[0,1],
+        "abilities":[],
+        "version":"base",
+        "x":3,
+        "y":0,
+        "count":2
+    },
     "2002":{
+        "name":"Ice Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":6,
+                "element":2
+            }
+        ],
+        "fame":8,
+        "resistances":[0,2],
+        "abilities":["paralyze"],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count":2
+    },
+    "2003":{
+        "name":"High Dragon",
+        "colour": 4,
+        "armour":9,
+        "attacks":[
+            {
+                "value":6,
+                "element":4
+            }
+        ],
+        "fame":9,
+        "resistances":[1,2],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count":2
+    },
+    "2100":{
+        "name":"Storm Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":4,
+                "element":2
+            }
+        ],
+        "fame":7,
+        "resistances":[2],
+        "abilities":["illusive","swift"],
+        "version":"ll",
+        "x":2,
+        "y":1,
+        "count":2
+    },
+    "2101":{
+        "name":"Lava Dragon",
+        "colour": 4,
+        "armour":8,
+        "attacks":[
+            {
+                "value":6,
+                "element":1
+            }
+        ],
+        "fame":8,
+        "resistances":[1],
+        "abilities":["brutal","fortified"],
+        "version":"ll",
+        "x":2,
+        "y":0,
+        "count":2
+    },
+    "2102":{
         "name":"Dragon Summoner",
         "colour": 4,
         "armour":8,
@@ -418,6 +526,78 @@
         "abilities":["immunity"],
         "version":"ll",
         "x":3,
+        "y":1,
+        "count":2
+    },
+    "2500":{
+        "name":"Freezers",
+        "colour": 5,
+        "armour":7,
+        "attacks":[
+            {
+                "value":3,
+                "element":2
+            }
+        ],
+        "fame":7,
+        "resistances":[1],
+        "abilities":["swift","paralyze"],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count":3
+    },
+    "2501":{
+        "name":"Gunners",
+        "colour": 5,
+        "armour":6,
+        "attacks":[
+            {
+                "value":6,
+                "element":1
+            }
+        ],
+        "fame":7,
+        "resistances":[2],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count":3
+    },
+    "2502":{
+        "name":"Altem Guardsmen",
+        "colour": 5,
+        "armour":7,
+        "attacks":[
+            {
+                "value":6,
+                "element":0
+            }
+        ],
+        "fame":8,
+        "resistances":[0,1,2],
+        "abilities":["fortified"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count":2
+    },
+    "2503":{
+        "name":"Altem Mages",
+        "colour": 5,
+        "armour":8,
+        "attacks":[
+            {
+                "value":4,
+                "element":4
+            }
+        ],
+        "fame":8,
+        "resistances":[1],
+        "abilities":["brutal","poison","fortified"],
+        "version":"base",
+        "x":0,
         "y":1,
         "count":2
     }

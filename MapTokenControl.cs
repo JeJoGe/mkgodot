@@ -8,6 +8,7 @@ public partial class MapTokenControl : Control
 	MapToken mapToken;
 	private bool hover;
 	const int MainLayer = 0;
+	const int MainTerrainSet = 0;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -43,7 +44,7 @@ public partial class MapTokenControl : Control
 	private void OnMouseExited() {
 		hover = false;
 	}
-	public override void _GuiInput(InputEvent @event)
+	/*public override void _GuiInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("leftClick"))
 		{
@@ -54,10 +55,30 @@ public partial class MapTokenControl : Control
 					var globalClicked = GetGlobalMousePosition();
 					var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
 					var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain;
-					player.PerformMovement(posClicked, cellTerrain);
+					if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
+					{
+						var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.playerPos, mapToken.MapPosition);
+						var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, mapToken.MapPosition).Terrain);
+						if (wallBetweenPlayerAndEnemy == true && (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))) // double fortified
+						{
+							GameSettings.EnemyList.Add(new Vector2I(mapToken.MonsterId, 2));
+						}
+						else if (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))
+						{
+							GameSettings.EnemyList.Add(new Vector2I(mapToken.MonsterId, 1));
+						}
+						else
+						{
+							GameSettings.EnemyList.Add(new Vector2I(mapToken.MonsterId, 0));
+						}
+						player.PerformMovement(posClicked, cellTerrain);
+					}
+					else
+					{
+						GD.Print("Terrain costs more movement than you currently have.");
+					}
 				}
-				player.InitiateCombat();
 			}	
 		}
-	}
+	}*/
 }
