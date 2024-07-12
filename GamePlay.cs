@@ -28,18 +28,6 @@ public partial class GamePlay : Node2D
 		}
     }
 
-	private void ManipulatePlayButton(CardObj card, bool visible) {
-		var playButton = card.GetChild<Button>(0);
-		if(visible) {
-            playButton.Visible = visible;
-            playButton.Disabled = !visible;
-
-		} else {
-			playButton.Visible = !visible;
-            playButton.Disabled = visible;
-		}
-	}
-
 	public void OnCardPlayed(string cardAction, CardObj card) {
 		Utils.undoRedo.CreateAction("Card Play Action");
 		// GD.Print("INONCARDPLAYED: ", cardAction);
@@ -55,11 +43,11 @@ public partial class GamePlay : Node2D
 			case nameof(BasicCardActions.attack):
 				Callable CombatConversionAttackAdd = Callable.From(() => {
 					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
-					ManipulatePlayButton(card, false);
+					card.ManipulateButtons(false);
 				});
 				Callable CombatConversionAttackMinus = Callable.From(() => {
 					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
-					ManipulatePlayButton(card, true);
+					card.ManipulateButtons(true);
 				});
 				Utils.undoRedo.AddDoMethod(CombatConversionAttackAdd);
 				Utils.undoRedo.AddUndoMethod(CombatConversionAttackMinus);
@@ -76,26 +64,37 @@ public partial class GamePlay : Node2D
 			case  nameof(BasicCardActions.move): 
 				Callable MoveConversionAdd = Callable.From(() => {
 					moveConversion(quantity);
-					ManipulatePlayButton(card, false);
+					card.ManipulateButtons(false);
 				});
 				Callable MoveConversionMinus = Callable.From(() => {
 					moveConversion(-quantity);
-					ManipulatePlayButton(card, true);
+					card.ManipulateButtons(true);
 				});
 				Utils.undoRedo.AddDoMethod(MoveConversionAdd);
 				Utils.undoRedo.AddUndoMethod(MoveConversionMinus);
 				Utils.undoRedo.CommitAction();
 				break;
 			case nameof(BasicCardActions.influence): 
-				Callable influenceConversionAdd = Callable.From(() => influenceConversion(quantity));
-				Callable influenceConversionMinus = Callable.From(() => influenceConversion(-quantity));
-				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
+				Callable influenceConversionAdd = Callable.From(() => {
+					influenceConversion(quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable influenceConversionMinus = Callable.From(() => {
+					influenceConversion(-quantity);
+					card.ManipulateButtons(true);
+				});				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
 				Utils.undoRedo.AddUndoMethod(influenceConversionMinus);
 				Utils.undoRedo.CommitAction();
 				break;
 			case nameof(BasicCardActions.block):
-			 	Callable CombatConversionBlockAdd = Callable.From(() => combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity));
-				Callable CombatConversionBlockMinus = Callable.From(() => combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity));
+			 	Callable CombatConversionBlockAdd = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable CombatConversionBlockMinus = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
+					card.ManipulateButtons(true);
+				});
 				Utils.undoRedo.AddDoMethod(CombatConversionBlockAdd);
 				Utils.undoRedo.AddUndoMethod(CombatConversionBlockMinus);
 				Utils.undoRedo.CommitAction();
@@ -103,7 +102,7 @@ public partial class GamePlay : Node2D
 
 
 		}
-    }
+	}
 
     private void combatConversion(string phase, string element, string attackRange, int quantity) {
 		var combatScene =  player.Combat;
