@@ -6,16 +6,19 @@ using System.Linq;
 using System.Numerics;
 
 public partial class Player : Node2D
-{
+{	
+	GameplayControl gameplayControl;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
-	public Vector2I playerPos = new Vector2I(0, 0);
+	private Vector2I _playerPos;
+	public Vector2I PlayerPos { get => _playerPos; set => _playerPos = value;}
 	public int movePoints = 100;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
+	Callable UpdateTColors;
 	PackedScene CombatScene;
 	public Combat Combat;
 	public bool isCombatSceneActive = false;
@@ -25,10 +28,13 @@ public partial class Player : Node2D
 
 	public override void _Ready()
 	{
+		PlayerPos = new Vector2I(0, 0);
 		mapGen = GetNode<MapGen>("../MapGen");
+		gameplayControl = GetNode<GameplayControl>("..");
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
-		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(playerPos));
+		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos));
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
+		UpdateTColors = Callable.From(() => UpdateTokenColors(PlayerPos));
 		CombatScene = GD.Load<PackedScene>("res://Combat.tscn");
 	}
 	public override void _Input(InputEvent @event)
@@ -68,21 +74,24 @@ public partial class Player : Node2D
 	{
 		Utils.undoRedo.CreateAction("Move Player");
 		Utils.undoRedo.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-		Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
+		Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
 		Utils.undoRedo.AddDoMethod(ChangeGlobalPos);
 		Utils.undoRedo.AddUndoMethod(ChangeGlobalPos);
 		//Utils.undoRedo.AddDoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-		//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(playerPos)));
-		Utils.undoRedo.AddDoProperty(this, "playerPos", posClicked);
-		Utils.undoRedo.AddUndoProperty(this, "playerPos", playerPos);
+		//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
+		Utils.undoRedo.AddDoProperty(this, "PlayerPos", posClicked);
+		Utils.undoRedo.AddUndoProperty(this, "PlayerPos", PlayerPos);
 		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - (int)mapGen.terrainCosts[cellTerrain]); // Reduce move points
 		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + (int)mapGen.terrainCosts[cellTerrain]);
+		Utils.undoRedo.AddDoMethod(UpdateTColors);
+		Utils.undoRedo.AddUndoMethod(UpdateTColors);
 		Utils.undoRedo.CommitAction();
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		//GD.Print(GlobalPosition);
+		//gameplayControl.UpdateTokenColors();
 		if (GameSettings.EnemyList.Count != 0)
 		{
-			InitiateCombat();
+			gameplayControl._on_challenge_button_pressed();
 		}
 	}
 
@@ -104,6 +113,12 @@ public partial class Player : Node2D
 	public void ChangeGlobalPosition(Vector2I GPosition)
 	{
 		this.GlobalPosition = GPosition;
+		//GD.Print("It's working");
+	}
+
+	public void UpdateTokenColors(Vector2I Pos)
+	{
+		gameplayControl.UpdateTokenColors(Pos);
 		//GD.Print("It's working");
 	}
 
