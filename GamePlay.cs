@@ -10,8 +10,6 @@ public partial class GamePlay : Node2D
 	[Export]
 	private Player player;
 
-	private CardObj _card;
-
 	// Called when the node enters the scene tree for the first time.
 	// TODO: Optimize the Callable initialization by calling it in _Ready
 	public override void _Ready()
