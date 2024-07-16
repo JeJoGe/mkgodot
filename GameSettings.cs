@@ -26,6 +26,7 @@ public partial class GameSettings : Node
 	private static Stack<int> redMonsterStack = new Stack<int>();
 	private static Stack<int> whiteMonsterStack = new Stack<int>();
 	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
+	public static bool CombatSim = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

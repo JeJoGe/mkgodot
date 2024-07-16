@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://du03m5ip3ckfx"]
+
+[ext_resource type="Script" path="res://CombatSim/CombatSim.cs" id="1_e4uvr"]
+
+[node name="CombatSim" type="Node2D"]
+script = ExtResource("1_e4uvr")
+
+[node name="SiteCheckBox" type="CheckBox" parent="."]
+offset_left = 64.0
+offset_top = 720.0
+offset_right = 191.0
+offset_bottom = 751.0
+text = "Fortified Site"
+
+[node name="WallCheckBox" type="CheckBox" parent="."]
+offset_left = 240.0
+offset_top = 720.0
+offset_right = 367.0
+offset_bottom = 751.0
+text = "Walls"
+
+[node name="ConfirmButton" type="Button" parent="."]
+offset_left = 576.0
+offset_top = 720.0
+offset_right = 584.0
+offset_bottom = 728.0
+text = "Initiate Combat Sim"
+
+[connection signal="pressed" from="ConfirmButton" to="." method="OnInitiateSimPressed"]
