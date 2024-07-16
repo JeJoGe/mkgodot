@@ -46,12 +46,12 @@ public partial class GameplayControl : Control
 
 			//-------------------------------------------------Movement Phase-----------------------------------------------------------
 			//if player phase is movement
-			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(player.playerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
+			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
 				foreach (var enemy in EnemyList)
 				{
-					if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition))
+					if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
 					{
 						if (player.besideRampage != true)
 						{
@@ -60,10 +60,11 @@ public partial class GameplayControl : Control
 						}
 					}
 				}
+				UpdateTokenColors();
 				Utils.undoRedo.ClearHistory();
 			}
 			// Check if tile clicked is any tiles surrounding player position
-			else if (mapGen.GetSurroundingCells(player.playerPos).Contains(posClicked))
+			else if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked))
 			{
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 																						 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
@@ -80,22 +81,22 @@ public partial class GameplayControl : Control
 							break;
 						}
 						// Enemy adjacent and moving to another tile adjacent to enemy
-						if ((mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
+						if ((mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 						{
-							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.playerPos, enemy.MapPosition);
+							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.PlayerPos, enemy.MapPosition);
 							var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, enemy.MapPosition).Terrain);
 							if (wallBetweenPlayerAndEnemy == true && (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))) // double fortified
 							{
-								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 2));
+								GameSettings.EnemyList.Add((enemy.TokenId, 2, enemy.PosColour));
 							}
 							else if (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))
 							{
-								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 1));
+								GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour));
 							}
 							else
 							{
-								GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 0));
+								GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour));
 							}
 						}
 						// Need another else if for if enemy is facedown and time of day
@@ -119,6 +120,7 @@ public partial class GameplayControl : Control
 						}
 						player.PerformMovement(posClicked, cellTerrain);
 					}
+
 					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
 				}
 				else
@@ -137,7 +139,7 @@ public partial class GameplayControl : Control
 		monsterToken.MapPosition = localPos;
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
-		monsterToken.MonsterId = enemy;
+		monsterToken.TokenId = enemy;
 		var monsterStats = Utils.Bestiary[enemy];
 		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
 		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
@@ -149,19 +151,19 @@ public partial class GameplayControl : Control
 		EnemyList.Add(monsterToken);
 	}
 
-	private void _on_challenge_button_pressed()
+	public void _on_challenge_button_pressed()
 	{
 		foreach (var enemy in EnemyList)
 		{
-			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.playerPos).Contains(enemy.MapPosition))
+			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
 			{
-				if (player.IsWallBetween(player.playerPos, enemy.MapPosition))
+				if (player.IsWallBetween(player.PlayerPos, enemy.MapPosition))
 				{
-					GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 1));
+					GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour));
 				}
 				else
 				{
-					GameSettings.EnemyList.Add(new Vector2I(enemy.MonsterId, 0));
+					GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour));
 				}
 			}
 		}
@@ -169,5 +171,44 @@ public partial class GameplayControl : Control
 		AddChild(ChallengeStart);
 		ChallengeStart.Position = new Godot.Vector2I(300, 500);
 		//GetTree().Paused = true;
+	}
+	// Change the identification color of tokens adjacent to player according to position relative to player
+	public void UpdateTokenColors()
+	{
+		foreach (var enemy in EnemyList)
+		{
+			if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
+			{
+				var direction = enemy.MapPosition - player.PlayerPos;
+				if (direction == new Vector2I(1,-1) && enemy.PosColour != Colors.Red)
+				{
+					enemy.PosColour = Colors.Red;
+				}
+				else if (direction == new Vector2I(1,0) && enemy.PosColour != Colors.Gold)
+				{
+					enemy.PosColour = Colors.Gold;
+				}
+				else if (direction == new Vector2I(0,1) && enemy.PosColour != Colors.Green)
+				{
+					enemy.PosColour = Colors.Green;
+				}
+				else if (direction == new Vector2I(-1,1) && enemy.PosColour != Colors.Blue)
+				{
+					enemy.PosColour = Colors.Blue;
+				}
+				else if (direction == new Vector2I(-1,0) && enemy.PosColour != Colors.White)
+				{
+					enemy.PosColour = Colors.White;
+				}
+				else if (direction == new Vector2I(0,-1) && enemy.PosColour != Colors.Purple)
+				{
+					enemy.PosColour = Colors.Purple;
+				}
+			}
+			else
+			{
+				if (enemy.PosColour != Colors.Black) {enemy.PosColour = Colors.Black;}
+			}
+		}
 	}
 }

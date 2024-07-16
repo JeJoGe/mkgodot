@@ -120,9 +120,10 @@ public partial class Combat : Node2D
 		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
 		{
 			var enemy = GameSettings.EnemyList[i];
-			GD.Print("Monster ID: " + enemy.X.ToString());
-			var monsterToken = CreateMonsterToken(enemy.X);
-			monsterToken.SiteFortifications = enemy.Y;
+			GD.Print("Monster ID: " + enemy.Item1.ToString());
+			var monsterToken = CreateMonsterToken(enemy.Item1);
+			monsterToken.SiteFortifications = enemy.Item2;
+			monsterToken.PosColour = enemy.Item3;
 		}
 		// instantiate units
 		var unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
