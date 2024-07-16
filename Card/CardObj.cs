@@ -140,5 +140,5 @@ public partial class CardObj : Sprite2D
         playButton.Visible = visible;
         playButton.Disabled = !visible;
     }
-        
+
 }
