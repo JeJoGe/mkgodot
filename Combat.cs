@@ -669,7 +669,7 @@ public partial class Combat : Node2D
 		GD.Print(range.ToString()+" "+type.ToString()+" Attack: "+PlayerAttacks[(int)type + (int)range]);
 	}
 
-	public void AddBlock(int amount, Element type, bool swift)
+	public void AddBlock(int amount, Element type, bool swift = false)
 	{
 		PlayerBlocks[(int)type] += amount;
 		if (swift)

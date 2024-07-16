@@ -135,42 +135,40 @@ public partial class GamePlay : Node2D
 		var combatScene = player.Combat;
 		if (combatScene == null) { GD.Print("Currently not in Combat"); return; }
 
-		int index = 0;
+		var type = Element.Physical;
 		switch (element)
 		{
 			case nameof(AttackBlockElement.fire):
-				index += (int)Element.Fire;
+				type = Element.Fire;
 				break;
 			case nameof(AttackBlockElement.ice):
-				index += (int)Element.Ice;
+				type = Element.Ice;
 				break;
 			case nameof(AttackBlockElement.coldFire):
-				index += (int)Element.ColdFire;
+				type = Element.ColdFire;
 				break;
 		}
 
+		var range = Combat.AttackRange.Melee;
 		switch (attackRange)
 		{
 			case nameof(AttackType.ranged):
-				index += (int)Combat.AttackRange.Ranged;
+				range = Combat.AttackRange.Ranged;
 				break;
 			case nameof(AttackType.siege):
-				index += (int)Combat.AttackRange.Siege;
+				range = Combat.AttackRange.Siege;
 				break;
 		}
 
 		if (phase == nameof(BasicCardActions.attack))
 		{
-			combatScene.PlayerAttacks[index] += quantity;
-			GD.Print("Attack: ", combatScene.PlayerAttacks[index]);
+			combatScene.AddAttack(quantity,type,range);
 		}
 		else
 		{
-			combatScene.PlayerBlocks[index] += quantity;
-			GD.Print("Block: ", combatScene.PlayerBlocks[index]);
+			combatScene.AddBlock(quantity,type);
 		}
 
-		GD.Print("Index: ", index);
 	}
 
 	private void drawConversion(int quantity)
