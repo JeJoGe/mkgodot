@@ -9,7 +9,7 @@ public partial class Monster : Node2D
 	public int SiteFortifications { get; set; }
 	[Export]
 	public bool Selected { get; set; } = false;
-	public Color PosColour { get; set; }
+	public Color PosColour;
 	public bool Blocked
 	{
 		get

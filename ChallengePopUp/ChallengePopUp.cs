@@ -22,7 +22,7 @@ public partial class ChallengePopUp : Control
 		ChallengeOptions.Size = new Vector2 (310, 32 * GameSettings.EnemyList.Count);
 		foreach (var enemy in GameSettings.EnemyList)
 		{
-			enemyCheckboxes.Add(ChallengeOptions.createChallengeOption(enemy.Item1, optionOffset, enemy.Item3));
+			enemyCheckboxes.Add(ChallengeOptions.createChallengeOption(enemy.Item1, optionOffset, enemy.Item3, enemy.Item4));
 			optionOffset += 32;
 		}
 		Challenge.Position = new Vector2 (0, 132 + optionOffset);
@@ -43,7 +43,7 @@ public partial class ChallengePopUp : Control
 			for (var enemy = GameSettings.EnemyList.Count -1; enemy >= 0; enemy--)
 			{
 				//if checkbox text (subject to change) equals monster id and it's checkbox is unchecked. go backwards because removing from list while iterating
-				if (checkBox.Text == GameSettings.EnemyList[enemy][0].ToString() && checkBox.ButtonPressed == false)
+				if (checkBox.Text == Utils.Bestiary[GameSettings.EnemyList[enemy].Item1].Name && checkBox.ButtonPressed == false)
 				{
 					GameSettings.EnemyList.Remove(GameSettings.EnemyList[enemy]);
 				}
@@ -57,6 +57,7 @@ public partial class ChallengePopUp : Control
 	}
 	private void _on_cancel_pressed()
 	{
+		Utils.undoRedo.Undo();
 		GameSettings.EnemyList.Clear();
 		GetNode<Window>("..").QueueFree();
 	}

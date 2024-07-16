@@ -9,11 +9,17 @@ public partial class MapToken : Node2D
 	public Vector2I MapPosition { get; set; }
 	public int SiteFortifications { get; set; }
 	public int TokenId { get; set; }
+	private Color _oldPosColour = Colors.Black;
+	public Color OldPosColour { get; set;}
 	private Color _posColour = Colors.Black;
 	public Color PosColour { 
 		get => _posColour; 
 		set
 		{
+			if (OldPosColour != PosColour)
+			{
+				OldPosColour = PosColour;
+			}
 			_posColour = value;
 			colorRect.Color = _posColour;
 			if (_posColour == Colors.Black)

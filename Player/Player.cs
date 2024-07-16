@@ -34,7 +34,7 @@ public partial class Player : Node2D
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
 		GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos));
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
-		UpdateTColors = Callable.From(() => UpdateTokenColors());
+		UpdateTColors = Callable.From(() => UpdateTokenColors(PlayerPos));
 		CombatScene = GD.Load<PackedScene>("res://Combat.tscn");
 	}
 	public override void _Input(InputEvent @event)
@@ -88,7 +88,7 @@ public partial class Player : Node2D
 		Utils.undoRedo.CommitAction();
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		//GD.Print(GlobalPosition);
-		gameplayControl.UpdateTokenColors();
+		//gameplayControl.UpdateTokenColors();
 		if (GameSettings.EnemyList.Count != 0)
 		{
 			gameplayControl._on_challenge_button_pressed();
@@ -116,9 +116,9 @@ public partial class Player : Node2D
 		//GD.Print("It's working");
 	}
 
-	public void UpdateTokenColors()
+	public void UpdateTokenColors(Vector2I Pos)
 	{
-		gameplayControl.UpdateTokenColors();
+		gameplayControl.UpdateTokenColors(Pos);
 		//GD.Print("It's working");
 	}
 
