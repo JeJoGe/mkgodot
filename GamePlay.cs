@@ -10,8 +10,6 @@ public partial class GamePlay : Node2D
 	[Export]
 	private Player player;
 
-	
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -30,63 +28,114 @@ public partial class GamePlay : Node2D
 		}
     }
 
-	public void OnCardPlayed(string cardAction) {
+	public void OnCardPlayed(string cardAction, CardObj card) {
+		Utils.undoRedo.CreateAction("Card Play Action");
 		// GD.Print("INONCARDPLAYED: ", cardAction);
 		string[] action = cardAction.Split('-');
 		int quantity;
-		if (action[0] == "attack") {
+		if (action[0] == nameof(BasicCardActions.attack)) {
 			quantity = Convert.ToInt16(action[3]);
 		} else {
 			quantity = Convert.ToInt16(action[1]);
 		}
+
 		switch(action[0]) {
-			case "attack": combatConversion("attack", action[1], action[2], quantity);
+			case nameof(BasicCardActions.attack):
+				Callable CombatConversionAttackAdd = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable CombatConversionAttackMinus = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
+					card.ManipulateButtons(true);
+				});
+				Utils.undoRedo.AddDoMethod(CombatConversionAttackAdd);
+				Utils.undoRedo.AddUndoMethod(CombatConversionAttackMinus);
+				Utils.undoRedo.CommitAction();
 				break;
-			case "heal": healingConversion(quantity);
+			case nameof(BasicCardActions.heal):
+				healingConversion(quantity);
 				break;
-			case "draw": drawConversion(quantity);
+			case nameof(BasicCardActions.draw): 
+				drawConversion(quantity);
+				Utils.undoRedo.ClearHistory();
+				Utils.undoRedo.CommitAction();
 				break;
-			case "move": moveConversion(quantity);
+			case  nameof(BasicCardActions.move): 
+				Callable MoveConversionAdd = Callable.From(() => {
+					moveConversion(quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable MoveConversionMinus = Callable.From(() => {
+					moveConversion(-quantity);
+					card.ManipulateButtons(true);
+				});
+				Utils.undoRedo.AddDoMethod(MoveConversionAdd);
+				Utils.undoRedo.AddUndoMethod(MoveConversionMinus);
+				Utils.undoRedo.CommitAction();
 				break;
-			case "influence": influenceConversion(quantity);
+			case nameof(BasicCardActions.influence): 
+				Callable influenceConversionAdd = Callable.From(() => {
+					influenceConversion(quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable influenceConversionMinus = Callable.From(() => {
+					influenceConversion(-quantity);
+					card.ManipulateButtons(true);
+				});				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
+				Utils.undoRedo.AddUndoMethod(influenceConversionMinus);
+				Utils.undoRedo.CommitAction();
 				break;
-			case "block": combatConversion("block", action[1], action[2], quantity);
+			case nameof(BasicCardActions.block):
+			 	Callable CombatConversionBlockAdd = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
+					card.ManipulateButtons(false);
+				});
+				Callable CombatConversionBlockMinus = Callable.From(() => {
+					combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
+					card.ManipulateButtons(true);
+				});
+				Utils.undoRedo.AddDoMethod(CombatConversionBlockAdd);
+				Utils.undoRedo.AddUndoMethod(CombatConversionBlockMinus);
+				Utils.undoRedo.CommitAction();
 				break;
+
 
 		}
-    }
+	}
 
     private void combatConversion(string phase, string element, string attackRange, int quantity) {
-		var player = GetNode<Player>("Player");
 		var combatScene =  player.Combat;
 		if (combatScene == null) { GD.Print("Currently not in Combat"); return;}
 		
 		int index = 0;
 		switch(element) {
-			case "fire":
+			case nameof(AttackBlockElement.fire):
 				index += (int) Element.Fire;
 				break;
-			case "ice":
+			case nameof(AttackBlockElement.ice):
 				index += (int) Element.Ice;
 				break;
-			case "coldFire":
+			case nameof(AttackBlockElement.coldFire):
 				index += (int) Element.ColdFire;
 				break;
 		}
 
 		switch(attackRange) {
-			case "ranged":
+			case nameof(AttackType.ranged):
 				index += (int) Combat.AttackRange.Ranged;
 				break;
-			case "siege":
+			case nameof(AttackType.siege):
 				index += (int) Combat.AttackRange.Siege;
 				break;
 		}
 
-		if (phase == "attack") {
-			combatScene.PlayerAttacks[index] = quantity;
+		if (phase == nameof(BasicCardActions.attack)) {
+			combatScene.PlayerAttacks[index] += quantity;
+			GD.Print("Attack: ", combatScene.PlayerAttacks[index]);
 		} else {
-			combatScene.PlayerBlocks[index] = quantity;
+			combatScene.PlayerBlocks[index] += quantity;
+			GD.Print("Block: ", combatScene.PlayerBlocks[index]);
 		}
 
 		GD.Print("Index: ", index);
@@ -96,7 +145,7 @@ public partial class GamePlay : Node2D
         for (int i = 0; i < quantity; i++) {
             deck.OnDeckButtonPressed();
         }
-    }
+	}
 
     private void moveConversion(int quantity) {
         player.MovePoints += quantity;
@@ -104,23 +153,21 @@ public partial class GamePlay : Node2D
     }
 
 	private void influenceConversion(int quantity){
-		var player = GetNode<Player>("Player");
-		player.influence = quantity;
-		GD.Print("Influence Points: ", quantity);
+		player.influence += quantity;
+		GD.Print("Influence Points: ", player.influence);
 	}
 
 	private void healingConversion(int quantity) {
-		var deck = GetNode<Deck>("Player UI/PlayerArea/Deck");
-		
+
 	}
 
-	// When card enters the tree, tie the signal CardPlayed to OnCard
+	// When card enters the tree, tie the signal CardPlayed to OnCardPlayed
 	public void OnCardEntered(Node card) {
 		GD.Print("OnCardEnteredTree: ", card);
 		try {
 			var currCardFrame = (CardControl) card;
 			var currCard = (CardObj) currCardFrame.GetChild(0);
-			currCard.CardPlayed += cardAction => OnCardPlayed(cardAction);
+			currCard.CardPlayed += cardAction => OnCardPlayed(cardAction, currCard);
 		} catch {
 			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
