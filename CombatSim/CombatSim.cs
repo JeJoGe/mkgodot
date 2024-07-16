@@ -101,6 +101,7 @@ public partial class CombatSim : Node2D
 
 	private void OnInitiateSimPressed()
 	{
+		GameSettings.CombatSim = true;
 		GameSettings.EnemyList = _enemies;
 		GetTree().ChangeSceneToFile("res://Combat.tscn");
 	}

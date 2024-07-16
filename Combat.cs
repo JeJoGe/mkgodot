@@ -108,12 +108,15 @@ public partial class Combat : Node2D
 		// FOR INITIAL TESTING
 		//GD.Print("Combat Start!");
 		//GD.Print("TEST: " + GameSettings.EnemyList.Count.ToString());
-		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
-		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
-		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
-		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
-		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		//GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
+		if (GameSettings.CombatSim)
+		{
+			GD.Print("combat simulator mode");
+			var simButtons = GetNode<Button>("NinePatchRect/AttackButton").ButtonGroup.GetButtons();
+			foreach (var simButton in simButtons)
+			{
+				simButton.Visible = true;
+			}
+		}
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
@@ -550,8 +553,6 @@ public partial class Combat : Node2D
 					{
 						enemy.Selected = false;
 					}
-					// FOR TESTING ONLY
-					PreventAttack(3);
 					break;
 				}
 			case Phase.Block:
@@ -662,8 +663,26 @@ public partial class Combat : Node2D
 		_targetAttack = null;
 	}
 
+	public void AddAttack(int amount, Element type, AttackRange range)
+	{
+		PlayerAttacks[(int)type + (int)range] += amount;
+		GD.Print(range.ToString()+" "+type.ToString()+" Attack: "+PlayerAttacks[(int)type + (int)range]);
+	}
+
+	public void AddBlock(int amount, Element type, bool swift)
+	{
+		PlayerBlocks[(int)type] += amount;
+		if (swift)
+		{
+			PlayerBlocks[(int)type + 4] += amount;
+		}
+		GD.Print(type.ToString()+" Block: "+PlayerBlocks[(int)type]);
+		GD.Print(type.ToString()+" Block only against enemies with switftness: "+PlayerBlocks[(int)type + 4]);
+	}
+
 	public bool PreventAttack(int numAttacksPrevented, bool targetUnfortified = false)
 	{
+		GD.Print(string.Format("prevent {0} enemies from attacking; unfortified only: {1}",numAttacksPrevented,targetUnfortified));
 		var result = false; // return false if still in middle of resolving a cancel attack action
 		if (!ResolvingAction)
 		{
