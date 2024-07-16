@@ -60,7 +60,7 @@ public partial class GameplayControl : Control
 						}
 					}
 				}
-				UpdateTokenColors();
+				UpdateTokenColors(player.PlayerPos);
 				Utils.undoRedo.ClearHistory();
 			}
 			// Check if tile clicked is any tiles surrounding player position
@@ -84,19 +84,21 @@ public partial class GameplayControl : Control
 						if ((mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition) && mapGen.GetSurroundingCells(enemy.MapPosition).Contains(posClicked)
 						&& (enemy.Colour == "green" || enemy.Colour == "red") && player.IsWallBetween(posClicked, enemy.MapPosition) == false) || (enemy.MapPosition == posClicked))
 						{
+							UpdateTokenColors(posClicked);
 							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.PlayerPos, enemy.MapPosition);
 							var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, enemy.MapPosition).Terrain);
-							if (wallBetweenPlayerAndEnemy == true && (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))) // double fortified
+							var tokenEvent = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Event").ToString();
+							if (wallBetweenPlayerAndEnemy == true && (tokenEvent == "tower" || tokenEvent == "keep" || tokenEvent.Contains("castle"))) // double fortified
 							{
-								GameSettings.EnemyList.Add((enemy.TokenId, 2, enemy.PosColour));
+								GameSettings.EnemyList.Add((enemy.TokenId, 2, enemy.PosColour, enemy.OldPosColour));
 							}
-							else if (monsterTerrain == "tower" || monsterTerrain == "keep" || monsterTerrain.Contains("castle"))
+							else if (tokenEvent == "tower" || tokenEvent == "keep" || tokenEvent.Contains("castle"))
 							{
-								GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour));
+								GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour, enemy.OldPosColour));
 							}
 							else
 							{
-								GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour));
+								GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour, enemy.OldPosColour));
 							}
 						}
 						// Need another else if for if enemy is facedown and time of day
@@ -157,13 +159,25 @@ public partial class GameplayControl : Control
 		{
 			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
 			{
-				if (player.IsWallBetween(player.PlayerPos, enemy.MapPosition))
+				var already_fighting = false;
+				foreach (var fight in GameSettings.EnemyList) 
 				{
-					GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour));
+					if (fight.Item3 == enemy.PosColour)
+					{
+						already_fighting = true;
+					}
+				}
+				if (already_fighting)
+				{
+					continue;
+				}
+				else if (player.IsWallBetween(player.PlayerPos, enemy.MapPosition))
+				{
+					GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour, enemy.OldPosColour));
 				}
 				else
 				{
-					GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour));
+					GameSettings.EnemyList.Add((enemy.TokenId, 0, enemy.PosColour, enemy.OldPosColour));
 				}
 			}
 		}
@@ -172,14 +186,14 @@ public partial class GameplayControl : Control
 		ChallengeStart.Position = new Godot.Vector2I(300, 500);
 		//GetTree().Paused = true;
 	}
-	// Change the identification color of tokens adjacent to player according to position relative to player
-	public void UpdateTokenColors()
+	// Change the identification color of tokens adjacent to player according to given position
+	public void UpdateTokenColors(Vector2I Pos)
 	{
 		foreach (var enemy in EnemyList)
 		{
-			if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
+			if (mapGen.GetSurroundingCells(Pos).Contains(enemy.MapPosition))
 			{
-				var direction = enemy.MapPosition - player.PlayerPos;
+				var direction = enemy.MapPosition - Pos;
 				if (direction == new Vector2I(1,-1) && enemy.PosColour != Colors.Red)
 				{
 					enemy.PosColour = Colors.Red;

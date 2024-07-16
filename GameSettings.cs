@@ -13,7 +13,7 @@ public partial class GameSettings : Node
 	}
 	public static int PlayerCharacter { get; set; }
 	public static int DummyCharacter { get; set; }
-	public static List<(int, int, Color)> EnemyList { get; set; } // monster id, site fortifications: 0 - 2, token colour
+	public static List<(int, int, Color, Color)> EnemyList { get; set; } // monster id, site fortifications: 0 - 2, token colour, old token colour
 	public static List<(int, int)> UnitList { get; set; } // unit id, wounds
 	public static readonly int CardWidth = 1000;
 	public static readonly int CardLength = 1400;
@@ -26,11 +26,13 @@ public partial class GameSettings : Node
 	private static Stack<int> redMonsterStack = new Stack<int>();
 	private static Stack<int> whiteMonsterStack = new Stack<int>();
 	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
+	public static bool CombatSim = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
+		EnemyList = new List<(int, int, Color, Color)>();
+		UnitList = new List<(int, int)> ();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

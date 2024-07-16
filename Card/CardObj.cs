@@ -81,7 +81,7 @@ public partial class CardObj : Sprite2D
                 }
             }
        } else {
-            if(position == CardObjOption.top) {
+            if (position == CardObjOption.top) {
                 topOptionExists = false;
                 topOptionActions.Add(0, function[0]);
             } else {
@@ -133,6 +133,12 @@ public partial class CardObj : Sprite2D
         var frame = (AtlasTexture) atlas.Duplicate();
         frame.Region = new Rect2(new Godot.Vector2(1000 * xCoord, 1400 * yCoord), new Godot.Vector2(1000, 1400));
         this.Texture = frame;
+    }
+
+    public void ManipulateButtons(bool visible) {
+        var playButton = GetChild<Button>(0);
+        playButton.Visible = visible;
+        playButton.Disabled = !visible;
     }
         
 }

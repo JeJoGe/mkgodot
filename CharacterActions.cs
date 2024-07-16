@@ -1,17 +1,13 @@
-public enum CharacterActions {
+public enum BasicCardActions {
     move, heal, draw, block, discard, ready, influence, attack
 }
 
-public enum Attack {
+public enum AttackType {
     ranged, siege, melee
 }
 
-public enum AttackElement {
+public enum AttackBlockElement {
     ice, fire, coldFire, physical
-}
-
-public enum Block {
-    physical, ice, fire, coldFire
 }
 
 public enum SpecialCardActions {
