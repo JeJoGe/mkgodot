@@ -9,6 +9,7 @@ public partial class Monster : Node2D
 	public int SiteFortifications { get; set; }
 	[Export]
 	public bool Selected { get; set; } = false;
+	public Color PosColour;
 	public bool Blocked
 	{
 		get
@@ -41,6 +42,8 @@ public partial class Monster : Node2D
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public MonsterColour Colour { get; set; }
+	// MapPosition is direction relativve to player
+	public Vector2I MapPosition { get; set; }
 	public int MonsterId { get; set; }
 	private static readonly int _attackOffset = 40;
 	private bool _flag { get; set; } = false;
