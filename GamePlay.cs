@@ -16,7 +16,8 @@ public partial class GamePlay : Node2D
 	// TODO: Optimize the Callable initialization by calling it in _Ready
 	public override void _Ready()
 	{
-		tactics.StartRound += extraDraws => onStartRound(extraDraws);
+		tactics.StartRound += onStartRound;
+		tactics.TacticSelected += tacticChosen => onResolveTactic(tacticChosen);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -216,7 +217,17 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	public void onStartRound(int extraDraws) {
-		deck.OnDeckButtonPressed(player.cardDrawLimit + extraDraws);
+	public void onStartRound() {
+		deck.OnDeckButtonPressed(player.cardDrawLimit);
+	}
+
+	public void onResolveTactic(string TacticChosen) {
+		switch(TacticChosen) {
+			case "Tactic5":
+				deck.OnDeckButtonPressed(2);
+				break;
+			default:
+				break;
+		}
 	}
 }

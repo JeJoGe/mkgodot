@@ -6,8 +6,10 @@ public partial class Tactics : Control
 	[Signal]
 	public delegate void TurnOrderEventHandler(int playerTurn, int dummyTurn);
 	[Signal]
-	public delegate void StartRoundEventHandler(int extraDraws);
-
+	public delegate void StartRoundEventHandler();
+	[Signal]
+	public delegate void TacticSelectedEventHandler(string Tactic);
+	
 	private List<string> _availableDay = ["Tactic1", "Tactic2", "Tactic3", "Tactic4", "Tactic5", "Tactic6"];
 	private bool _night = true;
 	public string selectedTactic;
@@ -29,6 +31,7 @@ public partial class Tactics : Control
 		{
 			GetNode<Button>(path).Disabled = false;
 		}
+		EmitSignal(SignalName.StartRound);
 		Show();
 	}
 
@@ -41,11 +44,7 @@ public partial class Tactics : Control
 		if (GameSettings.NumPlayers == 1)
 		{
 			SinglePlayerConquest();
-			if (selectedTactic == "Tactic5") {
-				EmitSignal(SignalName.StartRound, 2);
-			} else {
-				EmitSignal(SignalName.StartRound, 0);
-			}
+			EmitSignal(SignalName.TacticSelected, selectedTactic);
 		} else {
 			// handle different scenarios and player numbers
 		}
