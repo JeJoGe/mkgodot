@@ -44,7 +44,7 @@ public partial class Tactics : Control
 			if (selectedTactic == "Tactic5") {
 				EmitSignal(SignalName.StartRound, 2);
 			} else {
-			EmitSignal(SignalName.StartRound, 0);
+				EmitSignal(SignalName.StartRound, 0);
 			}
 		} else {
 			// handle different scenarios and player numbers
