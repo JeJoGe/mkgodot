@@ -69,6 +69,7 @@ public partial class GameplayControl : Control
 			{
 				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
 																						 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+				var movementMod = 0;
 				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
 				{
 					// Check if next to any enemy
@@ -121,7 +122,7 @@ public partial class GameplayControl : Control
 							player.besideRampage = false;
 							challengeButton.Disabled = true;
 						}
-						player.PerformMovement(posClicked, cellTerrain);
+						player.PerformMovement(posClicked, cellTerrain, movementMod);
 					}
 
 					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
@@ -174,6 +175,12 @@ public partial class GameplayControl : Control
 	}
 
 	public void _on_challenge_button_pressed()
+	{
+		player.PerformMovement(player.PlayerPos,0,(int)mapGen.terrainCosts[0]); // movement so cancel on challenge undoes this move
+		challengeEnemies();
+	}
+
+	public void challengeEnemies()
 	{
 		foreach (var enemy in EnemyList)
 		{

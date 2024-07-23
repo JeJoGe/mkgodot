@@ -4,7 +4,12 @@
 [ext_resource type="Script" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
 
 [node name="ChallengeWindow" type="Window"]
+position = Vector2i(0, 36)
 size = Vector2i(350, 100)
+transient = true
+exclusive = true
+unresizable = true
+always_on_top = true
 
 [node name="ChallengePopUp" type="Control" parent="." node_paths=PackedStringArray("ChallengeOptions", "Challenge", "Cancel")]
 layout_mode = 3

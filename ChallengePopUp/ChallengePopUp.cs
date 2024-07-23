@@ -27,7 +27,7 @@ public partial class ChallengePopUp : Control
 		}
 		Challenge.Position = new Vector2 (0, 132 + optionOffset);
 		Cancel.Position = new Vector2 (175, 132 + optionOffset);
-		GetTree().Paused = true;
+		//GetTree().Paused = true;
 	}
 
 
@@ -54,14 +54,14 @@ public partial class ChallengePopUp : Control
 		if (GameSettings.EnemyList.Count != 0){
 			GetNode<Player>("../../Player").InitiateCombat();
 		}
-		GetTree().Paused = false;
+		//GetTree().Paused = false;
 		GetNode<Window>("..").QueueFree();
 	}
 	private void _on_cancel_pressed()
 	{
 		Utils.undoRedo.Undo();
 		GameSettings.EnemyList.Clear();
-		GetTree().Paused = false;
+		//GetTree().Paused = false;
 		GetNode<Window>("..").QueueFree();
 	}
 }
