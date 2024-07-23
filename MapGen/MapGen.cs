@@ -97,7 +97,13 @@ public partial class MapGen : TileMap
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
 					}
-				}				
+					else if (tokenData == "yellow")
+					{
+						// May need to add in switch statement for whether token is flipped
+						// Generate monster from color stack, site fortifications from what site it's on, on what tile
+						gameplayControl.RuinGen(patternTile);
+					}
+				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
 				{

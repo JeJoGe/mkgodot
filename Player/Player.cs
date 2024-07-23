@@ -71,8 +71,9 @@ public partial class Player : Node2D
 	}
 
 	// Change position of player, update position vector
-	public void PerformMovement(Vector2I posClicked, int cellTerrain)
+	public void PerformMovement(Vector2I posClicked, int cellTerrain, int modifier)
 	{
+		var terrainCost = (int)mapGen.terrainCosts[cellTerrain];
 		Utils.undoRedo.CreateAction("Move Player");
 		Utils.undoRedo.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
@@ -82,8 +83,8 @@ public partial class Player : Node2D
 		//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
 		Utils.undoRedo.AddDoProperty(this, "PlayerPos", posClicked);
 		Utils.undoRedo.AddUndoProperty(this, "PlayerPos", PlayerPos);
-		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - (int)mapGen.terrainCosts[cellTerrain]); // Reduce move points
-		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + (int)mapGen.terrainCosts[cellTerrain]);
+		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - terrainCost + modifier); // Reduce move points
+		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + terrainCost + modifier);
 		Utils.undoRedo.AddDoMethod(UpdateTColors);
 		Utils.undoRedo.AddUndoMethod(UpdateTColors);
 		Utils.undoRedo.CommitAction();
@@ -92,7 +93,7 @@ public partial class Player : Node2D
 		//gameplayControl.UpdateTokenColors();
 		if (GameSettings.EnemyList.Count != 0)
 		{
-			gameplayControl._on_challenge_button_pressed();
+			gameplayControl.challengeEnemies();
 		}
 	}
 

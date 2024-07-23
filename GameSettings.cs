@@ -18,13 +18,15 @@ public partial class GameSettings : Node
 	public static readonly int CardWidth = 1000;
 	public static readonly int CardLength = 1400;
 
-	private static Stack<int> greenMonsterStack = new Stack<int>();
 	private static Dictionary<MonsterColour, List<int>> _discardPiles = [];
+	private static List<int> _yellowDiscardPile = [];
+	private static Stack<int> greenMonsterStack = new Stack<int>();
 	private static Stack<int> greyMonsterStack = new Stack<int>();
 	private static Stack<int> purpleMonsterStack = new Stack<int>();
 	private static Stack<int> brownMonsterStack = new Stack<int>();
 	private static Stack<int> redMonsterStack = new Stack<int>();
 	private static Stack<int> whiteMonsterStack = new Stack<int>();
+	private static Stack<int> yellowTokenStack = new Stack<int>();
 	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
 	public static bool CombatSim = false;
 
@@ -117,6 +119,33 @@ public partial class GameSettings : Node
 		_discardPiles.Add(MonsterColour.White,new List<int>());
 	}
 
+	public static void createYellowStack()
+	{
+		foreach (var ruin in Utils.RuinEvents)
+		{
+			int ruinID = ruin.Key;
+			yellowTokenStack.Push(ruinID);
+		}
+	}
+
+	public static int DrawRuin()
+	{
+		if (!yellowTokenStack.TryPop(out int id))
+		{
+			if(_yellowDiscardPile.Count > 0)
+			{
+				yellowTokenStack = new Stack<int>(_yellowDiscardPile.Shuffle());
+				_yellowDiscardPile.Clear();
+				id = yellowTokenStack.Pop();
+			}
+			else
+			{
+				id = -1;
+			}
+			
+		}
+		return id;
+	}
 	public static int DrawMonster(MonsterColour colour)
 	{
 		if (!MonsterStacks[colour].TryPop(out int id))
@@ -141,5 +170,9 @@ public partial class GameSettings : Node
 	{
 		MonsterColour colour = (MonsterColour)(id / 500);
 		_discardPiles[colour].Add(id);
+	}
+	public static void DiscardYellowToken(int id)
+	{
+		_yellowDiscardPile.Add(id);
 	}
 }
