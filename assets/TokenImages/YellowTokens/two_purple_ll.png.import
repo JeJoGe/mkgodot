@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5w4cpamcbyye"
-path="res://.godot/imported/three_green.png-7b86b2cc6d76bcc12239f6ed1cfa7a37.ctex"
+uid="uid://fbo484frobl"
+path="res://.godot/imported/two_purple_ll.png-bb28397ad09d0c3739662e505b263a80.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/TokenImages/YellowTokens/three_green.png"
-dest_files=["res://.godot/imported/three_green.png-7b86b2cc6d76bcc12239f6ed1cfa7a37.ctex"]
+source_file="res://assets/TokenImages/YellowTokens/two_purple_ll.png"
+dest_files=["res://.godot/imported/two_purple_ll.png-bb28397ad09d0c3739662e505b263a80.ctex"]
 
 [params]
 

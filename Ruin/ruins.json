@@ -1,0 +1,128 @@
+{
+    "3000":{
+        "name":"Brown Purple",
+        "version":"base",
+        "x":1,
+        "y":0,
+        "event":"monster",
+		"requirements":["brown","purple"],
+		"rewards":["spell","white","green","red","blue"]
+    },
+    "3001":{
+        "name":"Brown Red",
+        "version":"base",
+        "x":2,
+        "y":0,
+        "event":"monster",
+		"requirements":["brown","red"],
+		"rewards":["artifact","artifact"]
+    },
+	"3002":{
+        "name":"Green Brown",
+        "version":"base",
+        "x":3,
+        "y":0,
+        "event":"monster",
+		"requirements":["green","brown"],
+		"rewards":["artifact"]
+    },
+	"3003":{
+        "name":"Green Red",
+        "version":"base",
+        "x":0,
+        "y":1,
+        "event":"monster",
+		"requirements":["green","red"],
+		"rewards":["artifact","advanced"]
+    },
+	"3004":{
+        "name":"Grey Brown",
+        "version":"base",
+        "x":1,
+        "y":1,
+        "event":"monster",
+		"requirements":["grey","brown"],
+		"rewards":["artifact"]
+    },
+	"3005":{
+        "name":"Grey Purple",
+        "version":"base",
+        "x":2,
+        "y":1,
+        "event":"monster",
+		"requirements":["grey","purple"],
+		"rewards":["unit"]
+    },
+	"3006":{
+        "name":"Grey White",
+        "version":"base",
+        "x":3,
+        "y":1,
+        "event":"monster",
+		"requirements":["grey","white"],
+		"rewards":["artifact","spell"]
+    },
+	"3007":{
+        "name":"Three Blue",
+        "version":"base",
+        "x":0,
+        "y":2,
+        "event":"mana",
+		"requirements":["blue","blue","blue"],
+		"rewards":["7"]
+    },
+	"3008":{
+        "name":"Three Red",
+        "version":"base",
+        "x":1,
+        "y":2,
+        "event":"mana",
+		"requirements":["red","red","red"],
+		"rewards":["7"]
+    },
+	"3009":{
+        "name":"Three White",
+        "version":"base",
+        "x":2,
+        "y":2,
+        "event":"mana",
+		"requirements":["white","white","white"],
+		"rewards":["7"]
+    },
+	"3010":{
+        "name":"Green Green",
+        "version":"base",
+        "x":3,
+        "y":2,
+        "event":"monster",
+		"requirements":["green","green"],
+		"rewards":["white","green","red","blue"]
+    },
+	"3011":{
+        "name":"One Green One Blue One White One Red",
+        "version":"ll",
+        "x":0,
+        "y":3,
+        "event":"mana",
+		"requirements":["green","blue","white","red"],
+		"rewards":["10"]
+    },
+	"3012":{
+        "name":"Green Green Green",
+        "version":"ll",
+        "x":1,
+        "y":3,
+        "event":"monster",
+		"requirements":["green","green","green"],
+		"rewards":["unit"]
+    },
+	"3013":{
+        "name":"Purple Purple",
+        "version":"ll",
+        "x":2,
+        "y":3,
+        "event":"monster",
+		"requirements":["purple","purple"],
+		"rewards":["spell","advanced"]
+    },
+}

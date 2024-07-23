@@ -10,9 +10,9 @@ Purples: 1000-1499
 Browns: 1500-1999
 Reds: 2000-2499
 Whites: 2500-2999
-Yellows: 3500-3999
-Dark Crusader Rewards: 4200-4249
-Elementalist Rewards: 4250-4299
+Yellows: 3000-3500
+Dark Crusader Rewards: 3700-3749
+Elementalist Rewards: 3750-3799
 
 Token Resistance values:
 No Resistance: --
