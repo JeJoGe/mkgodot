@@ -63,7 +63,7 @@ public partial class CardControl : Control
 	// Zoom if shift pressed and hovering token
 	public override void _Input(InputEvent @event)
 	{
-		if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover && !isFocused)
+		if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover && !isFocused && cardState == CardStates.InHand)
 		{
 			this.originalBeforeFocusPos = this.Position;
 			this.Scale = new Vector2((float)0.5, (float)0.5);
