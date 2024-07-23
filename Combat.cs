@@ -16,8 +16,8 @@ public partial class Combat : Node2D
 	private List<Monster> _enemyList = new List<Monster>();
 	private List<Unit> _unitList = new List<Unit>();
 	public ButtonGroup MonsterAttacks;
-	public Dictionary<int, int> PlayerAttacks = new Dictionary<int, int>();
-	public Dictionary<int, int> PlayerBlocks = new Dictionary<int, int>();
+	private Dictionary<int, int> _playerAttacks = new Dictionary<int, int>();
+	private Dictionary<int, int> _playerBlocks = new Dictionary<int, int>();
 	private int _targetArmour, _totalAttack, _totalBlock;
 	private List<Element> _targetResistances = new List<Element>();
 	private bool _targetFortified;
@@ -108,21 +108,30 @@ public partial class Combat : Node2D
 		// FOR INITIAL TESTING
 		//GD.Print("Combat Start!");
 		//GD.Print("TEST: " + GameSettings.EnemyList.Count.ToString());
-		PlayerBlocks[0] = PlayerBlocks[1] = PlayerBlocks[2] = PlayerBlocks[3] = 10;
-		PlayerBlocks[4] = PlayerBlocks[5] = PlayerBlocks[6] = PlayerBlocks[7] = 10;
-		PlayerAttacks[0] = PlayerAttacks[1] = PlayerAttacks[2] = PlayerAttacks[3] = 10;
-		PlayerAttacks[4] = PlayerAttacks[5] = PlayerAttacks[6] = PlayerAttacks[7] = 10;
-		PlayerAttacks[8] = PlayerAttacks[9] = PlayerAttacks[10] = PlayerAttacks[11] = 10;
-		//GameSettings.EnemyList = new List<(int, int)>([(0, 0), (1600, 0), (1000, 1), (501, 0), (2002, 0)]);
+		if (GameSettings.CombatSim)
+		{
+			GD.Print("combat simulator mode");
+			var simButtons = GetNode<Button>("NinePatchRect/AttackButton").ButtonGroup.GetButtons();
+			foreach (var simButton in simButtons)
+			{
+				simButton.Visible = true;
+			}
+		}
+		_playerBlocks[0] = _playerBlocks[1] = _playerBlocks[2] = _playerBlocks[3] = 0;
+		_playerBlocks[4] = _playerBlocks[5] = _playerBlocks[6] = _playerBlocks[7] = 0;
+		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 0;
+		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 0;
+		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 0;
 		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
 		//Utils.PrintBestiary();
 		// create  enemy tokens
 		for (var i = 0; i < GameSettings.EnemyList.Count; i++)
 		{
 			var enemy = GameSettings.EnemyList[i];
-			GD.Print("Monster ID: " + enemy.X.ToString());
-			var monsterToken = CreateMonsterToken(enemy.X);
-			monsterToken.SiteFortifications = enemy.Y;
+			GD.Print("Monster ID: " + enemy.Item1.ToString());
+			var monsterToken = CreateMonsterToken(enemy.Item1);
+			monsterToken.SiteFortifications = enemy.Item2;
+			monsterToken.PosColour = enemy.Item3;
 		}
 		// instantiate units
 		var unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
@@ -218,37 +227,37 @@ public partial class Combat : Node2D
 	{
 		var swift = MonsterAttacks.GetPressedButton().GetParent<Monster>().Abilities.Contains("swift");
 		var inefficientBlock = 0;
-		var efficientBlock = PlayerBlocks[(int)Element.ColdFire] + (swift ? PlayerBlocks[7] : 0); // cold fire block is always efficient
+		var efficientBlock = _playerBlocks[(int)Element.ColdFire] + (swift ? _playerBlocks[7] : 0); // cold fire block is always efficient
 		switch (TargetAttack.Element)
 		{
 			case Element.Physical:
 				{
 					// all blocks are efficient
-					efficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] + PlayerBlocks[(int)Element.Ice] +
-					(swift ? PlayerBlocks[(int)Element.Physical + 4] + PlayerBlocks[(int)Element.Fire + 4] + PlayerBlocks[(int)Element.Ice + 4] : 0);
+					efficientBlock += _playerBlocks[(int)Element.Physical] + _playerBlocks[(int)Element.Fire] + _playerBlocks[(int)Element.Ice] +
+					(swift ? _playerBlocks[(int)Element.Physical + 4] + _playerBlocks[(int)Element.Fire + 4] + _playerBlocks[(int)Element.Ice + 4] : 0);
 					break;
 				}
 			case Element.Fire:
 				{
 					// ice is efficient
-					efficientBlock += PlayerBlocks[(int)Element.Ice] + (swift ? PlayerBlocks[(int)Element.Ice + 4] : 0);
-					inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] +
-					(swift ? PlayerBlocks[(int)Element.Physical + 4] + PlayerBlocks[(int)Element.Fire + 4] : 0);
+					efficientBlock += _playerBlocks[(int)Element.Ice] + (swift ? _playerBlocks[(int)Element.Ice + 4] : 0);
+					inefficientBlock += _playerBlocks[(int)Element.Physical] + _playerBlocks[(int)Element.Fire] +
+					(swift ? _playerBlocks[(int)Element.Physical + 4] + _playerBlocks[(int)Element.Fire + 4] : 0);
 					break;
 				}
 			case Element.Ice:
 				{
 					// fire is efficient
-					efficientBlock += PlayerBlocks[(int)Element.Fire] + (swift ? PlayerBlocks[(int)Element.Fire + 4] : 0);
-					inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Ice] +
-					(swift ? PlayerBlocks[(int)Element.Physical + 4] + PlayerBlocks[(int)Element.Ice + 4] : 0);
+					efficientBlock += _playerBlocks[(int)Element.Fire] + (swift ? _playerBlocks[(int)Element.Fire + 4] : 0);
+					inefficientBlock += _playerBlocks[(int)Element.Physical] + _playerBlocks[(int)Element.Ice] +
+					(swift ? _playerBlocks[(int)Element.Physical + 4] + _playerBlocks[(int)Element.Ice + 4] : 0);
 					break;
 				}
 			case Element.ColdFire:
 				{
 					// all blocks are inefficient
-					inefficientBlock += PlayerBlocks[(int)Element.Physical] + PlayerBlocks[(int)Element.Fire] + PlayerBlocks[(int)Element.Ice] +
-					(swift ? PlayerBlocks[(int)Element.Physical + 4] + PlayerBlocks[(int)Element.Fire + 4] + PlayerBlocks[(int)Element.Ice + 4] : 0);
+					inefficientBlock += _playerBlocks[(int)Element.Physical] + _playerBlocks[(int)Element.Fire] + _playerBlocks[(int)Element.Ice] +
+					(swift ? _playerBlocks[(int)Element.Physical + 4] + _playerBlocks[(int)Element.Fire + 4] + _playerBlocks[(int)Element.Ice + 4] : 0);
 					break;
 				}
 			default: break;
@@ -330,16 +339,16 @@ public partial class Combat : Node2D
 		{
 			if (_targetResistances.Contains((Element)element))
 			{
-				resistedAttack += PlayerAttacks[(int)AttackRange.Siege + element] +
-				(_targetFortified ? 0 : 1) * PlayerAttacks[(int)AttackRange.Ranged + element] +
+				resistedAttack += _playerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
 				// current phase is ranged, melee attacks ignored
-				(CurrentPhase == Phase.Ranged ? 0 : 1) * PlayerAttacks[element];
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
 			}
 			else
 			{
-				effectiveAttack += PlayerAttacks[(int)AttackRange.Siege + element] +
-				(_targetFortified ? 0 : 1) * PlayerAttacks[(int)AttackRange.Ranged + element] +
-				(CurrentPhase == Phase.Ranged ? 0 : 1) * PlayerAttacks[element];
+				effectiveAttack += _playerAttacks[(int)AttackRange.Siege + element] +
+				(_targetFortified ? 0 : 1) * _playerAttacks[(int)AttackRange.Ranged + element] +
+				(CurrentPhase == Phase.Ranged ? 0 : 1) * _playerAttacks[element];
 			}
 		}
 		_totalAttack = effectiveAttack + resistedAttack / 2; // integer math automatically rounds down
@@ -466,9 +475,9 @@ public partial class Combat : Node2D
 					var button = MonsterAttacks.GetPressedButton();
 					button.QueueFree();
 					GetNode<Button>("NinePatchRect/ConfirmButton").Disabled = true;
-					foreach (var kvp in PlayerBlocks)
+					foreach (var kvp in _playerBlocks)
 					{
-						PlayerBlocks[kvp.Key] = 0;
+						_playerBlocks[kvp.Key] = 0;
 					}
 					_totalBlock = 0;
 					// check if all enemies blocked
@@ -550,8 +559,6 @@ public partial class Combat : Node2D
 					{
 						enemy.Selected = false;
 					}
-					// FOR TESTING ONLY
-					PreventAttack(3);
 					break;
 				}
 			case Phase.Block:
@@ -662,8 +669,26 @@ public partial class Combat : Node2D
 		_targetAttack = null;
 	}
 
+	public void AddAttack(int amount, Element type, AttackRange range)
+	{
+		_playerAttacks[(int)type + (int)range] += amount;
+		GD.Print(range.ToString()+" "+type.ToString()+" Attack: "+_playerAttacks[(int)type + (int)range]);
+	}
+
+	public void AddBlock(int amount, Element type, bool swift = false)
+	{
+		_playerBlocks[(int)type] += amount;
+		if (swift)
+		{
+			_playerBlocks[(int)type + 4] += amount;
+		}
+		GD.Print(type.ToString()+" Block: "+_playerBlocks[(int)type]);
+		GD.Print(type.ToString()+" Block only against enemies with switftness: "+_playerBlocks[(int)type + 4]);
+	}
+
 	public bool PreventAttack(int numAttacksPrevented, bool targetUnfortified = false)
 	{
+		GD.Print(string.Format("prevent {0} enemies from attacking; unfortified only: {1}",numAttacksPrevented,targetUnfortified));
 		var result = false; // return false if still in middle of resolving a cancel attack action
 		if (!ResolvingAction)
 		{
@@ -729,9 +754,9 @@ public partial class Combat : Node2D
 
 	private void ResetAttacks()
 	{
-		foreach (var kvp in PlayerAttacks)
+		foreach (var kvp in _playerAttacks)
 		{
-			PlayerAttacks[kvp.Key] = 0;
+			_playerAttacks[kvp.Key] = 0;
 		}
 		_totalAttack = 0;
 	}

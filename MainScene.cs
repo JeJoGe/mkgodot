@@ -18,6 +18,11 @@ public partial class MainScene : Node2D
 	private void OnPlayPressed() {
 		GetTree().ChangeSceneToFile("res://CharacterChoiceScene/CharacterChoice.tscn");
 	}
+
+	private void OnCombatSimPressed()
+	{
+		GetTree().ChangeSceneToFile("res://CombatSim/CombatSim.tscn");
+	}
 }
 
 

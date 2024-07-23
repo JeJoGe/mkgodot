@@ -31,6 +31,21 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Start Game"
 
+[node name="CombatSim" type="Button" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 80.0
+offset_top = 297.0
+offset_right = 180.0
+offset_bottom = 347.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Combat Sim"
+
 [node name="Credits" type="Button" parent="UI/MainMenu"]
 layout_mode = 1
 anchors_preset = 8
@@ -62,5 +77,6 @@ grow_vertical = 2
 text = "Quit"
 
 [connection signal="pressed" from="UI/MainMenu/StartGame" to="." method="OnPlayPressed"]
+[connection signal="pressed" from="UI/MainMenu/CombatSim" to="." method="OnCombatSimPressed"]
 [connection signal="pressed" from="UI/MainMenu/Credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Quit" to="." method="_on_quit_pressed"]

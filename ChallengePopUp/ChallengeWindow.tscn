@@ -52,8 +52,8 @@ layout_mode = 0
 offset_left = 10.0
 offset_right = 341.0
 offset_bottom = 51.0
-text = "More than one monster can be challenged. 
-Select which monsters to challenge below:"
+text = "You are about to enter combat.
+Select which monsters to fight below:"
 
 [connection signal="pressed" from="ChallengePopUp/ColorRect/Challenge" to="ChallengePopUp" method="_on_challenge_pressed"]
 [connection signal="pressed" from="ChallengePopUp/ColorRect/Cancel" to="ChallengePopUp" method="_on_cancel_pressed"]

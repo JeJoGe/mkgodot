@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Godot;
 
 public partial class CardControl : Control
