@@ -1,11 +1,11 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class Deck : Node2D
 {   
     public List<CardControl> CurrentHand = new List<CardControl>();
+	public int cardDrawnNumber = 0;
 	public CardScene _cards = new CardScene();
 	private Vector2I CardSize = new Vector2I(140, 100);
 	// starting angle of the card
@@ -20,10 +20,9 @@ public partial class Deck : Node2D
 		AddChild(_cards);
 	}
 
-	public void OnDeckButtonPressed()
-	{
+	public void DrawCards() {
 		CardControl card = _cards.DrawCard();
-		Angle = Math.PI/2 + CardSpread*(CurrentHand.Count()/2 - CurrentHand.Count());
+		Angle = Math.PI/2 + CardSpread*(cardDrawnNumber/2 - cardDrawnNumber);
 		// center oval point on the screen
 		var CentreCardOval = GetViewportRect().Size * new Vector2((float)0.5, (float) 1.5);
 		// horizontal radius of the oval scaled by *#
@@ -45,7 +44,7 @@ public partial class Deck : Node2D
 		foreach(var cardInHand in this.GetChildren()) {
 			if(cardInHand is CardControl) {
 				var actualCardInHand = (CardControl) cardInHand;
-				Angle = Math.PI/2 + CardSpread*(CurrentHand.Count()/2 - CardNumber);
+				Angle = Math.PI/2 + CardSpread*(cardDrawnNumber/2 - CardNumber);
 				OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float) (-Ver_rad * Mathf.Sin(Angle)));
 				actualCardInHand.targetPos = CentreCardOval + OvalAngleVector - card.GetRect().Size;
 				actualCardInHand.startRotation = actualCardInHand.RotationDegrees;
@@ -59,7 +58,23 @@ public partial class Deck : Node2D
 		}
 		AddChild(card);
 		CurrentHand.Add(card);
+		cardDrawnNumber += 1;
 		// angle in which its offset by
 		Angle += 0.1;	
+	}
+
+	public void OnDeckButtonPressed(int cardLimit)
+	{	
+		for(int cardDraw = 0; cardDraw < cardLimit; cardDraw++) {
+			DrawCards();
+		}
+	}
+
+	public void onRemoveFromCurrentHand(CardControl cardControl) {
+		CurrentHand.Remove(cardControl);
+	}
+
+	public void onAddToCurrentHand(CardControl cardControl) {
+		CurrentHand.Add(cardControl);
 	}
 }
