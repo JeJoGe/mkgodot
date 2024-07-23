@@ -78,10 +78,10 @@ public partial class CardControl : Control
 			this.ZIndex = 0;
 			this.startPos = this.Position;
 
-			if (cardState == CardStates.InFocusEnlarged || cardState == CardStates.inFocus || cardState == CardStates.InFocusBackToHand)
+			if (cardState == CardStates.InFocusEnlarged || cardState == CardStates.inFocus || cardState == CardStates.InFocusBackToHand || cardState == CardStates.InHand)
 			{
 				this.Scale = new Vector2((float)0.25, (float)0.25);
-				this.targetPos = originalBeforeFocusPos;
+				this.targetPos = this.originalBeforeFocusPos;
 				this.cardState = CardStates.InFocusBackToHand;
 			}
 			else
