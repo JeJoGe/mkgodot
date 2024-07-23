@@ -49,6 +49,58 @@ public partial class Inventory : Node2D
 	{
 	}
 
+	public bool AddCrystal(int colour)
+	{
+		var crystalColour = (Source.Colour)colour;
+		var result = false;
+		if (_crystals[crystalColour] < 3 && colour >= 0 && colour < 4) // max of 3 crystals and must be blue/red/green/white
+		{
+			result = true;
+			_crystals[crystalColour] = _crystals[crystalColour] + 1;
+			GD.Print(string.Format("{0} token added",crystalColour.ToString()));
+			GD.Print(string.Format("{0} {1} tokens currently",_crystals[crystalColour],crystalColour.ToString()));
+		}
+		return result;
+	}
+
+	public bool ConsumeCrystal(int colour)
+	{
+		var crystalColour = (Source.Colour)colour;
+		var result = false;
+		if (_crystals[crystalColour] > 0)
+		{
+			result = true;
+			_crystals[crystalColour] = _crystals[crystalColour] - 1;
+		}
+		return result;
+	}
+
+	public bool AddToken(int colour)
+	{
+		var tokenColour = (Source.Colour)colour;
+		var result = false;
+		if (colour >= 0 && colour < 6) // no limit on tokens
+		{
+			result = true;
+			_tokens[tokenColour] = _tokens[tokenColour] + 1;
+			GD.Print(string.Format("{0} token added",tokenColour.ToString()));
+			GD.Print(string.Format("{0} {1} tokens currently",_tokens[tokenColour],tokenColour.ToString()));
+		}
+		return result;
+	}
+
+	public bool ConsumeToken(int colour)
+	{
+		var tokenColour = (Source.Colour)colour;
+		var result = false;
+		if (_tokens[tokenColour] > 0)
+		{
+			result = true;
+			_tokens[tokenColour] = _tokens[tokenColour] - 1;
+		}
+		return result;
+	}
+
 	private void OnDieTaken(int colour)
 	{
 		var dieColour = (Source.Colour)colour;

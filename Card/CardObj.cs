@@ -117,16 +117,37 @@ public partial class CardObj : Sprite2D
     public void toggleActionPressed() {
         var getPowerUp = GetChild<Button>(1);
         if(currentOption == CardObjOption.top) {
-            getPowerUp.Text = "Use Top Option";
-            currentOption = CardObjOption.bottom;
-            topOptionsButton.Visible = false;
-            bottomOptionsButton.Visible = bottomOptionExists && true; 
+            if (PayMana(color))
+            {
+                getPowerUp.Text = "Use Top Option";
+                currentOption = CardObjOption.bottom;
+                topOptionsButton.Visible = false;
+                bottomOptionsButton.Visible = bottomOptionExists && true; 
+            }
         } else {
             getPowerUp.Text = "Use Bottom Option";
             currentOption = CardObjOption.top;
             bottomOptionsButton.Visible = false; 
             topOptionsButton.Visible = topOptionExists && true;
         }
+    }
+
+    private bool PayMana(string colour)
+    {
+        var source = GetNode<Source>("../../../../SharedArea/Source"); // cardcontrol -> deck -> playerarea -> playerui <- sharedarea <- source
+        var inventory = GetNode<Inventory>("../../../Inventory"); // cardcontrol -> deck -> playerarea <- inventory
+        var result = false;
+        if (CreateManaDialog() > 0) // at least 1 option available
+        {
+
+        }
+        return result;
+    }
+
+    private int CreateManaDialog()
+    {
+        var result = 0;
+        return result;
     }
 
     public void ImageCropping(AtlasTexture atlas) {
