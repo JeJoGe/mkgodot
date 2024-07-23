@@ -11,7 +11,7 @@ public partial class CombatSim : Node2D
 	private static readonly int _offset = 120;
 	private static readonly int _voffset = 120;
 	private int _monstersPerRow = 14; // this should depend on viewport size
-	private List<Vector2I> _enemies = new List<Vector2I>();
+	private List<(int, int, Color, Color)> _enemies = new List<(int, int, Color, Color)>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -48,7 +48,7 @@ public partial class CombatSim : Node2D
 		var walls = GetNode<CheckBox>("WallCheckBox").ButtonPressed;
 		GD.Print(string.Format("monster #{0} clicked   fortified: {1}   walls: {2}",id,fortifications,walls));
 		// add to enemy list
-		_enemies.Add(new Vector2I(id,(fortifications ? 1 : 0) + (walls ? 1 : 0)));
+		_enemies.Add((id,(fortifications ? 1 : 0) + (walls ? 1 : 0), Colors.Black, Colors.Black));
 		UpdateEnemyList();
 	}
 
@@ -74,7 +74,7 @@ public partial class CombatSim : Node2D
 		}
 		for (int i = 0; i < _enemies.Count; i++)
 		{
-			var monsterId = _enemies[i].X;
+			var monsterId = _enemies[i].Item1;
 			var monster = Utils.Bestiary[monsterId];
 			var atlas = (AtlasTexture)Utils.SpriteSheets[Utils.ConvertMonsterColourToString(monster.Colour)].Duplicate();
 			atlas.Region = new Rect2(new Vector2(monster.X * _spriteSize, monster.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
@@ -90,7 +90,7 @@ public partial class CombatSim : Node2D
 			var label = new Label
 			{
 				Position = new Vector2(horizontalPosition, 980),
-				Text = string.Format("Fortifications: {0}",_enemies[i].Y),
+				Text = string.Format("Fortifications: {0}",_enemies[i].Item2),
 			};
 			GD.Print(string.Format("new button with index {0}",index));
 			button.Pressed += () => OnEnemyListButtonPressed(index);
