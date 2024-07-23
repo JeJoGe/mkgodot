@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Godot;
 
 public partial class CardControl : Control
@@ -65,10 +64,10 @@ public partial class CardControl : Control
 	{
 		if (Input.IsActionPressed("shift") && Input.IsActionPressed("leftClick") && hover && !isFocused)
 		{
-			originalBeforeFocusPos = this.Position;
+			this.originalBeforeFocusPos = this.Position;
 			this.Scale = new Vector2((float)0.5, (float)0.5);
 			this.ZIndex = 1;
-			this.startPos = originalBeforeFocusPos;
+			this.startPos = this.Position;
 			this.targetPos = new Vector2(this.Position.X, this.Position.Y - 600);
 			this.cardState = CardStates.inFocus;
 			this.isFocused = true;
@@ -78,18 +77,15 @@ public partial class CardControl : Control
 			this.ZIndex = 0;
 			this.startPos = this.Position;
 
-			if (cardState == CardStates.inFocus)
+			if (cardState == CardStates.InFocusEnlarged || cardState == CardStates.inFocus || cardState == CardStates.InFocusBackToHand)
 			{
 				this.Scale = new Vector2((float)0.25, (float)0.25);
-
-
 				this.targetPos = originalBeforeFocusPos;
 				this.cardState = CardStates.InFocusBackToHand;
 			}
 			else
 			{
 				this.Scale = new Vector2((float)0.125, (float)0.125);
-
 				this.targetPos = this.Position;
 				this.cardState = CardStates.InDiscard;
 			}
@@ -97,6 +93,11 @@ public partial class CardControl : Control
 
 		}
 
+		if(hover) {
+			ZIndex = 1;
+		} else if(!hover) {
+			ZIndex = 0;
+		}
 	}
 	private void OnMouseEntered()
 	{
@@ -107,6 +108,7 @@ public partial class CardControl : Control
 	{
 		hover = false;
 	}
+
 	public override void _GuiInput(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mb)
@@ -217,11 +219,14 @@ public partial class CardControl : Control
 	public void PlayedCardAnimation()
 	{
 		startPos = Position;
-		backToHandPos = startPos;
+		if(cardState == CardStates.InFocusEnlarged) {
+			backToHandPos = originalBeforeFocusPos;
+		} else {
+			backToHandPos = startPos;
+		}
 		targetPos = discardArea;
 		this.cardState = CardStates.PlayedCard;
 		this.Scale = new Vector2((float)0.125, (float)0.125);
-
 	}
 
 	public void UndoPlayedCardAnimation()

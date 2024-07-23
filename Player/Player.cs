@@ -22,6 +22,7 @@ public partial class Player : Node2D
 	public int influence = 0;
 	public bool besideRampage = false;
 	private List<int> enemiesBeside = new List<int>();
+	public int cardDrawLimit = 5;
 
 	public override void _Ready()
 	{

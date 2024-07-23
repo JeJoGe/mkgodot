@@ -9,12 +9,14 @@ public partial class GamePlay : Node2D
 	private Deck deck;
 	[Export]
 	private Player player;
+	[Export]
+	private Tactics tactics;
 
 	// Called when the node enters the scene tree for the first time.
 	// TODO: Optimize the Callable initialization by calling it in _Ready
 	public override void _Ready()
 	{
-
+		tactics.StartRound += extraDraws => onStartRound(extraDraws);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,12 +53,14 @@ public partial class GamePlay : Node2D
 					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
 					card.ManipulateButtons(false);
 					cardControl.PlayedCardAnimation();
+					deck.onRemoveFromCurrentHand(cardControl);
 				});
 				Callable CombatConversionAttackMinus = Callable.From(() =>
 				{
 					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
 					card.ManipulateButtons(true);
 					cardControl.UndoPlayedCardAnimation();
+					deck.onAddToCurrentHand(cardControl);
 				});
 				Utils.undoRedo.AddDoMethod(CombatConversionAttackAdd);
 				Utils.undoRedo.AddUndoMethod(CombatConversionAttackMinus);
@@ -77,13 +81,14 @@ public partial class GamePlay : Node2D
 					moveConversion(quantity);
 					card.ManipulateButtons(false);
 					cardControl.PlayedCardAnimation();
-
+					deck.onRemoveFromCurrentHand(cardControl);
 				});
 				Callable MoveConversionMinus = Callable.From(() =>
 				{
 					moveConversion(-quantity);
 					card.ManipulateButtons(true);
 					cardControl.UndoPlayedCardAnimation();
+					deck.onAddToCurrentHand(cardControl);
 				});
 				Utils.undoRedo.AddDoMethod(MoveConversionAdd);
 				Utils.undoRedo.AddUndoMethod(MoveConversionMinus);
@@ -95,13 +100,14 @@ public partial class GamePlay : Node2D
 					influenceConversion(quantity);
 					card.ManipulateButtons(false);
 					cardControl.PlayedCardAnimation();
-					
+					deck.onRemoveFromCurrentHand(cardControl);
 				});
 				Callable influenceConversionMinus = Callable.From(() =>
 				{
 					influenceConversion(-quantity);
 					card.ManipulateButtons(true);
 					cardControl.UndoPlayedCardAnimation();
+					deck.onAddToCurrentHand(cardControl);
 				});
 				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
 				Utils.undoRedo.AddUndoMethod(influenceConversionMinus);
@@ -113,13 +119,14 @@ public partial class GamePlay : Node2D
 					combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
 					card.ManipulateButtons(false);
 					cardControl.PlayedCardAnimation();
-
+					deck.onRemoveFromCurrentHand(cardControl);
 				});
 				Callable CombatConversionBlockMinus = Callable.From(() =>
 				{
 					combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
 					card.ManipulateButtons(true);
 					cardControl.UndoPlayedCardAnimation();
+					deck.onAddToCurrentHand(cardControl);
 				});
 				Utils.undoRedo.AddDoMethod(CombatConversionBlockAdd);
 				Utils.undoRedo.AddUndoMethod(CombatConversionBlockMinus);
@@ -175,10 +182,7 @@ public partial class GamePlay : Node2D
 
 	private void drawConversion(int quantity)
 	{
-		for (int i = 0; i < quantity; i++)
-		{
-			deck.OnDeckButtonPressed();
-		}
+		deck.OnDeckButtonPressed(quantity);
 	}
 
 	private void moveConversion(int quantity)
@@ -212,5 +216,9 @@ public partial class GamePlay : Node2D
 		{
 			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
+	}
+
+	public void onStartRound(int extraDraws) {
+		deck.OnDeckButtonPressed(player.cardDrawLimit + extraDraws);
 	}
 }

@@ -1,15 +1,16 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Dynamic;
 
 public partial class Tactics : Control
 {
 	[Signal]
 	public delegate void TurnOrderEventHandler(int playerTurn, int dummyTurn);
+	[Signal]
+	public delegate void StartRoundEventHandler(int extraDraws);
 
 	private List<string> _availableDay = ["Tactic1", "Tactic2", "Tactic3", "Tactic4", "Tactic5", "Tactic6"];
 	private bool _night = true;
+	public string selectedTactic;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -40,6 +41,11 @@ public partial class Tactics : Control
 		if (GameSettings.NumPlayers == 1)
 		{
 			SinglePlayerConquest();
+			if (selectedTactic == "Tactic5") {
+				EmitSignal(SignalName.StartRound, 2);
+			} else {
+			EmitSignal(SignalName.StartRound, 0);
+			}
 		} else {
 			// handle different scenarios and player numbers
 		}
@@ -48,6 +54,7 @@ public partial class Tactics : Control
 	private void SinglePlayerConquest() {
 		var group = GetNode<Button>("Tactic1").ButtonGroup;
 		var selectedButton = (string)group.GetPressedButton().Name;
+		this.selectedTactic = selectedButton;
 		var playerTurn = selectedButton.Substring(6);
 		_availableDay.Remove(selectedButton);
 		var tacticButtons = group.GetButtons();
