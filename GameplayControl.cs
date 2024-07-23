@@ -14,9 +14,10 @@ public partial class GameplayControl : Control
 	private Button challengeButton;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
-	PackedScene monsterScene = GD.Load<PackedScene>("res://MapToken.tscn");
+	PackedScene mapTokenScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
-	private static readonly int _monsterSpriteSize = 258;
+	public List<MapToken> RuinList = new List<MapToken>();
+	private static readonly int _tokenSpriteSize = 258;
 	PackedScene ChallengeScene;
 
 	// Called when the node enters the scene tree for the first time.
@@ -137,7 +138,7 @@ public partial class GameplayControl : Control
 	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{
 		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
-		var monsterToken = (MapToken)monsterScene.Instantiate();
+		var monsterToken = (MapToken)mapTokenScene.Instantiate();
 		monsterToken.MapPosition = localPos;
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
@@ -145,7 +146,7 @@ public partial class GameplayControl : Control
 		var monsterStats = Utils.Bestiary[enemy];
 		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
 		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize, monsterStats.Y * _monsterSpriteSize), new Vector2(_monsterSpriteSize, _monsterSpriteSize));
+		atlas.Region = new Rect2(new Vector2(monsterStats.X * _tokenSpriteSize, monsterStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
 		enemySprite.Texture = atlas;
 		enemySprite.Scale = new Vector2((float)0.25, (float)0.25);
 		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
@@ -154,23 +155,22 @@ public partial class GameplayControl : Control
 	}
 
 	// Generate Ruin Token, may need to add in variable for whether flipped
-	public void RuinGen(string name, Vector2I localPos)
+	public void RuinGen(Vector2I localPos)
 	{
-		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
-		var monsterToken = (MapToken)monsterScene.Instantiate();
-		monsterToken.MapPosition = localPos;
-		monsterToken.SiteFortifications = siteFortifications;
-		monsterToken.Colour = colour;
-		monsterToken.TokenId = enemy;
-		var monsterStats = Utils.Bestiary[enemy];
-		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
-		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		atlas.Region = new Rect2(new Vector2(monsterStats.X * _monsterSpriteSize, monsterStats.Y * _monsterSpriteSize), new Vector2(_monsterSpriteSize, _monsterSpriteSize));
-		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.25, (float)0.25);
-		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
-		AddChild(monsterToken);
-		EnemyList.Add(monsterToken);
+		var ruin = GameSettings.DrawRuin();
+		var ruinToken = (MapToken)mapTokenScene.Instantiate();
+		ruinToken.MapPosition = localPos;
+		ruinToken.Colour = "yellow";
+		ruinToken.TokenId = ruin;
+		var ruinStats = Utils.RuinEvents[ruin];
+		var ruinSprite = ruinToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
+		var atlas = (AtlasTexture)Utils.SpriteSheets["yellow"].Duplicate();
+		atlas.Region = new Rect2(new Vector2(ruinStats.X * _tokenSpriteSize, ruinStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+		ruinSprite.Texture = atlas;
+		ruinSprite.Scale = new Vector2((float)0.25, (float)0.25);
+		ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
+		AddChild(ruinToken);
+		RuinList.Add(ruinToken);
 	}
 
 	public void _on_challenge_button_pressed()

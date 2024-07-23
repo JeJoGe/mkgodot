@@ -19,6 +19,7 @@ public partial class GameSettings : Node
 	public static readonly int CardLength = 1400;
 
 	private static Dictionary<MonsterColour, List<int>> _discardPiles = [];
+	private static List<int> _yellowDiscardPile = [];
 	private static Stack<int> greenMonsterStack = new Stack<int>();
 	private static Stack<int> greyMonsterStack = new Stack<int>();
 	private static Stack<int> purpleMonsterStack = new Stack<int>();
@@ -131,6 +132,17 @@ public partial class GameSettings : Node
 	{
 		if (!yellowTokenStack.TryPop(out int id))
 		{
+			if(_yellowDiscardPile.Count > 0)
+			{
+				yellowTokenStack = new Stack<int>(_yellowDiscardPile.Shuffle());
+				_yellowDiscardPile.Clear();
+				id = yellowTokenStack.Pop();
+			}
+			else
+			{
+				id = -1;
+			}
+			
 		}
 		return id;
 	}
@@ -158,5 +170,9 @@ public partial class GameSettings : Node
 	{
 		MonsterColour colour = (MonsterColour)(id / 500);
 		_discardPiles[colour].Add(id);
+	}
+	public static void DiscardYellowToken(int id)
+	{
+		_yellowDiscardPile.Add(id);
 	}
 }

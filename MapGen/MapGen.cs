@@ -101,7 +101,7 @@ public partial class MapGen : TileMap
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
+						gameplayControl.RuinGen(patternTile);
 					}
 				}
 
