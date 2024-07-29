@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 public partial class GameplayControl : Control
 {
@@ -12,6 +13,8 @@ public partial class GameplayControl : Control
 	private GamePlay gamePlay;
 	[Export]
 	private Button challengeButton;
+	[Export]
+	private Button interactButton;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	PackedScene mapTokenScene = GD.Load<PackedScene>("res://MapToken.tscn");
@@ -23,6 +26,7 @@ public partial class GameplayControl : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		interactButton.Disabled = true;
 		challengeButton.Disabled = true;
 		ChallengeScene = GD.Load<PackedScene>("res://ChallengePopUp/ChallengeWindow.tscn");
 	}
@@ -75,8 +79,11 @@ public partial class GameplayControl : Control
 					// Check if next to any enemy
 					bool clickedRampage = false;
 					bool clickedBesideRampage = false;
+					var mapEvent = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Event").ToString();
+					var mapToken = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Token").ToString();
 					foreach (var enemy in EnemyList)
 					{
+						
 						if (posClicked == enemy.MapPosition && (enemy.Colour == "green" || enemy.Colour == "red"))
 						{
 							clickedRampage = true;
@@ -89,12 +96,11 @@ public partial class GameplayControl : Control
 							UpdateTokenColors(posClicked);
 							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.PlayerPos, enemy.MapPosition);
 							var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, enemy.MapPosition).Terrain);
-							var tokenEvent = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Event").ToString();
-							if (wallBetweenPlayerAndEnemy == true && (tokenEvent == "tower" || tokenEvent == "keep" || tokenEvent.Contains("castle"))) // double fortified
+							if (wallBetweenPlayerAndEnemy == true && (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("castle"))) // double fortified
 							{
 								GameSettings.EnemyList.Add((enemy.TokenId, 2, enemy.PosColour, enemy.OldPosColour));
 							}
-							else if (tokenEvent == "tower" || tokenEvent == "keep" || tokenEvent.Contains("castle"))
+							else if (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("castle"))
 							{
 								GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour, enemy.OldPosColour));
 							}
@@ -121,6 +127,25 @@ public partial class GameplayControl : Control
 						{
 							player.besideRampage = false;
 							challengeButton.Disabled = true;
+						}
+						if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out
+						{
+							if (interactButton.Disabled == true){interactButton.Disabled = false;}
+						}
+						else if (mapToken == "yellow")
+						{
+							foreach (var ruin in RuinList)
+							{
+								if (ruin.MapPosition == posClicked)
+								{
+									if (interactButton.Disabled == true){interactButton.Disabled = false;}
+									break;
+								}
+							}
+						}
+						else if (interactButton.Disabled == false)
+						{
+							interactButton.Disabled = true;
 						}
 						player.PerformMovement(posClicked, cellTerrain, movementMod);
 					}
@@ -176,7 +201,7 @@ public partial class GameplayControl : Control
 
 	public void _on_challenge_button_pressed()
 	{
-		player.PerformMovement(player.PlayerPos,0,(int)mapGen.terrainCosts[0]); // movement so cancel on challenge undoes this move
+		player.PerformMovement(player.PlayerPos,0,(int)mapGen.terrainCosts[0]); // movement 0 so cancel on challenge undoes this move
 		challengeEnemies();
 	}
 
@@ -251,5 +276,9 @@ public partial class GameplayControl : Control
 				if (enemy.PosColour != Colors.Black) {enemy.PosColour = Colors.Black;}
 			}
 		}
+	}
+	public void _on_interact_button_pressed()
+	{
+		GD.Print("test");
 	}
 }
