@@ -83,7 +83,7 @@ public partial class GameplayControl : Control
 					var mapToken = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Token").ToString();
 					foreach (var enemy in EnemyList)
 					{
-						
+
 						if (posClicked == enemy.MapPosition && (enemy.Colour == "green" || enemy.Colour == "red"))
 						{
 							clickedRampage = true;
@@ -130,7 +130,7 @@ public partial class GameplayControl : Control
 						}
 						if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out
 						{
-							if (interactButton.Disabled == true){interactButton.Disabled = false;}
+							if (interactButton.Disabled == true) { interactButton.Disabled = false; }
 						}
 						else if (mapToken == "yellow")
 						{
@@ -138,7 +138,7 @@ public partial class GameplayControl : Control
 							{
 								if (ruin.MapPosition == posClicked)
 								{
-									if (interactButton.Disabled == true){interactButton.Disabled = false;}
+									if (interactButton.Disabled == true) { interactButton.Disabled = false; }
 									break;
 								}
 							}
@@ -201,7 +201,7 @@ public partial class GameplayControl : Control
 
 	public void _on_challenge_button_pressed()
 	{
-		player.PerformMovement(player.PlayerPos,0,(int)mapGen.terrainCosts[0]); // movement 0 so cancel on challenge undoes this move
+		player.PerformMovement(player.PlayerPos, 0, (int)mapGen.terrainCosts[0]); // movement 0 so cancel on challenge undoes this move
 		challengeEnemies();
 	}
 
@@ -212,7 +212,7 @@ public partial class GameplayControl : Control
 			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
 			{
 				var already_fighting = false;
-				foreach (var fight in GameSettings.EnemyList) 
+				foreach (var fight in GameSettings.EnemyList)
 				{
 					if (fight.Item3 == enemy.PosColour)
 					{
@@ -246,39 +246,108 @@ public partial class GameplayControl : Control
 			if (mapGen.GetSurroundingCells(Pos).Contains(enemy.MapPosition))
 			{
 				var direction = enemy.MapPosition - Pos;
-				if (direction == new Vector2I(1,-1) && enemy.PosColour != Colors.Red)
+				if (direction == new Vector2I(1, -1) && enemy.PosColour != Colors.Red)
 				{
 					enemy.PosColour = Colors.Red;
 				}
-				else if (direction == new Vector2I(1,0) && enemy.PosColour != Colors.Gold)
+				else if (direction == new Vector2I(1, 0) && enemy.PosColour != Colors.Gold)
 				{
 					enemy.PosColour = Colors.Gold;
 				}
-				else if (direction == new Vector2I(0,1) && enemy.PosColour != Colors.Green)
+				else if (direction == new Vector2I(0, 1) && enemy.PosColour != Colors.Green)
 				{
 					enemy.PosColour = Colors.Green;
 				}
-				else if (direction == new Vector2I(-1,1) && enemy.PosColour != Colors.Blue)
+				else if (direction == new Vector2I(-1, 1) && enemy.PosColour != Colors.Blue)
 				{
 					enemy.PosColour = Colors.Blue;
 				}
-				else if (direction == new Vector2I(-1,0) && enemy.PosColour != Colors.White)
+				else if (direction == new Vector2I(-1, 0) && enemy.PosColour != Colors.White)
 				{
 					enemy.PosColour = Colors.White;
 				}
-				else if (direction == new Vector2I(0,-1) && enemy.PosColour != Colors.Purple)
+				else if (direction == new Vector2I(0, -1) && enemy.PosColour != Colors.Purple)
 				{
 					enemy.PosColour = Colors.Purple;
 				}
 			}
 			else
 			{
-				if (enemy.PosColour != Colors.Black) {enemy.PosColour = Colors.Black;}
+				if (enemy.PosColour != Colors.Black) { enemy.PosColour = Colors.Black; }
 			}
 		}
 	}
 	public void _on_interact_button_pressed()
 	{
-		GD.Print("test");
+		var mapEvent = mapGen.GetCellTileData(MainLayer, player.PlayerPos).GetCustomData("Event").ToString();
+		switch (mapEvent)
+		{
+			case "village":
+				break;
+			case "monastery":
+				break;
+			case "keep":
+				break;
+			case "tower":
+				break;
+			case "den":
+				break;
+			case "labyrinth":
+				break;
+			case "tomb":
+				break;
+			case "grounds":
+				break;
+			case "maze":
+				break;
+			case "dungeon":
+				break;
+			case "gcastle":
+				break;
+			case "bcastle":
+				break;
+			case "rcastle":
+				break;
+			case "wcastle":
+				break;
+			case "glade":
+				break;
+			default:
+				var mapToken = mapGen.GetCellTileData(MainLayer, player.PlayerPos).GetCustomData("Token").ToString();
+				if (mapToken == "")
+				{
+					GD.Print("Unknown Interaction");
+				}
+				else
+				{
+					foreach (var ruin in RuinList)
+					{
+						if (ruin.MapPosition == player.PlayerPos)
+						{
+							if (Utils.RuinEvents[ruin.TokenId].Event == "monster")
+							{
+								foreach (var monsterColour in Utils.RuinEvents[ruin.TokenId].Requirements)
+								{
+									var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(monsterColour));
+									GameSettings.EnemyList.Add((enemy, 0, Colors.Black, Colors.Black)); // may need to add another variable for unseen
+								}
+								var ChallengeStart = (Window)ChallengeScene.Instantiate();
+								AddChild(ChallengeStart);
+								ChallengeStart.Position = new Godot.Vector2I(300, 500);
+							}
+							else if (Utils.RuinEvents[ruin.TokenId].Event == "mana")
+							{
+
+							}
+							else
+							{
+								GD.Print("Error with identifying ruin event");
+							}
+							break;
+						}
+					}
+				}
+				break;
+		}
 	}
 }
