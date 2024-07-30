@@ -3,6 +3,8 @@ using System;
 
 public partial class PlayerArea : Node2D
 {	
+	private PackedScene _manaPopup = GD.Load<PackedScene>("res://ManaPopUp/ManaPopup.tscn");
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -21,5 +23,12 @@ public partial class PlayerArea : Node2D
 			//GD.Print("Disabled: " + GetNode<Button>("EndTurnButton").Disabled.ToString());
 			GD.Print("It's your turn!");
 		}
+	}
+
+	public ManaPopup CreateManaPopup()
+	{
+		var popup = (ManaPopup)_manaPopup.Instantiate();
+		AddChild(popup);
+		return popup;
 	}
 }
