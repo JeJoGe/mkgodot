@@ -135,15 +135,5 @@ public partial class Inventory : Node2D
 		{
 			_tokens[colour.Key] = 0;
 		}
-		// dice is returned at end of turn
-		foreach (var colour in _dice)
-		{
-			_dice[colour.Key] = 0;
-			if (_diceScenes.ContainsKey(colour.Key))
-			{
-				_diceScenes[colour.Key].Count = 0;
-				_diceScenes[colour.Key].Visible = false;
-			}
-		}
 	}
 }

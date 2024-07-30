@@ -1,38 +1,32 @@
 [gd_scene load_steps=2 format=3 uid="uid://dwyjksssv5ygp"]
 
-[ext_resource type="Texture2D" uid="uid://cbh5wxp2pxap1" path="res://assets/blackmana.png" id="1_k7so1"]
+[ext_resource type="Script" path="res://ManaPopUp/ManaPopup.cs" id="1_ekovf"]
 
-[node name="ManaPopup" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Window" type="Window"]
+size = Vector2i(400, 243)
 
-[node name="Window" type="Window" parent="."]
-position = Vector2i(0, 36)
+[node name="ManaPopup" type="VSplitContainer" parent="." node_paths=PackedStringArray("_optionContainer", "_window", "_confirmButton")]
+offset_right = 400.0
+offset_bottom = 243.0
+script = ExtResource("1_ekovf")
+_optionContainer = NodePath("HBoxContainer")
+_window = NodePath("..")
+_confirmButton = NodePath("HSplitContainer/ConfirmButton")
 
-[node name="VSplitContainer" type="VSplitContainer" parent="Window"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 289.0
-grow_horizontal = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="ManaPopup"]
+layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Window/VSplitContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="ManaPopup"]
 layout_mode = 2
 
-[node name="TextureButton" type="TextureButton" parent="Window/VSplitContainer/HBoxContainer"]
+[node name="ConfirmButton" type="Button" parent="ManaPopup/HSplitContainer"]
 layout_mode = 2
-texture_normal = ExtResource("1_k7so1")
-
-[node name="HSplitContainer" type="HSplitContainer" parent="Window/VSplitContainer"]
-layout_mode = 2
-
-[node name="ConfirmButton" type="Button" parent="Window/VSplitContainer/HSplitContainer"]
-layout_mode = 2
+size_flags_horizontal = 4
+disabled = true
 text = "Ok"
 
-[node name="CancelButton" type="Button" parent="Window/VSplitContainer/HSplitContainer"]
+[node name="CancelButton" type="Button" parent="ManaPopup/HSplitContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Cancel"

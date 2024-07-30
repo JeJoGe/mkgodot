@@ -25,6 +25,7 @@ public partial class Player : Node2D
 	public int influence = 0;
 	public bool besideRampage = false;
 	private List<int> enemiesBeside = new List<int>();
+	private List<(string,bool)> _skills = new();
 
 	public override void _Ready()
 	{
@@ -36,6 +37,8 @@ public partial class Player : Node2D
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
 		UpdateTColors = Callable.From(() => UpdateTokenColors(PlayerPos));
 		CombatScene = GD.Load<PackedScene>("res://Combat.tscn");
+		// TESTING ONLY
+		_skills.Add(("AR08",true)); // add polarization to skill list
 	}
 	public override void _Input(InputEvent @event)
 	{

@@ -136,6 +136,7 @@ public partial class CardObj : Sprite2D
     {
         var source = GetNode<Source>("../../../../SharedArea/Source"); // cardcontrol -> deck -> playerarea -> playerui <- sharedarea <- source
         var inventory = GetNode<Inventory>("../../../Inventory"); // cardcontrol -> deck -> playerarea <- inventory
+        Source.Colour requestedColour = Utils.ConvertStringToSourceColour(colour);
         var result = false;
         if (CreateManaDialog() > 0) // at least 1 option available
         {

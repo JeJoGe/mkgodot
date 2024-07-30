@@ -21,6 +21,12 @@ public partial class Utils : Node
 		{"gold","res://assets/goldunits.jpg"},
 		{"dice","res://assets/dice.jpg"}
 	};
+	private static readonly Dictionary<Source.Colour, string> _crystalPaths = new Dictionary<Source.Colour, string>{
+		{Source.Colour.Blue,"res://assets/bluecrystal.png"},
+		{Source.Colour.Red,"res://assets/redcrystal.png"},
+		{Source.Colour.Green,"res://assets/greencrystal.png"},
+		{Source.Colour.White,"res://assets/whitecrystal.png"}
+	};
 	private static readonly Dictionary<string,MonsterColour> _stringToColours = new Dictionary<string, MonsterColour>{
 		{"green", MonsterColour.Green},
 		{"grey", MonsterColour.Grey},
@@ -28,6 +34,14 @@ public partial class Utils : Node
 		{"brown", MonsterColour.Brown},
 		{"red", MonsterColour.Red},
 		{"white", MonsterColour.White}
+	};
+	private static readonly Dictionary<string,Source.Colour> _stringToSourceColours = new Dictionary<string, Source.Colour>{
+		{"blue", Source.Colour.Blue},
+		{"red", Source.Colour.Red},
+		{"green", Source.Colour.Green},
+		{"white", Source.Colour.White},
+		{"gold", Source.Colour.Gold},
+		{"black", Source.Colour.Black}
 	};
 	private static readonly Dictionary<MonsterColour,string> _coloursToStrings = new Dictionary<MonsterColour,string>{
 		{MonsterColour.Green, "green"},
@@ -38,6 +52,7 @@ public partial class Utils : Node
 		{MonsterColour.White, "white"}
 	};	
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
+	public static Dictionary<Source.Colour,AtlasTexture> CrystalSprites = new Dictionary<Source.Colour, AtlasTexture>();
 	public static Dictionary<int,MonsterObject> Bestiary;
 	public static Dictionary<int,UnitObject> UnitStats;
 
@@ -48,6 +63,7 @@ public partial class Utils : Node
 		LoadBestiary();
 		GameSettings.createMonsterStacks();
 		LoadUnits();
+		LoadManaSprites();
 	}
 
 	public static MonsterColour ConvertStringToMonsterColour(string colour)
@@ -59,6 +75,11 @@ public partial class Utils : Node
 	{
 		return _coloursToStrings[colour];
 	}
+
+    public static Source.Colour ConvertStringToSourceColour(string colour)
+    {
+        return _stringToSourceColours[colour];
+    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -95,6 +116,16 @@ public partial class Utils : Node
 		StreamReader sr = new StreamReader("./Unit/units.json");
 		string json = sr.ReadToEnd();
 		UnitStats = JsonConvert.DeserializeObject<Dictionary<int, UnitObject>>(json);
+	}
+
+	private void LoadManaSprites()
+	{
+		foreach (var kvp in _crystalPaths)
+		{
+			var atlas = new AtlasTexture();
+			atlas.Atlas = (Texture2D)GD.Load(_crystalPaths[kvp.Key]);
+			CrystalSprites[kvp.Key] = atlas;
+		}
 	}
 
 	public static void PrintBestiary()
