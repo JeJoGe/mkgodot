@@ -17,6 +17,7 @@ public partial class Utils : Node
 		{"brown","res://assets/TokenImages/BrownTokens/brown_tokens_sheet.png"},
 		{"red","res://assets/TokenImages/RedTokens/red_tokens_sheet.png"},
 		{"white","res://assets/TokenImages/WhiteTokens/white_tokens_sheet.png"},
+		{"yellow","res://assets/TokenImages/YellowTokens/yellow_tokens_sheet.png"},
 		{"silver","res://assets/silverunits.jpg"},
 		{"gold","res://assets/goldunits.jpg"},
 		{"dice","res://assets/dice.jpg"}
@@ -74,6 +75,7 @@ public partial class Utils : Node
 	public static Dictionary<Source.Colour, AtlasTexture> ManaSprites = new Dictionary<Source.Colour, AtlasTexture>();
 	public static Dictionary<int, MonsterObject> Bestiary;
 	public static Dictionary<int, UnitObject> UnitStats;
+	public static Dictionary<int,RuinObject> RuinEvents;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -82,6 +84,8 @@ public partial class Utils : Node
 		LoadBestiary();
 		GameSettings.createMonsterStacks();
 		LoadUnits();
+		LoadRuins();
+		GameSettings.createYellowStack();
 		LoadManaSprites();
 	}
 
@@ -135,6 +139,13 @@ public partial class Utils : Node
 		StreamReader sr = new StreamReader("./Unit/units.json");
 		string json = sr.ReadToEnd();
 		UnitStats = JsonConvert.DeserializeObject<Dictionary<int, UnitObject>>(json);
+	}
+
+	private void LoadRuins()
+	{
+		StreamReader sr = new StreamReader("./Ruin/ruins.json");
+		string json = sr.ReadToEnd();
+		RuinEvents = JsonConvert.DeserializeObject<Dictionary<int, RuinObject>>(json);
 	}
 
 	private void LoadManaSprites()
@@ -205,6 +216,16 @@ public class UnitObject
 	public int Count { get; set; }
 }
 
+public class RuinObject
+{
+	public string Name { get; set; }
+	public string Event { get; set; }
+	public List<string> Requirements { get; set; }
+	public List<string> Rewards { get; set; }
+	public int X { get; set; }
+	public int Y { get; set; }
+	public string Version { get; set; }
+}
 public class MonsterAttack
 {
 	public int Value { get; set; }
