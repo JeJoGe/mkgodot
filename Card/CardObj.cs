@@ -1,37 +1,37 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-public enum CardObjOption {
+public enum CardObjOption
+{
     top,
     bottom
 }
 public partial class CardObj : Sprite2D
 {
     [Signal]
-	public delegate void CardPlayedEventHandler(string cardAction);
-    public int id {get; set;}
-    public string cardId {get; set;}
-    public string color {get; set;}
-    public int xCoord {get; set;}
-    public int yCoord {get; set;}
-    public int copies {get; set;}
-    public string topFunction {get; set;}
-    public string bottomFunction {get; set;}
+    public delegate void CardPlayedEventHandler(string[] basicAction, string[] specialAction);
+    public int id { get; set; }
+    public string cardId { get; set; }
+    public string color { get; set; }
+    public int xCoord { get; set; }
+    public int yCoord { get; set; }
+    public int copies { get; set; }
+    public string topFunction { get; set; }
+    public string bottomFunction { get; set; }
     public OptionButton topOptionsButton = new OptionButton();
     public OptionButton bottomOptionsButton = new OptionButton();
-    public  CardObjOption currentOption {get; set;} = CardObjOption.top;
+    public CardObjOption currentOption { get; set; } = CardObjOption.top;
     public bool topOptionExists = true;
     public bool bottomOptionExists = true;
-    private string specialOption;
-    public string effects;
-    public Dictionary<int, string> topOptionActions = new Dictionary<int, string>();
-    public Dictionary<int, string> bottomOptionActions = new Dictionary<int, string>();
+    private Dictionary<int, string[]> specialOptionsActions = new Dictionary<int, string[]>();
+    public Dictionary<int, string[]> topOptionActions = new Dictionary<int, string[]>();
+    public Dictionary<int, string[]> bottomOptionActions = new Dictionary<int, string[]>();
     public override void _Ready()
     {
         this.Position = new Godot.Vector2(500, 700);
         PlayButton play = new PlayButton(id);
         PowerUpButton powerUp = new PowerUpButton(id, "Using Top Action");
-        AddChild(play); 
+        AddChild(play);
         AddChild(powerUp);
         play.Pressed += onPlayButtonPressed;
         powerUp.Pressed += toggleActionPressed;
@@ -60,85 +60,161 @@ public partial class CardObj : Sprite2D
     * Quantity of Actions:
     * 5. The quantity of an action is denoted by (-) followed by a number. ie: move-4***** attack-fire-3
     */
-    public void parseFunction(string cardFunction, CardObjOption position) {
-       string[] function = cardFunction.Split(",");
-       if (function.Count() > 1) {
-            for (int i = 0; i < function.Count(); ++i) {
-                string [] otherAction = function[i].Split("&");
-                if (position == CardObjOption.top) {
-                    topOptionsButton.AddItem(otherAction[0], i);
-                    topOptionActions.Add(i, otherAction[0]);
-                } else {
-                    bottomOptionsButton.AddItem(otherAction[0], i);
-                    bottomOptionActions.Add(i, otherAction[0]);
+    public void parseFunction(string cardFunction, CardObjOption position)
+    {
+        string[] function = cardFunction.Split(",");
+        if (function.Count() > 1)
+        {
+            for (int i = 0; i < function.Count(); ++i)
+            {
+                if (position == CardObjOption.top)
+                {
+                    topOptionsButton.AddItem(function[i], i);
                 }
-                if (otherAction.Count() > 1) {
-                   if(otherAction[1].Contains("*")) {
-                    specialOption = otherAction[1];
-                   } else {
-                    effects = otherAction[1];
-                   }
+                else
+                {
+                    bottomOptionsButton.AddItem(function[i], i);
                 }
-            }
-       } else {
-            if (position == CardObjOption.top) {
-                topOptionExists = false;
-                topOptionActions.Add(0, function[0]);
-            } else {
-                bottomOptionExists = false;
-                bottomOptionActions.Add(0, function[0]);
-
-            }
-       }
-    }
-
-    public void onPlayButtonPressed() {
-        int selectedId = 0;
-        string action = "";
-        if(currentOption == CardObjOption.top) {
-            selectedId = topOptionsButton.GetSelectedId();
-            if(selectedId == -1) {
-                action = topOptionActions[0];
-            } else {
-                action = topOptionActions[selectedId];
-            }
-        } else {
-            selectedId = bottomOptionsButton.GetSelectedId();
-            if (selectedId == -1) {
-                action = bottomOptionActions[0];
-            } else {
-                action = bottomOptionActions[selectedId];
+                string[] otherAction = function[i].Split("&");
+                for (int x = 0; x < otherAction.Count(); ++x)
+                {
+                    if (position == CardObjOption.top)
+                    {
+                        ActionAdd(topOptionActions, i, otherAction[x]);
+                    }
+                    else
+                    {
+                        ActionAdd(bottomOptionActions, i, otherAction[x]);
+                    }
+                    if (otherAction[x].Contains("*"))
+                    {
+                        ActionAdd(specialOptionsActions, i, otherAction[x]);
+                    }
+                }
             }
         }
-        GD.Print(action);
-        EmitSignal(SignalName.CardPlayed, (string) action);
+        else
+        {
+            if (position == CardObjOption.top)
+            {
+                topOptionExists = false;
+                NewActionAdd(topOptionActions, 0, function[0]);
+            }
+            else
+            {
+                bottomOptionExists = false;
+                NewActionAdd(bottomOptionActions, 0, function[0]);
+            }
+            if (function[0].Contains("*"))
+            {
+                ActionAdd(specialOptionsActions, 0, function[0]);
+            }
+        }
     }
 
-    public void toggleActionPressed() {
+    public void NewActionAdd(Dictionary<int, string[]> actionList, int index, string action)
+    {
+        List<string> newList = new List<string>(){
+                action
+        };
+        actionList.Add(index, newList.ToArray());
+
+    }
+    public void ActionAdd(Dictionary<int, string[]> actionList, int index, string action)
+    {
+        bool doesIndexExist = actionList.ContainsKey(index);
+        if (doesIndexExist)
+        {
+            List<string> currList = new List<string>(actionList[index])
+            {
+                action
+            };
+            actionList[index] =  currList.ToArray();
+        }
+        else
+        {
+            NewActionAdd(actionList, index, action);
+        }
+    }
+
+    public void onPlayButtonPressed()
+    {
+        int selectedId = 0;
+        string[] basicAction = [];
+        string[] specialAction = [];
+        if (currentOption == CardObjOption.top)
+        {
+            selectedId = topOptionsButton.GetSelectedId();
+            if (selectedId == -1)
+            {
+                basicAction = topOptionActions[0];
+            }
+            else
+            {
+                basicAction = topOptionActions[selectedId];
+            }
+        }
+        else
+        {
+            selectedId = bottomOptionsButton.GetSelectedId();
+            if (selectedId == -1)
+            {
+                basicAction = bottomOptionActions[0];
+            }
+            else
+            {
+                basicAction = bottomOptionActions[selectedId];
+            }
+        }
+
+        if (selectedId == -1)
+        {
+            bool doesSpecialActionExist = specialOptionsActions.ContainsKey(0);
+            if(doesSpecialActionExist) {
+                specialAction = specialOptionsActions[0];
+            }
+        }
+        else
+        {
+            bool doesSpecialActionExist = specialOptionsActions.ContainsKey(selectedId);
+            if(doesSpecialActionExist) {
+                specialAction = specialOptionsActions[selectedId];
+            }
+        }
+        GD.Print(basicAction);
+        EmitSignal(SignalName.CardPlayed, basicAction, specialAction);
+    }
+
+    public void toggleActionPressed()
+    {
         var getPowerUp = GetChild<Button>(1);
-        if(currentOption == CardObjOption.top) {
+        if (currentOption == CardObjOption.top)
+        {
             getPowerUp.Text = "Use Top Option";
             currentOption = CardObjOption.bottom;
             topOptionsButton.Visible = false;
-            bottomOptionsButton.Visible = bottomOptionExists && true; 
-        } else {
+            bottomOptionsButton.Visible = bottomOptionExists && true;
+        }
+        else
+        {
             getPowerUp.Text = "Use Bottom Option";
             currentOption = CardObjOption.top;
-            bottomOptionsButton.Visible = false; 
+            bottomOptionsButton.Visible = false;
             topOptionsButton.Visible = topOptionExists && true;
         }
     }
 
-    public void ImageCropping(AtlasTexture atlas) {
-        var frame = (AtlasTexture) atlas.Duplicate();
+    public void ImageCropping(AtlasTexture atlas)
+    {
+        var frame = (AtlasTexture)atlas.Duplicate();
         frame.Region = new Rect2(new Godot.Vector2(1000 * xCoord, 1400 * yCoord), new Godot.Vector2(1000, 1400));
         this.Texture = frame;
     }
 
-    public void ManipulateButtons(bool visible) {
+    public void ManipulateButtons(bool visible)
+    {
         var playButton = GetChild<Button>(0);
         playButton.Visible = visible;
         playButton.Disabled = !visible;
     }
-        
 }
