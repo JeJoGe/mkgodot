@@ -1068,7 +1068,7 @@ deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
 player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
 
-[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton")]
+[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -1084,6 +1084,7 @@ mapGen = NodePath("MapGen")
 player = NodePath("Player")
 gamePlay = NodePath("..")
 challengeButton = NodePath("ChallengeButton")
+interactButton = NodePath("InteractButton")
 
 [node name="TurnOrderTracker" type="Node2D" parent="GameplayControl"]
 position = Vector2(208, 480)
@@ -1336,6 +1337,14 @@ offset_bottom = 454.0
 text = "Challenge
 "
 
+[node name="InteractButton" type="Button" parent="GameplayControl"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 377.0
+offset_right = 112.0
+offset_bottom = 408.0
+text = "Interact"
+
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
 z_index = -1
@@ -1372,6 +1381,7 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
 [connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
+[connection signal="pressed" from="GameplayControl/InteractButton" to="GameplayControl" method="_on_interact_button_pressed"]
 
 [editable path="GameplayControl/Area2D/DummyArea/BlueCrystal"]
 [editable path="GameplayControl/Area2D/DummyArea/RedCrystal"]
