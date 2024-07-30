@@ -8,7 +8,6 @@ public partial class PlayerArea : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		CreateManaPopup(Source.Colour.Blue);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,9 +25,10 @@ public partial class PlayerArea : Node2D
 		}
 	}
 
-	public void CreateManaPopup(Source.Colour colour)
+	public ManaPopup CreateManaPopup()
 	{
-		var popup = (Control)_manaPopup.Instantiate();
+		var popup = (ManaPopup)_manaPopup.Instantiate();
 		AddChild(popup);
+		return popup;
 	}
 }

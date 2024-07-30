@@ -6,6 +6,8 @@ public partial class ManaPopup : VSplitContainer
 	[Export]
 	private HBoxContainer _optionContainer;
 	[Export]
+	private HSplitContainer _bottomContainer;
+	[Export]
 	private Window _window;
 	[Export]
 	private Button _confirmButton;
@@ -20,9 +22,11 @@ public partial class ManaPopup : VSplitContainer
 	public override void _Ready()
 	{
 		//TESTING ONLY
+		AddOption(Source.Colour.Green, ManaType.Token);
 		AddOption(Source.Colour.Blue, ManaType.Crystal);
 		AddOption(Source.Colour.Red, ManaType.Crystal);
 		AddOption(Source.Colour.White, ManaType.Crystal);
+		AddOption(Source.Colour.Gold, ManaType.Dice);
 		GD.Print("hbox x:", _optionContainer.Size.X);
 		GD.Print("hbox y:", _optionContainer.Size.Y);
 		GD.Print("this x:", Size.X);
@@ -33,7 +37,9 @@ public partial class ManaPopup : VSplitContainer
 	private void ResizeWindow()
 	{
 		var numOptions = _optionContainer.GetChildCount();
-		_window.Size = new Vector2I(_optionSize * numOptions, (int)Size.Y);
+		_window.Size = new Vector2I((_optionSize * numOptions)+100, (int)Size.Y+100);
+		var halfway = _optionSize * numOptions / 2;
+		_bottomContainer.SplitOffset = halfway;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -41,22 +47,28 @@ public partial class ManaPopup : VSplitContainer
 	{
 	}
 
-	private void AddOption(Source.Colour colour, ManaType type)
+	public void AddOption(Source.Colour colour, ManaType type)
 	{
 		var textureRect = new TextureRect
 		{
 			ExpandMode = TextureRect.ExpandModeEnum.FitWidthProportional,
 			CustomMinimumSize = new Vector2(_optionSize,_optionSize)
 		};
-		AtlasTexture atlas;
+		AtlasTexture atlas = new AtlasTexture();
 		switch (type)
 		{
 			case ManaType.Dice:
 				{
+					atlas = (AtlasTexture)Utils.SpriteSheets["dice"].Duplicate();
+					atlas.Region = new Rect2(new Vector2(Utils.DiceCoordinates[colour].Item1 * Utils.DiceSize,
+						Utils.DiceCoordinates[colour].Item2 * Utils.DiceSize),
+						new Vector2(Utils.DiceSize, Utils.DiceSize));
 					break;
 				}
 			case ManaType.Token:
 				{
+					atlas = (AtlasTexture)Utils.ManaSprites[colour].Duplicate();
+					atlas.Region = new Rect2(new Vector2(0,0), new Vector2(246,246));
 					break;
 				}
 			case ManaType.Crystal:
@@ -70,17 +82,17 @@ public partial class ManaPopup : VSplitContainer
 					{
 						atlas = (AtlasTexture)Utils.CrystalSprites[colour].Duplicate();
 						atlas.Region = new Rect2(new Vector2(0,0), new Vector2(306,280)); //TODO: remake white crystal sprite to meet dimensions
-						textureRect.Texture = atlas;
-						//textureRect.Texture = (Texture2D)GD.Load("res://assets/blue.jpg");
 					}
 					break;
 				}
 			default: break;
 		}
+		textureRect.Texture = atlas;
 		var button = new Button
 		{
 			CustomMinimumSize = new Vector2(_optionSize, _optionSize),
-			ButtonGroup = _optionGroup
+			ButtonGroup = _optionGroup,
+			
 		};
 		button.Pressed += () => OnOptionSelected(colour,type);
 		button.AddChild(textureRect);
@@ -104,5 +116,6 @@ public partial class ManaPopup : VSplitContainer
 	private void OnCancelButtonPressed()
 	{
 		GD.Print("cancel pressed");
+		_window.QueueFree();
 	}
 }

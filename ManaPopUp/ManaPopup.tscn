@@ -3,19 +3,21 @@
 [ext_resource type="Script" path="res://ManaPopUp/ManaPopup.cs" id="1_ekovf"]
 
 [node name="Window" type="Window"]
-size = Vector2i(400, 243)
+position = Vector2i(0, 36)
+size = Vector2i(200, 243)
 
-[node name="ManaPopup" type="VSplitContainer" parent="." node_paths=PackedStringArray("_optionContainer", "_window", "_confirmButton")]
+[node name="ManaPopup" type="VSplitContainer" parent="." node_paths=PackedStringArray("_optionContainer", "_bottomContainer", "_window", "_confirmButton")]
 offset_right = 400.0
 offset_bottom = 243.0
 script = ExtResource("1_ekovf")
 _optionContainer = NodePath("HBoxContainer")
+_bottomContainer = NodePath("HSplitContainer")
 _window = NodePath("..")
 _confirmButton = NodePath("HSplitContainer/ConfirmButton")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ManaPopup"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 4
 
 [node name="HSplitContainer" type="HSplitContainer" parent="ManaPopup"]
 layout_mode = 2

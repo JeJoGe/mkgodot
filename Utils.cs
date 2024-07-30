@@ -21,13 +21,31 @@ public partial class Utils : Node
 		{"gold","res://assets/goldunits.jpg"},
 		{"dice","res://assets/dice.jpg"}
 	};
+	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
+		{Source.Colour.Blue,(0,1)},
+		{Source.Colour.Red,(2,1)},
+		{Source.Colour.Green,(1,1)},
+		{Source.Colour.White,(1,2)},
+		{Source.Colour.Gold,(2,2)},
+		{Source.Colour.Black,(0,2)}
+	};
+	public const float DiceSize = 682.66F;
+	public const float FliceSize = 23F;
 	private static readonly Dictionary<Source.Colour, string> _crystalPaths = new Dictionary<Source.Colour, string>{
 		{Source.Colour.Blue,"res://assets/bluecrystal.png"},
 		{Source.Colour.Red,"res://assets/redcrystal.png"},
 		{Source.Colour.Green,"res://assets/greencrystal.png"},
 		{Source.Colour.White,"res://assets/whitecrystal.png"}
 	};
-	private static readonly Dictionary<string,MonsterColour> _stringToColours = new Dictionary<string, MonsterColour>{
+	private static readonly Dictionary<Source.Colour, string> _manaPaths = new Dictionary<Source.Colour, string>{
+		{Source.Colour.Blue,"res://assets/bluemana.png"},
+		{Source.Colour.Red,"res://assets/redmana.png"},
+		{Source.Colour.Green,"res://assets/greenmana.png"},
+		{Source.Colour.White,"res://assets/whitemana.png"},
+		{Source.Colour.Gold,"res://assets/goldmana.png"},
+		{Source.Colour.Black,"res://assets/blackmana.png"}
+	};
+	private static readonly Dictionary<string, MonsterColour> _stringToColours = new Dictionary<string, MonsterColour>{
 		{"green", MonsterColour.Green},
 		{"grey", MonsterColour.Grey},
 		{"purple", MonsterColour.Purple},
@@ -35,7 +53,7 @@ public partial class Utils : Node
 		{"red", MonsterColour.Red},
 		{"white", MonsterColour.White}
 	};
-	private static readonly Dictionary<string,Source.Colour> _stringToSourceColours = new Dictionary<string, Source.Colour>{
+	private static readonly Dictionary<string, Source.Colour> _stringToSourceColours = new Dictionary<string, Source.Colour>{
 		{"blue", Source.Colour.Blue},
 		{"red", Source.Colour.Red},
 		{"green", Source.Colour.Green},
@@ -43,18 +61,19 @@ public partial class Utils : Node
 		{"gold", Source.Colour.Gold},
 		{"black", Source.Colour.Black}
 	};
-	private static readonly Dictionary<MonsterColour,string> _coloursToStrings = new Dictionary<MonsterColour,string>{
+	private static readonly Dictionary<MonsterColour, string> _coloursToStrings = new Dictionary<MonsterColour, string>{
 		{MonsterColour.Green, "green"},
 		{MonsterColour.Grey, "grey"},
 		{MonsterColour.Purple, "purple"},
 		{MonsterColour.Brown, "brown"},
 		{MonsterColour.Red, "red"},
 		{MonsterColour.White, "white"}
-	};	
+	};
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
-	public static Dictionary<Source.Colour,AtlasTexture> CrystalSprites = new Dictionary<Source.Colour, AtlasTexture>();
-	public static Dictionary<int,MonsterObject> Bestiary;
-	public static Dictionary<int,UnitObject> UnitStats;
+	public static Dictionary<Source.Colour, AtlasTexture> CrystalSprites = new Dictionary<Source.Colour, AtlasTexture>();
+	public static Dictionary<Source.Colour, AtlasTexture> ManaSprites = new Dictionary<Source.Colour, AtlasTexture>();
+	public static Dictionary<int, MonsterObject> Bestiary;
+	public static Dictionary<int, UnitObject> UnitStats;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -76,10 +95,10 @@ public partial class Utils : Node
 		return _coloursToStrings[colour];
 	}
 
-    public static Source.Colour ConvertStringToSourceColour(string colour)
-    {
-        return _stringToSourceColours[colour];
-    }
+	public static Source.Colour ConvertStringToSourceColour(string colour)
+	{
+		return _stringToSourceColours[colour];
+	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -126,6 +145,12 @@ public partial class Utils : Node
 			atlas.Atlas = (Texture2D)GD.Load(_crystalPaths[kvp.Key]);
 			CrystalSprites[kvp.Key] = atlas;
 		}
+		foreach (var kvp in _manaPaths)
+		{
+			var atlas = new AtlasTexture();
+			atlas.Atlas = (Texture2D)GD.Load(_manaPaths[kvp.Key]);
+			ManaSprites[kvp.Key] = atlas;
+		}
 	}
 
 	public static void PrintBestiary()
@@ -133,20 +158,21 @@ public partial class Utils : Node
 		GD.Print("Bestiary\n=====");
 		foreach (var kvp in Bestiary)
 		{
-			GD.Print(string.Format("{0} {1}",kvp.Key,kvp.Value.Name));
-			if (kvp.Value.Abilities.Count > 0) {
-				GD.Print(string.Format("Abilities: {0}",kvp.Value.Abilities.First()));
+			GD.Print(string.Format("{0} {1}", kvp.Key, kvp.Value.Name));
+			if (kvp.Value.Abilities.Count > 0)
+			{
+				GD.Print(string.Format("Abilities: {0}", kvp.Value.Abilities.First()));
 			}
 			var resistances = "";
 			foreach (var element in kvp.Value.Resistances)
 			{
 				resistances = resistances + element.ToString("F") + " ";
 			}
-			GD.Print(string.Format("Armour: {0} Resists: {1}",kvp.Value.Armour,resistances));
-			GD.Print(string.Format("{0} {1}",kvp.Value.Attacks.First().Element, kvp.Value.Attacks.First().Value.ToString("F")));
+			GD.Print(string.Format("Armour: {0} Resists: {1}", kvp.Value.Armour, resistances));
+			GD.Print(string.Format("{0} {1}", kvp.Value.Attacks.First().Element, kvp.Value.Attacks.First().Value.ToString("F")));
 			GD.Print("=====");
 		}
-	}	
+	}
 }
 
 public class MonsterObject

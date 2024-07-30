@@ -117,13 +117,10 @@ public partial class CardObj : Sprite2D
     public void toggleActionPressed() {
         var getPowerUp = GetChild<Button>(1);
         if(currentOption == CardObjOption.top) {
-            if (PayMana(color))
-            {
-                getPowerUp.Text = "Use Top Option";
-                currentOption = CardObjOption.bottom;
-                topOptionsButton.Visible = false;
-                bottomOptionsButton.Visible = bottomOptionExists && true; 
-            }
+            getPowerUp.Text = "Use Top Option";
+            currentOption = CardObjOption.bottom;
+            topOptionsButton.Visible = false;
+            bottomOptionsButton.Visible = bottomOptionExists && true; 
         } else {
             getPowerUp.Text = "Use Bottom Option";
             currentOption = CardObjOption.top;
@@ -134,20 +131,78 @@ public partial class CardObj : Sprite2D
 
     private bool PayMana(string colour)
     {
-        var source = GetNode<Source>("../../../../SharedArea/Source"); // cardcontrol -> deck -> playerarea -> playerui <- sharedarea <- source
-        var inventory = GetNode<Inventory>("../../../Inventory"); // cardcontrol -> deck -> playerarea <- inventory
         Source.Colour requestedColour = Utils.ConvertStringToSourceColour(colour);
         var result = false;
-        if (CreateManaDialog() > 0) // at least 1 option available
+        if (CreateManaDialog(requestedColour) > 0) // at least 1 option available
         {
-
         }
         return result;
     }
 
-    private int CreateManaDialog()
+    private int CreateManaDialog(Source.Colour colour)
     {
-        var result = 0;
+        // assume colour is any colour except for gold
+        var source = GetNode<Source>("../../../../SharedArea/Source"); // cardcontrol -> deck -> playerarea -> playerui <- sharedarea <- source
+        var inventory = GetNode<Inventory>("../../../Inventory"); // cardcontrol -> deck -> playerarea <- inventory
+        var playerArea = GetNode<PlayerArea>("../../.."); // cardcontrol -> deck -> playerarea
+        var popup = playerArea.CreateManaPopup();
+        var result = 0; // number of options available
+        if (source.DicePerTurn > source.DiceTaken)
+        {
+            switch (colour)
+            {
+                case Source.Colour.Blue:
+                    {
+                        if (source.Blue > 0)
+                        {
+                            popup.AddOption(Source.Colour.Blue, ManaPopup.ManaType.Dice);
+                            result++;
+                        }
+                        if (source.Gold > 0)
+                        {
+                            popup.AddOption(Source.Colour.Gold, ManaPopup.ManaType.Dice);
+                        }
+                        break;
+                    }
+                case Source.Colour.Red:
+                    {
+                        if (source.Red > 0)
+                        {
+                            popup.AddOption(Source.Colour.Red, ManaPopup.ManaType.Dice);
+                            result++;
+                        }
+                        break;
+                    }
+                case Source.Colour.Green:
+                    {
+                        if (source.Green > 0)
+                        {
+                            popup.AddOption(Source.Colour.Green, ManaPopup.ManaType.Dice);
+                            result++;
+                        }
+                        break;
+                    }
+                case Source.Colour.White:
+                    {
+                        if (source.White > 0)
+                        {
+                            popup.AddOption(Source.Colour.White, ManaPopup.ManaType.Dice);
+                            result++;
+                        }
+                        break;
+                    }
+                case Source.Colour.Black:
+                    {
+                        if (source.Blue > 0)
+                        {
+                            popup.AddOption(Source.Colour.Black, ManaPopup.ManaType.Dice);
+                            result++;
+                        }
+                        break;
+                    }
+                default: break;
+            }
+        }
         return result;
     }
 
