@@ -1165,6 +1165,7 @@ position = Vector2(8, 24)
 [node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
 
 [node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker")]
+process_mode = 3
 script = ExtResource("10_bkisu")
 _roundMarker = NodePath("../../RoundMarker")
 
@@ -1284,6 +1285,7 @@ text = "End Turn"
 metadata/_edit_use_anchors_ = true
 
 [node name="Deck" type="Node2D" parent="GameplayControl/PlayerUI/PlayerArea"]
+process_mode = 3
 position = Vector2(1, -2)
 script = ExtResource("18_4oofl")
 
@@ -1298,6 +1300,7 @@ stretch_mode = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="Inventory" parent="GameplayControl/PlayerUI/PlayerArea" instance=ExtResource("20_4h2of")]
+process_mode = 3
 position = Vector2(1528, 680)
 
 [node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]

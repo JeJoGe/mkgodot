@@ -334,6 +334,7 @@ public partial class GameplayControl : Control
 								var ChallengeStart = (Window)ChallengeScene.Instantiate();
 								AddChild(ChallengeStart);
 								ChallengeStart.Position = new Godot.Vector2I(300, 500);
+								//GetTree().Paused = true;
 							}
 							else if (Utils.RuinEvents[ruin.TokenId].Event == "mana")
 							{

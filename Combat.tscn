@@ -5,6 +5,7 @@
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
 [node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog")]
+process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 
