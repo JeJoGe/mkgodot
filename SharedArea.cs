@@ -23,6 +23,7 @@ public partial class SharedArea : Node2D
 	private void OnNewRoundButtonPressed() {
 		Round++;
 		_roundMarker.Text = "Round " + Round;
+		GameSettings.NightTime = !GameSettings.NightTime;
 		EmitSignal(SignalName.NewRound);
 	}
 }

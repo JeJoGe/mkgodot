@@ -172,7 +172,14 @@ public partial class GameplayControl : Control
 		var monsterStats = Utils.Bestiary[enemy];
 		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
 		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		atlas.Region = new Rect2(new Vector2(monsterStats.X * _tokenSpriteSize, monsterStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+		if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) || !GameSettings.NightTime)
+		{
+			atlas.Region = new Rect2(new Vector2(monsterStats.X * _tokenSpriteSize, monsterStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+		}
+		else
+		{
+			atlas.Region = new Rect2(new Vector2(0, 0), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+		}
 		enemySprite.Texture = atlas;
 		enemySprite.Scale = new Vector2((float)0.25, (float)0.25);
 		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
