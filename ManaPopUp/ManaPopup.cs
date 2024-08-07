@@ -1,17 +1,23 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class ManaPopup : VSplitContainer
 {
 	[Export]
 	private HBoxContainer _optionContainer;
 	[Export]
-	private HSplitContainer _bottomContainer;
+	private GridContainer _bottomContainer;
 	[Export]
 	private Window _window;
 	[Export]
 	private Button _confirmButton;
+	[Export]
+	private CheckButton _polarizationToggle;
 	private ButtonGroup _optionGroup = new ButtonGroup();
+	private ButtonGroup _polarizationButtonGroup = new ButtonGroup();
+	private bool _polarization = false;
+	private (Source.Colour, ManaType) _selectedOption;
 	private int _optionSize = 200;
 	public enum ManaType
 	{
@@ -21,25 +27,35 @@ public partial class ManaPopup : VSplitContainer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		//TESTING ONLY
-		AddOption(Source.Colour.Green, ManaType.Token);
-		AddOption(Source.Colour.Blue, ManaType.Crystal);
-		AddOption(Source.Colour.Red, ManaType.Crystal);
-		AddOption(Source.Colour.White, ManaType.Crystal);
-		AddOption(Source.Colour.Gold, ManaType.Dice);
-		GD.Print("hbox x:", _optionContainer.Size.X);
-		GD.Print("hbox y:", _optionContainer.Size.Y);
-		GD.Print("this x:", Size.X);
-		GD.Print("this y:", Size.Y);
+	}
+
+	public void PopulatePopup(List<(Source.Colour, ManaType)> options)
+	{
+		foreach (var item in options)
+		{
+			AddOption(item.Item1, item.Item2);
+		}
+		ResizeWindow();
+	}
+
+	public void PopulatePopup(List<(Source.Colour, ManaType)> options, List<(Source.Colour, ManaType)> polarizationOptions)
+	{
+		_polarizationToggle.Visible = true;
+		PopulatePopup(options);
+		foreach (var item in polarizationOptions)
+		{
+			AddOption(item.Item1, item.Item2, true);
+		}
 		ResizeWindow();
 	}
 
 	private void ResizeWindow()
 	{
-		var numOptions = _optionContainer.GetChildCount();
+		var numOptions = _polarization ? _polarizationButtonGroup.GetButtons().Count : _optionGroup.GetButtons().Count;
 		_window.Size = new Vector2I((_optionSize * numOptions)+100, (int)Size.Y+100);
-		var halfway = _optionSize * numOptions / 2;
-		_bottomContainer.SplitOffset = halfway;
+		//use below when using hsplitcontainer for bottom container
+		//var halfway = _optionSize * numOptions / 2;
+		//_bottomContainer.SplitOffset = halfway;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,7 +63,7 @@ public partial class ManaPopup : VSplitContainer
 	{
 	}
 
-	public void AddOption(Source.Colour colour, ManaType type)
+	private void AddOption(Source.Colour colour, ManaType type, bool polarization = false)
 	{
 		var textureRect = new TextureRect
 		{
@@ -91,8 +107,8 @@ public partial class ManaPopup : VSplitContainer
 		var button = new Button
 		{
 			CustomMinimumSize = new Vector2(_optionSize, _optionSize),
-			ButtonGroup = _optionGroup,
-			
+			ButtonGroup = polarization ? _polarizationButtonGroup : _optionGroup,
+			Visible = !polarization
 		};
 		button.Pressed += () => OnOptionSelected(colour,type);
 		button.AddChild(textureRect);
@@ -104,18 +120,44 @@ public partial class ManaPopup : VSplitContainer
 		// enable confirm button
 		_confirmButton.Disabled = false;
 		GD.Print(string.Format("{0} {1}",colour.ToString(),type.ToString()));
+		_selectedOption = (colour, type);
 	}
 
 	private void OnConfirmButtonPressed()
 	{
 		GD.Print("confirm pressed");
+		var playerArea = GetNode<PlayerArea>("../..");
+		if (_polarization)
+		{
+			// set polarization as used this turn
+			if (!playerArea.ActivateSkill("AR08"))
+			{
+				throw new InvalidOperationException("Failed to activate Polarization skill");
+			}
+		}
 		// consume selected option
-		_optionGroup.GetPressedButton();
+		playerArea.ConsumeMana(_selectedOption.Item1,_selectedOption.Item2);
+		_window.QueueFree();
 	}
 
 	private void OnCancelButtonPressed()
 	{
 		GD.Print("cancel pressed");
 		_window.QueueFree();
+	}
+
+	private void OnPolarizationToggled(bool toggledOn)
+	{
+		GD.Print("polarization toggled"+toggledOn);
+		_polarization = toggledOn;
+		foreach (var button in _optionGroup.GetButtons())
+		{
+			button.Visible = !toggledOn;
+		}
+		foreach (var button in _polarizationButtonGroup.GetButtons())
+		{
+			button.Visible = toggledOn;
+		}
+		ResizeWindow();
 	}
 }

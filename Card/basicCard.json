@@ -6,7 +6,9 @@
         "yCoord": 0,
         "topFunction": "move-2",
         "bottomFunction": "move-4",
-        "copies": 1
+        "copies": 1,
+        "phase": "move",
+        "character": "basic"
     },
     {
         "cardId": "Tranquility",
@@ -15,16 +17,20 @@
         "yCoord": 0,
         "topFunction":  "heal-1,draw-1",
         "bottomFunction": "heal-2,draw-2",
-        "copies": 0
+        "copies": 0,
+        "phase": "healing",
+        "character": "basic"
     },
     {
         "cardId": "Concentration",
         "colour": "green",
         "xCoord": 2,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red",
+        "topFunction": "gainManaTokens-Blue,gainManaTokens-White,gainManaTokens-Red",
         "bottomFunction": "*enhanceBottom-2",
-        "copies": 0
+        "copies": 0,
+        "phase": "special",
+        "character": "basic"
     },
     {
         "cardId": "SavageHarvesting",
@@ -33,7 +39,10 @@
         "yCoord": 0,
         "topFunction": "move-2&*discard-crystal",
         "bottomFunction": "move-2&*discard-crystals-per_hex-1",
-        "copies": 0
+        "copies": 0,
+        "phase": "move,special",
+        "character": "Krang",
+        "replaces": "March"
     },
     {
         "cardId": "OneWithTheLand",
@@ -42,7 +51,10 @@
         "yCoord": 0,
         "topFunction":  "move-2,heal-1,block-2",
         "bottomFunction":  "move-2,heal-2,*additionalBlock-per_hex",
-        "copies": 0
+        "copies": 0,
+        "phase": "move,combat,healing",
+        "character": "Braevalar",
+        "replaces": "March"
     },
     {
         "cardId": "Rejunvenate",
@@ -50,17 +62,23 @@
         "xCoord": 5,
         "yCoord": 0,
         "topFunction":  "heal-1,draw-1,manaToken-green,ready-2",
-        "bottomFunction": "heal-2,draw-1,gainManaTokens-green,ready-3",
-        "copies": 0
+        "bottomFunction": "heal-2,draw-1,gainManaTokens-Green,ready-3",
+        "copies": 0,
+        "phase": "healing",
+        "character": "Norowas",
+        "replaces": "Tranquility"
     }, 
     {
         "cardId": "WillFocus",
         "colour": "green",
         "xCoord": 6,
         "yCoord": 0,
-        "topFunction": "gainManaTokens-blue,gainManaTokens-white,gainManaTokens-red,gainCrystal-green",
+        "topFunction": "gainManaTokens-Blue,gainManaTokens-White,gainManaTokens-Red,gainCrystal-green",
         "bottomFunction": "*bottom-3",
-        "copies": 0
+        "copies": 0,
+        "phase": "special",
+        "character": "Goldyx",
+        "replaces": "Concentration"
     },
     {
         "cardId": "Swiftness",
@@ -69,7 +87,9 @@
         "yCoord": 1,
         "topFunction":  "move-2",
         "bottomFunction":  "attack-physical-ranged-3",
-        "copies": 1
+        "copies": 1,
+        "phase": "move,combat",
+        "character": "basic"
     },
     {
         "cardId": "Promise",
@@ -78,7 +98,9 @@
         "yCoord": 1,
         "topFunction": "influence-2",
         "bottomFunction": "influence-4",
-        "copies": 0
+        "copies": 0,
+        "phase": "interaction",
+        "character": "basic"
     },
     {
         "cardId": "ManaDraw",
@@ -87,7 +109,9 @@
         "yCoord": 1,
         "topFunction": "useAdditionalDice-1",
         "bottomFunction": "*gainManaTokens-2",
-        "copies": 0
+        "copies": 0,
+        "phase": "special",
+        "character": "basic"
     },
     {
         "cardId": "SwiftReflexes",
@@ -96,7 +120,10 @@
         "yCoord": 1,
         "topFunction": "move-2,attack-physical-ranged-1,reduceEnemyAttack-1",
         "bottomFunction":"move-4,attack-physical-ranged-3,reduceEnemyAttack-2",
-        "copies": 0
+        "copies": 0,
+        "phase":"move,combat",
+        "character": "Wolfhawk",
+        "replaces": "Swiftness"
     },
     {
         "cardId": "AxeThrow",
@@ -105,7 +132,8 @@
         "yCoord": 1,
         "topFunction":  "move-2,attack-physical-ranged-1&*reputation-1",
         "bottomFunction": "attack-physical-ranged-3&*discardsCards-1,*fame-1",
-        "copies": 0
+        "copies": 0,
+        "phase": "move,combat"
     },
     {
         "cardId": "NobleManners",
@@ -114,7 +142,10 @@
         "yCoord": 1,
         "topFunction": "influence-2&*fame-1",
         "bottomFunction": "influence-4&*fame-1&*reputation-1",
-        "copies": 0
+        "copies": 0,
+        "phase":"interaction",
+        "character": "Norowas",
+        "replaces": "Promise"
     },
     {
         "cardId": "ManaPull",
@@ -123,7 +154,10 @@
         "yCoord": 1,
         "topFunction": "*useAdditionalDice-1",
         "bottomFunction": "*gainManaTokens-2",
-        "copies": 0
+        "copies": 0,
+        "phase":"special",
+        "character": "Arythea",
+        "replaces": "ManaDraw"
     },
     {
         "cardId": "Stamina",
@@ -132,7 +166,9 @@
         "yCoord": 2,
         "topFunction": "move-2",
         "bottomFunction": "move-4",
-        "copies": 1
+        "copies": 1,
+        "phase": "move",
+        "character": "basic"
     },
     {
         "cardId": "Crystallize",
@@ -141,7 +177,9 @@
         "yCoord": 2,
         "topFunction": "gainCrystals-same_color&payMana-1",
         "bottomFunction": "gainCrystals-1",
-        "copies": 0
+        "copies": 0,
+        "phase": "special",
+        "character": "basic"
     },
     {
         "cardId": "Determination",
@@ -150,7 +188,9 @@
         "yCoord": 2,
         "topFunction": "attack-physical-melee-2,block-2",
         "bottomFunction": "block-5",
-        "copies": 0
+        "copies": 0,
+        "phase": "combat",
+        "character": "basic"
     },
     {
         "cardId": "Tirelessness",
@@ -159,7 +199,10 @@
         "yCoord": 2, 
         "topFunction": "move-2&*moveSpecial-1-next",
         "bottomFunction":  "move-4&*moveSpecial-1-each",
-        "copies": 0
+        "copies": 0,
+        "phase":"move",
+        "character": "Wolfhawk",
+        "replaces": "Stamina"
     },
     {
         "cardId": "DruidicPaths",
@@ -168,7 +211,10 @@
         "yCoord": 2,
         "topFunction": "move-2&*moveSpecial-1-reduction",
         "bottomFunction": "move-4&*moveSpecial-1-reduction",
-        "copies": 0
+        "copies": 0,
+        "phase":"move",
+        "character": "Braevalar",
+        "replaces": "Stamina"
     },
     {
         "cardId": "CrystalJoy",
@@ -177,7 +223,10 @@
         "yCoord": 2,
         "topFunction": "payMana-1&gainCrystals-1&*discardsCards",
         "bottomFunction": "gainCrystals-1&*discardsCards",
-        "copies": 0
+        "copies": 0,
+        "phase":"special",
+        "character": "Goldyx",
+        "replaces": "Crystallize"
     },
     {
         "cardId": "ColdToughness",
@@ -186,7 +235,10 @@
         "yCoord": 2,
         "topFunction":  "attack-physical-melee-2,block-ice-3",
         "bottomFunction": "block-ice-5&*additionalBlock",
-        "copies": 0
+        "copies": 0,
+        "phase": "combat",
+        "character": "Tovak",
+        "replaces": "Determination"
     },
     {
         "cardId": "Rage",
@@ -195,7 +247,9 @@
         "yCoord": 3,
         "topFunction": "attack-physical-melee-2,block-2",
         "bottomFunction": "attack-physical-melee-4",
-        "copies": 1
+        "copies": 1,
+        "phase": "combat",
+        "character": "basic"
     }, 
     {
         "cardId": "Threaten",
@@ -204,7 +258,9 @@
         "yCoord": 3,
         "topFunction": "influence-2",
         "bottomFunction": "influence-5&reputation-_1",
-        "copies": 0
+        "copies": 0,
+        "phase": "interaction",
+        "character": "basic"
     },
     {
         "cardId": "Improvisation",
@@ -213,7 +269,9 @@
         "yCoord": 3,
         "topFunction":  "move-3,influence-3,attack-physical-melee-3,block-3&discard-1",
         "bottomFunction": "move-5,influence-5,attack-physical-melee-5,block-5&discard-1",
-        "copies": 0
+        "copies": 0,
+        "phase": "move,interaction,combat",
+        "character": "basic"
     },
     {
         "cardId": "BattleVersatility",
@@ -222,7 +280,10 @@
         "yCoord": 3,
         "topFunction":  "attack-physical-melee-2,block-2,attack-physical-ranged-1",
         "bottomFunction": "attack-physical-melee-4,block-4,attack-fire-melee-3,block-fire-3,attack-physical-ranged-3,attack-physical-siege-2",
-        "copies": 0
+        "copies": 0,
+        "phase": "combat",
+        "character": "Arythea",
+        "replaces": "Rage"
     }, 
     {
         "cardId": "BattleRage",
@@ -231,7 +292,8 @@
         "yCoord": 3,
         "topFunction":  "attack-physical-melee-2,block-2&*discard-wound",
         "bottomFunction":  "attack-physical-melee-4&*attackSpecial",
-        "copies": 0
+        "copies": 0,
+        "phase": "combat"
     }, 
     {
         "cardId": "RuthlessCoercion",
@@ -240,7 +302,10 @@
         "yCoord": 3,
         "topFunction": "influence-2&discount-2&*reputation-_1",
         "bottomFunction": "influence-6&reputation-_1&*ready-2_influence_per_level",
-        "copies": 0
+        "copies": 0,
+        "phase": "interaction,healing",
+        "character": "Krang",
+        "replaces": "Threaten"
     }, 
     {
         "cardId": "Instinct",
@@ -249,6 +314,9 @@
         "yCoord": 3,
         "topFunction":  "move-2,influence-2,attack-physical-melee-2,block-2",
         "bottomFunction": "move-4,influence-4,attack-physical-melee-4,block-4",
-        "copies": 0
+        "copies": 0,
+        "phase": "move,interaction,combat",
+        "character": "Tovak",
+        "replaces": "Improvisation"
     }
 ]

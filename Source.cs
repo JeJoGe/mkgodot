@@ -6,37 +6,58 @@ public partial class Source : Node2D
 {
 	[Signal]
 	public delegate void DieEventHandler(Colour colour);
-
-	private int _blue = 0;
-	public int Blue => _blue;
-	private int _red = 0;
-	public int Red => _red;
-	private int _green = 0;
-	public int Green => _green;
-	private int _white = 0;
-	public int White => _white;
-	private int _gold = 0;
-	public int Gold => _gold;
-	private int _black = 0;
-	public int Black => _black;
+	private Dictionary<Colour, int> _dice = new Dictionary<Colour, int>{
+		{Colour.Blue, 0},
+		{Colour.Red, 0},
+		{Colour.Green, 0},
+		{Colour.White, 0},
+		{Colour.Gold, 0},
+		{Colour.Black, 0}
+	};
+	public int Blue
+	{
+		get => _dice[Colour.Blue];
+	}
+	public int Red
+	{
+		get => _dice[Colour.Red];
+	}
+	public int Green
+	{
+		get => _dice[Colour.Green];
+	}
+	public int White
+	{
+		get => _dice[Colour.White];
+	}
+	public int Gold
+	{
+		get => _dice[Colour.Gold];
+	}
+	public int Black
+	{
+		get => _dice[Colour.Black];
+	}
 	private int _dicePerTurn = 1; // default number of dice allowed to be taken
-	public int DicePerTurn 
-	{ 
+	public int DicePerTurn
+	{
 		get => _dicePerTurn;
 		set
 		{
-			if (value > _diceTaken) {
+			if (value > _diceTaken)
+			{
 				//enable all buttons that have available mana
 				UpdateButtons();
 			}
 			_dicePerTurn = value;
-		} 
+		}
 	}
 	private int _diceTaken = 0;
 	public int DiceTaken
 	{
 		get => _diceTaken;
-		set {
+		set
+		{
 			_diceTaken = value;
 		}
 	}
@@ -56,15 +77,18 @@ public partial class Source : Node2D
 	{
 	}
 
+	public int GetDiceCount(Colour colour)
+	{
+		return _dice[colour];
+	}
+
 	public void NewRound()
 	{
 		// reset all the current dice pool
-		_blue = 0;
-		_red = 0;
-		_green = 0;
-		_white = 0;
-		_gold = 0;
-		_black = 0;
+		foreach (var kvp in _dice)
+		{
+			_dice[kvp.Key] = 0;
+		}
 		var numDice = GameSettings.NumPlayers + 2; //number of dice be default
 		for (int i = 0; i < numDice; i++)
 		{
@@ -72,10 +96,10 @@ public partial class Source : Node2D
 		}
 		// check if half are basics and reroll all black and yellow until true
 		var numNonBasic = Gold + Black;
-		while (numNonBasic > numDice/2 )
+		while (numNonBasic > numDice / 2)
 		{
-			_gold = 0;
-			_black = 0;
+			_dice[Colour.Gold] = 0;
+			_dice[Colour.Black] = 0;
 			for (int j = 0; j < numNonBasic; j++)
 			{
 				SetDie(RollDie());
@@ -100,7 +124,8 @@ public partial class Source : Node2D
 		UpdateButtons();
 	}
 
-	private void UpdateLabels() {
+	private void UpdateLabels()
+	{
 		UpdateBlueLabel();
 		UpdateRedLabel();
 		UpdateGreenLabel();
@@ -109,159 +134,134 @@ public partial class Source : Node2D
 		UpdateBlackLabel();
 	}
 
-	private void UpdateBlueLabel() {
+	private void UpdateBlueLabel()
+	{
 		GetNode<Label>("BlueLabel").Text = Blue.ToString();
 	}
 
-	private void UpdateRedLabel() {
+	private void UpdateRedLabel()
+	{
 		GetNode<Label>("RedLabel").Text = Red.ToString();
 	}
 
-	private void UpdateGreenLabel() {
+	private void UpdateGreenLabel()
+	{
 		GetNode<Label>("GreenLabel").Text = Green.ToString();
 	}
 
-	private void UpdateWhiteLabel() {
+	private void UpdateWhiteLabel()
+	{
 		GetNode<Label>("WhiteLabel").Text = White.ToString();
 	}
 
-	private void UpdateGoldLabel() {
+	private void UpdateGoldLabel()
+	{
 		GetNode<Label>("GoldLabel").Text = Gold.ToString();
 	}
 
-	private void UpdateBlackLabel() {
+	private void UpdateBlackLabel()
+	{
 		GetNode<Label>("BlackLabel").Text = Black.ToString();
 	}
 
-	public void SetDie(Colour colour) {
+	public void SetDie(Colour colour)
+	{
+		_dice[colour]++;
 		switch (colour)
 		{
 			case Colour.Blue:
-			{
-				_blue++;
-				UpdateBlueLabel();
-				UpdateBlueButton();
-				break;
-			}
+				{
+					UpdateBlueLabel();
+					UpdateBlueButton();
+					break;
+				}
 			case Colour.Red:
-			{
-				_red++;
-				UpdateRedLabel();
-				UpdateRedButton();
-				break;
-			}
+				{
+					UpdateRedLabel();
+					UpdateRedButton();
+					break;
+				}
 			case Colour.Green:
-			{
-				_green++;
-				UpdateGreenLabel();
-				UpdateGreenButton();
-				break;
-			}
+				{
+					UpdateGreenLabel();
+					UpdateGreenButton();
+					break;
+				}
 			case Colour.White:
-			{
-				_white++;
-				UpdateWhiteLabel();
-				UpdateWhiteButton();
-				break;
-			}
+				{
+					UpdateWhiteLabel();
+					UpdateWhiteButton();
+					break;
+				}
 			case Colour.Gold:
-			{
-				_gold++;
-				UpdateGoldLabel();
-				UpdateGoldButton();
-				break;
-			}
+				{
+					UpdateGoldLabel();
+					UpdateGoldButton();
+					break;
+				}
 			case Colour.Black:
-			{
-				_black++;
-				UpdateBlackLabel();
-				UpdateBlackButton();
-				break;
-			}
+				{
+					UpdateBlackLabel();
+					UpdateBlackButton();
+					break;
+				}
 			default: break;
 		}
 	}
 
 	public void TakeDie(Colour colour)
 	{
-		switch (colour)
+		if (_dice[colour] > 0)
 		{
-			case Colour.Blue:
+			_dice[colour]--;
+			switch (colour)
 			{
-				if (Blue > 0)
-				{
-					_blue--;
-					UpdateBlueLabel();
-					UpdateBlueButton();
-				} else {
-					throw new InvalidOperationException("No blue dice available");
-				}
-				break;
+				case Colour.Blue:
+					{
+						UpdateBlueLabel();
+						UpdateBlueButton();
+						break;
+					}
+				case Colour.Red:
+					{
+						UpdateRedLabel();
+						UpdateRedButton();
+						break;
+					}
+				case Colour.Green:
+					{
+						UpdateGreenLabel();
+						UpdateGreenButton();
+						break;
+					}
+				case Colour.White:
+					{
+						UpdateWhiteLabel();
+						UpdateWhiteButton();
+						break;
+					}
+				case Colour.Gold:
+					{
+						UpdateGoldLabel();
+						UpdateGoldButton();
+						break;
+					}
+				case Colour.Black:
+					{
+						UpdateBlackLabel();
+						UpdateBlackButton();
+						break;
+					}
+				default: break;
 			}
-			case Colour.Red:
-			{
-				if (Red > 0)
-				{
-					_red--;
-					UpdateRedLabel();
-					UpdateRedButton();
-				} else {
-					throw new InvalidOperationException("No red dice available");
-				}
-				break;
-			}
-			case Colour.Green:
-			{
-				if (Green > 0)
-				{
-					_green--;
-					UpdateGreenLabel();
-					UpdateGreenButton();
-				} else {
-					throw new InvalidOperationException("No green dice available");
-				}
-				break;
-			}
-			case Colour.White:
-			{
-				if (White > 0)
-				{
-					_white--;
-					UpdateWhiteLabel();
-					UpdateWhiteButton();
-				} else {
-					throw new InvalidOperationException("No white dice available");
-				}
-				break;
-			}
-			case Colour.Gold:
-			{
-				if (Gold > 0)
-				{
-					_gold--;
-					UpdateGoldLabel();
-					UpdateGoldButton();
-				} else {
-					throw new InvalidOperationException("No gold dice available");
-				}
-				break;
-			}
-			case Colour.Black:
-			{
-				if (Black > 0)
-				{
-					_black--;
-					UpdateBlackLabel();
-					UpdateBlackButton();
-				} else {
-					throw new InvalidOperationException("No black dice available");
-				}
-				break;
-			}
-			default: break;
+		}
+		else
+		{
+			throw new InvalidOperationException("No " + colour.ToString().ToLower() + " dice available");
 		}
 		_diceTaken++;
-		if (_diceTaken == DicePerTurn) {
+		if (_diceTaken == DicePerTurn)
+		{
 			// no more dice allowed to be taken
 			GetNode<Button>("BlueButton").Disabled = true;
 			GetNode<Button>("RedButton").Disabled = true;
@@ -270,10 +270,11 @@ public partial class Source : Node2D
 			GetNode<Button>("GoldButton").Disabled = true;
 			GetNode<Button>("BlackButton").Disabled = true;
 		}
-		EmitSignal(SignalName.Die, (int) colour);
+		EmitSignal(SignalName.Die, (int)colour);
 	}
 
-	private void UpdateButtons() {
+	private void UpdateButtons()
+	{
 		UpdateBlueButton();
 		UpdateRedButton();
 		UpdateGreenButton();
@@ -282,54 +283,66 @@ public partial class Source : Node2D
 		UpdateBlackButton();
 	}
 
-	private void UpdateBlueButton() {
+	private void UpdateBlueButton()
+	{
 		GetNode<Button>("BlueButton").Disabled = Blue == 0;
 	}
-	private void UpdateRedButton() {
+	private void UpdateRedButton()
+	{
 		GetNode<Button>("RedButton").Disabled = Red == 0;
 	}
-	private void UpdateGreenButton() {
+	private void UpdateGreenButton()
+	{
 		GetNode<Button>("GreenButton").Disabled = Green == 0;
 	}
 
-	private void UpdateWhiteButton() {
+	private void UpdateWhiteButton()
+	{
 		GetNode<Button>("WhiteButton").Disabled = White == 0;
 	}
 
-	private void UpdateGoldButton() {
+	private void UpdateGoldButton()
+	{
 		GetNode<Button>("GoldButton").Disabled = Gold == 0;
 	}
 
-	private void UpdateBlackButton() {
+	private void UpdateBlackButton()
+	{
 		GetNode<Button>("BlackButton").Disabled = Black == 0;
 	}
 	public static Colour RollDie()
 	{
 		var faces = Enum.GetValues<Colour>();
-		return (Colour)faces.GetValue(Utils.RandomNumber(0,6));
+		return (Colour)faces.GetValue(Utils.RandomNumber(0, 6));
 	}
 
-	private void OnBlueDiePressed() {
+	private void OnBlueDiePressed()
+	{
 		TakeDie(Colour.Blue);
 	}
 
-	private void OnRedDiePressed() {
+	private void OnRedDiePressed()
+	{
 		TakeDie(Colour.Red);
 	}
 
-	private void OnGreenDiePressed() {
+	private void OnGreenDiePressed()
+	{
 		TakeDie(Colour.Green);
 	}
 
-	private void OnWhiteDiePressed() {
+	private void OnWhiteDiePressed()
+	{
 		TakeDie(Colour.White);
 	}
 
-	private void OnGoldDiePressed() {
+	private void OnGoldDiePressed()
+	{
 		TakeDie(Colour.Gold);
 	}
 
-	private void OnBlackDiePressed() {
+	private void OnBlackDiePressed()
+	{
 		TakeDie(Colour.Black);
 	}
 }

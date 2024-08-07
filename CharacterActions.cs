@@ -1,5 +1,5 @@
 public enum BasicCardActions {
-    move, heal, draw, block, discard, ready, influence, attack
+    move, heal, draw, block, discard, ready, influence, attack, gainManaTokens, useAdditionalDice, gainCrystals
 }
 
 public enum AttackType {
@@ -13,8 +13,8 @@ public enum AttackBlockElement {
 public enum SpecialCardActions {
     // next card played gets +# if move, influence, block or any type of attack
     enhanceBottom,
-    gainCrystals,
     gainManaTokens,
+    gainCrystals,
     useAdditionalDice,
     reduceEnemyAttack,
     reputation,
