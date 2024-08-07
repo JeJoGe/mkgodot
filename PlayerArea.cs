@@ -27,11 +27,10 @@ public partial class PlayerArea : Node2D
 
 	public bool PayMana(Source.Colour colour)
 	{
-		// get options for colour
-		var result = false;
-		var list = GetOptions(colour);
-		result = list.Count > 0;
-		CreateManaPopup();
+        var list = GetOptions(colour);
+        // get options for colour
+        bool result = list.Count > 0;
+        CreateManaPopup();
 		if (_skills.ContainsKey("AR08") && _skills["AR08"])
 		{
 			// get options for colour with polarization
