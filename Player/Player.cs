@@ -55,20 +55,23 @@ public partial class Player : Node2D
 		Combat = CombatStart;
 		AddChild(CombatStart);
 		CombatStart.GlobalPosition = new Godot.Vector2(270,0);
+		GetTree().Paused = true;
 	}
 
 	public void CombatCleanup(bool victory)
 	{
 		GetTree().Paused = false;
-		GameSettings.EnemyList.Clear();
+		
 		if (victory)
 		{
+			
 			// do something
 		}
 		else
 		{
 			// do something else
-		}		
+		}
+		GameSettings.EnemyList.Clear();
 	}
 
 	// Change position of player, update position vector
