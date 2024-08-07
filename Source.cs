@@ -33,6 +33,13 @@ public partial class Source : Node2D
 		} 
 	}
 	private int _diceTaken = 0;
+	public int DiceTaken
+	{
+		get => _diceTaken;
+		set {
+			_diceTaken = value;
+		}
+	}
 
 	public enum Colour
 	{

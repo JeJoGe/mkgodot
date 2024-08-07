@@ -164,10 +164,10 @@ public partial class GamePlay : Node2D
 							break;
 						}
 						Callable GainManaToken = Callable.From(()=> {
-							inventory._tokens[colour] += 1;
+							inventory.AddToken((int)colour);
 						});
 						Callable RemoveManaToken = Callable.From(() => {
-							inventory._tokens[colour] -= 1;
+							inventory.ConsumeToken((int)colour);
 						});
 						break;
 					case nameof(BasicCardActions.useAdditionalDice):
