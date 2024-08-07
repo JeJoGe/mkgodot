@@ -1060,13 +1060,14 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory")]
 z_index = -1
 script = ExtResource("1_m0gf8")
 mapGen = NodePath("GameplayControl/MapGen")
 deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
 player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
+inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
