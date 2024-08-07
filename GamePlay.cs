@@ -1,5 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
 
 public partial class GamePlay : Node2D
 {
@@ -11,6 +14,8 @@ public partial class GamePlay : Node2D
 	private Player player;
 	[Export]
 	private Tactics tactics;
+	[Export]
+	private Inventory inventory;
 
 	// Called when the node enters the scene tree for the first time.
 	// TODO: Optimize the Callable initialization by calling it in _Ready
@@ -32,109 +37,166 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	public void OnCardPlayed(string cardAction, CardObj card, CardControl cardControl)
+	private Source.Colour determineColour(string color) {
+		switch(color) {
+			case nameof(Source.Colour.Blue):
+				return Source.Colour.Blue;
+			case nameof(Source.Colour.Green):
+				return Source.Colour.Green;
+			case nameof(Source.Colour.Red):
+				return Source.Colour.Red;
+			case nameof(Source.Colour.White):
+				return Source.Colour.White;
+			default:
+				return Source.Colour.Gold;
+		}
+	}
+
+	public void OnCardPlayed(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
 	{
-		Utils.undoRedo.CreateAction("Card Play Action");
-		string[] action = cardAction.Split('-');
-		int quantity;
-		if (action[0] == nameof(BasicCardActions.attack))
+		if (basicAction != null)
 		{
-			quantity = Convert.ToInt16(action[3]);
-		}
-		else
-		{
-			quantity = Convert.ToInt16(action[1]);
-		}
+			Utils.undoRedo.CreateAction("Card Play Action");
+			List<Callable> doMethodList = new List<Callable>();
+			List<Callable> undoMethodList = new List<Callable>();
 
-		switch (action[0])
-		{
-			case nameof(BasicCardActions.attack):
-				Callable CombatConversionAttackAdd = Callable.From(() =>
-				{
-					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
-					card.ManipulateButtons(false);
-					cardControl.PlayedCardAnimation();
-					deck.onRemoveFromCurrentHand(cardControl);
-				});
-				Callable CombatConversionAttackMinus = Callable.From(() =>
-				{
-					combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
-					card.ManipulateButtons(true);
-					cardControl.UndoPlayedCardAnimation();
-					deck.onAddToCurrentHand(cardControl);
-				});
-				Utils.undoRedo.AddDoMethod(CombatConversionAttackAdd);
-				Utils.undoRedo.AddUndoMethod(CombatConversionAttackMinus);
-				Utils.undoRedo.CommitAction();
-				break;
-			case nameof(BasicCardActions.heal):
-				healingConversion(quantity);
-				break;
-			case nameof(BasicCardActions.draw):
-				drawConversion(quantity);
-				cardControl.PlayedCardAnimation();
-				Utils.undoRedo.ClearHistory();
-				Utils.undoRedo.CommitAction();
-				break;
-			case nameof(BasicCardActions.move):
-				Callable MoveConversionAdd = Callable.From(() =>
-				{
-					moveConversion(quantity);
-					card.ManipulateButtons(false);
-					cardControl.PlayedCardAnimation();
-					deck.onRemoveFromCurrentHand(cardControl);
-				});
-				Callable MoveConversionMinus = Callable.From(() =>
-				{
-					moveConversion(-quantity);
-					card.ManipulateButtons(true);
-					cardControl.UndoPlayedCardAnimation();
-					deck.onAddToCurrentHand(cardControl);
-				});
-				Utils.undoRedo.AddDoMethod(MoveConversionAdd);
-				Utils.undoRedo.AddUndoMethod(MoveConversionMinus);
-				Utils.undoRedo.CommitAction();
-				break;
-			case nameof(BasicCardActions.influence):
-				Callable influenceConversionAdd = Callable.From(() =>
-				{
-					influenceConversion(quantity);
-					card.ManipulateButtons(false);
-					cardControl.PlayedCardAnimation();
-					deck.onRemoveFromCurrentHand(cardControl);
-				});
-				Callable influenceConversionMinus = Callable.From(() =>
-				{
-					influenceConversion(-quantity);
-					card.ManipulateButtons(true);
-					cardControl.UndoPlayedCardAnimation();
-					deck.onAddToCurrentHand(cardControl);
-				});
-				Utils.undoRedo.AddDoMethod(influenceConversionAdd);
-				Utils.undoRedo.AddUndoMethod(influenceConversionMinus);
-				Utils.undoRedo.CommitAction();
-				break;
-			case nameof(BasicCardActions.block):
-				Callable CombatConversionBlockAdd = Callable.From(() =>
-				{
-					combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
-					card.ManipulateButtons(false);
-					cardControl.PlayedCardAnimation();
-					deck.onRemoveFromCurrentHand(cardControl);
-				});
-				Callable CombatConversionBlockMinus = Callable.From(() =>
-				{
-					combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
-					card.ManipulateButtons(true);
-					cardControl.UndoPlayedCardAnimation();
-					deck.onAddToCurrentHand(cardControl);
-				});
-				Utils.undoRedo.AddDoMethod(CombatConversionBlockAdd);
-				Utils.undoRedo.AddUndoMethod(CombatConversionBlockMinus);
-				Utils.undoRedo.CommitAction();
-				break;
+			for (int i = 0; i < basicAction.Count(); i++)
+			{
+				string[] action = basicAction[i].Split('-');
+				int quantity;
 
+				if (action[0] == nameof(BasicCardActions.attack))
+				{
+					quantity = Convert.ToInt16(action[3]);
+				}
+				else
+				{
+					quantity = Convert.ToInt16(action[1]);
+				}
 
+				switch (action[0])
+				{
+					case nameof(BasicCardActions.attack):
+						Callable CombatConversionAttackAdd = Callable.From(() =>
+						{
+							combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
+							card.ManipulateButtons(false);
+							cardControl.PlayedCardAnimation();
+							deck.onRemoveFromCurrentHand(cardControl);
+						});
+						Callable CombatConversionAttackMinus = Callable.From(() =>
+						{
+							combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
+							card.ManipulateButtons(true);
+							cardControl.UndoPlayedCardAnimation();
+							deck.onAddToCurrentHand(cardControl);
+						});
+						doMethodList.Add(CombatConversionAttackAdd);
+						undoMethodList.Add(CombatConversionAttackMinus);
+						break;
+					case nameof(BasicCardActions.heal):
+						healingConversion(quantity);
+						break;
+					case nameof(BasicCardActions.draw):
+						drawConversion(quantity);
+						cardControl.PlayedCardAnimation();
+						Utils.undoRedo.ClearHistory();
+						Utils.undoRedo.CommitAction();
+						break;
+					case nameof(BasicCardActions.move):
+						Callable MoveConversionAdd = Callable.From(() =>
+						{
+							moveConversion(quantity);
+							card.ManipulateButtons(false);
+							cardControl.PlayedCardAnimation();
+							deck.onRemoveFromCurrentHand(cardControl);
+						});
+						Callable MoveConversionMinus = Callable.From(() =>
+						{
+							moveConversion(-quantity);
+							card.ManipulateButtons(true);
+							cardControl.UndoPlayedCardAnimation();
+							deck.onAddToCurrentHand(cardControl);
+						});
+						doMethodList.Add(MoveConversionAdd);
+						undoMethodList.Add(MoveConversionMinus);
+						break;
+					case nameof(BasicCardActions.influence):
+						Callable influenceConversionAdd = Callable.From(() =>
+						{
+							influenceConversion(quantity);
+							card.ManipulateButtons(false);
+							cardControl.PlayedCardAnimation();
+							deck.onRemoveFromCurrentHand(cardControl);
+						});
+						Callable influenceConversionMinus = Callable.From(() =>
+						{
+							influenceConversion(-quantity);
+							card.ManipulateButtons(true);
+							cardControl.UndoPlayedCardAnimation();
+							deck.onAddToCurrentHand(cardControl);
+						});
+						doMethodList.Add(influenceConversionAdd);
+						undoMethodList.Add(influenceConversionMinus);
+						break;
+					case nameof(BasicCardActions.block):
+						Callable CombatConversionBlockAdd = Callable.From(() =>
+						{
+							combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
+							card.ManipulateButtons(false);
+							cardControl.PlayedCardAnimation();
+							deck.onRemoveFromCurrentHand(cardControl);
+						});
+						Callable CombatConversionBlockMinus = Callable.From(() =>
+						{
+							combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
+							card.ManipulateButtons(true);
+							cardControl.UndoPlayedCardAnimation();
+							deck.onAddToCurrentHand(cardControl);
+						});
+						doMethodList.Add(CombatConversionBlockAdd);
+						undoMethodList.Add(CombatConversionBlockMinus);
+						break;
+					case nameof(BasicCardActions.gainManaTokens):
+						Source.Colour colour = determineColour(action[1]);
+						if (colour == Source.Colour.Gold) {
+							GD.Print("Error in determining color of manatoken");
+							break;
+						}
+						Callable GainManaToken = Callable.From(()=> {
+							inventory.AddToken((int)colour);
+						});
+						Callable RemoveManaToken = Callable.From(() => {
+							inventory.ConsumeToken((int)colour);
+						});
+						break;
+					case nameof(BasicCardActions.useAdditionalDice):
+						break;
+					case nameof(BasicCardActions.gainCrystals):
+						break;
+					default:
+						break;
+				}
+				
+
+				Callable doCallable = Callable.From(() =>
+				{
+					foreach (Callable method in doMethodList)
+					{
+						method.Call();
+					}
+				});
+				Callable undoCallable = Callable.From(() =>
+				{
+					foreach (Callable method in undoMethodList)
+					{
+						method.Call();
+					}
+				});
+				Utils.undoRedo.AddDoMethod(doCallable);
+				Utils.undoRedo.AddUndoMethod(undoCallable);
+				Utils.undoRedo.CommitAction();
+			}
 		}
 	}
 
@@ -170,11 +232,11 @@ public partial class GamePlay : Node2D
 
 		if (phase == nameof(BasicCardActions.attack))
 		{
-			combatScene.AddAttack(quantity,type,range);
+			combatScene.AddAttack(quantity, type, range);
 		}
 		else
 		{
-			combatScene.AddBlock(quantity,type);
+			combatScene.AddBlock(quantity, type);
 		}
 
 	}
@@ -209,7 +271,7 @@ public partial class GamePlay : Node2D
 		{
 			var currCardControl = (CardControl)card;
 			var currCard = (CardObj)currCardControl.GetChild(0);
-			currCard.CardPlayed += cardAction => OnCardPlayed(cardAction, currCard, currCardControl);
+			currCard.CardPlayed += (basicAction, specialAction) => OnCardPlayed(basicAction, specialAction, currCard, currCardControl);
 		}
 		catch
 		{
@@ -217,12 +279,15 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	public void onStartRound() {
+	public void onStartRound()
+	{
 		deck.OnDeckButtonPressed(player.cardDrawLimit);
 	}
 
-	public void onResolveTactic(string TacticChosen) {
-		switch(TacticChosen) {
+	public void onResolveTactic(string TacticChosen)
+	{
+		switch (TacticChosen)
+		{
 			case "Tactic5":
 				deck.OnDeckButtonPressed(2);
 				break;

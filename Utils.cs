@@ -70,6 +70,14 @@ public partial class Utils : Node
 		{MonsterColour.Red, "red"},
 		{MonsterColour.White, "white"}
 	};
+	private static readonly Dictionary<Source.Colour, Source.Colour> _oppositeColours = new Dictionary<Source.Colour, Source.Colour>{
+		{Source.Colour.Blue, Source.Colour.Red},
+		{Source.Colour.Red, Source.Colour.Blue},
+		{Source.Colour.Green, Source.Colour.White},
+		{Source.Colour.White, Source.Colour.Green},
+		{Source.Colour.Gold, Source.Colour.Black},
+		{Source.Colour.Black, Source.Colour.Gold}
+	};
 	public static Dictionary<string, AtlasTexture> SpriteSheets = new Dictionary<string, AtlasTexture>();
 	public static Dictionary<Source.Colour, AtlasTexture> CrystalSprites = new Dictionary<Source.Colour, AtlasTexture>();
 	public static Dictionary<Source.Colour, AtlasTexture> ManaSprites = new Dictionary<Source.Colour, AtlasTexture>();
@@ -102,6 +110,11 @@ public partial class Utils : Node
 	public static Source.Colour ConvertStringToSourceColour(string colour)
 	{
 		return _stringToSourceColours[colour];
+	}
+
+	public static Source.Colour GetOppositeColour(Source.Colour colour)
+	{
+		return _oppositeColours[colour];
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

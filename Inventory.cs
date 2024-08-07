@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 public partial class Inventory : Node2D
 {
-	private Dictionary<Source.Colour, int> _dice = new Dictionary<Source.Colour, int>{
-		{Source.Colour.Blue,0},
-		{Source.Colour.Red,0},
-		{Source.Colour.Green,0},
-		{Source.Colour.White,0},
-		{Source.Colour.Gold,0},
-		{Source.Colour.Black,0}
-	};
+	// only time a die can remain in inventory without being used
+	private int _manaStolenDie = -1; // -1 indicates no mana die stolen
+	public int ManaStolenDie
+	{
+		get => _manaStolenDie;
+	}
 	private Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
 		{Source.Colour.Blue,0},
 		{Source.Colour.Red,0},
@@ -26,18 +24,33 @@ public partial class Inventory : Node2D
 		{Source.Colour.Gold,0},
 		{Source.Colour.Black,0}
 	};
-	private Dictionary<Source.Colour, ManaDie> _diceScenes = new Dictionary<Source.Colour, ManaDie>();
+	private List<ManaDie> _usedDiceScenes = new List<ManaDie>();
+	private ManaDie _manaStolenDieScene;
 	private PackedScene _dieScene = GD.Load<PackedScene>("res://ManaDie.tscn");
-	private static readonly int _offset = 60;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		// TESTING ONLY
+		_crystals[Source.Colour.Blue] = 3;
+		_crystals[Source.Colour.Red] = 3;
+		_crystals[Source.Colour.Green] = 3;
+		_crystals[Source.Colour.White] = 3;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since  the previous frame.
 	public override void _Process(double delta)
 	{
+	}
+
+	public int CrystalCount(Source.Colour colour)
+	{
+		return _crystals[colour];
+	}
+
+	public int TokenCount(Source.Colour colour)
+	{
+		return _tokens[colour];
 	}
 
 	public bool AddCrystal(int colour)
@@ -57,11 +70,16 @@ public partial class Inventory : Node2D
 	public bool ConsumeCrystal(int colour)
 	{
 		var crystalColour = (Source.Colour)colour;
+		return ConsumeCrystal(crystalColour);
+	}
+
+	public bool ConsumeCrystal(Source.Colour colour)
+	{
 		var result = false;
-		if (_crystals[crystalColour] > 0)
+		if (_crystals[colour] > 0)
 		{
 			result = true;
-			_crystals[crystalColour] = _crystals[crystalColour] - 1;
+			_crystals[colour] = _crystals[colour] - 1;
 		}
 		return result;
 	}
@@ -83,41 +101,48 @@ public partial class Inventory : Node2D
 	public bool ConsumeToken(int colour)
 	{
 		var tokenColour = (Source.Colour)colour;
+		return ConsumeToken(tokenColour);
+	}
+
+	public bool ConsumeToken(Source.Colour colour)
+	{
 		var result = false;
-		if (_tokens[tokenColour] > 0)
+		if (_tokens[colour] > 0)
 		{
 			result = true;
-			_tokens[tokenColour] = _tokens[tokenColour] - 1;
+			_tokens[colour] = _tokens[colour] - 1;
 		}
 		return result;
 	}
 
+	// create die image for each used die this turn
 	private void OnDieTaken(int colour)
 	{
-		var dieColour = (Source.Colour)colour;
-		GD.Print(string.Format("die taken of colour {0}", dieColour.ToString()));
-		_dice[dieColour]++;
-		// update dice images
-		foreach (var die in _dice)
+		// update die image
+		if (colour != -1 && colour < 6)
 		{
-			if (die.Value > 0)
-			{
-				// create die if it does not already exist
-				if (!_diceScenes.ContainsKey(die.Key))
-				{
-					var manaDie = _dieScene.Instantiate<ManaDie>();
-					var atlas = (AtlasTexture)Utils.SpriteSheets["dice"].Duplicate();
-					atlas.Region = new Rect2(new Vector2(Utils.DiceCoordinates[die.Key].Item1 * Utils.DiceSize,
-						Utils.DiceCoordinates[die.Key].Item2 * Utils.DiceSize),
-						new Vector2(Utils.DiceSize, Utils.DiceSize));
-					manaDie.GetNode<Sprite2D>("DieImage").Texture = atlas;
-					manaDie.Position = new Vector2(_offset * _diceScenes.Count, 0);
-					_diceScenes[die.Key] = manaDie;
-					AddChild(manaDie);
-				}
-				_diceScenes[die.Key].Count = die.Value;
-			}
+			var dieColour = (Source.Colour)colour;
+			GD.Print(string.Format("die taken of colour {0}", dieColour.ToString()));
+			// TODO: mana stolen die should send different signal
+			//_manaStolenDie = colour;
+			// create die scene
+			var manaDie = _dieScene.Instantiate<ManaDie>();
+			var atlas = (AtlasTexture)Utils.SpriteSheets["dice"].Duplicate();
+			atlas.Region = new Rect2(new Vector2(Utils.DiceCoordinates[dieColour].Item1 * Utils.DiceSize,
+				Utils.DiceCoordinates[dieColour].Item2 * Utils.DiceSize),
+				new Vector2(Utils.DiceSize, Utils.DiceSize));
+			manaDie.GetNode<Sprite2D>("DieImage").Texture = atlas;
+			manaDie.Position = new Vector2(_usedDiceScenes.Count * 50, 0);
+			_usedDiceScenes.Add(manaDie);
+			AddChild(manaDie);
 		}
+	}
+
+	private void ConsumeDie()
+	{
+		_manaStolenDie = -1;
+		_manaStolenDieScene.QueueFree();
+		// TODO: return mana stolen die at end of turn
 	}
 
 	private void OnEndTurn()
@@ -126,6 +151,13 @@ public partial class Inventory : Node2D
 		foreach (var colour in _tokens)
 		{
 			_tokens[colour.Key] = 0;
+		}
+		// remove dice imagess
+		for (int i = _usedDiceScenes.Count - 1; i >= 0; i--)
+		{
+			var dieImage = _usedDiceScenes[i];
+			_usedDiceScenes.RemoveAt(i);
+			dieImage.QueueFree();
 		}
 	}
 }
