@@ -42,3 +42,6 @@ size_flags_horizontal = 8
 text = "Polarization"
 
 [connection signal="close_requested" from="." to="ManaPopup" method="OnCancelButtonPressed"]
+[connection signal="pressed" from="ManaPopup/GridContainer/ConfirmButton" to="ManaPopup" method="OnConfirmButtonPressed"]
+[connection signal="pressed" from="ManaPopup/GridContainer/CancelButton" to="ManaPopup" method="OnCancelButtonPressed"]
+[connection signal="toggled" from="ManaPopup/GridContainer/PolarizationToggle" to="ManaPopup" method="OnPolarizationToggled"]

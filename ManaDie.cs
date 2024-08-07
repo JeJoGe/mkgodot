@@ -4,16 +4,6 @@ using System.Collections.Generic;
 
 public partial class ManaDie : Area2D
 {
-    private int _count = 0;
-    public int Count
-    {
-        get => _count;
-        set
-        {
-            _count = value;
-            GetNode<Label>("DieLabel").Text = _count.ToString();
-        }
-    }
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {

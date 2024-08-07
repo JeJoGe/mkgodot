@@ -126,7 +126,7 @@ public partial class ManaPopup : VSplitContainer
 	private void OnConfirmButtonPressed()
 	{
 		GD.Print("confirm pressed");
-		var playerArea = GetParent<PlayerArea>();
+		var playerArea = GetNode<PlayerArea>("../..");
 		if (_polarization)
 		{
 			// set polarization as used this turn
@@ -137,6 +137,7 @@ public partial class ManaPopup : VSplitContainer
 		}
 		// consume selected option
 		playerArea.ConsumeMana(_selectedOption.Item1,_selectedOption.Item2);
+		_window.QueueFree();
 	}
 
 	private void OnCancelButtonPressed()

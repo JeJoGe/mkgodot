@@ -11,13 +11,13 @@ public partial class PlayerArea : Node2D
 	private PackedScene _manaPopup = GD.Load<PackedScene>("res://ManaPopUp/ManaPopup.tscn");
 	private Dictionary<string, bool> _skills = new();
 	private ManaPopup _popup;
+	private bool _night = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		// TESTING ONLY
 		_skills.Add("AR08", true); // add polarization to skill list
-		PayMana(Source.Colour.Blue);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,8 +71,9 @@ public partial class PlayerArea : Node2D
 
 	private void CreateManaPopup()
 	{
-		_popup = (ManaPopup)_manaPopup.Instantiate();
-		AddChild(_popup);
+		var popup = (Window)_manaPopup.Instantiate();
+		_popup = (ManaPopup)popup.GetChild(0);
+		AddChild(popup);
 	}
 
 	private List<(Source.Colour, ManaPopup.ManaType)> GetOptions(Source.Colour colour, bool polarization = false)
@@ -95,17 +96,6 @@ public partial class PlayerArea : Node2D
 		{
 			// TODO: special option to indicate this is the mana stolen die
 		}
-		if (colour != Source.Colour.Gold && colour != Source.Colour.Black)
-		{
-			// only check for matching crystals if basic colour
-			foreach (var matchingColour in matchingColours)
-			{
-				if (_inventory.CrytalCount(matchingColour) > 0)
-				{
-					options.Add((matchingColour, ManaPopup.ManaType.Crystal));
-				}
-			}
-		}
 		// check for matching mana tokens
 		foreach (var matchingColour in matchingColours)
 		{
@@ -114,13 +104,26 @@ public partial class PlayerArea : Node2D
 				options.Add((matchingColour, ManaPopup.ManaType.Token));
 			}
 		}
+		if (colour != Source.Colour.Gold && colour != Source.Colour.Black)
+		{
+			// only check for matching crystals if basic colour
+			matchingColours.Remove(Source.Colour.Gold);
+			matchingColours.Remove(Source.Colour.Black);
+			foreach (var matchingColour in matchingColours)
+			{
+				if (_inventory.CrystalCount(matchingColour) > 0)
+				{
+					options.Add((matchingColour, ManaPopup.ManaType.Crystal));
+				}
+			}
+		}
 		return options;
 	}
 
-	private List<Source.Colour> GetColours(Source.Colour colour, bool polarization)
+	private HashSet<Source.Colour> GetColours(Source.Colour colour, bool polarization)
 	{
 		// colour matches itself
-		var result = new List<Source.Colour>
+		var result = new HashSet<Source.Colour>
 		{
 			colour
 		};
@@ -133,6 +136,11 @@ public partial class PlayerArea : Node2D
 		{
 			// include opposite colour
 			result.Add(Utils.GetOppositeColour(colour));
+			if (!_night)
+			{
+				// during daytime can use black mana as any other colour
+				result.Add(Source.Colour.Black);
+			}
 		}
 		return result;
 	}
@@ -158,5 +166,12 @@ public partial class PlayerArea : Node2D
 			}
 			default: break;
 		}
+	}
+
+	private void OnEndTurn()
+	{
+		// refresh all once per turn skills
+		// TESTING ONLY
+		_skills["AR08"] = true;
 	}
 }

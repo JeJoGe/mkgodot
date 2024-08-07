@@ -24,7 +24,8 @@ public partial class Inventory : Node2D
 		{Source.Colour.Gold,0},
 		{Source.Colour.Black,0}
 	};
-	private ManaDie _manaDieScene;
+	private List<ManaDie> _usedDiceScenes = new List<ManaDie>();
+	private ManaDie _manaStolenDieScene;
 	private PackedScene _dieScene = GD.Load<PackedScene>("res://ManaDie.tscn");
 
 	// Called when the node enters the scene tree for the first time.
@@ -42,7 +43,7 @@ public partial class Inventory : Node2D
 	{
 	}
 
-	public int CrytalCount(Source.Colour colour)
+	public int CrystalCount(Source.Colour colour)
 	{
 		return _crystals[colour];
 	}
@@ -114,6 +115,7 @@ public partial class Inventory : Node2D
 		return result;
 	}
 
+	// create die image for each used die this turn
 	private void OnDieTaken(int colour)
 	{
 		// update die image
@@ -121,7 +123,8 @@ public partial class Inventory : Node2D
 		{
 			var dieColour = (Source.Colour)colour;
 			GD.Print(string.Format("die taken of colour {0}", dieColour.ToString()));
-			_manaStolenDie = colour;
+			// TODO: mana stolen die should send different signal
+			//_manaStolenDie = colour;
 			// create die scene
 			var manaDie = _dieScene.Instantiate<ManaDie>();
 			var atlas = (AtlasTexture)Utils.SpriteSheets["dice"].Duplicate();
@@ -129,7 +132,8 @@ public partial class Inventory : Node2D
 				Utils.DiceCoordinates[dieColour].Item2 * Utils.DiceSize),
 				new Vector2(Utils.DiceSize, Utils.DiceSize));
 			manaDie.GetNode<Sprite2D>("DieImage").Texture = atlas;
-			_manaDieScene = manaDie;
+			manaDie.Position = new Vector2(_usedDiceScenes.Count * 50, 0);
+			_usedDiceScenes.Add(manaDie);
 			AddChild(manaDie);
 		}
 	}
@@ -137,7 +141,8 @@ public partial class Inventory : Node2D
 	private void ConsumeDie()
 	{
 		_manaStolenDie = -1;
-		_manaDieScene.QueueFree();
+		_manaStolenDieScene.QueueFree();
+		// TODO: return mana stolen die at end of turn
 	}
 
 	private void OnEndTurn()
@@ -146,6 +151,13 @@ public partial class Inventory : Node2D
 		foreach (var colour in _tokens)
 		{
 			_tokens[colour.Key] = 0;
+		}
+		// remove dice imagess
+		for (int i = _usedDiceScenes.Count - 1; i >= 0; i--)
+		{
+			var dieImage = _usedDiceScenes[i];
+			_usedDiceScenes.RemoveAt(i);
+			dieImage.QueueFree();
 		}
 	}
 }
