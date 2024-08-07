@@ -20,13 +20,13 @@ public partial class Inventory : Node2D
 		{Source.Colour.Gold,(2,2)},
 		{Source.Colour.Black,(0,2)}
 	};
-	private Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
+	public Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
 		{Source.Colour.Blue,0},
 		{Source.Colour.Red,0},
 		{Source.Colour.Green,0},
 		{Source.Colour.White,0}
 	};
-	private Dictionary<Source.Colour, int> _tokens =  new Dictionary<Source.Colour, int>{
+	public Dictionary<Source.Colour, int> _tokens =  new Dictionary<Source.Colour, int>{
 		{Source.Colour.Blue,0},
 		{Source.Colour.Red,0},
 		{Source.Colour.Green,0},

@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 public enum CardObjOption
@@ -9,13 +10,16 @@ public enum CardObjOption
 public partial class CardObj : Sprite2D
 {
     [Signal]
-    public delegate void CardPlayedEventHandler(string[] basicAction, string[] specialAction);
+    public delegate void CardPlayedEventHandler(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction);
     public int id { get; set; }
     public string cardId { get; set; }
     public string color { get; set; }
     public int xCoord { get; set; }
     public int yCoord { get; set; }
     public int copies { get; set; }
+    public string phase {get; set;}
+    public string character {get; set;}
+    public string replaces { get; set;}
     public string topFunction { get; set; }
     public string bottomFunction { get; set; }
     public OptionButton topOptionsButton = new OptionButton();
@@ -23,9 +27,10 @@ public partial class CardObj : Sprite2D
     public CardObjOption currentOption { get; set; } = CardObjOption.top;
     public bool topOptionExists = true;
     public bool bottomOptionExists = true;
-    private Dictionary<int, string[]> specialOptionsActions = new Dictionary<int, string[]>();
-    public Dictionary<int, string[]> topOptionActions = new Dictionary<int, string[]>();
-    public Dictionary<int, string[]> bottomOptionActions = new Dictionary<int, string[]>();
+    private Dictionary<int, Godot.Collections.Array<string>> topSpecialOptionsActions = new Dictionary<int, Godot.Collections.Array<string>>();
+    private Dictionary<int, Godot.Collections.Array<string>> bottomSpecialOptionsActions = new Dictionary<int, Godot.Collections.Array<string>>();
+    public Dictionary<int, Godot.Collections.Array<string>> topOptionActions = new Dictionary<int, Godot.Collections.Array<string>>();
+    public Dictionary<int, Godot.Collections.Array<string>> bottomOptionActions = new Dictionary<int, Godot.Collections.Array<string>>();
     public override void _Ready()
     {
         this.Position = new Godot.Vector2(500, 700);
@@ -80,15 +85,21 @@ public partial class CardObj : Sprite2D
                 {
                     if (position == CardObjOption.top)
                     {
-                        ActionAdd(topOptionActions, i, otherAction[x]);
+                        if (otherAction[x].Contains("*"))
+                        {
+                            ActionAdd(topSpecialOptionsActions, i, otherAction[x]);
+                        } else { 
+                            ActionAdd(topOptionActions, i, otherAction[x]);
+                        }
                     }
                     else
                     {
-                        ActionAdd(bottomOptionActions, i, otherAction[x]);
-                    }
-                    if (otherAction[x].Contains("*"))
-                    {
-                        ActionAdd(specialOptionsActions, i, otherAction[x]);
+                        if (otherAction[x].Contains("*"))
+                        {
+                            ActionAdd(bottomSpecialOptionsActions, i, otherAction[x]);
+                        } else { 
+                            ActionAdd(bottomOptionActions, i, otherAction[x]);
+                        }
                     }
                 }
             }
@@ -98,38 +109,42 @@ public partial class CardObj : Sprite2D
             if (position == CardObjOption.top)
             {
                 topOptionExists = false;
-                NewActionAdd(topOptionActions, 0, function[0]);
+                if (function[0].Contains("*"))
+                {
+                    ActionAdd(topSpecialOptionsActions, 0, function[0]);
+                } else 
+                { 
+                    NewActionAdd(topOptionActions, 0, function[0]);
+                }
             }
             else
             {
                 bottomOptionExists = false;
-                NewActionAdd(bottomOptionActions, 0, function[0]);
-            }
-            if (function[0].Contains("*"))
-            {
-                ActionAdd(specialOptionsActions, 0, function[0]);
+                if (function[0].Contains("*"))
+                {
+                    ActionAdd(bottomSpecialOptionsActions, 0, function[0]);
+                } else 
+                { 
+                    NewActionAdd(bottomOptionActions, 0, function[0]);
+                }
             }
         }
     }
 
-    public void NewActionAdd(Dictionary<int, string[]> actionList, int index, string action)
+    public void NewActionAdd(Dictionary<int, Godot.Collections.Array<string>> actionList, int index, string action)
     {
-        List<string> newList = new List<string>(){
+        Godot.Collections.Array<string> currList = new Godot.Collections.Array<string>() {
                 action
-        };
-        actionList.Add(index, newList.ToArray());
-
+            };
+        actionList.Add(index, currList);
     }
-    public void ActionAdd(Dictionary<int, string[]> actionList, int index, string action)
+
+    public void ActionAdd(Dictionary<int, Godot.Collections.Array<string>> actionList, int index, string action)
     {
         bool doesIndexExist = actionList.ContainsKey(index);
         if (doesIndexExist)
         {
-            List<string> currList = new List<string>(actionList[index])
-            {
-                action
-            };
-            actionList[index] =  currList.ToArray();
+            actionList[index].Add(action);
         }
         else
         {
@@ -137,51 +152,41 @@ public partial class CardObj : Sprite2D
         }
     }
 
+    public Godot.Collections.Array<string> getSpecificAction(Dictionary<int, Godot.Collections.Array<string>> actionList, int index) {
+        bool doesIndexExist = actionList.ContainsKey(index);
+        if(doesIndexExist) {
+            return actionList[index];
+        } else return null;
+    }
+
     public void onPlayButtonPressed()
     {
         int selectedId = 0;
-        string[] basicAction = [];
-        string[] specialAction = [];
+        Godot.Collections.Array<string> basicAction = [];
+        Godot.Collections.Array<string> specialAction = [];
         if (currentOption == CardObjOption.top)
         {
             selectedId = topOptionsButton.GetSelectedId();
+            
             if (selectedId == -1)
             {
-                basicAction = topOptionActions[0];
+                selectedId = 0;
             }
-            else
-            {
-                basicAction = topOptionActions[selectedId];
-            }
+            basicAction = getSpecificAction(topOptionActions, selectedId);
+            specialAction = getSpecificAction(topSpecialOptionsActions, selectedId);
+
         }
         else
         {
             selectedId = bottomOptionsButton.GetSelectedId();
             if (selectedId == -1)
             {
-                basicAction = bottomOptionActions[0];
+                selectedId = 0;
             }
-            else
-            {
-                basicAction = bottomOptionActions[selectedId];
-            }
-        }
+            basicAction = getSpecificAction(bottomOptionActions, selectedId);
+            specialAction = getSpecificAction(bottomSpecialOptionsActions, selectedId);
 
-        if (selectedId == -1)
-        {
-            bool doesSpecialActionExist = specialOptionsActions.ContainsKey(0);
-            if(doesSpecialActionExist) {
-                specialAction = specialOptionsActions[0];
-            }
         }
-        else
-        {
-            bool doesSpecialActionExist = specialOptionsActions.ContainsKey(selectedId);
-            if(doesSpecialActionExist) {
-                specialAction = specialOptionsActions[selectedId];
-            }
-        }
-        GD.Print(basicAction);
         EmitSignal(SignalName.CardPlayed, basicAction, specialAction);
     }
 
