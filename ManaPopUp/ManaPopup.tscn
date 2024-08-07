@@ -4,31 +4,41 @@
 
 [node name="Window" type="Window"]
 position = Vector2i(0, 36)
-size = Vector2i(200, 243)
+size = Vector2i(400, 243)
 
-[node name="ManaPopup" type="VSplitContainer" parent="." node_paths=PackedStringArray("_optionContainer", "_bottomContainer", "_window", "_confirmButton")]
+[node name="ManaPopup" type="VSplitContainer" parent="." node_paths=PackedStringArray("_optionContainer", "_bottomContainer", "_window", "_confirmButton", "_polarizationToggle")]
 offset_right = 400.0
 offset_bottom = 243.0
 script = ExtResource("1_ekovf")
 _optionContainer = NodePath("HBoxContainer")
-_bottomContainer = NodePath("HSplitContainer")
+_bottomContainer = NodePath("GridContainer")
 _window = NodePath("..")
-_confirmButton = NodePath("HSplitContainer/ConfirmButton")
+_confirmButton = NodePath("GridContainer/ConfirmButton")
+_polarizationToggle = NodePath("GridContainer/PolarizationToggle")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ManaPopup"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="HSplitContainer" type="HSplitContainer" parent="ManaPopup"]
+[node name="GridContainer" type="GridContainer" parent="ManaPopup"]
 layout_mode = 2
+columns = 3
 
-[node name="ConfirmButton" type="Button" parent="ManaPopup/HSplitContainer"]
+[node name="ConfirmButton" type="Button" parent="ManaPopup/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 disabled = true
 text = "Ok"
 
-[node name="CancelButton" type="Button" parent="ManaPopup/HSplitContainer"]
+[node name="CancelButton" type="Button" parent="ManaPopup/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Cancel"
+
+[node name="PolarizationToggle" type="CheckButton" parent="ManaPopup/GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Polarization"
+
+[connection signal="close_requested" from="." to="ManaPopup" method="OnCancelButtonPressed"]

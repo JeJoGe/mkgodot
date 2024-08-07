@@ -1171,8 +1171,10 @@ _roundMarker = NodePath("../../RoundMarker")
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
-[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI"]
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
 script = ExtResource("2_khnnw")
+_source = NodePath("../SharedArea/Source")
+_inventory = NodePath("Inventory")
 
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
