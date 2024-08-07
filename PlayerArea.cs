@@ -126,9 +126,9 @@ public partial class PlayerArea : Node2D
 		{
 			colour
 		};
-		if (colour != Source.Colour.Gold && colour != Source.Colour.Black)
+		if (colour != Source.Colour.Gold && colour != Source.Colour.Black && !_night)
 		{
-			// if basic colour include gold
+			// if basic colour include gold during daytime
 			result.Add(Source.Colour.Gold);
 		}
 		if (polarization)
