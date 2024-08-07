@@ -127,7 +127,7 @@ public partial class GameSettings : Node
 			int ruinID = ruin.Key;
 			yellowTokenStack.Push(ruinID);
 		}
-		yellowTokenStack.Shuffle();
+		yellowTokenStack = new Stack<int>( yellowTokenStack.Shuffle() );
 	}
 
 	public static int DrawRuin()

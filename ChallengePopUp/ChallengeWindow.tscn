@@ -60,5 +60,6 @@ offset_bottom = 51.0
 text = "You are about to enter combat.
 Select which monsters to fight below:"
 
+[connection signal="close_requested" from="." to="ChallengePopUp" method="_on_cancel_pressed"]
 [connection signal="pressed" from="ChallengePopUp/ColorRect/Challenge" to="ChallengePopUp" method="_on_challenge_pressed"]
 [connection signal="pressed" from="ChallengePopUp/ColorRect/Cancel" to="ChallengePopUp" method="_on_cancel_pressed"]

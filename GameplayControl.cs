@@ -15,12 +15,9 @@ public partial class GameplayControl : Control
 	private Button challengeButton;
 	[Export]
 	private Button interactButton;
-	const int MainLayer = 0;
-	const int MainTerrainSet = 0;
 	PackedScene mapTokenScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
 	public List<MapToken> RuinList = new List<MapToken>();
-	private static readonly int _tokenSpriteSize = 258;
 	PackedScene ChallengeScene;
 
 	// Called when the node enters the scene tree for the first time.
@@ -46,7 +43,7 @@ public partial class GameplayControl : Control
 			var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
 			//GD.Print("TileMap: " + posClicked.ToString());
 			// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
-			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MainLayer, posClicked);
+			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MapGen.MainLayer, posClicked);
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
 			//-------------------------------------------------Movement Phase-----------------------------------------------------------
@@ -71,7 +68,7 @@ public partial class GameplayControl : Control
 			// Check if tile clicked is any tiles surrounding player position
 			else if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked))
 			{
-				var cellTerrain = mapGen.GetCellTileData(MainLayer, posClicked).Terrain; // Get terrain of tile
+				var cellTerrain = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).Terrain; // Get terrain of tile
 																						 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				var movementMod = 0;
 				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
@@ -79,8 +76,8 @@ public partial class GameplayControl : Control
 					// Check if next to any enemy
 					bool clickedRampage = false;
 					bool clickedBesideRampage = false;
-					var mapEvent = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Event").ToString();
-					var mapToken = mapGen.GetCellTileData(MainLayer, posClicked).GetCustomData("Token").ToString();
+					var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).GetCustomData("Event").ToString();
+					var mapToken = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).GetCustomData("Token").ToString();
 					foreach (var enemy in EnemyList)
 					{
 
@@ -95,12 +92,12 @@ public partial class GameplayControl : Control
 						{
 							UpdateTokenColors(posClicked);
 							var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.PlayerPos, enemy.MapPosition);
-							var monsterTerrain = mapGen.TileSet.GetTerrainName(MainTerrainSet, mapGen.GetCellTileData(MainLayer, enemy.MapPosition).Terrain);
-							if (wallBetweenPlayerAndEnemy == true && (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("castle"))) // double fortified
+							var monsterTerrain = mapGen.TileSet.GetTerrainName(MapGen.MainTerrainSet, mapGen.GetCellTileData(MapGen.MainLayer, enemy.MapPosition).Terrain);
+							if (wallBetweenPlayerAndEnemy == true && (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("city"))) // double fortified
 							{
 								GameSettings.EnemyList.Add((enemy.TokenId, 2, enemy.PosColour, enemy.OldPosColour));
 							}
-							else if (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("castle"))
+							else if (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("city"))
 							{
 								GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour, enemy.OldPosColour));
 							}
@@ -148,6 +145,7 @@ public partial class GameplayControl : Control
 							interactButton.Disabled = true;
 						}
 						player.PerformMovement(posClicked, cellTerrain, movementMod);
+						
 					}
 
 					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
@@ -169,19 +167,18 @@ public partial class GameplayControl : Control
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
 		monsterToken.TokenId = enemy;
-		var monsterStats = Utils.Bestiary[enemy];
-		var enemySprite = monsterToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
-		var atlas = (AtlasTexture)Utils.SpriteSheets[monsterToken.Colour].Duplicate();
-		if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) || !GameSettings.NightTime)
+		var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, monsterToken.MapPosition).GetCustomData("Event").ToString();
+		if ((monsterToken.Colour == "green" || monsterToken.Colour == "red") || //rampaging
+		(mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) && mapEvent.Contains("city")) || // City monsters and next to
+		(mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) && !GameSettings.NightTime) // Next to keep or tower in day
+		)
 		{
-			atlas.Region = new Rect2(new Vector2(monsterStats.X * _tokenSpriteSize, monsterStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+			monsterToken.Facedown = false;
 		}
 		else
 		{
-			atlas.Region = new Rect2(new Vector2(0, 0), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+			monsterToken.Facedown = true;
 		}
-		enemySprite.Texture = atlas;
-		enemySprite.Scale = new Vector2((float)0.25, (float)0.25);
 		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
 		AddChild(monsterToken);
 		EnemyList.Add(monsterToken);
@@ -195,12 +192,14 @@ public partial class GameplayControl : Control
 		ruinToken.MapPosition = localPos;
 		ruinToken.Colour = "yellow";
 		ruinToken.TokenId = ruin;
-		var ruinStats = Utils.RuinEvents[ruin];
-		var ruinSprite = ruinToken.GetNode<Sprite2D>("MapTokenControl/Sprite2D");
-		var atlas = (AtlasTexture)Utils.SpriteSheets["yellow"].Duplicate();
-		atlas.Region = new Rect2(new Vector2(ruinStats.X * _tokenSpriteSize, ruinStats.Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
-		ruinSprite.Texture = atlas;
-		ruinSprite.Scale = new Vector2((float)0.25, (float)0.25);
+		if (!GameSettings.NightTime)
+		{
+			ruinToken.Facedown = false;
+		}
+		else
+		{
+			ruinToken.Facedown = true;	
+		}
 		ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
 		AddChild(ruinToken);
 		RuinList.Add(ruinToken);
@@ -286,7 +285,7 @@ public partial class GameplayControl : Control
 	}
 	public void _on_interact_button_pressed()
 	{
-		var mapEvent = mapGen.GetCellTileData(MainLayer, player.PlayerPos).GetCustomData("Event").ToString();
+		var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, player.PlayerPos).GetCustomData("Event").ToString();
 		switch (mapEvent)
 		{
 			case "village":
@@ -320,7 +319,7 @@ public partial class GameplayControl : Control
 			case "glade":
 				break;
 			default:
-				var mapToken = mapGen.GetCellTileData(MainLayer, player.PlayerPos).GetCustomData("Token").ToString();
+				var mapToken = mapGen.GetCellTileData(MapGen.MainLayer, player.PlayerPos).GetCustomData("Token").ToString();
 				if (mapToken == "")
 				{
 					GD.Print("Unknown Interaction");
