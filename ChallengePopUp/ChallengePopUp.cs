@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public partial class ChallengePopUp : Control
 {	
 	[Export]
+	private ChallengeWindow ChallengeWindow;
+	[Export]
 	private ChallengeOptions ChallengeOptions;
 	[Export]
 	private Button Challenge;
@@ -12,6 +14,7 @@ public partial class ChallengePopUp : Control
 	private Button Cancel;
 	List<CheckBox> enemyCheckboxes;
 	// Called when the node enters the scene tree for the first time.
+
 	public override void _Ready()
 	{
 		var optionOffset = 0;
@@ -38,7 +41,6 @@ public partial class ChallengePopUp : Control
 
 	private void _on_challenge_pressed()
 	{
-
 		foreach (var checkBox in enemyCheckboxes)
 		{
 			for (var enemy = GameSettings.EnemyList.Count -1; enemy >= 0; enemy--)
@@ -52,16 +54,18 @@ public partial class ChallengePopUp : Control
 		}
 		GD.Print(GameSettings.EnemyList.Count);
 		if (GameSettings.EnemyList.Count != 0){
+			GetNode<GameplayControl>("../..").MapUpdateOnPlayerMovement(ChallengeWindow.posClicked, ChallengeWindow.cellTerrain, ChallengeWindow.movementMod, ChallengeWindow.mapEvent);
 			GetNode<Player>("../../Player").InitiateCombat();
 		}
 		//GetTree().Paused = false;
-		GetNode<Window>("..").QueueFree();
+		GetNode<ChallengeWindow>("..").QueueFree();
 	}
 	private void _on_cancel_pressed()
 	{
-		Utils.undoRedo.Undo();
+		//Utils.undoRedo.Undo();
 		GameSettings.EnemyList.Clear();
+		GetNode<GameplayControl>("../..").UpdateTokenColors(GetNode<Player>("../../Player").PlayerPos);
 		//GetTree().Paused = false;
-		GetNode<Window>("..").QueueFree();
+		GetNode<ChallengeWindow>("..").QueueFree();
 	}
 }

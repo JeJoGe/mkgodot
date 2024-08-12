@@ -55,9 +55,8 @@ public partial class GameplayControl : Control
 				{
 					if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
 					{
-						if (player.besideRampage != true)
+						if (challengeButton.Disabled == true)
 						{
-							player.besideRampage = true;
 							challengeButton.Disabled = false;
 						}
 					}
@@ -69,13 +68,12 @@ public partial class GameplayControl : Control
 			else if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked))
 			{
 				var cellTerrain = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).Terrain; // Get terrain of tile
-																						 // GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+																								// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				var movementMod = 0;
 				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
 				{
 					// Check if next to any enemy
 					bool clickedRampage = false;
-					bool clickedBesideRampage = false;
 					var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).GetCustomData("Event").ToString();
 					var mapToken = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).GetCustomData("Token").ToString();
 					foreach (var enemy in EnemyList)
@@ -108,81 +106,17 @@ public partial class GameplayControl : Control
 						}
 						// Need another else if for if enemy is facedown and time of day
 
-						if (clickedBesideRampage == false && mapGen.GetSurroundingCells(posClicked).Contains(enemy.MapPosition) && (enemy.Colour == "green" || enemy.Colour == "red"))
-						{
-							clickedBesideRampage = true;
-						}
 					}
 					if (!clickedRampage)
 					{
-						if (clickedBesideRampage == true && player.besideRampage != true)
+						challengeButton.Disabled = true;
+						if (GameSettings.EnemyList.Count != 0)
 						{
-							player.besideRampage = true;
-							challengeButton.Disabled = false;
+							challengeEnemies(posClicked, cellTerrain, movementMod, mapEvent);
 						}
-						else if (clickedBesideRampage == false && player.besideRampage != false)
+						else
 						{
-							player.besideRampage = false;
-							challengeButton.Disabled = true;
-						}
-						if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out
-						{
-							if (interactButton.Disabled == true) { interactButton.Disabled = false; }
-						}
-						else if (mapToken == "yellow")
-						{
-							foreach (var ruin in RuinList)
-							{
-								if (ruin.MapPosition == posClicked)
-								{
-									if (interactButton.Disabled == true) { interactButton.Disabled = false; }
-									break;
-								}
-							}
-						}
-						else if (interactButton.Disabled == false)
-						{
-							interactButton.Disabled = true;
-						}
-						player.PerformMovement(posClicked, cellTerrain, movementMod);
-						foreach (var enemy in EnemyList)
-						{	
-							var nextToEnemy = mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition);
-							if (nextToEnemy)
-							{
-								GD.Print("next to enemy" + enemy.TokenId);
-								var enemyEvent = mapGen.GetCellTileData(MapGen.MainLayer, enemy.MapPosition).GetCustomData("Event").ToString();
-								if (!GameSettings.NightTime)
-								{
-									if (enemyEvent == "keep" || enemyEvent == "tower" || enemyEvent.Contains("city") )
-									{
-										if (enemy.Facedown != false)
-										{
-											enemy.Facedown = false;
-										}
-									}
-								}
-								else
-								{
-									if (enemyEvent.Contains("city"))
-									{
-										if (enemy.Facedown != false)
-										{
-											enemy.Facedown = false;
-										}
-									}
-								}
-							}
-						}
-						foreach (var ruin in RuinList)
-						{	
-							if (ruin.Position == player.PlayerPos) 
-							{
-								if (ruin.Facedown != false) //if it's daytime, already false so dont need to check
-								{
-									ruin.Facedown = false;
-								}
-							}
+							MapUpdateOnPlayerMovement(posClicked, cellTerrain, movementMod, mapEvent);
 						}
 					}
 
@@ -196,6 +130,8 @@ public partial class GameplayControl : Control
 
 		}
 	}
+	//
+
 	// Generate Monster Token and stats, may need to add in variable for whether flipped
 	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{
@@ -222,6 +158,63 @@ public partial class GameplayControl : Control
 		EnemyList.Add(monsterToken);
 	}
 
+	// Need movement function so that if challenge canceled, don't do movement
+	public void MapUpdateOnPlayerMovement(Vector2I posClicked, int cellTerrain, int movementMod, string mapEvent)
+	{
+		player.PerformMovement(posClicked, cellTerrain, movementMod);
+		foreach (var enemy in EnemyList)
+		{
+			var nextToEnemy = mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition);
+			if (nextToEnemy)
+			{
+				if ((enemy.Colour == "green" || enemy.Colour == "red"))
+				{
+					challengeButton.Disabled = false;
+				}
+				var enemyEvent = mapGen.GetCellTileData(MapGen.MainLayer, enemy.MapPosition).GetCustomData("Event").ToString();
+				if (!GameSettings.NightTime)
+				{
+					if (enemyEvent == "keep" || enemyEvent == "tower" || enemyEvent.Contains("city"))
+					{
+						if (enemy.Facedown != false)
+						{
+							enemy.Facedown = false;
+						}
+					}
+				}
+				else
+				{
+					if (enemyEvent.Contains("city"))
+					{
+						if (enemy.Facedown != false)
+						{
+							enemy.Facedown = false;
+						}
+					}
+				}
+			}
+		}
+		if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out
+		{
+			if (interactButton.Disabled == true) { interactButton.Disabled = false; }
+		}
+		else if (interactButton.Disabled == false)
+		{
+			interactButton.Disabled = true;
+		}
+		foreach (var ruin in RuinList)
+		{
+			if (ruin.MapPosition == player.PlayerPos)
+			{
+				if (ruin.Facedown != false) //if it's daytime, already false so dont need to check
+				{
+					ruin.Facedown = false; // Note for later: do we allow players to make mistake of reveal and not being able to undo
+				}
+				if (interactButton.Disabled == true) { interactButton.Disabled = false; }
+				break;
+			}
+		}
+	}
 	// Generate Ruin Token, may need to add in variable for whether flipped
 	public void RuinGen(Vector2I localPos)
 	{
@@ -236,7 +229,7 @@ public partial class GameplayControl : Control
 		}
 		else
 		{
-			ruinToken.Facedown = true;	
+			ruinToken.Facedown = true;
 		}
 		ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
 		AddChild(ruinToken);
@@ -245,15 +238,15 @@ public partial class GameplayControl : Control
 
 	public void _on_challenge_button_pressed()
 	{
-		player.PerformMovement(player.PlayerPos, 0, (int)mapGen.terrainCosts[0]); // movement 0 so cancel on challenge undoes this move
-		challengeEnemies();
+		//player.PerformMovement(player.PlayerPos, 0, (int)mapGen.terrainCosts[0]); // movement 0 so cancel on challenge undoes this move
+		challengeEnemies(player.PlayerPos, 0, 0, mapGen.GetCellTileData(MapGen.MainLayer, player.PlayerPos).GetCustomData("Token").ToString());
 	}
 
-	public void challengeEnemies()
+	public void challengeEnemies(Vector2I posClicked, int cellTerrain, int movementMod, string mapEvent)
 	{
 		foreach (var enemy in EnemyList)
 		{
-			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
+			if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(posClicked).Contains(enemy.MapPosition))
 			{
 				var already_fighting = false;
 				foreach (var fight in GameSettings.EnemyList)
@@ -267,7 +260,7 @@ public partial class GameplayControl : Control
 				{
 					continue;
 				}
-				else if (player.IsWallBetween(player.PlayerPos, enemy.MapPosition))
+				else if (player.IsWallBetween(posClicked, enemy.MapPosition))
 				{
 					GameSettings.EnemyList.Add((enemy.TokenId, 1, enemy.PosColour, enemy.OldPosColour));
 				}
@@ -277,9 +270,13 @@ public partial class GameplayControl : Control
 				}
 			}
 		}
-		var ChallengeStart = (Window)ChallengeScene.Instantiate();
+		var ChallengeStart = (ChallengeWindow)ChallengeScene.Instantiate();
 		AddChild(ChallengeStart);
 		ChallengeStart.Position = new Godot.Vector2I(300, 500);
+		ChallengeStart.posClicked = posClicked; 
+		ChallengeStart.cellTerrain = cellTerrain;
+		ChallengeStart.movementMod = movementMod;
+		ChallengeStart.mapEvent = mapEvent;
 		//GetTree().Paused = true;
 	}
 	// Change the identification color of tokens adjacent to player according to given position

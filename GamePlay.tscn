@@ -22,9 +22,9 @@
 [ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
-[ext_resource type="PackedScene" uid="uid://ddlsl1mpmfruu" path="res://Inventory.tscn" id="20_4h2of"]
-[ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
-[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="PackedScene" path="res://Inventory.tscn" id="20_4h2of"]
+[ext_resource type="PackedScene" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" path="res://Crystal.tscn" id="22_7fhxe"]
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="26_j3ivl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
