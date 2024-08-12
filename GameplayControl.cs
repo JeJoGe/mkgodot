@@ -145,7 +145,45 @@ public partial class GameplayControl : Control
 							interactButton.Disabled = true;
 						}
 						player.PerformMovement(posClicked, cellTerrain, movementMod);
-						
+						foreach (var enemy in EnemyList)
+						{	
+							var nextToEnemy = mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition);
+							if (nextToEnemy)
+							{
+								GD.Print("next to enemy" + enemy.TokenId);
+								var enemyEvent = mapGen.GetCellTileData(MapGen.MainLayer, enemy.MapPosition).GetCustomData("Event").ToString();
+								if (!GameSettings.NightTime)
+								{
+									if (enemyEvent == "keep" || enemyEvent == "tower" || enemyEvent.Contains("city") )
+									{
+										if (enemy.Facedown != false)
+										{
+											enemy.Facedown = false;
+										}
+									}
+								}
+								else
+								{
+									if (enemyEvent.Contains("city"))
+									{
+										if (enemy.Facedown != false)
+										{
+											enemy.Facedown = false;
+										}
+									}
+								}
+							}
+						}
+						foreach (var ruin in RuinList)
+						{	
+							if (ruin.Position == player.PlayerPos) 
+							{
+								if (ruin.Facedown != false) //if it's daytime, already false so dont need to check
+								{
+									ruin.Facedown = false;
+								}
+							}
+						}
 					}
 
 					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());

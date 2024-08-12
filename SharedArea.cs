@@ -30,7 +30,10 @@ public partial class SharedArea : Node2D
 		{
 			foreach (var ruin in gameplayControl.RuinList)
 			{
-				ruin.Facedown = false;
+				if (ruin.Facedown != false)
+				{
+					ruin.Facedown = false;
+				}
 			}
 		}
 		EmitSignal(SignalName.NewRound);
