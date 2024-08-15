@@ -44,7 +44,12 @@ public partial class MapToken : Node2D
 		{
 			int X;
 			int Y;
-			if (Colour != "yellow")
+			if(TokenId == -1)
+			{
+				X = 0;
+				Y = 0;
+			}
+			else if (Colour != "yellow")
 			{
 				var stats = Utils.Bestiary[TokenId];
 				X = stats.X;

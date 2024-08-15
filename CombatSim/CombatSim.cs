@@ -11,7 +11,7 @@ public partial class CombatSim : Node2D
 	private static readonly int _offset = 120;
 	private static readonly int _voffset = 120;
 	private int _monstersPerRow = 14; // this should depend on viewport size
-	private List<(int, int, Color, Color)> _enemies = new List<(int, int, Color, Color)>();
+	private List<(int, int, Color)> _enemies = new List<(int, int, Color)>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -48,7 +48,7 @@ public partial class CombatSim : Node2D
 		var walls = GetNode<CheckBox>("WallCheckBox").ButtonPressed;
 		GD.Print(string.Format("monster #{0} clicked   fortified: {1}   walls: {2}",id,fortifications,walls));
 		// add to enemy list
-		_enemies.Add((id,(fortifications ? 1 : 0) + (walls ? 1 : 0), Colors.Black, Colors.Black));
+		_enemies.Add((id,(fortifications ? 1 : 0) + (walls ? 1 : 0), Colors.Black));
 		UpdateEnemyList();
 	}
 

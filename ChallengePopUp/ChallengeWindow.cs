@@ -3,6 +3,7 @@ using System;
 
 public partial class ChallengeWindow : Window
 {
+	// Variables stored for movement if challenge accepted
 	public Vector2I posClicked;
 	public int cellTerrain;
 	public int movementMod;

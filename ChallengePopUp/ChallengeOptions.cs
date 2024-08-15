@@ -13,11 +13,21 @@ public partial class ChallengeOptions : VBoxContainer
 	{
 	}
 
-	public CheckBox createChallengeOption(int enemyId, int optionOffset, Color PosColour, Color OldPosColour)
+	public CheckBox createChallengeOption(int enemyId, int optionOffset, Color PosColour, Color OldPosColour, string monColour)
 	{
+		var tokenText = "";
+		if (enemyId == -1)
+		{
+			tokenText = monColour + " Token";
+		}
+		else
+		{
+			tokenText = Utils.Bestiary[enemyId].Name;
+		}
 		var enemyCheckBox = new CheckBox
 		{
-			Text = Utils.Bestiary[enemyId].Name,
+			
+			Text = tokenText,
 			Position = new Vector2(1000, optionOffset),// realized vbox means x position doesn't matter
 			Name = string.Format("Monster{0}", enemyId)
 		};

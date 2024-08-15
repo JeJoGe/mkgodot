@@ -70,6 +70,7 @@ public partial class Player : Node2D
 			// do something else
 		}
 		GameSettings.EnemyList.Clear();
+		GameSettings.ChallengeList.Clear();
 	}
 
 	// Change position of player, update position vector
