@@ -63,13 +63,13 @@ public partial class GamePlay : Node2D
 			for (int i = 0; i < basicAction.Count(); i++)
 			{
 				string[] action = basicAction[i].Split('-');
-				int quantity;
+				int quantity = 0;
 
 				if (action[0] == nameof(BasicCardActions.attack))
 				{
 					quantity = Convert.ToInt16(action[3]);
 				}
-				else
+				else if (action[0] != nameof(BasicCardActions.gainManaTokens))
 				{
 					quantity = Convert.ToInt16(action[1]);
 				}
