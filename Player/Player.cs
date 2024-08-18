@@ -38,8 +38,6 @@ public partial class Player : Node2D
 		ChangeGlobalPos = Callable.From(() => ChangeGlobalPosition(NewPosition));
 		UpdateTColors = Callable.From(() => UpdateTokenColors(PlayerPos));
 		CombatScene = GD.Load<PackedScene>("res://Combat.tscn");
-		// TESTING ONLY
-		_skills.Add(("AR08",true)); // add polarization to skill list
 	}
 	public override void _Input(InputEvent @event)
 	{
@@ -57,20 +55,23 @@ public partial class Player : Node2D
 		Combat = CombatStart;
 		AddChild(CombatStart);
 		CombatStart.GlobalPosition = new Godot.Vector2(270,0);
+		GetTree().Paused = true;
 	}
 
 	public void CombatCleanup(bool victory)
 	{
 		GetTree().Paused = false;
-		GameSettings.EnemyList.Clear();
+		
 		if (victory)
 		{
+			
 			// do something
 		}
 		else
 		{
 			// do something else
-		}		
+		}
+		GameSettings.EnemyList.Clear();
 	}
 
 	// Change position of player, update position vector

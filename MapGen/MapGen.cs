@@ -7,9 +7,9 @@ public partial class MapGen : TileMap
 {
 	[Export]
 	private GameplayControl gameplayControl;
-	const int MainLayer = 0;
-	const int MainAtlasID = 0;
-	const int MainTerrainSet = 0;
+	public const int MainLayer = 0;
+	public const int MainAtlasID = 0;
+	public const int MainTerrainSet = 0;
 	public Dictionary<int, int?> terrainCosts = new Dictionary<int, int?>(){
 		{0,2}, // Plains
 		{1,3}, // Forest

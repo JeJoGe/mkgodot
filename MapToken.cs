@@ -9,11 +9,15 @@ public partial class MapToken : Node2D
 	public Vector2I MapPosition { get; set; }
 	public int SiteFortifications { get; set; }
 	public int TokenId { get; set; }
+	private MapGen mapGen;
+	private static readonly int _tokenSpriteSize = 258;
 	private Color _oldPosColour = Colors.Black;
-	public Color OldPosColour { get; set;}
+	public Color OldPosColour { get; set; }
 	private Color _posColour = Colors.Black;
-	public Color PosColour { 
-		get => _posColour; 
+
+	public Color PosColour
+	{
+		get => _posColour;
 		set
 		{
 			if (OldPosColour != PosColour)
@@ -23,7 +27,7 @@ public partial class MapToken : Node2D
 			_posColour = value;
 			colorRect.Color = _posColour;
 			if (_posColour == Colors.Black)
-			{	
+			{
 				colorRect.Visible = false;
 			}
 			else if (colorRect.Visible == false)
@@ -32,11 +36,48 @@ public partial class MapToken : Node2D
 			}
 		}
 	}
+	private bool _facedown = true;
+	public bool Facedown
+	{
+		get => _facedown;
+		set
+		{
+			int X;
+			int Y;
+			if (Colour != "yellow")
+			{
+				var stats = Utils.Bestiary[TokenId];
+				X = stats.X;
+				Y = stats.Y;
+			}
+			else
+			{
+				var stats = Utils.RuinEvents[TokenId];
+				X = stats.X;
+				Y = stats.Y;
+			}
+			var Sprite = GetNode<Sprite2D>("MapTokenControl/Sprite2D");
+			var atlas = (AtlasTexture)Utils.SpriteSheets[Colour].Duplicate();
+
+			if (this._facedown != value)
+			{
+				atlas.Region = new Rect2(new Vector2(X * _tokenSpriteSize, Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+				_facedown = value;
+			}
+			else
+			{
+				atlas.Region = new Rect2(new Vector2(0,0), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+			}
+			Sprite.Texture = atlas;
+			Sprite.Scale = new Vector2((float)0.25, (float)0.25);
+		}
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		colorRect.Visible = false;
+		mapGen = GetNode<MapGen>("../MapGen");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

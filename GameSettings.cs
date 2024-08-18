@@ -29,6 +29,7 @@ public partial class GameSettings : Node
 	private static Stack<int> yellowTokenStack = new Stack<int>();
 	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
 	public static bool CombatSim = false;
+	public static bool NightTime = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -126,6 +127,7 @@ public partial class GameSettings : Node
 			int ruinID = ruin.Key;
 			yellowTokenStack.Push(ruinID);
 		}
+		yellowTokenStack = new Stack<int>( yellowTokenStack.Shuffle() );
 	}
 
 	public static int DrawRuin()
