@@ -1,8 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
-using System.Reflection.Metadata;
 
 public partial class GamePlay : Node2D
 {
@@ -54,22 +54,23 @@ public partial class GamePlay : Node2D
 
 	public void OnCardPlayed(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
 	{
+		Utils.undoRedo.CreateAction("Card Play Action");
+
 		if (basicAction != null)
 		{
-			Utils.undoRedo.CreateAction("Card Play Action");
 			List<Callable> doMethodList = new List<Callable>();
 			List<Callable> undoMethodList = new List<Callable>();
 
 			for (int i = 0; i < basicAction.Count(); i++)
 			{
 				string[] action = basicAction[i].Split('-');
-				int quantity;
+				int quantity = 0;
 
 				if (action[0] == nameof(BasicCardActions.attack))
 				{
 					quantity = Convert.ToInt16(action[3]);
 				}
-				else
+				else if( action[0] != nameof(BasicCardActions.gainManaTokens))
 				{
 					quantity = Convert.ToInt16(action[1]);
 				}
@@ -197,6 +198,10 @@ public partial class GamePlay : Node2D
 				Utils.undoRedo.AddUndoMethod(undoCallable);
 				Utils.undoRedo.CommitAction();
 			}
+		}
+
+		if(specialAction != null) {
+
 		}
 	}
 
