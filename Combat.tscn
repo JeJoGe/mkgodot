@@ -4,11 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_reduceAttackButton")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 _confirmButton = NodePath("NinePatchRect/ConfirmButton")
+_reduceAttackButton = NodePath("NinePatchRect/ReduceButton")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -238,4 +239,4 @@ text = "Reduce 1 Attack"
 [connection signal="pressed" from="NinePatchRect/FearBannerButton" to="." method="PreventAttack" binds= [3, false]]
 [connection signal="pressed" from="NinePatchRect/IllusionistsButton" to="." method="PreventAttack" binds= [1, true]]
 [connection signal="pressed" from="NinePatchRect/TargetEnemyButton" to="." method="PreventAttack" binds= [1, false]]
-[connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="PreventAttack" binds= [0, false]]
+[connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [2, 1]]

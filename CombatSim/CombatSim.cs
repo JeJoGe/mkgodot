@@ -24,14 +24,14 @@ public partial class CombatSim : Node2D
 			var monster = kvp.Value;
 			var atlas = (AtlasTexture)Utils.SpriteSheets[Utils.ConvertMonsterColourToString(monster.Colour)].Duplicate();
 			atlas.Region = new Rect2(new Vector2(monster.X * _spriteSize, monster.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
-            var button = new TextureButton
-            {
-                TextureNormal = atlas,
-                Position = new Vector2(_offset * count + 60, 80 + (_voffset * row)),
-                ButtonGroup = _monsterList,
-                Scale = new Vector2((float)0.4, (float)0.4)
-            };
-            count++;
+			var button = new TextureButton
+			{
+				TextureNormal = atlas,
+				Position = new Vector2(_offset * count + 60, 80 + (_voffset * row)),
+				ButtonGroup = _monsterList,
+				Scale = new Vector2((float)0.4, (float)0.4)
+			};
+			count++;
 			if (count > _monstersPerRow)
 			{
 				count = 0;
@@ -46,22 +46,22 @@ public partial class CombatSim : Node2D
 	{
 		var fortifications = GetNode<CheckBox>("SiteCheckBox").ButtonPressed;
 		var walls = GetNode<CheckBox>("WallCheckBox").ButtonPressed;
-		GD.Print(string.Format("monster #{0} clicked   fortified: {1}   walls: {2}",id,fortifications,walls));
+		GD.Print(string.Format("monster #{0} clicked   fortified: {1}   walls: {2}", id, fortifications, walls));
 		// add to enemy list
-		_enemies.Add((id,(fortifications ? 1 : 0) + (walls ? 1 : 0), Colors.Black));
+		_enemies.Add((id, (fortifications ? 1 : 0) + (walls ? 1 : 0), Colors.Black));
 		UpdateEnemyList();
 	}
 
 	private void OnEnemyListButtonPressed(int index)
 	{
-		GD.Print(string.Format("button with index {0} clicked",index));
+		GD.Print(string.Format("button with index {0} clicked", index));
 		_enemies.RemoveAt(index);
 		UpdateEnemyList();
 	}
 
 	private void UpdateEnemyList()
 	{
-		foreach(var oldButton in _enemyList.GetButtons())
+		foreach (var oldButton in _enemyList.GetButtons())
 		{
 			oldButton.QueueFree();
 		}
@@ -80,19 +80,19 @@ public partial class CombatSim : Node2D
 			atlas.Region = new Rect2(new Vector2(monster.X * _spriteSize, monster.Y * _spriteSize), new Vector2(_spriteSize, _spriteSize));
 			var horizontalPosition = (_offset + 30) * i + 60;
 			var index = i;
-            var button = new TextureButton
-            {
-                TextureNormal = atlas,
-                Position = new Vector2(horizontalPosition, 850),
-                ButtonGroup = _enemyList,
-                Scale = new Vector2((float)0.4, (float)0.4)
-            };
+			var button = new TextureButton
+			{
+				TextureNormal = atlas,
+				Position = new Vector2(horizontalPosition, 850),
+				ButtonGroup = _enemyList,
+				Scale = new Vector2((float)0.4, (float)0.4)
+			};
 			var label = new Label
 			{
 				Position = new Vector2(horizontalPosition, 980),
-				Text = string.Format("Fortifications: {0}",_enemies[i].Item2),
+				Text = string.Format("Fortifications: {0}", _enemies[i].Item2),
 			};
-			GD.Print(string.Format("new button with index {0}",index));
+			GD.Print(string.Format("new button with index {0}", index));
 			button.Pressed += () => OnEnemyListButtonPressed(index);
 			AddChild(button);
 			AddChild(label);
@@ -103,6 +103,7 @@ public partial class CombatSim : Node2D
 	{
 		GameSettings.CombatSim = true;
 		GameSettings.EnemyList = _enemies;
+		GetTree().Paused = true;
 		GetTree().ChangeSceneToFile("res://Combat.tscn");
 	}
 
