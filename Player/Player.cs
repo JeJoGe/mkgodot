@@ -6,12 +6,12 @@ using System.Linq;
 using System.Numerics;
 
 public partial class Player : Node2D
-{	
+{
 	GameplayControl gameplayControl;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	private Vector2I _playerPos;
-	public Vector2I PlayerPos { get => _playerPos; set => _playerPos = value;}
+	public Vector2I PlayerPos { get => _playerPos; set => _playerPos = value; }
 	public int movePoints = 100;
 
 	public int MovePoints { get => movePoints; set => movePoints = value; }
@@ -24,7 +24,7 @@ public partial class Player : Node2D
 	public bool isCombatSceneActive = false;
 	public int influence = 0;
 	public int cardDrawLimit = 5;
-	private List<(string,bool)> _skills = new();
+	private List<(string, bool)> _skills = new();
 
 	public override void _Ready()
 	{
@@ -52,17 +52,17 @@ public partial class Player : Node2D
 		isCombatSceneActive = true;
 		Combat = CombatStart;
 		AddChild(CombatStart);
-		CombatStart.GlobalPosition = new Godot.Vector2(270,0);
+		CombatStart.GlobalPosition = new Godot.Vector2(270, 0);
 		GetTree().Paused = true;
 	}
 
 	public void CombatCleanup(bool victory)
 	{
 		GetTree().Paused = false;
-		
+
 		if (victory)
 		{
-			
+
 			// do something
 		}
 		else
@@ -76,24 +76,24 @@ public partial class Player : Node2D
 	// Change position of player, update position vector
 	public void PerformMovement(Vector2I posClicked, int cellTerrain, int modifier)
 	{
-			var terrainCost = (int)mapGen.terrainCosts[cellTerrain];
-			Utils.undoRedo.CreateAction("Move Player");
-			Utils.undoRedo.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-			Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
-			Utils.undoRedo.AddDoMethod(ChangeGlobalPos);
-			Utils.undoRedo.AddUndoMethod(ChangeGlobalPos);
-			//Utils.undoRedo.AddDoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-			//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
-			Utils.undoRedo.AddDoProperty(this, "PlayerPos", posClicked);
-			Utils.undoRedo.AddUndoProperty(this, "PlayerPos", PlayerPos);
-			Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - terrainCost + modifier); // Reduce move points
-			Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + terrainCost + modifier);
-			Utils.undoRedo.AddDoMethod(UpdateTColors);
-			Utils.undoRedo.AddUndoMethod(UpdateTColors);
-			Utils.undoRedo.CommitAction();
-			//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
-			//GD.Print(GlobalPosition);
-			//gameplayControl.UpdateTokenColors();
+		var terrainCost = (int)mapGen.terrainCosts[cellTerrain];
+		Utils.undoRedo.CreateAction("Move Player");
+		Utils.undoRedo.AddDoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
+		Utils.undoRedo.AddUndoProperty(this, "NewPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
+		Utils.undoRedo.AddDoMethod(ChangeGlobalPos);
+		Utils.undoRedo.AddUndoMethod(ChangeGlobalPos);
+		//Utils.undoRedo.AddDoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
+		//Utils.undoRedo.AddUndoProperty(this, "GlobalPosition", mapGen.ToGlobal(mapGen.MapToLocal(PlayerPos)));
+		Utils.undoRedo.AddDoProperty(this, "PlayerPos", posClicked);
+		Utils.undoRedo.AddUndoProperty(this, "PlayerPos", PlayerPos);
+		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - terrainCost + modifier); // Reduce move points
+		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + terrainCost + modifier);
+		Utils.undoRedo.AddDoMethod(UpdateTColors);
+		Utils.undoRedo.AddUndoMethod(UpdateTColors);
+		Utils.undoRedo.CommitAction();
+		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
+		//GD.Print(GlobalPosition);
+		//gameplayControl.UpdateTokenColors();
 	}
 
 	// Check walls unique data in current tile and iterate. if Destination vector - Any Walls vector == Source vector, then wall between

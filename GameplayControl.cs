@@ -129,7 +129,6 @@ public partial class GameplayControl : Control
 
 		}
 	}
-	//
 
 	// Generate Monster Token and stats, may need to add in variable for whether flipped
 	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
