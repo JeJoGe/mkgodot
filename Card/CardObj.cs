@@ -19,9 +19,9 @@ public partial class CardObj : Sprite2D
     public int copies { get; set; }
     public string phase {get; set;}
     public string character {get; set;}
-    public string replaces { get; set;}
+    public string replaces { get; set;} = "";
     public string topFunction { get; set; }
-    public string bottomFunction { get; set; }
+    public string bottomFunction { get; set; }    
     public OptionButton topOptionsButton = new OptionButton();
     public OptionButton bottomOptionsButton = new OptionButton();
     public CardObjOption currentOption { get; set; } = CardObjOption.top;

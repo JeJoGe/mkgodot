@@ -7,7 +7,12 @@ public partial class CharacterChoice : Control
 {
 	private Dictionary<int,string> _characters = new Dictionary<int,string>{
 		{ 0, "Tovak"},
-		{ 1, "Arythea"}//,"Goldyx","Norowas","Wolfhawk","Krang","Braevalar"];
+		{ 1, "Arythea"},
+		{ 2, "Goldyx"},
+		{ 3, "Norowas"},
+		{ 4, "Wolfhawk"},
+		{ 5, "Krang"},
+		{ 6, "Braevalar"}
 	};
 
 	public override void _Ready() {
@@ -31,6 +36,7 @@ public partial class CharacterChoice : Control
 	{
 		var playerId = GetNode<OptionButton>("CharacterDropdown").GetSelectedId();
 		GameSettings.PlayerCharacter = playerId;
+		GameSettings.PlayerCharacterName = _characters[(int)playerId];
 		GD.Print("Player: "+_characters[GameSettings.PlayerCharacter]);
 		// randomly select dummy character
 		_characters.Remove(playerId);
