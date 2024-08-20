@@ -69,7 +69,6 @@ public partial class ChallengePopUp : Control
 			}
 		}
 		if (GameSettings.ChallengeList.Count != 0){
-			// Complete movement if challenge included a movement
 			foreach (var enemy in GameSettings.ChallengeList)
 			{
 				if(enemy.TokenId == -1)
@@ -82,6 +81,7 @@ public partial class ChallengePopUp : Control
 					GameSettings.EnemyList.Add((enemy.TokenId, enemy.SiteFortifications, enemy.PosColour));
 				}	
 			}
+			//TODO: put in source of monster so only monstergen when monster stays on map
 			gameplayControl.MapUpdateOnPlayerMovement(ChallengeWindow.posClicked, ChallengeWindow.cellTerrain, ChallengeWindow.movementMod, ChallengeWindow.mapEvent);
 			GetNode<Player>("../../Player").InitiateCombat();
 		}
