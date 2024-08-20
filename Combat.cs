@@ -53,25 +53,10 @@ public partial class Combat : Node2D
 				case Phase.PreventAttacks:
 					UpdateCancelledAttacks();
 					break;
+				case Phase.ReduceAttack:
+					break;
 				case Phase.Block:
-					{
-						if (ResolvingAction && _attacksReduced > 0 && !_targetAttack.Reduced)
-						{
-							if (_attacksReduced > 1)
-							{
-
-							}
-							else
-							{
-								// only need to reduce 1 attack
-								_confirmButton.Disabled = true;
-							}
-						}
-						else
-						{
-							UpdateBlock();
-						}
-					}
+					UpdateBlock();
 					break;
 				case Phase.Damage:
 					UpdateDamage();
@@ -96,7 +81,7 @@ public partial class Combat : Node2D
 	}
 	public enum Phase
 	{
-		Ranged, PreventAttacks, Block, Damage, Attack
+		Ranged, PreventAttacks, ReduceAttack, Block, Damage, Attack
 	}
 	// represented table here:
 	/*
@@ -404,6 +389,11 @@ public partial class Combat : Node2D
 				}
 			case Phase.PreventAttacks:
 				{
+					NextCombatPhase(Phase.ReduceAttack);
+					break;
+				}
+			case Phase.ReduceAttack:
+				{
 					NextCombatPhase(Phase.Block);
 					break;
 				}
@@ -502,6 +492,11 @@ public partial class Combat : Node2D
 						NextCombatPhase(Phase.Attack);
 					}
 					_confirmButton.Disabled = true;
+					break;
+				}
+			case Phase.ReduceAttack:
+				{
+					
 					break;
 				}
 			case Phase.Block:
@@ -749,6 +744,7 @@ public partial class Combat : Node2D
 		{
 			_resolvingAction = result = true;
 			_attacksReduced = numAttacks;
+			_confirmButton.Text = "Reduce Attack by " + amountReduced;
 		}
 		return result;
 	}
