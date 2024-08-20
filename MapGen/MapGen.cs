@@ -20,7 +20,8 @@ public partial class MapGen : TileMap
 		{6,2}, // City
 		{7,null}, // Mountain
 		{8,null}, // Lake
-		{9,null} // Nothing
+		{9,null}, // Nothing
+		{10,0} // Nowhere
 	};
 
 	//Initial stack of Green Tiles and Brown Tiles
