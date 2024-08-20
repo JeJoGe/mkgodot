@@ -58,19 +58,15 @@ public partial class Player : Node2D
 		GetTree().Paused = true;
 	}
 
-	public void CombatCleanup(bool victory)
+	public void CombatCleanup(List<(int, Color)> defeated)
 	{
 		GetTree().Paused = false;
-		
-		if (victory)
+		var currHexSafe = true; // check if current hex is safe
+		if (!currHexSafe) 
 		{
-			
-			// do something
+			// retreat to last safe space
 		}
-		else
-		{
-			// do something else
-		}
+		// give awards based on defeated enemies
 		GameSettings.EnemyList.Clear();
 	}
 
