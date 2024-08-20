@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpkfg3i2uq1dl"]
+[gd_scene load_steps=4 format=3 uid="uid://dpkfg3i2uq1dl"]
 
 [ext_resource type="Script" path="res://ChallengePopUp/ChallengePopUp.cs" id="1_55dua"]
+[ext_resource type="Script" path="res://ChallengePopUp/ChallengeWindow.cs" id="1_edn05"]
 [ext_resource type="Script" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
 
 [node name="ChallengeWindow" type="Window"]
@@ -10,11 +11,13 @@ transient = true
 exclusive = true
 unresizable = true
 always_on_top = true
+script = ExtResource("1_edn05")
 
-[node name="ChallengePopUp" type="Control" parent="." node_paths=PackedStringArray("ChallengeOptions", "Challenge", "Cancel")]
+[node name="ChallengePopUp" type="Control" parent="." node_paths=PackedStringArray("ChallengeWindow", "ChallengeOptions", "Challenge", "Cancel")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_55dua")
+ChallengeWindow = NodePath("..")
 ChallengeOptions = NodePath("PanelContainer/ChallengeOptions")
 Challenge = NodePath("ColorRect/Challenge")
 Cancel = NodePath("ColorRect/Cancel")
