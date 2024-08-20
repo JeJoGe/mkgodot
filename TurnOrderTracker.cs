@@ -12,7 +12,12 @@ public partial class TurnOrderTracker : Node2D
 	private Vector2 _scale = new Vector2((float)0.2, (float)0.2);
 	private Dictionary<int,string> _tokenImages = new Dictionary<int, string>{
 		{0, "res://assets/TurnOrder/Token Turn Order Front Tovak.jpg"},
-		{1, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"}
+		{1, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"},
+		{2, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"}, //TODO: add tokens for other characters
+		{3, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"},
+		{4, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"},
+		{5, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"},
+		{6, "res://assets/TurnOrder/Token Turn Order Front Arythea.jpg"}
 	};
 	private Dictionary<int,int> _tracker = new Dictionary<int, int>();
 	private int _currentTurn = 0;

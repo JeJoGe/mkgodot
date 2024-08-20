@@ -9,7 +9,9 @@ public partial class Monster : Node2D
 	public int SiteFortifications { get; set; }
 	[Export]
 	public bool Selected { get; set; } = false;
-	public Color PosColour;
+	[Export]
+	private ColorRect _colorRect;
+	public Color PosColour { get; set; }
 	public bool Blocked
 	{
 		get
@@ -52,6 +54,7 @@ public partial class Monster : Node2D
 	public override void _Ready()
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
+		_colorRect.Visible = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -224,6 +227,12 @@ public partial class Monster : Node2D
 		{
 			_flag = false;
 		}
+	}
+
+	public void ShowColourIdentifier()
+	{
+		_colorRect.Color = PosColour;
+		_colorRect.Visible = true;
 	}
 
 	public void PrintStats()

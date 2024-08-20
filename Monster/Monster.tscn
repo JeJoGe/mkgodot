@@ -10,9 +10,10 @@ region = Rect2(0, 0, 258, 258)
 [sub_resource type="CircleShape2D" id="CircleShape2D_cotig"]
 radius = 46.0
 
-[node name="Monster" type="Node2D"]
+[node name="Monster" type="Node2D" node_paths=PackedStringArray("_colorRect")]
 z_index = 1
 script = ExtResource("1_m3i1r")
+_colorRect = NodePath("ColorRect")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.4, 0.4)
