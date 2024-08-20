@@ -27,7 +27,7 @@ public partial class ChallengePopUp : Control
 		ChallengeOptions.Size = new Vector2 (310, 32 * GameSettings.ChallengeList.Count);
 		foreach (var enemy in GameSettings.ChallengeList)
 		{
-			enemyCheckboxes.Add(ChallengeOptions.createChallengeOption(enemy.TokenId, optionOffset, enemy.PosColour, enemy.OldPosColour, enemy.Colour));
+			enemyCheckboxes.Add(ChallengeOptions.createChallengeOption(enemy.TokenId, optionOffset, enemy.PosColour, enemy.OldPosColour, enemy.Colour, enemy.Facedown));
 			optionOffset += 32;
 		}
 		Challenge.Position = new Vector2 (0, 132 + optionOffset);

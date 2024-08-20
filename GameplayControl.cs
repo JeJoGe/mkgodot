@@ -177,14 +177,15 @@ public partial class GameplayControl : Control
 		foreach (var enemy in EnemyList)
 		{
 			var nextToEnemy = mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition);
-			if (nextToEnemy)
+			var onEnemy = (enemy.MapPosition == player.PlayerPos);
+			if (nextToEnemy || onEnemy)
 			{
 				if ((enemy.Colour == "green" || enemy.Colour == "red") && nextToRampage == false)
 				{
 					nextToRampage = true;
 				}
 				var enemyEvent = mapGen.GetCellTileData(MapGen.MainLayer, enemy.MapPosition).GetCustomData("Event").ToString();
-				if (!GameSettings.NightTime)
+				if (!GameSettings.NightTime || onEnemy)
 				{
 					if (enemyEvent == "keep" || enemyEvent == "tower" || enemyEvent.Contains("city"))
 					{
@@ -208,12 +209,10 @@ public partial class GameplayControl : Control
 		}
 		if(nextToRampage && challengeButton.Disabled == true)
 		{
-			GD.Print("Challenge false");
 			challengeButton.Disabled = false;
 		}
 		else if (!nextToRampage && challengeButton.Disabled == false)
 		{
-			GD.Print("Challenge true");
 			challengeButton.Disabled = true;
 		}
 		if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out

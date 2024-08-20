@@ -13,10 +13,10 @@ public partial class ChallengeOptions : VBoxContainer
 	{
 	}
 
-	public CheckBox createChallengeOption(int enemyId, int optionOffset, Color PosColour, Color OldPosColour, string monColour)
+	public CheckBox createChallengeOption(int enemyId, int optionOffset, Color PosColour, Color OldPosColour, string monColour, bool Facedown)
 	{
 		var tokenText = "";
-		if (enemyId == -1)
+		if (enemyId == -1 || Facedown == true)
 		{
 			tokenText = monColour + " Token";
 		}
