@@ -37,8 +37,10 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	private Source.Colour determineColour(string color) {
-		switch(color) {
+	private Source.Colour determineColour(string color)
+	{
+		switch (color)
+		{
 			case nameof(Source.Colour.Blue):
 				return Source.Colour.Blue;
 			case nameof(Source.Colour.Green):
@@ -160,14 +162,17 @@ public partial class GamePlay : Node2D
 						break;
 					case nameof(BasicCardActions.gainManaTokens):
 						Source.Colour colour = determineColour(action[1]);
-						if (colour == Source.Colour.Gold) {
+						if (colour == Source.Colour.Gold)
+						{
 							GD.Print("Error in determining color of manatoken");
 							break;
 						}
-						Callable GainManaToken = Callable.From(()=> {
+						Callable GainManaToken = Callable.From(() =>
+						{
 							inventory.AddToken((int)colour);
 						});
-						Callable RemoveManaToken = Callable.From(() => {
+						Callable RemoveManaToken = Callable.From(() =>
+						{
 							inventory.ConsumeToken((int)colour);
 						});
 						break;
@@ -178,7 +183,7 @@ public partial class GamePlay : Node2D
 					default:
 						break;
 				}
-				
+
 
 				Callable doCallable = Callable.From(() =>
 				{

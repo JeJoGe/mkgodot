@@ -4,10 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_reduceAttackButton")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
+_confirmButton = NodePath("NinePatchRect/ConfirmButton")
+_reduceAttackButton = NodePath("NinePatchRect/ReduceButton")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -37,6 +39,15 @@ offset_right = 165.0
 offset_bottom = 647.0
 disabled = true
 text = "Confirm Attack"
+
+[node name="ReduceButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 208.0
+offset_top = 616.0
+offset_right = 327.0
+offset_bottom = 647.0
+text = "Reduce Attack"
 
 [node name="WoundsLabel" type="Label" parent="NinePatchRect"]
 layout_mode = 0
@@ -201,6 +212,16 @@ offset_bottom = 463.0
 button_group = ExtResource("3_de76w")
 text = "Target Enemy No Attack"
 
+[node name="ReduceAttackButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 192.0
+offset_right = 1047.0
+offset_bottom = 223.0
+button_group = ExtResource("3_de76w")
+text = "Reduce 1 Attack"
+
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
@@ -218,3 +239,4 @@ text = "Target Enemy No Attack"
 [connection signal="pressed" from="NinePatchRect/FearBannerButton" to="." method="PreventAttack" binds= [3, false]]
 [connection signal="pressed" from="NinePatchRect/IllusionistsButton" to="." method="PreventAttack" binds= [1, true]]
 [connection signal="pressed" from="NinePatchRect/TargetEnemyButton" to="." method="PreventAttack" binds= [1, false]]
+[connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [2, 1]]
