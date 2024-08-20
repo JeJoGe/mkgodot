@@ -1060,13 +1060,14 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory")]
 z_index = -1
 script = ExtResource("1_m0gf8")
 mapGen = NodePath("GameplayControl/MapGen")
 deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
 player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
+inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
@@ -1172,8 +1173,10 @@ _roundMarker = NodePath("../../RoundMarker")
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
-[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI"]
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
 script = ExtResource("2_khnnw")
+_source = NodePath("../SharedArea/Source")
+_inventory = NodePath("Inventory")
 
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
@@ -1390,6 +1393,7 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
 [connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
 [connection signal="pressed" from="GameplayControl/InteractButton" to="GameplayControl" method="_on_interact_button_pressed"]
