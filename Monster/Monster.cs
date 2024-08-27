@@ -8,7 +8,17 @@ public partial class Monster : Node2D
 	[Export]
 	public int SiteFortifications { get; set; }
 	[Export]
-	public bool Selected { get; set; } = false;
+	private Sprite2D _halo;
+	private bool _selected = false;
+	public bool Selected
+	{
+		get => _selected;
+		set
+		{
+			_selected = value;
+			_halo.Visible = _selected;
+		}
+	}
 	[Export]
 	private ColorRect _colorRect;
 	public Color PosColour { get; set; }
