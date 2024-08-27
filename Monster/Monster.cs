@@ -88,6 +88,7 @@ public partial class Monster : Node2D
 			var attack = Attacks[i];
 			if (attack.Attacking)
 			{
+				var combat = GetParent<Combat>();
 				if (attack.Element == Element.Summon)
 				{
 					// draw brown tokens
@@ -95,18 +96,17 @@ public partial class Monster : Node2D
 					{
 						GD.Print("summon brown token");
 						var monsterID = GameSettings.DrawMonster(MonsterColour.Brown);
-						var monster = GetParent<Combat>().CreateMonsterToken(monsterID);
+						var monster = combat.CreateMonsterToken(monsterID);
 						monster.Summoned = true;
 					}
 					Visible = false;
 					attack.Attacked = true;
 					break;
 				}
-				var swift = Abilities.Contains("swift");
 				var button = new Button
 				{
-					ButtonGroup = GetParent<Combat>().MonsterAttacks,
-					Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0)),
+					ButtonGroup = combat.MonsterAttacks,
+					Text = string.Format("{0} {1}", attack.Element, attack.Value),
 					ToggleMode = true,
 					Position = new Vector2(-46, 60 + _attackOffset * i),
 					Name = string.Format("AttackButton{0}", i)
@@ -117,13 +117,27 @@ public partial class Monster : Node2D
 		}
 	}
 
+	public void UpdateAttackForSwiftness()
+	{
+		for (int i = 0; i < Attacks.Count; i++)
+		{
+			var attack = Attacks[i];
+			var swift = Abilities.Contains("swift");
+			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
+			{
+				var button = GetNode<Button>("AttackButton" + i.ToString());
+				button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0));
+			}
+		}
+	}
+
 	public void Damage()
 	{
 		for (int i = 0; i < Attacks.Count; i++)
 		{
 			var attack = Attacks[i];
 			var brutal = Abilities.Contains("brutal");
-			if (!attack.Blocked && attack.Element != Element.Summon)
+			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
 			{
 				var button = GetNode<Button>("AttackButton" + i.ToString());
 				button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (brutal ? attack.Value : 0));

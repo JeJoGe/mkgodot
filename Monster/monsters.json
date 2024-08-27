@@ -107,6 +107,24 @@
         "y":0,
         "count": 2
     },
+    "103":{
+        "name":"Orc Stonethrower",
+        "colour": 0,
+        "armour":2,
+        "attacks":[
+            {
+                "value":7,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":["fortified","cumbersome"],
+        "version":"base",
+        "x":3,
+        "y":1,
+        "count": 2
+    },
     "500":{
         "name":"Crossbowmen",
         "colour": 1,
