@@ -233,6 +233,33 @@ offset_bottom = 303.0
 button_group = ExtResource("3_de76w")
 text = "Add 1 Movement"
 
+[node name="AttackLabel" type="RichTextLabel" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 736.0
+offset_right = 104.0
+offset_bottom = 776.0
+bbcode_enabled = true
+text = "[img=40]res://assets/attack.png[/img] 0"
+
+[node name="FireAttackLabel" type="RichTextLabel" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 117.0
+offset_top = 736.0
+offset_right = 181.0
+offset_bottom = 776.0
+bbcode_enabled = true
+text = "[img=40]res://assets/fireattack.png[/img] 0"
+
+[node name="IceAttackLabel" type="RichTextLabel" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 736.0
+offset_right = 256.0
+offset_bottom = 776.0
+bbcode_enabled = true
+text = "[img=40]res://assets/iceattack.png[/img] 0"
+
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
