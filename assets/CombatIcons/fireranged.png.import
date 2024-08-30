@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5ard47elovs7"
-path="res://.godot/imported/attack.png-72c9feda44ac8341d0a98dd3d8bd7b4b.ctex"
+uid="uid://cx8yn0jg4kngk"
+path="res://.godot/imported/fireranged.png-fcfb29047932b4112e49c988f6b73712.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/attack.png"
-dest_files=["res://.godot/imported/attack.png-72c9feda44ac8341d0a98dd3d8bd7b4b.ctex"]
+source_file="res://assets/CombatIcons/fireranged.png"
+dest_files=["res://.godot/imported/fireranged.png-fcfb29047932b4112e49c988f6b73712.ctex"]
 
 [params]
 

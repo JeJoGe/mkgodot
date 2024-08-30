@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b07f64s7xq2od"
-path="res://.godot/imported/iceattack.png-cf7a0b943f8dfe4f48d4c3a9e46b319c.ctex"
+uid="uid://cuc4sxy2ovv8n"
+path="res://.godot/imported/icesiege.png-663ff533fc3600b45d0f5438edeebc13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/iceattack.png"
-dest_files=["res://.godot/imported/iceattack.png-cf7a0b943f8dfe4f48d4c3a9e46b319c.ctex"]
+source_file="res://assets/CombatIcons/icesiege.png"
+dest_files=["res://.godot/imported/icesiege.png-663ff533fc3600b45d0f5438edeebc13.ctex"]
 
 [params]
 

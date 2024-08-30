@@ -4,12 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_attackLabel", "_blockLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 _confirmButton = NodePath("NinePatchRect/ConfirmButton")
 _nextButton = NodePath("NinePatchRect/NextButton")
+_attackLabel = NodePath("NinePatchRect/AttackLabel")
+_blockLabel = NodePath("NinePatchRect/BlockLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -82,6 +84,36 @@ offset_bottom = 63.0
 button_group = ExtResource("3_de76w")
 text = "Add 1 Range"
 
+[node name="FireRangeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 1040.0
+offset_top = 72.0
+offset_right = 1146.0
+offset_bottom = 103.0
+button_group = ExtResource("3_de76w")
+text = "Fire Range 1"
+
+[node name="IceRangeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 1040.0
+offset_top = 112.0
+offset_right = 1146.0
+offset_bottom = 143.0
+button_group = ExtResource("3_de76w")
+text = "Ice Range 1"
+
+[node name="IceFireRangeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 1040.0
+offset_top = 152.0
+offset_right = 1146.0
+offset_bottom = 183.0
+button_group = ExtResource("3_de76w")
+text = "ColdFire R 1"
+
 [node name="SiegeButton" type="Button" parent="NinePatchRect"]
 visible = false
 layout_mode = 0
@@ -91,6 +123,36 @@ offset_right = 1026.0
 offset_bottom = 63.0
 button_group = ExtResource("3_de76w")
 text = "Add 1 Siege"
+
+[node name="FireSiegeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 72.0
+offset_right = 1026.0
+offset_bottom = 103.0
+button_group = ExtResource("3_de76w")
+text = "Fire Siege 1"
+
+[node name="IceSiegeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 112.0
+offset_right = 1026.0
+offset_bottom = 143.0
+button_group = ExtResource("3_de76w")
+text = "Ice Siege 1"
+
+[node name="IceFireSiegeButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 152.0
+offset_right = 1026.0
+offset_bottom = 183.0
+button_group = ExtResource("3_de76w")
+text = "ColdFire S 1"
 
 [node name="FireAttackButton" type="Button" parent="NinePatchRect"]
 visible = false
@@ -234,38 +296,35 @@ button_group = ExtResource("3_de76w")
 text = "Add 1 Movement"
 
 [node name="AttackLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
 layout_mode = 0
 offset_left = 40.0
 offset_top = 736.0
 offset_right = 104.0
-offset_bottom = 776.0
+offset_bottom = 784.0
 bbcode_enabled = true
-text = "[img=40]res://assets/attack.png[/img] 0"
 
-[node name="FireAttackLabel" type="RichTextLabel" parent="NinePatchRect"]
+[node name="BlockLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
 layout_mode = 0
-offset_left = 117.0
+offset_left = 40.0
 offset_top = 736.0
-offset_right = 181.0
-offset_bottom = 776.0
+offset_right = 104.0
+offset_bottom = 784.0
 bbcode_enabled = true
-text = "[img=40]res://assets/fireattack.png[/img] 0"
-
-[node name="IceAttackLabel" type="RichTextLabel" parent="NinePatchRect"]
-layout_mode = 0
-offset_left = 192.0
-offset_top = 736.0
-offset_right = 256.0
-offset_bottom = 776.0
-bbcode_enabled = true
-text = "[img=40]res://assets/iceattack.png[/img] 0"
 
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
 [connection signal="pressed" from="NinePatchRect/AttackButton" to="." method="AddAttack" binds= [1, 0, 0]]
 [connection signal="pressed" from="NinePatchRect/RangeButton" to="." method="AddAttack" binds= [1, 0, 4]]
+[connection signal="pressed" from="NinePatchRect/FireRangeButton" to="." method="AddAttack" binds= [1, 1, 4]]
+[connection signal="pressed" from="NinePatchRect/IceRangeButton" to="." method="AddAttack" binds= [1, 2, 4]]
+[connection signal="pressed" from="NinePatchRect/IceFireRangeButton" to="." method="AddAttack" binds= [1, 3, 4]]
 [connection signal="pressed" from="NinePatchRect/SiegeButton" to="." method="AddAttack" binds= [1, 0, 8]]
+[connection signal="pressed" from="NinePatchRect/FireSiegeButton" to="." method="AddAttack" binds= [1, 1, 8]]
+[connection signal="pressed" from="NinePatchRect/IceSiegeButton" to="." method="AddAttack" binds= [1, 2, 8]]
+[connection signal="pressed" from="NinePatchRect/IceFireSiegeButton" to="." method="AddAttack" binds= [1, 3, 8]]
 [connection signal="pressed" from="NinePatchRect/FireAttackButton" to="." method="AddAttack" binds= [1, 1, 0]]
 [connection signal="pressed" from="NinePatchRect/IceAttackButton" to="." method="AddAttack" binds= [1, 2, 0]]
 [connection signal="pressed" from="NinePatchRect/IceFireAttackButton" to="." method="AddAttack" binds= [1, 3, 0]]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c115g0n1m03sx"
-path="res://.godot/imported/fireattack.png-1e1aedf76b7c955ed3f89f40bf04368a.ctex"
+uid="uid://b07f64s7xq2od"
+path="res://.godot/imported/iceattack.png-b3421f043eecc0a875075bf6f5c1733c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/fireattack.png"
-dest_files=["res://.godot/imported/fireattack.png-1e1aedf76b7c955ed3f89f40bf04368a.ctex"]
+source_file="res://assets/CombatIcons/iceattack.png"
+dest_files=["res://.godot/imported/iceattack.png-b3421f043eecc0a875075bf6f5c1733c.ctex"]
 
 [params]
 

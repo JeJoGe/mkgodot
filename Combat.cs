@@ -11,6 +11,10 @@ public partial class Combat : Node2D
 	private Button _confirmButton;
 	[Export]
 	private Button _nextButton;
+	[Export]
+	private RichTextLabel _attackLabel;
+	[Export]
+	private RichTextLabel _blockLabel;
 	[Signal]
 	public delegate void KnockoutEventHandler();
 	[Signal]
@@ -112,6 +116,26 @@ public partial class Combat : Node2D
 	private PackedScene _monsterScene = GD.Load<PackedScene>("res://Monster/Monster.tscn");
 
 	public Phase CurrentPhase { get; set; }
+	private static readonly Dictionary<int, string> _icons = new Dictionary<int, string>(){
+		{0, "res://assets/CombatIcons/attack.png"},
+		{1, "res://assets/CombatIcons/fireattack.png"},
+		{2, "res://assets/CombatIcons/iceattack.png"},
+		{3, "res://assets/CombatIcons/coldfireattack.png"},
+		{4, "res://assets/CombatIcons/ranged.png"},
+		{5, "res://assets/CombatIcons/fireranged.png"},
+		{6, "res://assets/CombatIcons/iceranged.png"},
+		{7, "res://assets/CombatIcons/coldfireranged.png"},
+		{8, "res://assets/CombatIcons/siege.png"},
+		{9, "res://assets/CombatIcons/firesiege.png"},
+		{10, "res://assets/CombatIcons/icesiege.png"},
+		{11, "res://assets/CombatIcons/coldfiresiege.png"}
+	};
+	private static readonly Dictionary<int, string> _blockIcons = new Dictionary<int, string>(){
+		{0, "res://assets/CombatIcons/block.png"},
+		{1, "res://assets/CombatIcons/fireblock.png"},
+		{2, "res://assets/CombatIcons/iceblock.png"},
+		{3, "res://assets/CombatIcons/coldfireblock.png"}
+	};
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -573,6 +597,7 @@ public partial class Combat : Node2D
 						_playerBlocks[kvp.Key] = 0;
 					}
 					_totalBlock = 0;
+					UpdateUI();
 					// check if all enemies blocked
 					var allBlocked = AllEnemiesBlockedOrNotAttacking();
 					if (allBlocked)
@@ -651,7 +676,7 @@ public partial class Combat : Node2D
 					_confirmButton.Text = "Reduce Attack By 1";
 					_confirmButton.Disabled = true;
 
-					AllEnemiesAttack();
+					EnemiesAttack();
 					break;
 				}
 			case Phase.Block:
@@ -761,6 +786,7 @@ public partial class Combat : Node2D
 	{
 		_playerAttacks[(int)type + (int)range] += amount;
 		GD.Print(range.ToString() + " " + type.ToString() + " Attack: " + _playerAttacks[(int)type + (int)range]);
+		UpdateUI();
 	}
 
 	public void AddBlock(int amount, Element type, bool swift = false)
@@ -772,6 +798,7 @@ public partial class Combat : Node2D
 		}
 		GD.Print(type.ToString() + " Block: " + _playerBlocks[(int)type]);
 		GD.Print(type.ToString() + " Block only against enemies with switftness: " + _playerBlocks[(int)type + 4]);
+		UpdateUI();
 	}
 
 	public void AddMovement(int amount)
@@ -869,6 +896,7 @@ public partial class Combat : Node2D
 			_playerAttacks[kvp.Key] = 0;
 		}
 		_totalAttack = 0;
+		UpdateUI();
 	}
 
 	public void DeselectUnits()
@@ -955,7 +983,7 @@ public partial class Combat : Node2D
 		return result;
 	}
 
-	private void AllEnemiesAttack()
+	private void EnemiesAttack()
 	{
 		// Remove existing buttons before creating new attack buttons
 		HideAttackButtons();
@@ -968,6 +996,44 @@ public partial class Combat : Node2D
 			{
 				enemy.Attack();
 			}
+		}
+	}
+
+	private void UpdateUI()
+	{
+		var cellStrings = "";
+		var cellCount = 0;
+		if (CurrentPhase == Phase.Ranged || CurrentPhase == Phase.Attack || CurrentPhase == Phase.PreventAttacks)
+		{
+			// iterate through attack dictionary
+			foreach (var attackType in _playerAttacks)
+			{
+				if (attackType.Value > 0)
+				{
+					var str = string.Format("[cell][img=40,center]{0}[/img] {1}[/cell]", _icons[attackType.Key], attackType.Value);
+					cellStrings += str;
+					cellCount += 1;
+				}
+			}
+			_attackLabel.Text = string.Format("[table={0}]{1}[/table]", cellCount, cellStrings);
+			_attackLabel.Size = new Vector2(64 * cellCount, 48);
+			_attackLabel.Visible = cellCount > 0;
+		}
+		else
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (_playerBlocks[i] > 0)
+				{
+					// TODO: update value for swiftness
+					var str = string.Format("[cell][img=40,center]{0}[/img] {1}[/cell]", _blockIcons[i], _playerBlocks[i]);
+					cellStrings += str;
+					cellCount += 1;
+				}
+			}
+			_blockLabel.Text = string.Format("[table={0}]{1}[/table]", cellCount, cellStrings);
+			_blockLabel.Size = new Vector2(64 * cellCount, 48);
+			_blockLabel.Visible = cellCount > 0;
 		}
 	}
 
