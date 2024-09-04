@@ -67,6 +67,7 @@ public partial class MapToken : Node2D
 			if (this._facedown != value)
 			{
 				atlas.Region = new Rect2(new Vector2(X * _tokenSpriteSize, Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
+				
 				_facedown = value;
 			}
 			else
