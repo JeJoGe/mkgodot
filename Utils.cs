@@ -20,7 +20,8 @@ public partial class Utils : Node
 		{"yellow","res://assets/TokenImages/YellowTokens/yellow_tokens_sheet.png"},
 		{"silver","res://assets/silverunits.jpg"},
 		{"gold","res://assets/goldunits.jpg"},
-		{"dice","res://assets/dice.jpg"}
+		{"dice","res://assets/dice.jpg"},
+		{"spell","res://assets/spells.jpg"}
 	};
 	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
 		{Source.Colour.Blue,(0,1)},
@@ -84,6 +85,7 @@ public partial class Utils : Node
 	public static Dictionary<int, MonsterObject> Bestiary;
 	public static Dictionary<int, UnitObject> UnitStats;
 	public static Dictionary<int,RuinObject> RuinEvents;
+	public static Dictionary<int, Spell> SpellBook;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -95,6 +97,7 @@ public partial class Utils : Node
 		LoadRuins();
 		GameSettings.createYellowStack();
 		LoadManaSprites();
+		LoadSpells();
 	}
 
 	public static MonsterColour ConvertStringToMonsterColour(string colour)
@@ -152,6 +155,13 @@ public partial class Utils : Node
 		StreamReader sr = new StreamReader("./Unit/units.json");
 		string json = sr.ReadToEnd();
 		UnitStats = JsonConvert.DeserializeObject<Dictionary<int, UnitObject>>(json);
+	}
+
+	private void LoadSpells()
+	{
+		StreamReader sr = new StreamReader("./Card/spells.json");
+		string json = sr.ReadToEnd();
+		SpellBook = JsonConvert.DeserializeObject<Dictionary<int, Spell>>(json);
 	}
 
 	private void LoadRuins()
@@ -246,6 +256,17 @@ public class MonsterAttack
 	public bool Blocked { get; set; } = false;
 	public bool Attacked { get; set; } = false;
 	public bool Attacking { get; set; } = true;
+}
+
+public class Spell
+{
+	public string Name { get; set; }
+	public int X { get; set; }
+	public int Y { get; set; }
+	public string Version { get; set; }
+	public string Phase { get; set; }
+	public string TopFunction { get; set; }
+	public string BottomFunction { get; set; }
 }
 
 public enum MonsterColour

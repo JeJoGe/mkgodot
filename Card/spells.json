@@ -1,0 +1,42 @@
+{
+    "93":{
+        "name": "Fireball",
+        "colour": "red",
+        "x": 3,
+        "y": 1,
+        "topFunction": "attack-fire-ranged-5",
+        "bottomFunction": "attack-fire-siege-8",
+        "phase": "combat",
+        "version": "base"
+    },
+    "94":{
+        "name": "Snowstorm",
+        "colour": "blue",
+        "x": 3,
+        "y": 2,
+        "topFunction": "attack-ice-ranged-5",
+        "bottomFunction": "attack-ice-siege-8",
+        "phase": "combat",
+        "version": "base"
+    },
+    "96":{
+        "name": "Tremor",
+        "colour": "green",
+        "x": 3,
+        "y": 0,
+        "topFunction": "",
+        "bottomFunction": "",
+        "phase": "combat",
+        "version": "base"
+    },
+    "99":{
+        "name": "Whirlwind",
+        "colour": "white",
+        "x": 4,
+        "y": 3,
+        "topFunction": "",
+        "bottomFunction": "",
+        "phase": "combat",
+        "version": "base"
+    }
+}
