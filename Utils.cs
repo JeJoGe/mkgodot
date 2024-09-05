@@ -246,7 +246,6 @@ public class MonsterAttack
 	public bool Blocked { get; set; } = false;
 	public bool Attacked { get; set; } = false;
 	public bool Attacking { get; set; } = true;
-	public bool Reduced { get; set; } = false;
 }
 
 public enum MonsterColour

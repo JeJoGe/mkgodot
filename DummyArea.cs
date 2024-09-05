@@ -21,20 +21,20 @@ public partial class DummyArea : Node2D
 		{1,new Dictionary<int, int>{
 			{0,0},{1,2},{2,0},{3,1}
 		}},
-		{2,new Dictionary<int, int>{ //TODO: Update dummy initial crystals
-			{0,0},{1,2},{2,0},{3,1}
+		{2,new Dictionary<int, int>{
+			{0,1},{1,0},{2,2},{3,0}
 		}},
 		{3,new Dictionary<int, int>{
-			{0,0},{1,2},{2,0},{3,1}
+			{0,0},{1,0},{2,1},{3,2}
 		}},
 		{4,new Dictionary<int, int>{
-			{0,0},{1,2},{2,0},{3,1}
+			{0,1},{1,0},{2,0},{3,2}
 		}},
 		{5,new Dictionary<int, int>{
-			{0,0},{1,2},{2,0},{3,1}
+			{0,0},{1,2},{2,1},{3,0}
 		}},
 		{6,new Dictionary<int, int>{
-			{0,0},{1,2},{2,0},{3,1}
+			{0,2},{1,0},{2,1},{3,0}
 		}}
 	};
 	public enum Colour
