@@ -8,5 +8,5 @@ script = ExtResource("1_s06sx")
 [node name="MonsterGroupControl" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 64.0
+offset_bottom = 64.0
