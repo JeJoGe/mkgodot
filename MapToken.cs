@@ -14,6 +14,7 @@ public partial class MapToken : Node2D
 	private Color _oldPosColour = Colors.Black;
 	public Color OldPosColour { get; set; }
 	private Color _posColour = Colors.Black;
+	PackedScene MonsterGroupScene = GD.Load<PackedScene>("res://MonsterGroup.tscn");
 
 	public Color PosColour
 	{
@@ -67,7 +68,14 @@ public partial class MapToken : Node2D
 			if (this._facedown != value)
 			{
 				atlas.Region = new Rect2(new Vector2(X * _tokenSpriteSize, Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
-				
+				if (Colour == "yellow")
+				{
+					if (Utils.RuinEvents[TokenId].Event == "monster")
+					{
+						var monsterGroup = (MonsterGroup)MonsterGroupScene.Instantiate();
+						monsterGroup.MapPosition = MapPosition;
+					}
+				}
 				_facedown = value;
 			}
 			else
