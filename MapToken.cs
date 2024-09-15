@@ -80,6 +80,7 @@ public partial class MapToken : Node2D
 						{
 							monsterGroup.MonsterList.Add(gameplayControl.PlaceholderMonsterGen(monsterColour, 0, MapPosition));
 						}
+						
 						monsterGroup.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(MapPosition));
 						AddChild(monsterGroup);
 						gameplayControl.MonsterGroupList.Add(monsterGroup);
