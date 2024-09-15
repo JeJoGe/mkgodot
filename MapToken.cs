@@ -70,10 +70,20 @@ public partial class MapToken : Node2D
 				atlas.Region = new Rect2(new Vector2(X * _tokenSpriteSize, Y * _tokenSpriteSize), new Vector2(_tokenSpriteSize, _tokenSpriteSize));
 				if (Colour == "yellow")
 				{
-					if (Utils.RuinEvents[TokenId].Event == "monster")
+					var ruinStats = Utils.RuinEvents[TokenId];
+					if (ruinStats.Event == "monster")
 					{
 						var monsterGroup = (MonsterGroup)MonsterGroupScene.Instantiate();
 						monsterGroup.MapPosition = MapPosition;
+						var gameplayControl = GetNode<GameplayControl>("..");
+						foreach (var monsterColour in ruinStats.Requirements)
+						{
+							monsterGroup.MonsterList.Add(gameplayControl.PlaceholderMonsterGen(monsterColour, 0, MapPosition));
+						}
+						monsterGroup.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(MapPosition));
+						AddChild(monsterGroup);
+						gameplayControl.MonsterGroupList.Add(monsterGroup);
+						
 					}
 				}
 				_facedown = value;

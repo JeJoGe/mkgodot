@@ -157,7 +157,7 @@ public partial class GameplayControl : Control
 		EnemyList.Add(monsterToken);
 	}
 
-	public void PlaceholderMonsterGen(string colour, int siteFortifications, Vector2I localPos)
+	public MapToken PlaceholderMonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{
 		var monsterToken = (MapToken)mapTokenScene.Instantiate();
 		monsterToken.MapPosition = localPos;
@@ -166,7 +166,7 @@ public partial class GameplayControl : Control
 		monsterToken.TokenId = -1;
 		monsterToken.Facedown = true;
 		monsterToken.Visible = false;
-		GameSettings.ChallengeList.Add(monsterToken);
+		return(monsterToken);
 	}
 
 	// Need movement function so that if challenge canceled, don't do movement
@@ -393,22 +393,26 @@ public partial class GameplayControl : Control
 							if (Utils.RuinEvents[ruin.TokenId].Event == "monster")
 							{
 								var alreadyEnemies = false;
-								foreach (var enemy in EnemyList)
+								foreach (var monsterGroup in MonsterGroupList)
 								{
-									if (enemy.MapPosition == ruin.MapPosition)
+									if (monsterGroup.MapPosition == ruin.MapPosition)
 									{
 										if (!alreadyEnemies)
 										{
 											alreadyEnemies = true;
 										}
-										GameSettings.ChallengeList.Add(enemy);
+										foreach (var monster in monsterGroup.MonsterList)
+										{
+											GameSettings.ChallengeList.Add(monster);
+										}
 									}
 								}
 								if(!alreadyEnemies)
 								{
 									foreach (var monsterColour in Utils.RuinEvents[ruin.TokenId].Requirements)
 										{
-											PlaceholderMonsterGen(monsterColour, 0, ruin.MapPosition);
+											var monsterToken = PlaceholderMonsterGen(monsterColour, 0, ruin.MapPosition);
+											GameSettings.ChallengeList.Add(monsterToken);
 										}
 								}
 								var ChallengeStart = (ChallengeWindow)ChallengeScene.Instantiate();
