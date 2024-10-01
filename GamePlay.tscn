@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=58 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
+[ext_resource type="PackedScene" uid="uid://vctows426n3l" path="res://Offers/SpellOffer.tscn" id="10_h555x"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
 [ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
@@ -1172,6 +1173,9 @@ _roundMarker = NodePath("../../RoundMarker")
 
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
+
+[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("10_h555x")]
+position = Vector2(984, 176)
 
 [node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
 script = ExtResource("2_khnnw")
