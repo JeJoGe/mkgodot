@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public partial class SpellOffer : Node2D
@@ -94,8 +95,7 @@ public partial class SpellOffer : Node2D
 			}
 		}
 		var currNode = _offer.First;
-		// TODO: handle case when less than 3 cards remaining in deck
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < Math.Min(3, _offer.Count); i++)
 		{
 			var spell = Utils.SpellBook[currNode.Value];
 			currNode = currNode.Next;
