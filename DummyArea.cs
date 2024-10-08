@@ -46,6 +46,7 @@ public partial class DummyArea : Node2D
 	public override void _Ready()
 	{
 		_crystals = _initCrystals[GameSettings.DummyCharacter];
+		UpdateCrystals();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -137,9 +138,8 @@ public partial class DummyArea : Node2D
 	{
 		// add card to deck then shuffle
 		if (SharedArea.Round != 1) { // skip for round 1
-			//TODO: add card/crystal according once offers are implemented
+			//TODO: add card according once offers are implemented
 			_deck = _deck.Append(Utils.RandomNumber(0,4)).ToArray(); // adding a random card
-			_crystals[Utils.RandomNumber(0,4)]++; // add random crystal to dummy inventory
 			_blue = 0;
 			_red = 0;
 			_green = 0;
@@ -169,6 +169,11 @@ public partial class DummyArea : Node2D
 		}
 		stack = new Stack<int>(_deck.Shuffle());
 		UpdateLabels();
+	}
+
+	private void AddCrystal(int colour)
+	{
+		_crystals[colour]++;
 		UpdateCrystals();
 	}
 

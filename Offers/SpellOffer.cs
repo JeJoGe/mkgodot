@@ -1,9 +1,12 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class SpellOffer : Node2D
 {
+	[Signal]
+	public delegate void DummyEventHandler(Source.Colour colour);
+	[Export]
+	private ConfirmationDialog _confirmDialog;
 	private LinkedList<int> _offer;
 	private Dictionary<int,OfferCard> _slots; // keys 0-2 where 0 is the oldest card
 	private static int _offset = 112;
@@ -33,13 +36,50 @@ public partial class SpellOffer : Node2D
 		RefreshOffer();
 	}
 
-	private void NewRound() // waits for dummy
+	private void NewRound()
 	{
-		// move first card to bottom of deck
+		if (SharedArea.Round > 1)
+		{
+			// move first card to bottom of deck
+			var currNode = _offer.First;
+			var colour = Utils.ConvertStringToSourceColour(Utils.SpellBook[currNode.Value].Colour);
+			_offer.RemoveFirst();
+			_offer.AddLast(currNode);
+			RefreshOffer();
+			EmitSignal(SignalName.Dummy, (int)colour); //tell dummy to add crystal of colour
+		}
+	}
+
+	private void OnConfirmReward()
+	{
+		_confirmDialog.Visible = true;
+	}
+
+	private void OnConfirmSelection()
+	{
+		var offerIndex = 0;
 		var currNode = _offer.First;
-		_offer.RemoveFirst();
-		_offer.AddLast(currNode);
+		while (_reward)
+		{
+			if (_slots[offerIndex].Selected)
+			{
+				// TODO: add card to top of player deck
+				_offer.Remove(currNode);
+				GD.Print(string.Format("add spell #{0} to deck", currNode.Value));
+				_reward = false;
+			}
+			offerIndex++;
+			currNode = currNode.Next;
+		}
 		RefreshOffer();
+	}
+
+	private void OnCancelSelection()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			_slots[i].Selected = false;
+		}
 	}
 
 	private void RefreshOffer()
@@ -54,11 +94,13 @@ public partial class SpellOffer : Node2D
 			}
 		}
 		var currNode = _offer.First;
+		// TODO: handle case when less than 3 cards remaining in deck
 		for (int i = 0; i < 3; i++)
 		{
 			var spell = Utils.SpellBook[currNode.Value];
 			currNode = currNode.Next;
 			var spellCard = (OfferCard)_cardScene.Instantiate();
+			spellCard.ConfirmReward += OnConfirmReward;
 			var spellSprite = spellCard.GetNode<Sprite2D>("Sprite2D");
 			var atlas = (AtlasTexture)Utils.SpriteSheets["spell"].Duplicate();
 			atlas.Region = new Rect2(
@@ -67,8 +109,13 @@ public partial class SpellOffer : Node2D
 			spellSprite.Texture = atlas;
 			spellCard.Position = new Vector2(_offset * (3 - i), 0);
 			AddChild(spellCard);
-			_slots.Add(i, spellCard);
+			_slots[i] = spellCard;
 		}
+	}
+
+	private void OnAwardSpell() // testing function
+	{
+		_reward = true;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
