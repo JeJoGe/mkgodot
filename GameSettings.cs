@@ -11,6 +11,11 @@ public partial class GameSettings : Node
 	{
 		get => _numPlayers;
 	}
+	private static List<string> _expansions = ["base"];
+	public static List<string> Expansions
+	{
+		get => _expansions;
+	}
 	public static int PlayerCharacter { get; set; }
 	public static string PlayerCharacterName { get; set;}
 	public static int DummyCharacter { get; set; }

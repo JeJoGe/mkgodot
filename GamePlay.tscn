@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=58 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
 [ext_resource type="Script" path="res://SharedArea.cs" id="10_bkisu"]
+[ext_resource type="PackedScene" uid="uid://vctows426n3l" path="res://Offers/SpellOffer.tscn" id="10_h555x"]
 [ext_resource type="Script" path="res://TurnOrderTracker.cs" id="12_js350"]
 [ext_resource type="Script" path="res://Deck.cs" id="18_4oofl"]
 [ext_resource type="Script" path="res://DummyArea.cs" id="18_70l2p"]
@@ -1165,13 +1166,18 @@ position = Vector2(8, 24)
 
 [node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
 
-[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker")]
+[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker", "gameplayControl")]
 process_mode = 3
 script = ExtResource("10_bkisu")
 _roundMarker = NodePath("../../RoundMarker")
+gameplayControl = NodePath("../..")
 
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
+
+[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog") instance=ExtResource("10_h555x")]
+position = Vector2(984, 176)
+_confirmDialog = NodePath("../../ConfirmationDialog")
 
 [node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
 script = ExtResource("2_khnnw")
@@ -1313,6 +1319,13 @@ offset_right = 1698.0
 offset_bottom = 727.0
 text = "Pay Blue Mana"
 
+[node name="SpellTestingButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 1720.0
+offset_top = 696.0
+offset_right = 1842.0
+offset_bottom = 727.0
+text = "Award Spell"
+
 [node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
 offset_left = 55.0
 offset_top = 117.0
@@ -1320,6 +1333,12 @@ offset_right = 117.0
 offset_bottom = 148.0
 text = "Undo"
 metadata/_edit_use_anchors_ = true
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="GameplayControl/PlayerUI"]
+title = ""
+initial_position = 1
+size = Vector2i(204, 100)
+dialog_text = "Please confirm selection"
 
 [node name="MapGen" type="TileMap" parent="GameplayControl" node_paths=PackedStringArray("gameplayControl")]
 position = Vector2(482, 912)
@@ -1375,7 +1394,9 @@ patch_margin_bottom = 30
 [connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
+[connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1394,7 +1415,10 @@ patch_margin_bottom = 30
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/SpellTestingButton" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
+[connection signal="canceled" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnCancelSelection"]
+[connection signal="confirmed" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnConfirmSelection"]
 [connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
 [connection signal="pressed" from="GameplayControl/InteractButton" to="GameplayControl" method="_on_interact_button_pressed"]
 
