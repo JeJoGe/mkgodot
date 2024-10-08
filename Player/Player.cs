@@ -12,9 +12,10 @@ public partial class Player : Node2D
 	const int MainTerrainSet = 0;
 	private Vector2I _playerPos;
 	public Vector2I PlayerPos { get => _playerPos; set => _playerPos = value; }
-	public int movePoints = 100;
-
-	public int MovePoints { get => movePoints; set => movePoints = value; }
+	private int _movePoints = 100;
+	public int MovePoints { get => _movePoints; set => _movePoints = value; }
+	private int _experiencePoints = 0;
+	public int ExperiencePoints { get => _experiencePoints; set => _experiencePoints = value; }
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
@@ -59,6 +60,10 @@ public partial class Player : Node2D
 	public void CombatCleanup(List<(int, Color)> defeated)
 	{
 		GetTree().Paused = false;
+		foreach (var defeatedEnemy in defeated)
+		{
+			
+		}
 		var currHexSafe = true; // check if current hex is safe
 		if (!currHexSafe) 
 		{

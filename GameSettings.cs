@@ -14,7 +14,7 @@ public partial class GameSettings : Node
 	public static int PlayerCharacter { get; set; }
 	public static string PlayerCharacterName { get; set;}
 	public static int DummyCharacter { get; set; }
-	public static List<(int, int, Color)> EnemyList { get; set; } // monster id, site fortifications: 0 - 2, token colour, old token colour
+	public static List<(int, int, Color)> EnemyList { get; set; } // monster id, site fortifications: 0 - 2, token colour
 	public static List<MapToken> ChallengeList = new List<MapToken>(); // may need to make a dictionary of Lists, one list for each player
 	public static List<(int, int)> UnitList { get; set; } // unit id, wounds
 	public static readonly int CardWidth = 1000;
