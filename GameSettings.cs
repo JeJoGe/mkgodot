@@ -32,7 +32,9 @@ public partial class GameSettings : Node
 	private static Dictionary<MonsterColour, Stack<int>> MonsterStacks = new Dictionary<MonsterColour, Stack<int>>();
 	public static bool CombatSim = false;
 	public static bool NightTime = false;
-
+	
+	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
+	public Dictionary<(int, int), HexData> MapData = new Dictionary<(int, int), HexData>;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

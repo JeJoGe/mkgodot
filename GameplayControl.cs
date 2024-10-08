@@ -244,6 +244,7 @@ public partial class GameplayControl : Control
 	{
 		var ruin = GameSettings.DrawRuin();
 		var ruinToken = (MapToken)mapTokenScene.Instantiate();
+		AddChild(ruinToken);
 		ruinToken.MapPosition = localPos;
 		ruinToken.Colour = "yellow";
 		ruinToken.TokenId = ruin;
@@ -256,7 +257,6 @@ public partial class GameplayControl : Control
 			ruinToken.Facedown = true;
 		}
 		ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
-		AddChild(ruinToken);
 		RuinList.Add(ruinToken);
 	}
 
@@ -412,6 +412,7 @@ public partial class GameplayControl : Control
 									foreach (var monsterColour in Utils.RuinEvents[ruin.TokenId].Requirements)
 										{
 											var monsterToken = PlaceholderMonsterGen(monsterColour, 0, ruin.MapPosition);
+											monsterToken.Visible = false;
 											GameSettings.ChallengeList.Add(monsterToken);
 										}
 								}
