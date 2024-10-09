@@ -15,6 +15,8 @@ public partial class Combat : Node2D
 	private RichTextLabel _attackLabel;
 	[Export]
 	private RichTextLabel _blockLabel;
+	[Export]
+	private Label _fameLabel;
 	[Signal]
 	public delegate void KnockoutEventHandler();
 	[Signal]
@@ -24,7 +26,7 @@ public partial class Combat : Node2D
 	private List<Monster> _enemyList = new List<Monster>();
 	private List<Unit> _unitList = new List<Unit>();
 	public ButtonGroup MonsterAttacks;
-	private Dictionary<int, int> _playerAttacks = new Dictionary<int, int>();
+	private Godot.Collections.Dictionary<int, int> _playerAttacks = new Godot.Collections.Dictionary<int, int>();
 	private Dictionary<int, int> _playerBlocks = new Dictionary<int, int>();
 	private int _playerMovement = 0;
 	private int _targetArmour, _totalAttack, _totalBlock;
@@ -136,6 +138,7 @@ public partial class Combat : Node2D
 		{2, "res://assets/CombatIcons/iceblock.png"},
 		{3, "res://assets/CombatIcons/coldfireblock.png"}
 	};
+	private UndoRedo _undoRedo;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -199,6 +202,8 @@ public partial class Combat : Node2D
 		}
 
 		CurrentPhase = Phase.Ranged;
+
+		_undoRedo = new UndoRedo();
 	}
 
 	public Monster CreateMonsterToken(int id)
@@ -500,6 +505,7 @@ public partial class Combat : Node2D
 		{
 			case Phase.Ranged:
 				{
+					_undoRedo.CreateAction("defeat enemies");
 					// remove defeated enemies
 					DefeatEnemies();
 					// exit combat if all enemies defeated		
@@ -511,6 +517,16 @@ public partial class Combat : Node2D
 					}
 					_confirmButton.Disabled = true;
 					ResetAttacks();
+					_undoRedo.CommitAction();
+					var remaining = _enemyList.Count; // only for debugging
+					for (int i = _enemyList.Count - 1; i >= 0; i--)
+					{
+						if (_enemyList[i].Defeated)
+						{
+							remaining--;
+						}
+					}
+					GD.Print(string.Format("enemies remaining: {0}", remaining));
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -859,14 +875,21 @@ public partial class Combat : Node2D
 	private void DefeatEnemies()
 	{
 		var remaining = _enemyList.Count; // just for debugging
+		_undoRedo.AddUndoProperty(_fameLabel, "text", _fameLabel.Text);
+		_undoRedo.AddUndoProperty(this, "_totalFame", _totalFame);
+
 		for (int i = _enemyList.Count - 1; i >= 0; i--)
 		{
 			var enemy = _enemyList[i];
 			if (enemy.Selected)
 			{
+				_undoRedo.AddUndoProperty(enemy, "visible", true);
+				_undoRedo.AddUndoProperty(enemy, "Defeated", false);
 				_totalFame += enemy.Fame;
-				enemy.Defeated = true;
-				enemy.Visible = false;
+				//enemy.Defeated = true;
+				//enemy.Visible = false;
+				_undoRedo.AddDoProperty(enemy, "Defeated", true);
+				_undoRedo.AddDoProperty(enemy, "visible", false);
 				enemy.Selected = false;
 			}
 			if (enemy.Defeated)
@@ -874,8 +897,10 @@ public partial class Combat : Node2D
 				remaining--;
 			}
 		}
-		GD.Print("total fame: " + _totalFame.ToString());
-		GD.Print("enemies remaining: " + remaining);
+		_undoRedo.AddDoProperty(this, "_totalFame", _totalFame);
+		_undoRedo.AddDoProperty(_fameLabel, "text", string.Format("Total Fame {0}", _totalFame));
+		//GD.Print("total fame: " + _totalFame.ToString());
+		//GD.Print("enemies remaining: " + remaining);
 	}
 
 	private void CalculateHeroWounds(int damage, int poison, bool paralyze) // damage must always be greater than 0
@@ -891,12 +916,21 @@ public partial class Combat : Node2D
 
 	private void ResetAttacks()
 	{
+		_undoRedo.AddUndoProperty(this, "_playerAttacks", _playerAttacks);
+		_undoRedo.AddUndoProperty(this, "_totalAttack", _totalAttack);
+		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI)); // TODO: this is either not being called on undo or in wrong order
+		/*
 		foreach (var kvp in _playerAttacks)
 		{
 			_playerAttacks[kvp.Key] = 0;
-		}
-		_totalAttack = 0;
-		UpdateUI();
+		}*/
+		var zeros = new Godot.Collections.Dictionary<int, int>{
+			{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0},{11,0}
+		};
+		_undoRedo.AddDoProperty(this, "_totalAttack", 0);
+		_undoRedo.AddDoProperty(this, "_playerAttacks", zeros);
+		_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+		//UpdateUI();
 	}
 
 	public void DeselectUnits()
@@ -1039,7 +1073,21 @@ public partial class Combat : Node2D
 
 	private void OnUndoButtonPressed()
 	{
-		
+		_undoRedo.Undo();
+		foreach (var kvp in _playerAttacks)
+		{
+			GD.Print("attack value: "+kvp.Value);
+		}
+		GD.Print("total attack: "+_totalAttack);
+		var remaining = _enemyList.Count; // only for debugging
+		for (int i = _enemyList.Count - 1; i >= 0; i--)
+		{
+			if (_enemyList[i].Defeated)
+			{
+				remaining--;
+			}
+		}
+		GD.Print(string.Format("enemies remaining: {0}", remaining));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_attackLabel", "_blockLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_attackLabel", "_blockLabel", "_fameLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
@@ -12,6 +12,7 @@ _confirmButton = NodePath("NinePatchRect/ConfirmButton")
 _nextButton = NodePath("NinePatchRect/NextButton")
 _attackLabel = NodePath("NinePatchRect/AttackLabel")
 _blockLabel = NodePath("NinePatchRect/BlockLabel")
+_fameLabel = NodePath("NinePatchRect/TotalFameLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -57,6 +58,14 @@ offset_top = 704.0
 offset_right = 160.0
 offset_bottom = 727.0
 text = "Total Wounds 0"
+
+[node name="TotalFameLabel" type="Label" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 704.0
+offset_right = 256.0
+offset_bottom = 727.0
+text = "Total Fame 0"
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="NinePatchRect"]
 title = ""
