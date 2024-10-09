@@ -313,6 +313,14 @@ offset_right = 104.0
 offset_bottom = 784.0
 bbcode_enabled = true
 
+[node name="UndoButton" type="Button" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 568.0
+offset_right = 266.0
+offset_bottom = 599.0
+text = "Undo"
+
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
@@ -339,3 +347,4 @@ bbcode_enabled = true
 [connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [4, 1]]
 [connection signal="pressed" from="NinePatchRect/Reduce2AttacksButton" to="." method="ReduceAttack" binds= [2, 2]]
 [connection signal="pressed" from="NinePatchRect/MovementButton" to="." method="AddMovement" binds= [1]]
+[connection signal="pressed" from="NinePatchRect/UndoButton" to="." method="OnUndoButtonPressed"]
