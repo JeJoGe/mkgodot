@@ -803,7 +803,7 @@ public partial class Combat : Node2D
 		_playerAttacks[(int)type + (int)range] += amount;
 		GD.Print(range.ToString() + " " + type.ToString() + " Attack: " + _playerAttacks[(int)type + (int)range]);
 		UpdateUI();
-		//TODO: update attack calcuation if there are enemies currently selected after adding more attack
+		UpdateAttack();
 	}
 
 	public void AddBlock(int amount, Element type, bool swift = false)
@@ -919,7 +919,7 @@ public partial class Combat : Node2D
 	{
 		_undoRedo.AddUndoProperty(this, "_playerAttacks", _playerAttacks);
 		_undoRedo.AddUndoProperty(this, "_totalAttack", _totalAttack);
-		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI)); // TODO: this is either not being called on undo or in wrong order
+		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
 		/*
 		foreach (var kvp in _playerAttacks)
 		{
