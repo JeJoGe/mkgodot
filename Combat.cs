@@ -508,13 +508,6 @@ public partial class Combat : Node2D
 					_undoRedo.CreateAction("defeat enemies");
 					// remove defeated enemies
 					DefeatEnemies();
-					// exit combat if all enemies defeated		
-					if (CheckVictory())
-					{
-						GD.Print("all enemies defeated");
-						// exit combat
-						EndCombat(true);
-					}
 					_confirmButton.Disabled = true;
 					ResetAttacks();
 					_undoRedo.CommitAction();
@@ -527,6 +520,13 @@ public partial class Combat : Node2D
 						}
 					}
 					GD.Print(string.Format("enemies remaining: {0}", remaining));
+					// exit combat if all enemies defeated		
+					if (CheckVictory())
+					{
+						GD.Print("all enemies defeated");
+						// exit combat
+						EndCombat(true);
+					}
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -803,6 +803,7 @@ public partial class Combat : Node2D
 		_playerAttacks[(int)type + (int)range] += amount;
 		GD.Print(range.ToString() + " " + type.ToString() + " Attack: " + _playerAttacks[(int)type + (int)range]);
 		UpdateUI();
+		//TODO: update attack calcuation if there are enemies currently selected after adding more attack
 	}
 
 	public void AddBlock(int amount, Element type, bool swift = false)
