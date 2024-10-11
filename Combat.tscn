@@ -4,12 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_attackLabel", "_blockLabel", "_fameLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 _confirmButton = NodePath("NinePatchRect/ConfirmButton")
 _nextButton = NodePath("NinePatchRect/NextButton")
+_undoButton = NodePath("NinePatchRect/UndoButton")
 _attackLabel = NodePath("NinePatchRect/AttackLabel")
 _blockLabel = NodePath("NinePatchRect/BlockLabel")
 _fameLabel = NodePath("NinePatchRect/TotalFameLabel")
@@ -332,6 +333,7 @@ text = "Undo"
 
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
+[connection signal="canceled" from="NinePatchRect/ConfirmationDialog" to="." method="OnCancelFinishCombat"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
 [connection signal="pressed" from="NinePatchRect/AttackButton" to="." method="AddAttack" binds= [1, 0, 0]]
 [connection signal="pressed" from="NinePatchRect/RangeButton" to="." method="AddAttack" binds= [1, 0, 4]]
