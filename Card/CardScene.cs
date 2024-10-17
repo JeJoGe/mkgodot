@@ -8,21 +8,21 @@ public partial class CardScene : Node2D
 {
     public List<string> _replaces { get; set; } = new List<string>();
     public List<CardObj> InitialDeckOfCards { get; set; } = new List<CardObj>();
-    public List<CardControl> RecordDeckOfCards { get; set; } = new List<CardControl>();
-    public Stack<CardControl> DeckOfCards { get; set; } = new Stack<CardControl>();
+    public Stack<CardObj> DeckOfCards { get; set; } = new Stack<CardObj>();
     private int InitialDeckLength { get; set; }
     public List<CardControl> discardPile { get; set; } = new List<CardControl>();
+    public AtlasTexture basicCardAtlas;
     public override void _Ready()
     {
-        var atlas = new AtlasTexture();
+        basicCardAtlas = new AtlasTexture();
 
         try
         {
             var cardImage = Image.LoadFromFile("assets/basics.jpg");
             var atlasTexture = ImageTexture.CreateFromImage(cardImage);
-            atlas.Atlas = atlasTexture;
+            basicCardAtlas.Atlas = atlasTexture;
             var region = new Rect2(new Vector2(0, 0), new Vector2(atlasTexture.GetWidth(), atlasTexture.GetHeight()));
-            atlas.Region = region;
+            basicCardAtlas.Region = region;
         }
         catch
         {
@@ -40,7 +40,6 @@ public partial class CardScene : Node2D
             if (card.character == GameSettings.PlayerCharacterName || card.character == "basic")
             {
                 card.id = index;
-                card.ImageCropping(atlas);
                 InitialDeckOfCards.Add(card);
                 index++;
                 if (card.copies > 0)
@@ -61,7 +60,6 @@ public partial class CardScene : Node2D
                             character = card.character,
                             replaces = card.replaces
                         };
-                        newCard.ImageCropping(atlas);
                         InitialDeckOfCards.Add(newCard);
                         index++;
                     }
@@ -79,22 +77,56 @@ public partial class CardScene : Node2D
             CardObj cardReplace = InitialDeckOfCards.Where((card) => card.cardId == replace).First();
             InitialDeckOfCards.Remove(cardReplace);
         }
-
-        foreach (var card in InitialDeckOfCards)
-        {
-            GD.Print(card.cardId);
-            CardControl cardControl = new CardControl(card.cardId, card.Texture.GetSize());
-            cardControl.AddChild(card);
-            RecordDeckOfCards.Add(cardControl);
-        }
-        DeckOfCards = new Stack<CardControl>(RecordDeckOfCards.Shuffle());
+        DeckOfCards = new Stack<CardObj>(InitialDeckOfCards.Shuffle());
         InitialDeckLength = InitialDeckOfCards.Count;
-
     }
 
+    // Instantiation of the atlas & CardControl happens when card is drawn;
     public CardControl DrawCard()
+    {   
+        CardObj topCard;
+        CardControl drawnCard;
+        var card = DeckOfCards.Peek();
+
+        if(card is Spell) {
+            topCard = DeckOfCards.Pop();
+			drawnCard = InstantiateSpell(topCard);
+		} else if (card == null) {
+            GD.Print("no more cards in deck");
+            return null;
+        } else {
+            topCard = DeckOfCards.Pop();
+            drawnCard = InstantiateBasicCard(topCard);
+        }
+        
+        return drawnCard;       
+    }
+
+    public CardControl AttachCardControl(CardObj card) 
     {
-        CardControl card = DeckOfCards.Pop();
-        return card;
+        CardControl cardControl = new CardControl(card.cardId, card.Texture.GetSize());
+        cardControl.AddChild(card);
+        return cardControl;
+    }
+
+    public CardControl InstantiateSpell(CardObj card) {
+            var SpellCardAtlas = (AtlasTexture) Utils.SpriteSheets["spell"].Duplicate();
+            SpellCardAtlas.Region = new Rect2(
+				new Vector2(card.xCoord * GameSettings.CardWidth, card.yCoord * GameSettings.CardLength),
+				new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
+            card.Texture = SpellCardAtlas;
+            InitialDeckOfCards.Add(card);
+            CardControl spellCard = AttachCardControl(card);
+            return spellCard;
+    }
+
+    public CardControl InstantiateBasicCard(CardObj card) {
+        card.ImageCropping(basicCardAtlas);
+        CardControl basicCard = AttachCardControl(card);
+        return basicCard;
+    }
+
+    public void AddCardToDeck(CardObj card) {
+        DeckOfCards.Push(card);
     }
 }

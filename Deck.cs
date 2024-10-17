@@ -77,4 +77,11 @@ public partial class Deck : Node2D
 	public void onAddToCurrentHand(CardControl cardControl) {
 		CurrentHand.Add(cardControl);
 	}
+
+	public void onAddCardToDeck(CardObj card) {
+
+		if(card != null) {
+			_cards.AddCardToDeck(card);
+		}
+	}
 }

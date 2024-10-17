@@ -8,10 +8,13 @@ public partial class SpellOffer : Node2D
 	public delegate void DummyEventHandler(Source.Colour colour);
 	[Export]
 	private ConfirmationDialog _confirmDialog;
+	[Export]
+	private Deck _deck;
 	private LinkedList<int> _offer;
 	private Dictionary<int,OfferCard> _slots; // keys 0-2 where 0 is the oldest card
 	private static int _offset = 112;
 	private PackedScene _cardScene = GD.Load<PackedScene>("res://Offers/OfferCard.tscn");
+
 	private bool _reward = false;
 	public bool Reward
 	{
@@ -26,7 +29,7 @@ public partial class SpellOffer : Node2D
 		foreach (var kvp in Utils.SpellBook)
 		{
 			// TODO: check for cooperative/competitive spells
-			if (GameSettings.Expansions.Contains(kvp.Value.Version))
+			if (GameSettings.Expansions.Contains(kvp.Value.version))
 			{
 				includedCards.Add(kvp.Key);
 			}
@@ -43,7 +46,7 @@ public partial class SpellOffer : Node2D
 		{
 			// move first card to bottom of deck
 			var currNode = _offer.First;
-			var colour = Utils.ConvertStringToSourceColour(Utils.SpellBook[currNode.Value].Colour);
+			var colour = Utils.ConvertStringToSourceColour(Utils.SpellBook[currNode.Value].color);
 			_offer.RemoveFirst();
 			_offer.AddLast(currNode);
 			RefreshOffer();
@@ -64,7 +67,7 @@ public partial class SpellOffer : Node2D
 		{
 			if (_slots[offerIndex].Selected)
 			{
-				// TODO: add card to top of player deck
+				_deck.onAddCardToDeck(Utils.SpellBook[currNode.Value]);
 				_offer.Remove(currNode);
 				GD.Print(string.Format("add spell #{0} to deck", currNode.Value));
 				_reward = false;
@@ -72,6 +75,7 @@ public partial class SpellOffer : Node2D
 			offerIndex++;
 			currNode = currNode.Next;
 		}
+
 		RefreshOffer();
 	}
 
@@ -104,7 +108,7 @@ public partial class SpellOffer : Node2D
 			var spellSprite = spellCard.GetNode<Sprite2D>("Sprite2D");
 			var atlas = (AtlasTexture)Utils.SpriteSheets["spell"].Duplicate();
 			atlas.Region = new Rect2(
-				new Vector2(spell.X * GameSettings.CardWidth, spell.Y * GameSettings.CardLength),
+				new Vector2(spell.xCoord * GameSettings.CardWidth, spell.yCoord * GameSettings.CardLength),
 				new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
 			spellSprite.Texture = atlas;
 			spellCard.Position = new Vector2(_offset * (3 - i), 0);
