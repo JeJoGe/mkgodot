@@ -258,16 +258,9 @@ public class MonsterAttack
 	public bool Attacking { get; set; } = true;
 }
 
-public class Spell
+public partial class Spell: CardObj
 {
-	public string Name { get; set; }
-	public string Colour { get; set; }
-	public int X { get; set; }
-	public int Y { get; set; }
-	public string Version { get; set; }
-	public string Phase { get; set; }
-	public string TopFunction { get; set; }
-	public string BottomFunction { get; set; }
+	public string version { get; set; }
 }
 
 public enum MonsterColour

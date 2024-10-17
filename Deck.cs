@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public partial class Deck : Node2D
-{   
-    public List<CardControl> CurrentHand = new List<CardControl>();
+{	 
+	public List<CardControl> CurrentHand = new List<CardControl>();
 	public int cardDrawnNumber = 0;
 	public CardScene _cards = new CardScene();
 	private Vector2I CardSize = new Vector2I(140, 100);
@@ -20,39 +20,43 @@ public partial class Deck : Node2D
 		AddChild(_cards);
 	}
 
-	public void DrawCards() {
+	public void DrawCards()
+	{
 		CardControl card = _cards.DrawCard();
-		Angle = Math.PI/2 + CardSpread*(cardDrawnNumber/2 - cardDrawnNumber);
+		Angle = Math.PI / 2 + CardSpread * (cardDrawnNumber / 2 - cardDrawnNumber);
 		// center oval point on the screen
-		var CentreCardOval = GetViewportRect().Size * new Vector2((float)0.5, (float) 1.5);
+		var CentreCardOval = GetViewportRect().Size * new Vector2((float)0.5, (float)1.5);
 		// horizontal radius of the oval scaled by *#
 		var Hor_rad = GetViewportRect().Size.X * 0.70;
 		// vertical radius of oval scaled by by *#
 		var Ver_rad = GetViewportRect().Size.Y * 0.85;
 		var OvalAngleVector = new Vector2();
 
-		OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float) (-Ver_rad * Mathf.Sin(Angle)));
+		OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float)(-Ver_rad * Mathf.Sin(Angle)));
 		var button = GetChild(0);
-		var deckButton = (TextureButton) button;
+		var deckButton = (TextureButton)button;
 		card.Position = deckButton.GetRect().Position;
 		card.startPos = deckButton.GetRect().Position;
 		card.targetPos = CentreCardOval + OvalAngleVector - card.GetRect().Size;
 		card.startRotation = 0;
-		card.targetRotation = 90 - (float) Mathf.RadToDeg(Angle);
+		card.targetRotation = 90 - (float)Mathf.RadToDeg(Angle);
 		card.cardState = CardControl.CardStates.MoveDrawnCardToHand;
 		CardNumber = 0;
-		foreach(var cardInHand in this.GetChildren()) {
-			if(cardInHand is CardControl) {
-				var actualCardInHand = (CardControl) cardInHand;
-				Angle = Math.PI/2 + CardSpread*(cardDrawnNumber/2 - CardNumber);
-				OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float) (-Ver_rad * Mathf.Sin(Angle)));
+		foreach (var cardInHand in this.GetChildren())
+		{
+			if (cardInHand is CardControl)
+			{
+				var actualCardInHand = (CardControl)cardInHand;
+				Angle = Math.PI / 2 + CardSpread * (cardDrawnNumber / 2 - CardNumber);
+				OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float)(-Ver_rad * Mathf.Sin(Angle)));
 				actualCardInHand.targetPos = CentreCardOval + OvalAngleVector - card.GetRect().Size;
 				actualCardInHand.startRotation = actualCardInHand.RotationDegrees;
-				actualCardInHand.targetRotation = 90 - (float) Mathf.RadToDeg(Angle);
-			if (actualCardInHand.cardState == CardControl.CardStates.InHand) {
-				actualCardInHand.startPos = actualCardInHand.Position;
-				actualCardInHand.cardState = CardControl.CardStates.ReorganizeHand;
-			}
+				actualCardInHand.targetRotation = 90 - (float)Mathf.RadToDeg(Angle);
+				if (actualCardInHand.cardState == CardControl.CardStates.InHand)
+				{
+					actualCardInHand.startPos = actualCardInHand.Position;
+					actualCardInHand.cardState = CardControl.CardStates.ReorganizeHand;
+				}
 				CardNumber += 1;
 			}
 		}
@@ -60,21 +64,32 @@ public partial class Deck : Node2D
 		CurrentHand.Add(card);
 		cardDrawnNumber += 1;
 		// angle in which its offset by
-		Angle += 0.1;	
+		Angle += 0.1;
 	}
 
 	public void OnDeckButtonPressed(int cardLimit)
-	{	
-		for(int cardDraw = 0; cardDraw < cardLimit; cardDraw++) {
+	{
+		for (int cardDraw = 0; cardDraw < cardLimit; cardDraw++)
+		{
 			DrawCards();
 		}
 	}
 
-	public void onRemoveFromCurrentHand(CardControl cardControl) {
+	public void onRemoveFromCurrentHand(CardControl cardControl)
+	{
 		CurrentHand.Remove(cardControl);
 	}
 
-	public void onAddToCurrentHand(CardControl cardControl) {
+	public void onAddToCurrentHand(CardControl cardControl)
+	{
 		CurrentHand.Add(cardControl);
+	}
+
+	public void onAddCardToDeck(CardObj card)
+	{
+		if (card != null)
+		{
+			_cards.AddCardToDeck(card);
+		}
 	}
 }

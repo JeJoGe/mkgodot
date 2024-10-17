@@ -1175,9 +1175,10 @@ gameplayControl = NodePath("../..")
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
-[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog") instance=ExtResource("10_h555x")]
+[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog", "_deck") instance=ExtResource("10_h555x")]
 position = Vector2(984, 176)
 _confirmDialog = NodePath("../../ConfirmationDialog")
+_deck = NodePath("../../PlayerArea/Deck")
 
 [node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
 script = ExtResource("2_khnnw")
