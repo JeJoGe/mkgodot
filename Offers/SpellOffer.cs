@@ -11,7 +11,7 @@ public partial class SpellOffer : Node2D
 	[Export]
 	private Deck _deck;
 	private LinkedList<int> _offer;
-	private Dictionary<int,OfferCard> _slots; // keys 0-2 where 0 is the oldest card
+	private Dictionary<int, OfferCard> _slots; // keys 0-2 where 0 is the oldest card
 	private static int _offset = 112;
 	private PackedScene _cardScene = GD.Load<PackedScene>("res://Offers/OfferCard.tscn");
 

@@ -34,7 +34,7 @@ public partial class CardScene : Node2D
         string jsonObj = sr.ReadToEnd();
         var cardsObj = JsonConvert.DeserializeObject<List<CardObj>>(jsonObj);
         int index = 0;
-        
+
         foreach (var card in cardsObj)
         {
             if (card.character == GameSettings.PlayerCharacterName || card.character == "basic")
@@ -70,7 +70,7 @@ public partial class CardScene : Node2D
                 }
             }
         }
-        
+
         // Filter out cards with each name specified in _replaces
         foreach (string replace in _replaces)
         {
@@ -83,50 +83,59 @@ public partial class CardScene : Node2D
 
     // Instantiation of the atlas & CardControl happens when card is drawn;
     public CardControl DrawCard()
-    {   
+    {
         CardObj topCard;
         CardControl drawnCard;
         var card = DeckOfCards.Peek();
 
-        if(card is Spell) {
-            topCard = DeckOfCards.Pop();
-			drawnCard = InstantiateSpell(topCard);
-		} else if (card == null) {
+        if (card == null)
+        {
             GD.Print("no more cards in deck");
             return null;
-        } else {
+        }
+        else if (card is Spell)
+        {
+            topCard = DeckOfCards.Pop();
+            drawnCard = InstantiateSpell(topCard);
+
+        }
+        else
+        {
             topCard = DeckOfCards.Pop();
             drawnCard = InstantiateBasicCard(topCard);
         }
-        
-        return drawnCard;       
+
+        return drawnCard;
     }
 
-    public CardControl AttachCardControl(CardObj card) 
+    public CardControl AttachCardControl(CardObj card)
     {
         CardControl cardControl = new CardControl(card.cardId, card.Texture.GetSize());
         cardControl.AddChild(card);
         return cardControl;
     }
 
-    public CardControl InstantiateSpell(CardObj card) {
-            var SpellCardAtlas = (AtlasTexture) Utils.SpriteSheets["spell"].Duplicate();
-            SpellCardAtlas.Region = new Rect2(
-				new Vector2(card.xCoord * GameSettings.CardWidth, card.yCoord * GameSettings.CardLength),
-				new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
-            card.Texture = SpellCardAtlas;
-            InitialDeckOfCards.Add(card);
-            CardControl spellCard = AttachCardControl(card);
-            return spellCard;
+    public CardControl InstantiateSpell(CardObj card)
+    {
+        var SpellCardAtlas = (AtlasTexture)Utils.SpriteSheets["spell"].Duplicate();
+        SpellCardAtlas.Region = new Rect2(
+            new Vector2(card.xCoord * GameSettings.CardWidth, card.yCoord * GameSettings.CardLength),
+            new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
+        card.Texture = SpellCardAtlas;
+        InitialDeckOfCards.Add(card);
+        CardControl spellCard = AttachCardControl(card);
+        return spellCard;
     }
 
-    public CardControl InstantiateBasicCard(CardObj card) {
+    public CardControl InstantiateBasicCard(CardObj card)
+    {
         card.ImageCropping(basicCardAtlas);
         CardControl basicCard = AttachCardControl(card);
         return basicCard;
     }
 
-    public void AddCardToDeck(CardObj card) {
+    public void AddCardToDeck(CardObj card)
+    {
         DeckOfCards.Push(card);
     }
 }
