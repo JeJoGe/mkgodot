@@ -18,7 +18,6 @@ public partial class GameplayControl : Control
 	PackedScene mapTokenScene = GD.Load<PackedScene>("res://MapToken.tscn");
 	public List<MapToken> EnemyList = new List<MapToken>();
 	public List<MapToken> RuinList = new List<MapToken>();
-	public List<MonsterGroup> MonsterGroupList = new List<MonsterGroup>();
 	PackedScene ChallengeScene;
 
 	// Called when the node enters the scene tree for the first time.
