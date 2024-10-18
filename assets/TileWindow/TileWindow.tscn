@@ -30,6 +30,7 @@ theme_override_font_sizes/font_size = 50
 text = "Terrain:"
 
 [node name="TerrainText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
 offset_left = 250.0
 offset_top = 50.0
 offset_right = 440.0
@@ -37,6 +38,7 @@ offset_bottom = 119.0
 theme_override_font_sizes/font_size = 50
 
 [node name="TokenLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
 offset_left = 50.0
 offset_top = 169.0
 offset_right = 240.0
@@ -45,17 +47,19 @@ theme_override_font_sizes/font_size = 50
 text = "Token:"
 
 [node name="ActionsLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
 offset_left = 50.0
-offset_top = 299.0
+offset_top = 430.0
 offset_right = 243.0
-offset_bottom = 368.0
+offset_bottom = 499.0
 theme_override_font_sizes/font_size = 50
 text = "Actions:"
 
 [node name="AdditionalTokensLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
 offset_left = 50.0
-offset_top = 430.0
-offset_right = 485.0
-offset_bottom = 499.0
+offset_top = 690.0
+offset_right = 499.0
+offset_bottom = 759.0
 theme_override_font_sizes/font_size = 50
 text = "Additional Tokens:"

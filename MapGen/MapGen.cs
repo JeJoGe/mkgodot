@@ -135,6 +135,7 @@ public partial class MapGen : TileMap
 
 		return patternMapCoords;
 	}
+	
 
 	// Using math to determine how to position tile. Don't understand why it works, it just does
 	private Vector2I DetermineMapPlacement(Vector2I posClicked)
