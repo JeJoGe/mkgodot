@@ -87,9 +87,12 @@ public partial class MapGen : TileMap
 				// Populate tokens on pattern if needed
 				foreach (var patternTile in patternMapCoords)
 				{
+					var cellTerrain = GetCellTileData(MainLayer, patternTile).Terrain;
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
+					GameSettings.
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
+
 					//GD.Print("Point 1: "+ tokenData);
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
 					if (tokenData != "" && tokenData != "yellow")

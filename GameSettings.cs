@@ -34,7 +34,7 @@ public partial class GameSettings : Node
 	public static bool NightTime = false;
 	
 	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
-	public Dictionary<(int, int), HexData> MapData = new Dictionary<(int, int), HexData>;
+	public Dictionary<(int, int), MapTileData> MapData = new Dictionary<(int, int), MapTileData>;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
