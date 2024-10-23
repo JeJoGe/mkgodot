@@ -224,6 +224,7 @@ public partial class Deck : Node2D
 	{
 		if (card != null)
 		{
+			InitialDeckOfCards.Add(card);
 			DeckOfCards.Push(card);
 		}
 	}
