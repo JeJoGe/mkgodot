@@ -12,9 +12,13 @@ public partial class Combat : Node2D
 	[Export]
 	private Button _nextButton;
 	[Export]
+	private Button _undoButton;
+	[Export]
 	private RichTextLabel _attackLabel;
 	[Export]
 	private RichTextLabel _blockLabel;
+	[Export]
+	private Label _fameLabel;
 	[Signal]
 	public delegate void KnockoutEventHandler();
 	[Signal]
@@ -24,7 +28,7 @@ public partial class Combat : Node2D
 	private List<Monster> _enemyList = new List<Monster>();
 	private List<Unit> _unitList = new List<Unit>();
 	public ButtonGroup MonsterAttacks;
-	private Dictionary<int, int> _playerAttacks = new Dictionary<int, int>();
+	private Godot.Collections.Dictionary<int, int> _playerAttacks = new Godot.Collections.Dictionary<int, int>();
 	private Dictionary<int, int> _playerBlocks = new Dictionary<int, int>();
 	private int _playerMovement = 0;
 	private int _targetArmour, _totalAttack, _totalBlock;
@@ -136,6 +140,9 @@ public partial class Combat : Node2D
 		{2, "res://assets/CombatIcons/iceblock.png"},
 		{3, "res://assets/CombatIcons/coldfireblock.png"}
 	};
+	private UndoRedo _undoRedo;
+	public UndoRedo UndoRedo { get => _undoRedo; }
+	private ulong _undoVersion = 1; // oldest undo version the user is allowed to revert to
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -199,6 +206,9 @@ public partial class Combat : Node2D
 		}
 
 		CurrentPhase = Phase.Ranged;
+
+		_undoRedo = new UndoRedo();
+		GD.Print("intial undo version: "+_undoRedo.GetVersion());
 	}
 
 	public Monster CreateMonsterToken(int id)
@@ -428,12 +438,30 @@ public partial class Combat : Node2D
 			//attacking/blocking is optional
 			case Phase.Ranged:
 				{
+					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.PreventAttacks);
+					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					break;
 				}
 			case Phase.PreventAttacks:
 				{
+					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.ReduceAttack);
+					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
+					// check if any summons to prevent undoing
+					foreach (var enemy in _enemyList)
+					{
+						if (enemy.Summoned)
+						{
+							_undoRedo.ClearHistory();
+							// update oldest undo version user is allowed to revert to this version
+							_undoVersion = _undoRedo.GetVersion();
+							_undoButton.Disabled = true;
+							break;
+						}
+					}
 					break;
 				}
 			case Phase.ReduceAttack:
@@ -500,8 +528,22 @@ public partial class Combat : Node2D
 		{
 			case Phase.Ranged:
 				{
+					_undoRedo.CreateAction("defeat enemies");
 					// remove defeated enemies
 					DefeatEnemies();
+					_confirmButton.Disabled = true;
+					ResetAttacks();
+					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
+					var remaining = _enemyList.Count; // only for debugging
+					for (int i = _enemyList.Count - 1; i >= 0; i--)
+					{
+						if (_enemyList[i].Defeated)
+						{
+							remaining--;
+						}
+					}
+					GD.Print(string.Format("enemies remaining: {0}", remaining));
 					// exit combat if all enemies defeated		
 					if (CheckVictory())
 					{
@@ -509,8 +551,6 @@ public partial class Combat : Node2D
 						// exit combat
 						EndCombat(true);
 					}
-					_confirmButton.Disabled = true;
-					ResetAttacks();
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -654,6 +694,7 @@ public partial class Combat : Node2D
 
 	private void NextCombatPhase(Phase nextPhase)
 	{
+		_undoRedo.AddUndoProperty(this, "CurrentPhase", (int)CurrentPhase);
 		CurrentPhase = nextPhase;
 		switch (CurrentPhase)
 		{
@@ -661,22 +702,38 @@ public partial class Combat : Node2D
 				{
 					// zero any remaining attack
 					ResetAttacks();
-					_nextButton.Text = "Enemies Attack";
-					_confirmButton.Text = "Target Enemy Will Not Attack";
-					MonsterAttacks = new ButtonGroup();
+					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
+					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
+					//_nextButton.Text = "Enemies Attack";
+					//_confirmButton.Text = "Target Enemy Will Not Attack";
+					//MonsterAttacks = new ButtonGroup();
 					foreach (var enemy in _enemyList)
 					{
-						enemy.Selected = false;
+						//enemy.Selected = false;
+						_undoRedo.AddDoProperty(enemy, "Selected", false);
 					}
+					_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
+					_undoRedo.AddDoProperty(_nextButton, "text", "Enemies Attack");
+					_undoRedo.AddDoProperty(_confirmButton, "text", "Target Enemy Will Not Attack");
 					break;
 				}
 			case Phase.ReduceAttack:
 				{
-					_nextButton.Text = "Block Enemies";
-					_confirmButton.Text = "Reduce Attack By 1";
-					_confirmButton.Disabled = true;
+					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
+					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.HideAttackButtons));
+					_undoRedo.AddUndoProperty(this, "MonsterAttacks", MonsterAttacks);
+					//_nextButton.Text = "Block Enemies";
+					//_confirmButton.Text = "Reduce Attack By 1";
+					_undoRedo.AddDoProperty(_nextButton, "text", "Block Enemies");
+					_undoRedo.AddDoProperty(_confirmButton, "text", "Reduce Attack By 1");
+					_undoRedo.AddDoProperty(_confirmButton, "disabled", true);
+					// Remove existing buttons before creating new attack buttons
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.HideAttackButtons));
+					_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
 
-					EnemiesAttack();
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.EnemiesAttack));
+					//EnemiesAttack();
 					break;
 				}
 			case Phase.Block:
@@ -787,6 +844,7 @@ public partial class Combat : Node2D
 		_playerAttacks[(int)type + (int)range] += amount;
 		GD.Print(range.ToString() + " " + type.ToString() + " Attack: " + _playerAttacks[(int)type + (int)range]);
 		UpdateUI();
+		UpdateAttack();
 	}
 
 	public void AddBlock(int amount, Element type, bool swift = false)
@@ -859,14 +917,21 @@ public partial class Combat : Node2D
 	private void DefeatEnemies()
 	{
 		var remaining = _enemyList.Count; // just for debugging
+		_undoRedo.AddUndoProperty(_fameLabel, "text", _fameLabel.Text);
+		_undoRedo.AddUndoProperty(this, "_totalFame", _totalFame);
+
 		for (int i = _enemyList.Count - 1; i >= 0; i--)
 		{
 			var enemy = _enemyList[i];
 			if (enemy.Selected)
 			{
+				_undoRedo.AddUndoProperty(enemy, "visible", true);
+				_undoRedo.AddUndoProperty(enemy, "Defeated", false);
 				_totalFame += enemy.Fame;
-				enemy.Defeated = true;
-				enemy.Visible = false;
+				//enemy.Defeated = true;
+				//enemy.Visible = false;
+				_undoRedo.AddDoProperty(enemy, "Defeated", true);
+				_undoRedo.AddDoProperty(enemy, "visible", false);
 				enemy.Selected = false;
 			}
 			if (enemy.Defeated)
@@ -874,8 +939,10 @@ public partial class Combat : Node2D
 				remaining--;
 			}
 		}
-		GD.Print("total fame: " + _totalFame.ToString());
-		GD.Print("enemies remaining: " + remaining);
+		_undoRedo.AddDoProperty(this, "_totalFame", _totalFame);
+		_undoRedo.AddDoProperty(_fameLabel, "text", string.Format("Total Fame {0}", _totalFame));
+		//GD.Print("total fame: " + _totalFame.ToString());
+		//GD.Print("enemies remaining: " + remaining);
 	}
 
 	private void CalculateHeroWounds(int damage, int poison, bool paralyze) // damage must always be greater than 0
@@ -891,12 +958,15 @@ public partial class Combat : Node2D
 
 	private void ResetAttacks()
 	{
-		foreach (var kvp in _playerAttacks)
-		{
-			_playerAttacks[kvp.Key] = 0;
-		}
-		_totalAttack = 0;
-		UpdateUI();
+		_undoRedo.AddUndoProperty(this, "_playerAttacks", _playerAttacks);
+		_undoRedo.AddUndoProperty(this, "_totalAttack", _totalAttack);
+		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+		var zeros = new Godot.Collections.Dictionary<int, int>{
+			{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0},{11,0}
+		};
+		_undoRedo.AddDoProperty(this, "_totalAttack", 0);
+		_undoRedo.AddDoProperty(this, "_playerAttacks", zeros);
+		_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 	}
 
 	public void DeselectUnits()
@@ -933,6 +1003,11 @@ public partial class Combat : Node2D
 			_confirmDialog.DialogText = "Return to Combat Sim Setup";
 		}
 		_confirmDialog.Visible = true;
+	}
+
+	private void OnCancelFinishCombat()
+	{
+		_undoRedo.Undo();
 	}
 
 	private void OnFinishCombatConfirmed()
@@ -985,9 +1060,6 @@ public partial class Combat : Node2D
 
 	private void EnemiesAttack()
 	{
-		// Remove existing buttons before creating new attack buttons
-		HideAttackButtons();
-		MonsterAttacks = new ButtonGroup();
 		// create enemy attacks for undefeated enemies
 		for (int i = 0; i < _enemyList.Count; i++)
 		{
@@ -995,6 +1067,7 @@ public partial class Combat : Node2D
 			if (!enemy.Defeated && enemy.Attacking)
 			{
 				enemy.Attack();
+				//_undoRedo.AddDoMethod(new Callable(enemy, Monster.MethodName.Attack));
 			}
 		}
 	}
@@ -1035,6 +1108,28 @@ public partial class Combat : Node2D
 			_blockLabel.Size = new Vector2(64 * cellCount, 48);
 			_blockLabel.Visible = cellCount > 0;
 		}
+	}
+
+	private void OnUndoButtonPressed()
+	{
+		_undoRedo.Undo();
+		GD.Print("version after undo: "+_undoRedo.GetVersion());
+		_undoButton.Disabled = _undoRedo.GetVersion() <= _undoVersion;
+		foreach (var kvp in _playerAttacks)
+		{
+			GD.Print("attack value: "+kvp.Value);
+		}
+		GD.Print("total attack: "+_totalAttack);
+		var remaining = _enemyList.Count; // only for debugging
+		for (int i = _enemyList.Count - 1; i >= 0; i--)
+		{
+			if (_enemyList[i].Defeated)
+			{
+				remaining--;
+			}
+		}
+		GD.Print(string.Format("enemies remaining: {0}", remaining));
+		GD.Print(string.Format("current phase: {0}", CurrentPhase));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
