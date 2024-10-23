@@ -16,6 +16,7 @@ public partial class Deck : Node2D
 	private int InitialDeckLength { get; set; }
 	public List<CardControl> discardPile { get; set; } = new List<CardControl>();
 	public AtlasTexture basicCardAtlas;
+	public int wounds { get; set; }
 
 	/** Deck Draw Visual variables*/
 	public List<CardControl> CurrentHand = new List<CardControl>();
@@ -201,6 +202,10 @@ public partial class Deck : Node2D
 		// angle in which its offset by
 		Angle += 0.1;
 	}
+
+	/*****************************************************
+	* Deck Interactions
+	******************************************************/
 
 	public void OnDeckButtonPressed(int cardLimit)
 	{
