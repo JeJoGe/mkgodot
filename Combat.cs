@@ -142,6 +142,7 @@ public partial class Combat : Node2D
 	};
 	private UndoRedo _undoRedo;
 	public UndoRedo UndoRedo { get => _undoRedo; }
+	private ulong _undoVersion = 1; // oldest undo version the user is allowed to revert to
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -207,6 +208,7 @@ public partial class Combat : Node2D
 		CurrentPhase = Phase.Ranged;
 
 		_undoRedo = new UndoRedo();
+		GD.Print("intial undo version: "+_undoRedo.GetVersion());
 	}
 
 	public Monster CreateMonsterToken(int id)
@@ -439,6 +441,7 @@ public partial class Combat : Node2D
 					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.PreventAttacks);
 					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -446,12 +449,15 @@ public partial class Combat : Node2D
 					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.ReduceAttack);
 					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					// check if any summons to prevent undoing
 					foreach (var enemy in _enemyList)
 					{
 						if (enemy.Summoned)
 						{
 							_undoRedo.ClearHistory();
+							// update oldest undo version user is allowed to revert to this version
+							_undoVersion = _undoRedo.GetVersion();
 							_undoButton.Disabled = true;
 							break;
 						}
@@ -528,6 +534,7 @@ public partial class Combat : Node2D
 					_confirmButton.Disabled = true;
 					ResetAttacks();
 					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					var remaining = _enemyList.Count; // only for debugging
 					for (int i = _enemyList.Count - 1; i >= 0; i--)
 					{
@@ -714,13 +721,19 @@ public partial class Combat : Node2D
 				{
 					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
 					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.HideAttackButtons));
+					_undoRedo.AddUndoProperty(this, "MonsterAttacks", MonsterAttacks);
 					//_nextButton.Text = "Block Enemies";
 					//_confirmButton.Text = "Reduce Attack By 1";
 					_undoRedo.AddDoProperty(_nextButton, "text", "Block Enemies");
 					_undoRedo.AddDoProperty(_confirmButton, "text", "Reduce Attack By 1");
 					_undoRedo.AddDoProperty(_confirmButton, "disabled", true);
+					// Remove existing buttons before creating new attack buttons
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.HideAttackButtons));
+					_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
 
-					EnemiesAttack();
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.EnemiesAttack));
+					//EnemiesAttack();
 					break;
 				}
 			case Phase.Block:
@@ -1047,11 +1060,6 @@ public partial class Combat : Node2D
 
 	private void EnemiesAttack()
 	{
-		// Remove existing buttons before creating new attack buttons
-		_undoRedo.AddDoMethod(new Callable(this, MethodName.HideAttackButtons));
-		_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
-		//HideAttackButtons();
-		//MonsterAttacks = new ButtonGroup();
 		// create enemy attacks for undefeated enemies
 		for (int i = 0; i < _enemyList.Count; i++)
 		{
@@ -1059,6 +1067,7 @@ public partial class Combat : Node2D
 			if (!enemy.Defeated && enemy.Attacking)
 			{
 				enemy.Attack();
+				//_undoRedo.AddDoMethod(new Callable(enemy, Monster.MethodName.Attack));
 			}
 		}
 	}
@@ -1104,6 +1113,8 @@ public partial class Combat : Node2D
 	private void OnUndoButtonPressed()
 	{
 		_undoRedo.Undo();
+		GD.Print("version after undo: "+_undoRedo.GetVersion());
+		_undoButton.Disabled = _undoRedo.GetVersion() <= _undoVersion;
 		foreach (var kvp in _playerAttacks)
 		{
 			GD.Print("attack value: "+kvp.Value);

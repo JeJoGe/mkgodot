@@ -329,6 +329,7 @@ offset_left = 216.0
 offset_top = 568.0
 offset_right = 266.0
 offset_bottom = 599.0
+disabled = true
 text = "Undo"
 
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
