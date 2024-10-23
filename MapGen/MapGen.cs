@@ -90,7 +90,6 @@ public partial class MapGen : TileMap
 					var cellTerrain = GetCellTileData(MainLayer, patternTile).Terrain;
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
-					GameSettings.
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
 
 					//GD.Print("Point 1: "+ tokenData);
