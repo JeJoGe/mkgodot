@@ -211,7 +211,7 @@ public partial class CardObj : Sprite2D
 
     public void ImageCropping(AtlasTexture atlas)
     {
-        var frame = (AtlasTexture)atlas.Duplicate();
+        var frame = (AtlasTexture) atlas.Duplicate();
         frame.Region = new Rect2(new Godot.Vector2(1000 * xCoord, 1400 * yCoord), new Godot.Vector2(1000, 1400));
         this.Texture = frame;
     }
