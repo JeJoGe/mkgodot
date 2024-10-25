@@ -51,16 +51,7 @@ public partial class GameplayControl : Control
 			if (currentAtlasCoords is (-1, -1) && mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked)) // No tile from atlas exists here and adjacent to player
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
-				foreach (var enemy in EnemyList)
-				{
-					if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition))
-					{
-						if (challengeButton.Disabled == true)
-						{
-							challengeButton.Disabled = false;
-						}
-					}
-				}
+				MapUpdateOnPlayerMovement(player.PlayerPos, 10, 0, mapGen.GetCellTileData(MapGen.MainLayer, player.PlayerPos).GetCustomData("Event").ToString());
 				UpdateTokenColors(player.PlayerPos);
 				Utils.undoRedo.ClearHistory();
 			}
@@ -131,7 +122,7 @@ public partial class GameplayControl : Control
 	}
 
 	// Generate Monster Token and stats, may need to add in variable for whether flipped
-	public void MonsterGen(string colour, int siteFortifications, Vector2I localPos)
+	public MapToken MonsterGen(string colour, int siteFortifications, Vector2I localPos)
 	{
 		var enemy = GameSettings.DrawMonster(Utils.ConvertStringToMonsterColour(colour));
 		var monsterToken = (MapToken)mapTokenScene.Instantiate();
@@ -139,7 +130,7 @@ public partial class GameplayControl : Control
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
 		monsterToken.TokenId = enemy;
-		var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, monsterToken.MapPosition).GetCustomData("Event").ToString();
+		/*var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, monsterToken.MapPosition).GetCustomData("Event").ToString();
 		if ((monsterToken.Colour == "green" || monsterToken.Colour == "red") || //rampaging
 		(mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) && mapEvent.Contains("city")) || // City monsters and next to
 		(mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) && !GameSettings.NightTime) // Next to keep or tower in day
@@ -151,9 +142,8 @@ public partial class GameplayControl : Control
 		{
 			monsterToken.Facedown = true;
 		}
-		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
-		AddChild(monsterToken);
-		EnemyList.Add(monsterToken);
+		monsterToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));*/
+		return monsterToken;
 	}
 
 	public MapToken PlaceholderMonsterGen(string colour, int siteFortifications, Vector2I localPos)
@@ -227,19 +217,26 @@ public partial class GameplayControl : Control
 		}
 		foreach (var ruin in RuinList)
 		{
-			if (ruin.MapPosition == player.PlayerPos)
+			if (GameSettings.NightTime == false && ruin.MapPosition != player.PlayerPos)
 			{
-				if (ruin.Facedown != false) //if it's daytime, already false so dont need to check
+				if (ruin.Facedown == true)
+				{
+					ruin.Facedown = false;
+				}
+			}
+			
+			else if (ruin.MapPosition == player.PlayerPos)
+			{
+				if (ruin.Facedown == true) //if it's daytime, already false so dont need to check
 				{
 					ruin.Facedown = false; // Note for later: do we allow players to make mistake of reveal and not being able to undo
 				}
 				if (interactButton.Disabled == true) { interactButton.Disabled = false; }
-				break;
 			}
 		}
 	}
 	// Generate Ruin Token, may need to add in variable for whether flipped
-	public void RuinGen(Vector2I localPos)
+	public MapToken RuinGen(Vector2I localPos)
 	{
 		var ruin = GameSettings.DrawRuin();
 		var ruinToken = (MapToken)mapTokenScene.Instantiate();
@@ -247,16 +244,17 @@ public partial class GameplayControl : Control
 		ruinToken.MapPosition = localPos;
 		ruinToken.Colour = "yellow";
 		ruinToken.TokenId = ruin;
-		if (!GameSettings.NightTime)
+		/*if (!GameSettings.NightTime)
 		{
 			ruinToken.Facedown = false;
 		}
 		else
 		{
 			ruinToken.Facedown = true;
-		}
-		ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
-		RuinList.Add(ruinToken);
+		}*/
+		/*ruinToken.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(localPos));
+		RuinList.Add(ruinToken);*/
+		return ruinToken;
 	}
 
 	public void _on_challenge_button_pressed()
@@ -392,7 +390,7 @@ public partial class GameplayControl : Control
 							if (Utils.RuinEvents[ruin.TokenId].Event == "monster")
 							{
 								var alreadyEnemies = false;
-								foreach (var monsterGroup in MonsterGroupList)
+								/*foreach (var monsterGroup in MonsterGroupList)
 								{
 									if (monsterGroup.MapPosition == ruin.MapPosition)
 									{
@@ -405,7 +403,7 @@ public partial class GameplayControl : Control
 											GameSettings.ChallengeList.Add(monster);
 										}
 									}
-								}
+								}*/
 								if(!alreadyEnemies)
 								{
 									foreach (var monsterColour in Utils.RuinEvents[ruin.TokenId].Requirements)

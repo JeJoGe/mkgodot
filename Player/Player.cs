@@ -88,7 +88,7 @@ public partial class Player : Node2D
 		Utils.undoRedo.AddDoProperty(this, "PlayerPos", posClicked);
 		Utils.undoRedo.AddUndoProperty(this, "PlayerPos", PlayerPos);
 		Utils.undoRedo.AddDoProperty(this, "MovePoints", MovePoints - terrainCost + modifier); // Reduce move points
-		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints + terrainCost + modifier);
+		Utils.undoRedo.AddUndoProperty(this, "MovePoints", MovePoints);
 		Utils.undoRedo.AddDoMethod(UpdateTColors);
 		Utils.undoRedo.AddUndoMethod(UpdateTColors);
 		Utils.undoRedo.CommitAction();

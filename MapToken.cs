@@ -73,7 +73,7 @@ public partial class MapToken : Node2D
 					var ruinStats = Utils.RuinEvents[TokenId];
 					if (ruinStats.Event == "monster")
 					{
-						var monsterGroup = (MonsterGroup)MonsterGroupScene.Instantiate();
+						/*var monsterGroup = (MonsterGroup)MonsterGroupScene.Instantiate();
 						monsterGroup.MapPosition = MapPosition;
 						var gameplayControl = GetNode<GameplayControl>("..");
 						foreach (var monsterColour in ruinStats.Requirements)
@@ -83,7 +83,7 @@ public partial class MapToken : Node2D
 						monsterGroup.GlobalPosition = mapGen.ToGlobal(mapGen.MapToLocal(MapPosition));
 						AddChild(monsterGroup);
 						gameplayControl.MonsterGroupList.Add(monsterGroup);
-						
+						*/
 					}
 				}
 				_facedown = value;

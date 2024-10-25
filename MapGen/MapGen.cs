@@ -24,6 +24,9 @@ public partial class MapGen : TileMap
 		{10,0} // Nowhere
 	};
 
+	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
+	public static Dictionary<Vector2I, (int, MapToken, string, List<MapToken>)> MapData = new Dictionary<Vector2I, (int, MapToken, string, List<MapToken>)>();
+
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
 	int[] greenTiles = Enumerable.Range(2, 14).ToArray();
@@ -90,15 +93,16 @@ public partial class MapGen : TileMap
 					var cellTerrain = GetCellTileData(MainLayer, patternTile).Terrain;
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
+					var mapToken = new MapToken();
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
-
+					
 					//GD.Print("Point 1: "+ tokenData);
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
 					if (tokenData != "" && tokenData != "yellow")
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
+						mapToken = gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
 					}
 					else if (tokenData == "yellow")
 					{
@@ -106,6 +110,7 @@ public partial class MapGen : TileMap
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						gameplayControl.RuinGen(patternTile);
 					}
+					MapData.Add(patternTile, (cellTerrain, mapToken, patternTileData.GetCustomData("Event").ToString(), new List<MapToken>()));
 				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
