@@ -249,7 +249,7 @@ public class RuinObject
 	public int Y { get; set; }
 	public string Version { get; set; }
 }
-public class MonsterAttack
+public partial class MonsterAttack : GodotObject
 {
 	public int Value { get; set; }
 	public Element Element { get; set; }

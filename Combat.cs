@@ -27,7 +27,7 @@ public partial class Combat : Node2D
 	public delegate void WoundEventHandler(int wounds);
 	private List<Monster> _enemyList = new List<Monster>();
 	private List<Unit> _unitList = new List<Unit>();
-	public ButtonGroup MonsterAttacks;
+	public ButtonGroup MonsterAttacks = new ButtonGroup();
 	private Godot.Collections.Dictionary<int, int> _playerAttacks = new Godot.Collections.Dictionary<int, int>();
 	private Dictionary<int, int> _playerBlocks = new Dictionary<int, int>();
 	private int _playerMovement = 0;
@@ -556,11 +556,20 @@ public partial class Combat : Node2D
 			case Phase.PreventAttacks:
 				{
 					// prevent selected attack from happening or prevent selected monsters from attacking
-					_resolvingAction = false;
+					_undoRedo.CreateAction("cancel attack");
+					_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+					_undoRedo.AddDoProperty(this, "_resolvingAction", false);
+					//_resolvingAction = false;
+					_undoRedo.AddUndoProperty(this, "_enemiesNotAttacking", _enemiesNotAttacking);
 					if (EnemiesNotAttacking == 0)
 					{
+						_undoRedo.AddUndoProperty(_targetAttack, "Attacking", _targetAttack.Attacking);
+						//_undoRedo.AddDoProperty(_targetAttack, "Attacking", false);
 						_targetAttack.Attacking = false;
-						MonsterAttacks.GetPressedButton().QueueFree();
+						//MonsterAttacks.GetPressedButton().Visible = false;
+						var pressedButton = MonsterAttacks.GetPressedButton();
+						_undoRedo.AddUndoProperty(pressedButton, "visible", pressedButton.Visible);
+						_undoRedo.AddDoProperty(pressedButton, "visible", false);
 					}
 					else
 					{
@@ -568,6 +577,8 @@ public partial class Combat : Node2D
 						{
 							if (enemy.Selected)
 							{
+								_undoRedo.AddUndoProperty(enemy, "Attacking", enemy.Attacking);
+								//_undoRedo.AddDoProperty(enemy, "Attacking", false);
 								enemy.Attacking = false;
 							}
 						}
@@ -579,6 +590,8 @@ public partial class Combat : Node2D
 						GD.Print("no enemies attacking");
 						NextCombatPhase(Phase.Attack);
 					}
+					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					_confirmButton.Disabled = true;
 					break;
 				}
@@ -592,7 +605,7 @@ public partial class Combat : Node2D
 						{
 							_targetAttack.Value = 0;
 							_targetAttack.Blocked = true;
-							MonsterAttacks.GetPressedButton().QueueFree();
+							MonsterAttacks.GetPressedButton().Visible = false;
 						}
 						_resolvingAction = _reducedAttacks.Count < _maxAttacksReduce; // can still reduce attacks
 						if (!ResolvingAction)
@@ -610,7 +623,7 @@ public partial class Combat : Node2D
 						{
 							_targetAttack.Value = 0;
 							_targetAttack.Blocked = true;
-							MonsterAttacks.GetPressedButton().QueueFree();
+							MonsterAttacks.GetPressedButton().Visible = false;
 						}
 					}
 					var button = (Button)MonsterAttacks.GetPressedButton();
@@ -706,13 +719,11 @@ public partial class Combat : Node2D
 					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
 					//_nextButton.Text = "Enemies Attack";
 					//_confirmButton.Text = "Target Enemy Will Not Attack";
-					//MonsterAttacks = new ButtonGroup();
 					foreach (var enemy in _enemyList)
 					{
 						//enemy.Selected = false;
 						_undoRedo.AddDoProperty(enemy, "Selected", false);
 					}
-					_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
 					_undoRedo.AddDoProperty(_nextButton, "text", "Enemies Attack");
 					_undoRedo.AddDoProperty(_confirmButton, "text", "Target Enemy Will Not Attack");
 					break;
@@ -722,7 +733,6 @@ public partial class Combat : Node2D
 					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
 					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
 					_undoRedo.AddUndoMethod(new Callable(this, MethodName.HideAttackButtons));
-					_undoRedo.AddUndoProperty(this, "MonsterAttacks", MonsterAttacks);
 					//_nextButton.Text = "Block Enemies";
 					//_confirmButton.Text = "Reduce Attack By 1";
 					_undoRedo.AddDoProperty(_nextButton, "text", "Block Enemies");
@@ -730,7 +740,6 @@ public partial class Combat : Node2D
 					_undoRedo.AddDoProperty(_confirmButton, "disabled", true);
 					// Remove existing buttons before creating new attack buttons
 					_undoRedo.AddDoMethod(new Callable(this, MethodName.HideAttackButtons));
-					_undoRedo.AddDoProperty(this, "MonsterAttacks", new ButtonGroup());
 
 					_undoRedo.AddDoMethod(new Callable(this, MethodName.EnemiesAttack));
 					//EnemiesAttack();
@@ -1039,7 +1048,7 @@ public partial class Combat : Node2D
 		var buttons = MonsterAttacks.GetButtons();
 		foreach (var button in buttons)
 		{
-			button.QueueFree();
+			button.Visible = false;
 		}
 	}
 
