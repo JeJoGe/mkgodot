@@ -19,6 +19,10 @@ public partial class Combat : Node2D
 	private RichTextLabel _blockLabel;
 	[Export]
 	private Label _fameLabel;
+	[Export]
+	private RichTextLabel _actionLabel;
+	[Export]
+	private RichTextLabel _errorLabel;
 	[Signal]
 	public delegate void KnockoutEventHandler();
 	[Signal]
@@ -208,7 +212,7 @@ public partial class Combat : Node2D
 		CurrentPhase = Phase.Ranged;
 
 		_undoRedo = new UndoRedo();
-		GD.Print("intial undo version: "+_undoRedo.GetVersion());
+		GD.Print("intial undo version: " + _undoRedo.GetVersion());
 	}
 
 	public Monster CreateMonsterToken(int id)
@@ -557,7 +561,9 @@ public partial class Combat : Node2D
 				{
 					// prevent selected attack from happening or prevent selected monsters from attacking
 					_undoRedo.CreateAction("cancel attack");
+					_undoRedo.AddUndoProperty(_actionLabel, "visible", _actionLabel.Visible);
 					_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+					_undoRedo.AddDoProperty(_actionLabel, "visible", false);
 					_undoRedo.AddDoProperty(this, "_resolvingAction", false);
 					//_resolvingAction = false;
 					_undoRedo.AddUndoProperty(this, "_enemiesNotAttacking", _enemiesNotAttacking);
@@ -593,6 +599,8 @@ public partial class Combat : Node2D
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					_confirmButton.Disabled = true;
+					_errorLabel.Visible = false;
+					DeselectMonsters();
 					break;
 				}
 			case Phase.ReduceAttack:
@@ -889,17 +897,37 @@ public partial class Combat : Node2D
 	{
 		GD.Print(string.Format("prevent {0} enemies from attacking; unfortified only: {1}", numAttacksPrevented, targetUnfortified));
 		var result = false; // return false if still in middle of resolving a cancel attack action
+		string actionLabelText;
 		if (!ResolvingAction)
 		{
+			_undoRedo.CreateAction("prevent attack");
+			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+			_undoRedo.AddUndoProperty(_actionLabel, "visible", _actionLabel.Visible);
+			_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
+			_undoRedo.AddUndoProperty(_errorLabel, "visible", _errorLabel.Visible);
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.HideAttackButtons));
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.DeselectMonsters));
 			_resolvingAction = result = true;
 			PreventOnlyUnfortified = targetUnfortified;
 			_enemiesNotAttacking = numAttacksPrevented; // if 0 then cancel single attack
 			var str = "Target Enemies Will Not Attack";
+			actionLabelText = string.Format("[color=white]Prevent up to {0} ", numAttacksPrevented)
+			+ (PreventOnlyUnfortified ? "unfortified " : "") + (numAttacksPrevented > 1 ? "enemies" : "enemy")
+			+ " from attacking this combat[/color]";
 			if (numAttacksPrevented == 0)
 			{
 				str = "Cancel Single Attack";
+				actionLabelText = "[color=white]Cancel one enemy attack[/color]";
 			}
 			_confirmButton.Text = str;
+			_actionLabel.Text = actionLabelText;
+			_actionLabel.Visible = true;
+			_undoRedo.CommitAction();
+		}
+		else
+		{
+			_errorLabel.Text = "[color=red]ERROR: Resolve current action first[/color]";
+			_errorLabel.Visible = true;
 		}
 		return result;
 	}
@@ -1139,13 +1167,13 @@ public partial class Combat : Node2D
 	private void OnUndoButtonPressed()
 	{
 		_undoRedo.Undo();
-		GD.Print("version after undo: "+_undoRedo.GetVersion());
+		GD.Print("version after undo: " + _undoRedo.GetVersion());
 		_undoButton.Disabled = _undoRedo.GetVersion() <= _undoVersion;
 		foreach (var kvp in _playerAttacks)
 		{
-			GD.Print("attack value: "+kvp.Value);
+			GD.Print("attack value: " + kvp.Value);
 		}
-		GD.Print("total attack: "+_totalAttack);
+		GD.Print("total attack: " + _totalAttack);
 		var remaining = _enemyList.Count; // only for debugging
 		for (int i = _enemyList.Count - 1; i >= 0; i--)
 		{

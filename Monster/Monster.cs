@@ -40,12 +40,11 @@ public partial class Monster : Node2D
 		}
 		set
 		{
-			if (!value)
+			var undoRedo = GetParent<Combat>().UndoRedo;
+			foreach (var attack in Attacks)
 			{
-				foreach (var attack in Attacks)
-				{
-					attack.Attacking = false;
-				}
+				undoRedo.AddUndoProperty(attack, "Attacking", attack.Attacking);
+				attack.Attacking = value;
 			}
 			_noAttack.Visible = !value;
 		}
