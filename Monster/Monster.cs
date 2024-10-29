@@ -47,7 +47,7 @@ public partial class Monster : Node2D
 					attack.Attacking = false;
 				}
 			}
-			_noAttack.Visible = true;
+			_noAttack.Visible = !value;
 		}
 	}
 	public bool Summoned { get; set; } = false;

@@ -689,7 +689,12 @@ public partial class Combat : Node2D
 				}
 			case Phase.Attack:
 				{
+					_undoRedo.CreateAction("defeat enemies");
 					DefeatEnemies();
+					_confirmButton.Disabled = true;
+					ResetAttacks();
+					_undoRedo.CommitAction();
+					_undoButton.Disabled = false;
 					// exit combat if all enemies defeated
 					if (CheckVictory())
 					{
@@ -697,8 +702,6 @@ public partial class Combat : Node2D
 						// exit combat
 						EndCombat(true);
 					}
-					_confirmButton.Disabled = true;
-					ResetAttacks();
 					break;
 				}
 			default: break;
@@ -785,18 +788,26 @@ public partial class Combat : Node2D
 						var enemy = _enemyList[i];
 						if (enemy.Summoned)
 						{
-							enemy.Visible = false;
-							_enemyList.RemoveAt(i);
-							GameSettings.DiscardToken(enemy.MonsterId);
+							_undoRedo.AddUndoProperty(enemy, "visible", enemy.Visible);
+							_undoRedo.AddDoProperty(enemy, "visible", false);
+							//enemy.Visible = false;
+							//_enemyList.RemoveAt(i);
+							//GameSettings.DiscardToken(enemy.MonsterId);
 						}
 						else if (!enemy.Defeated && enemy.Attacks.First().Element == Element.Summon)
 						{
 							// reveal summoners
-							enemy.Visible = true;
+							_undoRedo.AddUndoProperty(enemy, "visible", enemy.Visible);
+							_undoRedo.AddDoProperty(enemy, "visible", true);
+							//enemy.Visible = true;
 						}
 					}
-					_nextButton.Text = "Skip Attacking";
-					_confirmButton.Text = "Confirm Attack";
+					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
+					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
+					_undoRedo.AddDoProperty(_nextButton, "text", "Skip Attacking");
+					_undoRedo.AddDoProperty(_confirmButton, "text", "Confirm Attack");
+					//_nextButton.Text = "Skip Attacking";
+					//_confirmButton.Text = "Confirm Attack";
 					_confirmButton.Disabled = true;
 					break;
 				}
@@ -914,7 +925,8 @@ public partial class Combat : Node2D
 		var result = true;
 		for (int i = 0; i < _enemyList.Count; i++)
 		{
-			if (!_enemyList[i].Defeated)
+			var enemy = _enemyList[i];
+			if (!enemy.Defeated && !enemy.Summoned)
 			{
 				result = false;
 				break;
@@ -1029,6 +1041,11 @@ public partial class Combat : Node2D
 			if (enemy.Defeated)
 			{
 				defeated.Add((enemy.MonsterId, enemy.PosColour));
+			}
+			// discard all summoned enemies
+			if (enemy.Summoned)
+			{
+				GameSettings.DiscardToken(enemy.MonsterId);
 			}
 		}
 		if (GameSettings.CombatSim)
