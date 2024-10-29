@@ -21,6 +21,8 @@ public partial class Monster : Node2D
 	}
 	[Export]
 	private ColorRect _colorRect;
+	[Export]
+	private Sprite2D _noAttack;
 	public Color PosColour { get; set; }
 	public bool Blocked
 	{
@@ -38,13 +40,13 @@ public partial class Monster : Node2D
 		}
 		set
 		{
-			if (!value)
+			var undoRedo = GetParent<Combat>().UndoRedo;
+			foreach (var attack in Attacks)
 			{
-				foreach (var attack in Attacks)
-				{
-					attack.Attacking = false;
-				}
+				undoRedo.AddUndoProperty(attack, "Attacking", attack.Attacking);
+				attack.Attacking = value;
 			}
+			_noAttack.Visible = !value;
 		}
 	}
 	public bool Summoned { get; set; } = false;
@@ -54,7 +56,7 @@ public partial class Monster : Node2D
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public MonsterColour Colour { get; set; }
-	// MapPosition is direction relativve to player
+	// MapPosition is direction relative to player
 	public Vector2I MapPosition { get; set; }
 	public int MonsterId { get; set; }
 	private static readonly int _attackOffset = 40;
@@ -65,6 +67,23 @@ public partial class Monster : Node2D
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
 		_colorRect.Visible = false;
+		// create attack buttons
+		var combat = GetParent<Combat>();
+		for (int i = 0; i < Attacks.Count; i++)
+		{
+			var attack = Attacks[i];
+			var button = new Button
+			{
+				ButtonGroup = combat.MonsterAttacks,
+				Text = string.Format("{0} {1}", attack.Element, attack.Value),
+				ToggleMode = true,
+				Position = new Vector2(-46, 60 + _attackOffset * i),
+				Name = string.Format("AttackButton{0}", i),
+				Visible = false
+			};
+			button.Pressed += () => OnAttackButtonToggled(attack);
+			AddChild(button);
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -113,7 +132,9 @@ public partial class Monster : Node2D
 					attack.Attacked = true;
 					break;
 				}
-				var button = new Button
+				var button = GetNode<Button>(string.Format("AttackButton{0}", i));
+				button.Visible = true;
+				/*var button = new Button
 				{
 					ButtonGroup = combat.MonsterAttacks,
 					Text = string.Format("{0} {1}", attack.Element, attack.Value),
@@ -122,7 +143,7 @@ public partial class Monster : Node2D
 					Name = string.Format("AttackButton{0}", i)
 				};
 				button.Pressed += () => OnAttackButtonToggled(attack);
-				AddChild(button);
+				AddChild(button);*/
 			}
 		}
 	}
@@ -205,6 +226,9 @@ public partial class Monster : Node2D
 									for (int i = 0; i < Attacks.Count; i++)
 									{
 										var attack = Attacks[i];
+										var button = GetNode<Button>(string.Format("AttackButton{0}", i));
+										button.Visible = attack.Attacking;
+										/*
 										var button = new Button
 										{
 											ButtonGroup = combatInstance.MonsterAttacks,
@@ -214,7 +238,7 @@ public partial class Monster : Node2D
 											Name = string.Format("AttackButton{0}", i)
 										};
 										button.Pressed += () => OnAttackButtonToggled(attack);
-										AddChild(button);
+										AddChild(button);*/
 									}
 									combatInstance.UpdateCancelledAttacks();
 								}

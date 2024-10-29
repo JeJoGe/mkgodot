@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel", "_actionLabel", "_errorLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
@@ -14,6 +14,8 @@ _undoButton = NodePath("NinePatchRect/UndoButton")
 _attackLabel = NodePath("NinePatchRect/AttackLabel")
 _blockLabel = NodePath("NinePatchRect/BlockLabel")
 _fameLabel = NodePath("NinePatchRect/TotalFameLabel")
+_actionLabel = NodePath("NinePatchRect/ActionLabel")
+_errorLabel = NodePath("NinePatchRect/ErrorLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -312,6 +314,24 @@ offset_left = 40.0
 offset_top = 736.0
 offset_right = 104.0
 offset_bottom = 784.0
+bbcode_enabled = true
+
+[node name="ActionLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 528.0
+offset_right = 540.0
+offset_bottom = 568.0
+bbcode_enabled = true
+
+[node name="ErrorLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 352.0
+offset_top = 616.0
+offset_right = 652.0
+offset_bottom = 656.0
 bbcode_enabled = true
 
 [node name="BlockLabel" type="RichTextLabel" parent="NinePatchRect"]
