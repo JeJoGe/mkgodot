@@ -25,7 +25,7 @@ public partial class MapGen : TileMap
 	};
 
 	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
-	public static Dictionary<Vector2I, (int, MapToken, string, List<MapToken>)> MapData = new Dictionary<Vector2I, (int, MapToken, string, List<MapToken>)>();
+	public Dictionary<Vector2I, TileData> MapData = new Dictionary<Vector2I, TileData>();
 
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
@@ -95,6 +95,7 @@ public partial class MapGen : TileMap
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
 					var mapToken = new MapToken();
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
+					string eventData = patternTileData.GetCustomData("Event").ToString();
 					
 					//GD.Print("Point 1: "+ tokenData);
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
@@ -102,15 +103,21 @@ public partial class MapGen : TileMap
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						mapToken = gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
+						mapToken = gameplayControl.MonsterGen(tokenData, (eventData == "") ? 0 : 1, patternTile);
+						GD.Print("zzzzToken is " + mapToken.TokenId.ToString());
 					}
 					else if (tokenData == "yellow")
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						gameplayControl.RuinGen(patternTile);
+						mapToken = gameplayControl.RuinGen(patternTile);
 					}
-					MapData.Add(patternTile, (cellTerrain, mapToken, patternTileData.GetCustomData("Event").ToString(), new List<MapToken>()));
+					mapToken.Visible = true;
+					mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
+					GD.Print("Map token: " + mapToken.MapPosition);
+					var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
+					MapData.Add(patternTile, tileData);
+					
 				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles

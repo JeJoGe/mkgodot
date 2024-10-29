@@ -14,7 +14,6 @@ public partial class MapToken : Node2D
 	private Color _oldPosColour = Colors.Black;
 	public Color OldPosColour { get; set; }
 	private Color _posColour = Colors.Black;
-	PackedScene MonsterGroupScene = GD.Load<PackedScene>("res://MonsterGroup.tscn");
 
 	public Color PosColour
 	{
@@ -73,6 +72,11 @@ public partial class MapToken : Node2D
 					var ruinStats = Utils.RuinEvents[TokenId];
 					if (ruinStats.Event == "monster")
 					{
+						var gameplayControl = GetNode<GameplayControl>("..");
+						foreach (var monsterColour in ruinStats.Requirements)
+						{
+							mapGen.MapData[MapPosition].MonsterGroup.Add(gameplayControl.PlaceholderMonsterGen(monsterColour, 0, MapPosition));
+						}
 						/*var monsterGroup = (MonsterGroup)MonsterGroupScene.Instantiate();
 						monsterGroup.MapPosition = MapPosition;
 						var gameplayControl = GetNode<GameplayControl>("..");
