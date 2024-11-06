@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3cy63d58f762"]
+[gd_scene load_steps=7 format=3 uid="uid://b3cy63d58f762"]
 
 [ext_resource type="Script" path="res://Monster/Monster.cs" id="1_m3i1r"]
 [ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="2_mspwl"]
 [ext_resource type="Texture2D" uid="uid://ilcvkcnomb4v" path="res://assets/halo.png" id="3_ud460"]
+[ext_resource type="Texture2D" uid="uid://lpqlbbl8jbbx" path="res://assets/CombatIcons/noattack.png" id="4_jb2xd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7iqo"]
 atlas = ExtResource("2_mspwl")
@@ -11,11 +12,12 @@ region = Rect2(0, 0, 258, 258)
 [sub_resource type="CircleShape2D" id="CircleShape2D_cotig"]
 radius = 46.0
 
-[node name="Monster" type="Node2D" node_paths=PackedStringArray("_halo", "_colorRect")]
+[node name="Monster" type="Node2D" node_paths=PackedStringArray("_halo", "_colorRect", "_noAttack")]
 z_index = 1
 script = ExtResource("1_m3i1r")
 _halo = NodePath("Halo")
 _colorRect = NodePath("ColorRect")
+_noAttack = NodePath("NoAttack")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 1
@@ -37,3 +39,10 @@ z_index = 2
 offset_top = -12.0
 offset_right = 12.0
 color = Color(0.486275, 0.486275, 0.486275, 1)
+
+[node name="NoAttack" type="Sprite2D" parent="."]
+visible = false
+z_index = 2
+position = Vector2(-32, 2)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_jb2xd")

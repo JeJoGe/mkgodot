@@ -4,14 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_attackLabel", "_blockLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel", "_actionLabel", "_errorLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 _confirmButton = NodePath("NinePatchRect/ConfirmButton")
 _nextButton = NodePath("NinePatchRect/NextButton")
+_undoButton = NodePath("NinePatchRect/UndoButton")
 _attackLabel = NodePath("NinePatchRect/AttackLabel")
 _blockLabel = NodePath("NinePatchRect/BlockLabel")
+_fameLabel = NodePath("NinePatchRect/TotalFameLabel")
+_actionLabel = NodePath("NinePatchRect/ActionLabel")
+_errorLabel = NodePath("NinePatchRect/ErrorLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -57,6 +61,14 @@ offset_top = 704.0
 offset_right = 160.0
 offset_bottom = 727.0
 text = "Total Wounds 0"
+
+[node name="TotalFameLabel" type="Label" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 704.0
+offset_right = 256.0
+offset_bottom = 727.0
+text = "Total Fame 0"
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="NinePatchRect"]
 title = ""
@@ -304,6 +316,24 @@ offset_right = 104.0
 offset_bottom = 784.0
 bbcode_enabled = true
 
+[node name="ActionLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 528.0
+offset_right = 540.0
+offset_bottom = 568.0
+bbcode_enabled = true
+
+[node name="ErrorLabel" type="RichTextLabel" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 352.0
+offset_top = 616.0
+offset_right = 652.0
+offset_bottom = 656.0
+bbcode_enabled = true
+
 [node name="BlockLabel" type="RichTextLabel" parent="NinePatchRect"]
 visible = false
 layout_mode = 0
@@ -313,8 +343,18 @@ offset_right = 104.0
 offset_bottom = 784.0
 bbcode_enabled = true
 
+[node name="UndoButton" type="Button" parent="NinePatchRect"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 568.0
+offset_right = 266.0
+offset_bottom = 599.0
+disabled = true
+text = "Undo"
+
 [connection signal="pressed" from="NinePatchRect/NextButton" to="." method="OnNextButtonPressed"]
 [connection signal="pressed" from="NinePatchRect/ConfirmButton" to="." method="OnConfirmButtonPressed"]
+[connection signal="canceled" from="NinePatchRect/ConfirmationDialog" to="." method="OnCancelFinishCombat"]
 [connection signal="confirmed" from="NinePatchRect/ConfirmationDialog" to="." method="OnFinishCombatConfirmed"]
 [connection signal="pressed" from="NinePatchRect/AttackButton" to="." method="AddAttack" binds= [1, 0, 0]]
 [connection signal="pressed" from="NinePatchRect/RangeButton" to="." method="AddAttack" binds= [1, 0, 4]]
@@ -339,3 +379,4 @@ bbcode_enabled = true
 [connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [4, 1]]
 [connection signal="pressed" from="NinePatchRect/Reduce2AttacksButton" to="." method="ReduceAttack" binds= [2, 2]]
 [connection signal="pressed" from="NinePatchRect/MovementButton" to="." method="AddMovement" binds= [1]]
+[connection signal="pressed" from="NinePatchRect/UndoButton" to="." method="OnUndoButtonPressed"]
