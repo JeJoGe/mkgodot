@@ -164,11 +164,47 @@ public partial class GameplayControl : Control
 	{
 		player.PerformMovement(posClicked, cellTerrain, movementMod);
 		var nextToRampage = false;
+		GD.Print("Checking around");
 		foreach (var coords in mapGen.GetSurroundingCells(player.PlayerPos))
 		{
-			if (mapGen.MapData[coords].)
+			var tileEvent = "";
+			GD.Print(coords);
+			if (mapGen.MapData.ContainsKey(coords))
+			{
+				tileEvent = mapGen.GetCellTileData(MapGen.MainLayer, coords).GetCustomData("Event").ToString();
+			}
+			else
+			{
+				continue;
+			}
+
+			GD.Print(tileEvent);
+			if(mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
+			{
+				if (mapGen.MapData[coords].Token.Facedown)
+				{
+					GD.Print("next to rampage");
+					mapGen.MapData[coords].Token.Facedown = false;
+				}
+				if (challengeButton.Disabled == true)
+				{
+					challengeButton.Disabled = false;
+				}
+			}
+			else if (mapEvent.Contains("castle") && mapGen.MapData[coords].Token != null)
 			{
 
+			}
+
+			else if(!GameSettings.NightTime)
+			{
+				if(mapEvent == "keep" || mapEvent == "tower")
+				{
+					if (mapGen.MapData[coords].Token.Facedown)
+					{
+						mapGen.MapData[coords].Token.Facedown = false;
+					}
+				}
 			}
 		}
 		/*foreach (var enemy in EnemyList)

@@ -93,9 +93,10 @@ public partial class MapGen : TileMap
 					var cellTerrain = GetCellTileData(MainLayer, patternTile).Terrain;
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
-					var mapToken = new MapToken();
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
 					string eventData = patternTileData.GetCustomData("Event").ToString();
+					var tokenExists = false;
+					var mapToken = new MapToken();
 					
 					//GD.Print("Point 1: "+ tokenData);
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
@@ -104,18 +105,28 @@ public partial class MapGen : TileMap
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						mapToken = gameplayControl.MonsterGen(tokenData, (eventData == "") ? 0 : 1, patternTile);
+						tokenExists = true;
 					}
 					else if (tokenData == "yellow")
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						mapToken = gameplayControl.RuinGen(patternTile);
+						tokenExists = true;
 					}
-					mapToken.Visible = true;
-					mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
-					var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
-					gameplayControl.AddChild(mapToken);
-					MapData.Add(patternTile, tileData);
+					else
+					{
+						tokenExists = false;
+					}
+					if (tokenExists)
+					{
+						mapToken.Visible = true;
+						mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
+						var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
+						gameplayControl.AddChild(mapToken);
+						MapData.Add(patternTile, tileData);
+					}
+					
 				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles
