@@ -130,6 +130,7 @@ public partial class GameplayControl : Control
 		monsterToken.SiteFortifications = siteFortifications;
 		monsterToken.Colour = colour;
 		monsterToken.TokenId = enemy;
+		monsterToken.Facedown = true;
 		/*var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, monsterToken.MapPosition).GetCustomData("Event").ToString();
 		if ((monsterToken.Colour == "green" || monsterToken.Colour == "red") || //rampaging
 		(mapGen.GetSurroundingCells(player.PlayerPos).Contains(monsterToken.MapPosition) && mapEvent.Contains("city")) || // City monsters and next to
@@ -163,7 +164,14 @@ public partial class GameplayControl : Control
 	{
 		player.PerformMovement(posClicked, cellTerrain, movementMod);
 		var nextToRampage = false;
-		foreach (var enemy in EnemyList)
+		foreach (var coords in mapGen.GetSurroundingCells(player.PlayerPos))
+		{
+			if (mapGen.MapData[coords].)
+			{
+
+			}
+		}
+		/*foreach (var enemy in EnemyList)
 		{
 			var nextToEnemy = mapGen.GetSurroundingCells(player.PlayerPos).Contains(enemy.MapPosition);
 			var onEnemy = (enemy.MapPosition == player.PlayerPos);
@@ -195,7 +203,7 @@ public partial class GameplayControl : Control
 					}
 				}
 			}
-		}
+		}*/
 		if(nextToRampage && challengeButton.Disabled == true)
 		{
 			challengeButton.Disabled = false;
@@ -240,10 +248,10 @@ public partial class GameplayControl : Control
 	{
 		var ruin = GameSettings.DrawRuin();
 		var ruinToken = (MapToken)mapTokenScene.Instantiate();
-		AddChild(ruinToken);
 		ruinToken.MapPosition = localPos;
 		ruinToken.Colour = "yellow";
 		ruinToken.TokenId = ruin;
+		ruinToken.Facedown = true;
 		/*if (!GameSettings.NightTime)
 		{
 			ruinToken.Facedown = false;

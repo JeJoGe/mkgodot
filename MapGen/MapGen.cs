@@ -104,7 +104,6 @@ public partial class MapGen : TileMap
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
 						mapToken = gameplayControl.MonsterGen(tokenData, (eventData == "") ? 0 : 1, patternTile);
-						GD.Print("zzzzToken is " + mapToken.TokenId.ToString());
 					}
 					else if (tokenData == "yellow")
 					{
@@ -114,10 +113,9 @@ public partial class MapGen : TileMap
 					}
 					mapToken.Visible = true;
 					mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
-					GD.Print("Map token: " + mapToken.MapPosition);
 					var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
+					gameplayControl.AddChild(mapToken);
 					MapData.Add(patternTile, tileData);
-					
 				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles

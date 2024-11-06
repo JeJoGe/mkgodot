@@ -15,10 +15,6 @@ public class TileData
         Token = mapToken;
         TileEvent = tileEvent;
         MonsterGroup = monsterGroup;
-        GD.Print("Terrain is " + CellTerrain.ToString());
-        GD.Print("Token is " + Token.TokenId);
-        GD.Print("Event is " + TileEvent);
-        GD.Print("MonsterGroup first id should be " + MonsterGroup.ToString());
     }
 
 }
