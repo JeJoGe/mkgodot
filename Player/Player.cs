@@ -95,7 +95,6 @@ public partial class Player : Node2D
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(posClicked)));
 		//GD.Print(GlobalPosition);
 		//gameplayControl.UpdateTokenColors();
-		GD.Print("player: " + PlayerPos);
 	}
 
 	// Check walls unique data in current tile and iterate. if Destination vector - Any Walls vector == Source vector, then wall between

@@ -59,7 +59,7 @@ public partial class GameplayControl : Control
 			else if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked))
 			{
 				var cellTerrain = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).Terrain; // Get terrain of tile
-																								// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				var movementMod = 0;
 				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
 				{
@@ -164,11 +164,9 @@ public partial class GameplayControl : Control
 	{
 		player.PerformMovement(posClicked, cellTerrain, movementMod);
 		var nextToRampage = false;
-		GD.Print("Checking around");
 		foreach (var coords in mapGen.GetSurroundingCells(player.PlayerPos))
 		{
 			var tileEvent = "";
-			GD.Print(coords);
 			if (mapGen.MapData.ContainsKey(coords))
 			{
 				tileEvent = mapGen.GetCellTileData(MapGen.MainLayer, coords).GetCustomData("Event").ToString();
@@ -178,14 +176,8 @@ public partial class GameplayControl : Control
 				continue;
 			}
 
-			GD.Print(tileEvent);
 			if(mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
 			{
-				if (mapGen.MapData[coords].Token.Facedown)
-				{
-					GD.Print("next to rampage");
-					mapGen.MapData[coords].Token.Facedown = false;
-				}
 				if (challengeButton.Disabled == true)
 				{
 					challengeButton.Disabled = false;
@@ -198,7 +190,7 @@ public partial class GameplayControl : Control
 
 			else if(!GameSettings.NightTime)
 			{
-				if(mapEvent == "keep" || mapEvent == "tower")
+				if((tileEvent == "keep" || tileEvent == "tower") && mapGen.MapData[coords].Token != null)
 				{
 					if (mapGen.MapData[coords].Token.Facedown)
 					{

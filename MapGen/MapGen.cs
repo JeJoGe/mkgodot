@@ -119,12 +119,20 @@ public partial class MapGen : TileMap
 						tokenExists = false;
 					}
 					if (tokenExists)
-					{
+					{	
 						mapToken.Visible = true;
 						mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
 						var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
 						gameplayControl.AddChild(mapToken);
 						MapData.Add(patternTile, tileData);
+						if (tokenData == "red" || tokenData == "green")
+						{
+							mapToken.Facedown = false;
+						}
+						else if (tokenData == "yellow" && GameSettings.NightTime != true)
+						{
+							mapToken.Facedown = false;
+						}
 					}
 					
 				}
