@@ -52,7 +52,6 @@ public partial class GameplayControl : Control
 			{
 				mapGen.GenerateTile(currentAtlasCoords, posClicked);
 				MapUpdateOnPlayerMovement(player.PlayerPos, 10, 0, mapGen.GetCellTileData(MapGen.MainLayer, player.PlayerPos).GetCustomData("Event").ToString());
-				UpdateTokenColors(player.PlayerPos);
 				Utils.undoRedo.ClearHistory();
 			}
 			// Check if tile clicked is any tiles surrounding player position
@@ -178,12 +177,14 @@ public partial class GameplayControl : Control
 
 			if(mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
 			{
+				nextToRampage = true;
 				if (challengeButton.Disabled == true)
 				{
 					challengeButton.Disabled = false;
 				}
 			}
-			else if (mapEvent.Contains("castle") && mapGen.MapData[coords].Token != null)
+			
+			else if (tileEvent.Contains("castle") && mapGen.MapData[coords].Token != null)
 			{
 
 			}
@@ -251,7 +252,7 @@ public partial class GameplayControl : Control
 		{
 			interactButton.Disabled = true;
 		}
-		foreach (var ruin in RuinList)
+		/*foreach (var ruin in RuinList)
 		{
 			if (GameSettings.NightTime == false && ruin.MapPosition != player.PlayerPos)
 			{
@@ -268,6 +269,22 @@ public partial class GameplayControl : Control
 					ruin.Facedown = false; // Note for later: do we allow players to make mistake of reveal and not being able to undo
 				}
 				if (interactButton.Disabled == true) { interactButton.Disabled = false; }
+			}
+		}*/
+		GD.Print("DOES PPOS EXIST IN MAPDATA: ");
+		foreach( var key in mapGen.MapData.Keys)
+		{
+			GD.Print(key);
+		}
+		if (mapGen.MapData[player.PlayerPos].Token.Colour == "yellow")
+		{
+			if (interactButton.Disabled == true)
+			{
+				interactButton.Disabled = false;
+			}
+			if (mapGen.MapData[player.PlayerPos].Token.Facedown == true)
+			{
+				mapGen.MapData[player.PlayerPos].Token.Facedown = false;
 			}
 		}
 	}
@@ -340,39 +357,51 @@ public partial class GameplayControl : Control
 	// Change the identification color of tokens adjacent to player according to given position
 	public void UpdateTokenColors(Vector2I Pos)
 	{
-		foreach (var enemy in EnemyList)
+		foreach (var oldAdjCoords in mapGen.GetSurroundingCells(player.PlayerPos))
 		{
-			if (mapGen.GetSurroundingCells(Pos).Contains(enemy.MapPosition))
+			if (mapGen.GetSurroundingCells(Pos).Contains(oldAdjCoords) == false)
 			{
-				var direction = enemy.MapPosition - Pos;
-				if (direction == new Vector2I(1, -1) && enemy.PosColour != Colors.Red)
-				{
-					enemy.PosColour = Colors.Red;
-				}
-				else if (direction == new Vector2I(1, 0) && enemy.PosColour != Colors.Gold)
-				{
-					enemy.PosColour = Colors.Gold;
-				}
-				else if (direction == new Vector2I(0, 1) && enemy.PosColour != Colors.Green)
-				{
-					enemy.PosColour = Colors.Green;
-				}
-				else if (direction == new Vector2I(-1, 1) && enemy.PosColour != Colors.Blue)
-				{
-					enemy.PosColour = Colors.Blue;
-				}
-				else if (direction == new Vector2I(-1, 0) && enemy.PosColour != Colors.White)
-				{
-					enemy.PosColour = Colors.White;
-				}
-				else if (direction == new Vector2I(0, -1) && enemy.PosColour != Colors.Purple)
-				{
-					enemy.PosColour = Colors.Purple;
-				}
+				if (mapGen.MapData[oldAdjCoords].Token.PosColour != Colors.Black) { mapGen.MapData[oldAdjCoords].Token.PosColour = Colors.Black; }
+			}
+		}
+		foreach (var coords in mapGen.GetSurroundingCells(Pos))
+		{
+			var coordExists = false;
+			if (mapGen.MapData.ContainsKey(coords))
+			{
+				coordExists = true;
 			}
 			else
 			{
-				if (enemy.PosColour != Colors.Black) { enemy.PosColour = Colors.Black; }
+				continue;
+			}
+			if (mapGen.MapData[coords].Token != null && coordExists)
+			{
+				var direction = coords - Pos;
+				if (direction == new Vector2I(1, -1) && mapGen.MapData[coords].Token.PosColour != Colors.Red)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Red;
+				}
+				else if (direction == new Vector2I(1, 0) && mapGen.MapData[coords].Token.PosColour != Colors.Gold)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Gold;
+				}
+				else if (direction == new Vector2I(0, 1) && mapGen.MapData[coords].Token.PosColour != Colors.Green)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Green;
+				}
+				else if (direction == new Vector2I(-1, 1) && mapGen.MapData[coords].Token.PosColour != Colors.Blue)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Blue;
+				}
+				else if (direction == new Vector2I(-1, 0) && mapGen.MapData[coords].Token.PosColour != Colors.White)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.White;
+				}
+				else if (direction == new Vector2I(0, -1) && mapGen.MapData[coords].Token.PosColour != Colors.Purple)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Purple;
+				}
 			}
 		}
 	}
