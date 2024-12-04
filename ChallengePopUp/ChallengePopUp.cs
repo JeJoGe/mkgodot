@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class ChallengePopUp : Control
 {	
@@ -14,12 +15,14 @@ public partial class ChallengePopUp : Control
 	private Button Cancel;
 	List<CheckBox> enemyCheckboxes;
 	GameplayControl gameplayControl;
+	MapGen mapGen;
 	// Called when the node enters the scene tree for the first time.
 
 	public override void _Ready()
 	{
 		var optionOffset = 0;
 		gameplayControl = GetNode<GameplayControl>("../..");
+		mapGen = GetNode<MapGen>("../../MapGen");
 		enemyCheckboxes = new List<CheckBox>();
 		GetNode<ColorRect>("ColorRect").Size = new Vector2 (350, 132 + (32 * GameSettings.ChallengeList.Count));
 		GetNode<Window>("..").Size = new Vector2I(350, 164 + (32 * GameSettings.ChallengeList.Count));
@@ -73,8 +76,18 @@ public partial class ChallengePopUp : Control
 			{
 				if(enemy.TokenId == -1)
 				{
-					gameplayControl.MonsterGen(enemy.Colour, enemy.SiteFortifications, enemy.MapPosition);
-					GameSettings.EnemyList.Add((gameplayControl.EnemyList[gameplayControl.EnemyList.Count-1].TokenId, enemy.SiteFortifications, enemy.PosColour));
+					foreach (var monster in mapGen.MapData[enemy.MapPosition].MonsterGroup.ToList())
+					{
+						if(enemy.Colour == monster.Colour)
+						{
+							mapGen.MapData[enemy.MapPosition].MonsterGroup.Remove(monster);
+							var replacementMonster = gameplayControl.MonsterGen(enemy.Colour, enemy.SiteFortifications, enemy.MapPosition);
+							replacementMonster.Facedown = false;
+							mapGen.MapData[enemy.MapPosition].MonsterGroup.Add(replacementMonster);
+							GameSettings.EnemyList.Add((mapGen.MapData[enemy.MapPosition].MonsterGroup[mapGen.MapData[enemy.MapPosition].MonsterGroup.Count-1].TokenId, enemy.SiteFortifications, enemy.PosColour));
+							break;
+						}	
+					}
 				}
 				else
 				{

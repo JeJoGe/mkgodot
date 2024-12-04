@@ -40,6 +40,15 @@ public partial class MapGen : TileMap
 		tileStack = new Stack<int> (greenTiles.Shuffle());
 		//GD.Print("GreenTiles: " + string.Join("\n", greenTiles));
 		//tileStack = new Stack<int>(greenTiles);
+		var patternMapCoords = getPatternMapCoords(new Vector2I(-1,-1));
+		foreach (var patternTile in patternMapCoords)
+		{
+			var patternTileData = GetCellTileData(MainLayer, patternTile);
+			var cellTerrain = patternTileData.Terrain;
+			string eventData = patternTileData.GetCustomData("Event").ToString();
+			var tileData = new TileData(cellTerrain, null, eventData, new List<MapToken>());
+			MapData.Add(patternTile, tileData);
+		}
 	}
 
 	// Don't know where to place this as can reuse for many things
@@ -90,9 +99,9 @@ public partial class MapGen : TileMap
 				// Populate tokens on pattern if needed
 				foreach (var patternTile in patternMapCoords)
 				{
-					var cellTerrain = GetCellTileData(MainLayer, patternTile).Terrain;
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
+					var cellTerrain = patternTileData.Terrain;
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
 					string eventData = patternTileData.GetCustomData("Event").ToString();
 					var tokenExists = false;
@@ -134,7 +143,11 @@ public partial class MapGen : TileMap
 							mapToken.Facedown = false;
 						}
 					}
-					
+					else
+					{
+						var tileData = new TileData(cellTerrain, null, eventData, new List<MapToken>());
+						MapData.Add(patternTile, tileData);
+					}
 				}
 
 				if (this.tileStack.Count == 0) // No tiles left in stack, rebuild stack with brown tiles

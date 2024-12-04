@@ -11,7 +11,9 @@ public partial class Player : Node2D
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	private Vector2I _playerPos;
-	public Vector2I PlayerPos { get => _playerPos; set => _playerPos = value; }
+	private Vector2I _lastPos = new Vector2I(0,0);
+	public Vector2I PlayerPos { get => _playerPos; set { _lastPos = _playerPos; _playerPos = value; }}
+	public Vector2I LastPos { get => _lastPos; set => _lastPos = value; }
 	private int _movePoints = 100;
 	public int MovePoints { get => _movePoints; set => _movePoints = value; }
 	private int _experiencePoints = 0;
