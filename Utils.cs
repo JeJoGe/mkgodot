@@ -21,7 +21,9 @@ public partial class Utils : Node
 		{"silver","res://assets/silverunits.jpg"},
 		{"gold","res://assets/goldunits.jpg"},
 		{"dice","res://assets/dice.jpg"},
-		{"spell","res://assets/spells.jpg"}
+		{"spell","res://assets/spells.jpg"},
+		{"basic", "res://assets/basics.jpg"},
+		{"wound", "res://assets/cardback.jpg"}
 	};
 	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
 		{Source.Colour.Blue,(0,1)},
@@ -84,7 +86,7 @@ public partial class Utils : Node
 	public static Dictionary<Source.Colour, AtlasTexture> ManaSprites = new Dictionary<Source.Colour, AtlasTexture>();
 	public static Dictionary<int, MonsterObject> Bestiary;
 	public static Dictionary<int, UnitObject> UnitStats;
-	public static Dictionary<int,RuinObject> RuinEvents;
+	public static Dictionary<int, RuinObject> RuinEvents;
 	public static Dictionary<int, Spell> SpellBook;
 
 	// Called when the node enters the scene tree for the first time.
@@ -258,10 +260,6 @@ public partial class MonsterAttack : GodotObject
 	public bool Attacking { get; set; } = true;
 }
 
-public partial class Spell: CardObj
-{
-	public string version { get; set; }
-}
 
 public enum MonsterColour
 {
