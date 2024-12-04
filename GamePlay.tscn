@@ -1309,6 +1309,20 @@ texture_normal = ExtResource("19_vtp22")
 stretch_mode = 0
 metadata/_edit_use_anchors_ = true
 
+[node name="WoundToDeck" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1626.0
+offset_top = 1019.0
+offset_right = 1749.0
+offset_bottom = 1066.0
+text = "WoundToDeck"
+
+[node name="WoundToHand" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1491.0
+offset_top = 1019.0
+offset_right = 1591.0
+offset_bottom = 1064.0
+text = "WoundToHand"
+
 [node name="Inventory" parent="GameplayControl/PlayerUI/PlayerArea" instance=ExtResource("20_4h2of")]
 process_mode = 3
 position = Vector2(1528, 680)
@@ -1415,6 +1429,8 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToDeck" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToDeck"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToHand" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToHand" binds= [1]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/SpellTestingButton" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]

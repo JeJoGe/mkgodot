@@ -5,6 +5,12 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Linq;
 
+public enum DrawCardType
+{
+	actionCard,
+	wound
+}
+
 public partial class Deck : Node2D
 {
 	/** Deck organization variables **/
@@ -14,13 +20,14 @@ public partial class Deck : Node2D
 	// Deck that is being currently drawn from
 	public Stack<CardObj> DeckOfCards { get; set; } = new Stack<CardObj>();
 	private int InitialDeckLength { get; set; }
-	public List<CardControl> discardPile { get; set; } = new List<CardControl>();
-	public AtlasTexture basicCardAtlas;
-	public int wounds { get; set; }
+	public Godot.Collections.Array<CardControl> DiscardPile { get; set; } = new Godot.Collections.Array<CardControl>();
+	public AtlasTexture BasicCardAtlas;
+	public int Wounds { get; set; }
+	public int CardLimit { get; set; } = 5;
 
 	/** Deck Draw Visual variables*/
-	public List<CardControl> CurrentHand = new List<CardControl>();
-	public int cardDrawnNumber = 0;
+	public Godot.Collections.Array<CardControl> CurrentHand = new Godot.Collections.Array<CardControl>();
+	public int CardDrawnNumber = 0;
 	private Vector2I CardSize = new Vector2I(140, 100);
 	// starting angle of the card
 	private double Angle = 0;
@@ -32,14 +39,14 @@ public partial class Deck : Node2D
 	// Instantiates the InitialDeckofCards & basicCardAtlas;
 	public override void _Ready()
 	{
-		basicCardAtlas = new AtlasTexture();
+		BasicCardAtlas = new AtlasTexture();
 		try
 		{
 			var cardImage = Image.LoadFromFile("assets/basics.jpg");
 			var atlasTexture = ImageTexture.CreateFromImage(cardImage);
-			basicCardAtlas.Atlas = atlasTexture;
+			BasicCardAtlas.Atlas = atlasTexture;
 			var region = new Rect2(new Vector2(0, 0), new Vector2(atlasTexture.GetWidth(), atlasTexture.GetHeight()));
-			basicCardAtlas.Region = region;
+			BasicCardAtlas.Region = region;
 		}
 		catch
 		{
@@ -94,6 +101,7 @@ public partial class Deck : Node2D
 		}
 		DeckOfCards = new Stack<CardObj>(InitialDeckOfCards.Shuffle());
 		InitialDeckLength = InitialDeckOfCards.Count;
+
 	}
 
 	/*****************************************************
@@ -107,23 +115,12 @@ public partial class Deck : Node2D
 		return cardControl;
 	}
 
-	public CardControl InstantiateSpell(CardObj card)
+	public CardControl InstantiateCard(CardObj card)
 	{
-		var SpellCardAtlas = (AtlasTexture)Utils.SpriteSheets["spell"].Duplicate();
-		SpellCardAtlas.Region = new Rect2(
-			new Vector2(card.xCoord * GameSettings.CardWidth, card.yCoord * GameSettings.CardLength),
-			new Vector2(GameSettings.CardWidth, GameSettings.CardLength));
-		card.Texture = SpellCardAtlas;
-		InitialDeckOfCards.Add(card);
-		CardControl spellCard = AttachCardControl(card);
-		return spellCard;
-	}
-
-	public CardControl InstantiateBasicCard(CardObj card)
-	{
-		card.ImageCropping(basicCardAtlas);
+		card.ImageCropping();
 		CardControl basicCard = AttachCardControl(card);
 		return basicCard;
+
 	}
 
 	// Instantiation of the atlas & CardControl happens when card is drawn;
@@ -138,15 +135,10 @@ public partial class Deck : Node2D
 			GD.Print("no more cards in deck");
 			return null;
 		}
-		else if (card is Spell)
-		{
-			topCard = DeckOfCards.Pop();
-			drawnCard = InstantiateSpell(topCard);
-		}
 		else
 		{
 			topCard = DeckOfCards.Pop();
-			drawnCard = InstantiateBasicCard(topCard);
+			drawnCard = InstantiateCard(topCard);
 		}
 
 		return drawnCard;
@@ -156,10 +148,19 @@ public partial class Deck : Node2D
 	* Deck Draw Visuals
 	******************************************************/
 
-	public void DrawCardsVisual()
+	public void DrawCardsVisual(DrawCardType type)
 	{
-		CardControl card = DrawCard();
-		Angle = Math.PI / 2 + CardSpread * (cardDrawnNumber / 2 - cardDrawnNumber);
+		CardControl card;
+		if (type == DrawCardType.actionCard)
+		{
+			card = DrawCard();
+		}
+		else
+		{
+			CardObj wound = new Wound();
+			card = InstantiateCard(wound);
+		}
+		Angle = Math.PI / 2 + CardSpread * (CardDrawnNumber / 2 - CardDrawnNumber);
 		// center oval point on the screen
 		var CentreCardOval = GetViewportRect().Size * new Vector2((float)0.5, (float)1.5);
 		// horizontal radius of the oval scaled by *#
@@ -183,7 +184,7 @@ public partial class Deck : Node2D
 			if (cardInHand is CardControl)
 			{
 				var actualCardInHand = (CardControl)cardInHand;
-				Angle = Math.PI / 2 + CardSpread * (cardDrawnNumber / 2 - CardNumber);
+				Angle = Math.PI / 2 + CardSpread * (CardDrawnNumber / 2 - CardNumber);
 				OvalAngleVector = new Vector2((float)(Hor_rad * Mathf.Cos(Angle)), (float)(-Ver_rad * Mathf.Sin(Angle)));
 				actualCardInHand.targetPos = CentreCardOval + OvalAngleVector - card.GetRect().Size;
 				actualCardInHand.startRotation = actualCardInHand.RotationDegrees;
@@ -198,7 +199,7 @@ public partial class Deck : Node2D
 		}
 		AddChild(card);
 		CurrentHand.Add(card);
-		cardDrawnNumber += 1;
+		CardDrawnNumber += 1;
 		// angle in which its offset by
 		Angle += 0.1;
 	}
@@ -207,11 +208,13 @@ public partial class Deck : Node2D
 	* Deck Interactions
 	******************************************************/
 
-	public void OnDeckButtonPressed(int cardLimit)
+	public void OnDeckButtonPressed(int numOfCards)
 	{
-		for (int cardDraw = 0; cardDraw < cardLimit; cardDraw++)
+		int cardsDrawn = 0;
+		while (CurrentHand.Count() < this.CardLimit && cardsDrawn < numOfCards)
 		{
-			DrawCardsVisual();
+			DrawCardsVisual(DrawCardType.actionCard);
+			cardsDrawn++;
 		}
 	}
 
@@ -231,6 +234,50 @@ public partial class Deck : Node2D
 		{
 			InitialDeckOfCards.Add(card);
 			DeckOfCards.Push(card);
+			InitialDeckLength++;
 		}
+	}
+
+	/*****************************************************
+	* Wounds
+	******************************************************/
+	public void AddWoundToDeck()
+	{
+		var newWound = new Wound();
+		onAddCardToDeck(newWound);
+		Wounds++;
+	}
+
+	public void AddWoundToHand(int numberOfWounds)
+	{
+		for (int i = 0; i < numberOfWounds; i++)
+		{
+			DrawCardsVisual(DrawCardType.wound);
+			var newWound = new Wound();
+			InitialDeckOfCards.Add(newWound);
+			InitialDeckLength++;
+			Wounds++;
+		}
+	}
+
+	public void RemoveWoundFromHand()
+	{
+		if (Wounds > 0)
+		{
+			CardControl wound = CurrentHand.Where((cardcontrol) => cardcontrol.GetChild<CardObj>(0).id == 0).First();
+			CurrentHand.Remove(wound);
+			CardObj woundInInitial = InitialDeckOfCards.Where(card => card.id == 0).First();
+			InitialDeckOfCards.Remove(woundInInitial);
+			Wounds--;
+		}
+	}
+
+	public void RemoveWoundFromDeck()
+	{
+		CardObj wound = DeckOfCards.Where((card) => card.id == 0).First();
+		var DeckToList = new List<CardObj>(DeckOfCards);
+		DeckToList.Remove(wound);
+		DeckOfCards = new Stack<CardObj>(DeckToList.Shuffle());
+
 	}
 }
