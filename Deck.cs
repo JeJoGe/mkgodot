@@ -266,6 +266,7 @@ public partial class Deck : Node2D
 		{
 			CardControl wound = CurrentHand.Where((cardcontrol) => cardcontrol.GetChild<CardObj>(0).id == 0).First();
 			CurrentHand.Remove(wound);
+			RemoveChild(wound);
 			CardObj woundInInitial = InitialDeckOfCards.Where(card => card.id == 0).First();
 			InitialDeckOfCards.Remove(woundInInitial);
 			Wounds--;
