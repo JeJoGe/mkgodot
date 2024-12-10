@@ -222,13 +222,13 @@ public partial class Deck : Node2D
 	public void onRemoveFromCurrentHand(CardControl cardControl)
 	{
 		CurrentHand.Remove(cardControl);
-		DiscardPile.Remove(cardControl);
+		DiscardPile.Add(cardControl);
 	}
 
 	public void onAddToCurrentHand(CardControl cardControl)
 	{
 		CurrentHand.Add(cardControl);
-		DiscardPile.Add(cardControl);
+		DiscardPile.Remove(cardControl);
 	}
 
 	public void onAddCardToDeck(CardObj card)
