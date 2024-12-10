@@ -20,6 +20,7 @@ public partial class GameplayControl : Control
 	public List<MapToken> EnemyList = new List<MapToken>();
 	public List<MapToken> RuinList = new List<MapToken>();
 	PackedScene ChallengeScene;
+	PackedScene TileWindowScene;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -27,6 +28,7 @@ public partial class GameplayControl : Control
 		interactButton.Disabled = true;
 		challengeButton.Disabled = true;
 		ChallengeScene = GD.Load<PackedScene>("res://ChallengePopUp/ChallengeWindow.tscn");
+		TileWindowScene = GD.Load<PackedScene>("res://TileWindow/TileWindow.tscn");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,7 +36,7 @@ public partial class GameplayControl : Control
 	{
 	}
 
-	public override void _GuiInput(InputEvent @event)
+	public override void _Input(InputEvent @event)
 	{
 		// Process mouse event Leftclick on gameplay screen
 		if (@event.IsActionPressed("leftClick"))
@@ -44,6 +46,7 @@ public partial class GameplayControl : Control
 			var posClicked = mapGen.LocalToMap(mapGen.ToLocal(globalClicked));
 			//GD.Print("TileMap: " + posClicked.ToString());
 			// Atlas coordinates are the tile's coordinates on the atlas the tilemap is pulling tiles from
+			// Probably unnecessary now that we track every coordinate in MapData
 			var currentAtlasCoords = mapGen.GetCellAtlasCoords(MapGen.MainLayer, posClicked);
 			//GD.Print("Atlas: " + currentAtlasCoords.ToString());
 
@@ -126,6 +129,16 @@ public partial class GameplayControl : Control
 				}
 			}
 
+		}
+		else if(@event.IsActionPressed("control"))
+		{
+			var globalMousePosition = GetGlobalMousePosition();
+			var mapMousePosition = mapGen.LocalToMap(mapGen.ToLocal(globalMousePosition));
+			if(mapGen.MapData.ContainsKey(mapMousePosition))
+			{
+				var TileWindowStart = (TileWindow)TileWindowScene.Instantiate();
+				AddChild(TileWindowStart);
+			}
 		}
 	}
 
