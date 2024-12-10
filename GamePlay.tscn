@@ -1382,9 +1382,10 @@ position = Vector2(969, 543)
 process_callback = 0
 script = ExtResource("4_15lwj")
 
-[node name="Player" type="Node2D" parent="GameplayControl"]
+[node name="Player" type="Node2D" parent="GameplayControl" node_paths=PackedStringArray("_deck")]
 position = Vector2(672, 856)
 script = ExtResource("4_jr7il")
+_deck = NodePath("../PlayerUI/PlayerArea/Deck")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")

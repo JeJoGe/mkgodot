@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel", "_actionLabel", "_errorLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel", "_woundsLabel", "_totalWoundsLabel", "_actionLabel", "_errorLabel")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
@@ -14,6 +14,8 @@ _undoButton = NodePath("NinePatchRect/UndoButton")
 _attackLabel = NodePath("NinePatchRect/AttackLabel")
 _blockLabel = NodePath("NinePatchRect/BlockLabel")
 _fameLabel = NodePath("NinePatchRect/TotalFameLabel")
+_woundsLabel = NodePath("NinePatchRect/WoundsLabel")
+_totalWoundsLabel = NodePath("NinePatchRect/TotalWoundsLabel")
 _actionLabel = NodePath("NinePatchRect/ActionLabel")
 _errorLabel = NodePath("NinePatchRect/ErrorLabel")
 

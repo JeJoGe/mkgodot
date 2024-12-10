@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuxx5xluiba7o"]
+
+[ext_resource type="Script" path="res://Monster/MonsterAttack.cs" id="1_s8yth"]
+
+[node name="MonsterAttack" type="Node2D" node_paths=PackedStringArray("_button")]
+script = ExtResource("1_s8yth")
+_button = NodePath("Button")
+
+[node name="Button" type="Button" parent="."]
+visible = false
+offset_right = 8.0
+offset_bottom = 8.0
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Button" to="." method="OnAttackButtonToggled"]
