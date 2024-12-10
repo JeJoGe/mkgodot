@@ -57,6 +57,7 @@ public partial class ChallengePopUp : Control
 					if(checkBox.Text.Contains("Token") && checkBox.Text.Contains(GameSettings.ChallengeList[enemy].Colour) && checkBox.ButtonPressed == false)
 					{
 						GameSettings.ChallengeList.Remove(GameSettings.ChallengeList[enemy]);
+						break;
 					}
 				}
 				else
@@ -67,6 +68,7 @@ public partial class ChallengePopUp : Control
 					if (checkBox.Text == Utils.Bestiary[GameSettings.ChallengeList[enemy].TokenId].Name && checkBox.ButtonPressed == false)
 					{
 						GameSettings.ChallengeList.Remove(GameSettings.ChallengeList[enemy]);
+						break;
 					}
 				}
 			}

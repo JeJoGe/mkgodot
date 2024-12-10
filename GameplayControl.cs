@@ -86,7 +86,9 @@ public partial class GameplayControl : Control
 									if ((mapGen.GetSurroundingCells(posClicked).Contains(coords) && (mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red") 
 									&& player.IsWallBetween(posClicked, mapGen.MapData[coords].Token.MapPosition) == false) || ((mapGen.MapData[coords].Token.MapPosition == posClicked) && (mapGen.MapData[coords].Token.Colour != "yellow")))
 									{
+										player.LastPos = player.PlayerPos;
 										UpdateTokenColors(posClicked);
+										player.LastPos = posClicked;
 										var wallBetweenPlayerAndEnemy = player.IsWallBetween(player.PlayerPos, mapGen.MapData[coords].Token.MapPosition);
 										var monsterTerrain = mapGen.TileSet.GetTerrainName(MapGen.MainTerrainSet, mapGen.GetCellTileData(MapGen.MainLayer, mapGen.MapData[coords].Token.MapPosition).Terrain);
 										if (wallBetweenPlayerAndEnemy == true && (mapEvent == "tower" || mapEvent == "keep" || mapEvent.Contains("city"))) // double fortified
@@ -390,6 +392,7 @@ public partial class GameplayControl : Control
 	// Change the identification color of tokens adjacent to player according to given position
 	public void UpdateTokenColors(Vector2I Pos)
 	{
+		// Change all tokens from last positions to black
 		foreach (var oldAdjCoords in mapGen.GetSurroundingCells(player.LastPos))
 		{
 			if (mapGen.MapData.ContainsKey(oldAdjCoords))
@@ -400,7 +403,10 @@ public partial class GameplayControl : Control
 				}
 			}
 		}
-		foreach (var coords in mapGen.GetSurroundingCells(Pos))
+		var cellsInPos = mapGen.GetSurroundingCells(Pos);
+		cellsInPos.Add(Pos);
+		// Update all tokens in new position to corresponding colors
+		foreach (var coords in cellsInPos)
 		{
 			var coordExists = false;
 			if (mapGen.MapData.ContainsKey(coords))
@@ -414,7 +420,11 @@ public partial class GameplayControl : Control
 			if (mapGen.MapData[coords].Token != null && coordExists)
 			{
 				var direction = coords - Pos;
-				if (direction == new Vector2I(1, -1) && mapGen.MapData[coords].Token.PosColour != Colors.Red)
+				if (direction == new Vector2I(0, 0) && mapGen.MapData[coords].Token.PosColour != Colors.Black)
+				{
+					mapGen.MapData[coords].Token.PosColour = Colors.Black;
+				}
+				else if (direction == new Vector2I(1, -1) && mapGen.MapData[coords].Token.PosColour != Colors.Red)
 				{
 					mapGen.MapData[coords].Token.PosColour = Colors.Red;
 				}
