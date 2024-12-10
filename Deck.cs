@@ -20,9 +20,10 @@ public partial class Deck : Node2D
 	// Deck that is being currently drawn from
 	public Stack<CardObj> DeckOfCards { get; set; } = new Stack<CardObj>();
 	private int InitialDeckLength { get; set; }
-	public Godot.Collections.Array<CardControl> DiscardPile { get; set; } = new Godot.Collections.Array<CardControl>();
+	public List<CardControl> DiscardPile { get; set; } = new List<CardControl>();
 	public AtlasTexture BasicCardAtlas;
-	public int Wounds { get; set; }
+	public int WoundsInHand { get; set; } = 0;
+	public int WoundsInDiscard { get; set; } = 0;
 	public int CardLimit { get; set; } = 5;
 
 	/** Deck Draw Visual variables*/
@@ -96,7 +97,7 @@ public partial class Deck : Node2D
 		// Filter out cards with each name specified in _replaces
 		foreach (string replace in _replaces)
 		{
-			CardObj cardReplace = InitialDeckOfCards.Where((card) => card.cardId == replace).First();
+			CardObj cardReplace = InitialDeckOfCards.Where((card) => card.cardId == replace).FirstOrDefault();
 			InitialDeckOfCards.Remove(cardReplace);
 		}
 		DeckOfCards = new Stack<CardObj>(InitialDeckOfCards.Shuffle());
@@ -157,7 +158,7 @@ public partial class Deck : Node2D
 		}
 		else
 		{
-			CardObj wound = new Wound();
+			Wound wound = new Wound();
 			card = InstantiateCard(wound);
 		}
 		Angle = Math.PI / 2 + CardSpread * (CardDrawnNumber / 2 - CardDrawnNumber);
@@ -221,11 +222,13 @@ public partial class Deck : Node2D
 	public void onRemoveFromCurrentHand(CardControl cardControl)
 	{
 		CurrentHand.Remove(cardControl);
+		DiscardPile.Remove(cardControl);
 	}
 
 	public void onAddToCurrentHand(CardControl cardControl)
 	{
 		CurrentHand.Add(cardControl);
+		DiscardPile.Add(cardControl);
 	}
 
 	public void onAddCardToDeck(CardObj card)
@@ -241,11 +244,21 @@ public partial class Deck : Node2D
 	/*****************************************************
 	* Wounds
 	******************************************************/
-	public void AddWoundToDeck()
+	public void AddWoundToDiscard(int numberOfWounds)
 	{
-		var newWound = new Wound();
-		onAddCardToDeck(newWound);
-		Wounds++;
+		for (int i = 0; i < numberOfWounds; i++)
+		{
+			Wound newWound = new Wound();
+			CardControl woundControl = InstantiateCard(newWound);
+			AddChild(woundControl);
+			woundControl.Position = woundControl.discardArea;
+			woundControl.Scale = new Vector2((float)0.125, (float)0.125);
+			woundControl.cardId = "Wound";
+			DiscardPile.Add(woundControl);
+			InitialDeckOfCards.Add(newWound);
+			InitialDeckLength++;
+			WoundsInDiscard++;
+		}
 	}
 
 	public void AddWoundToHand(int numberOfWounds)
@@ -256,29 +269,48 @@ public partial class Deck : Node2D
 			var newWound = new Wound();
 			InitialDeckOfCards.Add(newWound);
 			InitialDeckLength++;
-			Wounds++;
+			WoundsInHand++;
 		}
 	}
 
-	public void RemoveWoundFromHand()
+	public void RemoveWoundFromHand(int numberOfWounds)
 	{
-		if (Wounds > 0)
+		int currWoundRemoved = numberOfWounds;
+		while (currWoundRemoved > 0 && WoundsInHand > 0)
 		{
-			CardControl wound = CurrentHand.Where((cardcontrol) => cardcontrol.GetChild<CardObj>(0).id == 0).First();
+			CardControl wound = CurrentHand.Where((cardcontrol) => cardcontrol.GetChild<CardObj>(0).id == 0).FirstOrDefault();
 			CurrentHand.Remove(wound);
+			CardObj woundCardObj = (CardObj)wound.GetChild(0);
 			RemoveChild(wound);
-			CardObj woundInInitial = InitialDeckOfCards.Where(card => card.id == 0).First();
-			InitialDeckOfCards.Remove(woundInInitial);
-			Wounds--;
+			RemoveCardFromInitialDeck(woundCardObj);
+			WoundsInHand--;
+			currWoundRemoved--;
 		}
 	}
 
-	public void RemoveWoundFromDeck()
+	public void RemoveWoundFromDiscard(int numberOfWounds)
 	{
-		CardObj wound = DeckOfCards.Where((card) => card.id == 0).First();
-		var DeckToList = new List<CardObj>(DeckOfCards);
-		DeckToList.Remove(wound);
-		DeckOfCards = new Stack<CardObj>(DeckToList.Shuffle());
+		int currWoundRemoved = numberOfWounds;
+		while (currWoundRemoved > 0 && WoundsInDiscard > 0)
+		{
+			CardControl wound = DiscardPile.Where((card) => card.cardId == "Wound").FirstOrDefault();
+			GD.Print(wound);
+			CardObj woundCardObj = (CardObj)wound.GetChild(0);
+			RemoveChild(wound);
+			RemoveCardFromInitialDeck(woundCardObj);
+			DiscardPile.Remove(wound);
+			WoundsInDiscard--;
+			currWoundRemoved--;
+		}
+	}
+
+	/*****************************************************
+	* Helpers
+	******************************************************/
+	private void RemoveCardFromInitialDeck(CardObj card)
+	{
+		CardObj cardInInitial = InitialDeckOfCards.Where(c => c.id == card.id).First();
+		InitialDeckOfCards.Remove(cardInInitial);
 
 	}
 }

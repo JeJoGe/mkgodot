@@ -72,7 +72,7 @@ public partial class GamePlay : Node2D
 				{
 					quantity = Convert.ToInt16(action[3]);
 				}
-				else if( action[0] != nameof(BasicCardActions.gainManaTokens))
+				else if (action[0] != nameof(BasicCardActions.gainManaTokens))
 				{
 					quantity = Convert.ToInt16(action[1]);
 				}
@@ -205,7 +205,8 @@ public partial class GamePlay : Node2D
 			}
 		}
 
-		if(specialAction != null) {
+		if (specialAction != null)
+		{
 
 		}
 	}
