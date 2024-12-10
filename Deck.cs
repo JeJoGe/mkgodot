@@ -309,7 +309,7 @@ public partial class Deck : Node2D
 	******************************************************/
 	private void RemoveCardFromInitialDeck(CardObj card)
 	{
-		CardObj cardInInitial = InitialDeckOfCards.Where(c => c.id == card.id).First();
+		CardObj cardInInitial = InitialDeckOfCards.Where(c => c.id == card.id).FirstOrDefault();
 		InitialDeckOfCards.Remove(cardInInitial);
 
 	}
