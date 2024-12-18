@@ -48,7 +48,7 @@ text = "Terrain:"
 layout_mode = 0
 offset_left = 250.0
 offset_top = 50.0
-offset_right = 440.0
+offset_right = 480.0
 offset_bottom = 119.0
 theme_override_font_sizes/font_size = 50
 
@@ -69,6 +69,14 @@ offset_right = 243.0
 offset_bottom = 499.0
 theme_override_font_sizes/font_size = 50
 text = "Actions:"
+
+[node name="ActionsText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 253.0
+offset_top = 430.0
+offset_right = 483.0
+offset_bottom = 499.0
+theme_override_font_sizes/font_size = 50
 
 [node name="AdditionalTokensLabelText" type="Label" parent="TileWindowControl"]
 layout_mode = 0

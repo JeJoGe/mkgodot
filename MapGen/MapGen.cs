@@ -23,6 +23,23 @@ public partial class MapGen : TileMap
 		{9,null}, // Nothing
 		{10,0} // Nowhere
 	};
+	/*public Dictionary<int, string> terrainNames = new Dictionary<int, string>(){
+		{0,"Plains"}, // Plains
+		{1,"Forest"}, // Forest
+		{2,"Hills"}, // Hills
+		{3,"Swamp"}, // Swamp
+		{4,"Wasteland"}, // Wasteland
+		{5,"Desert"}, // Desert
+		{6,"City"}, // City
+		{7,"Mountains"}, // Mountains
+		{8,"Lake"}, // Lake
+		{9,"Nothing"}, // Nothing
+		{10,"Nowhere"} // Nowhere
+	};*/
+	public enum Terrain
+	{
+		Plains, Forest, Hills, Swamp, Wasteland, Desert, City, Mountains, Lake, Nothing, Nowhere
+	}
 
 	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
 	public Dictionary<Vector2I, TileData> MapData = new Dictionary<Vector2I, TileData>();

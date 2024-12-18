@@ -6,6 +6,7 @@ public partial class TileWindowControl : NinePatchRect
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,10 +17,6 @@ public partial class TileWindowControl : NinePatchRect
 	public void on_button_pressed()
 	{
 		var window = GetNode<TileWindow>("..");
-		if (window != null)
-		{
-			GD.Print("tile window found!!!");
-		}
 		GetNode<TileWindow>("..").QueueFree();
 	}
 }

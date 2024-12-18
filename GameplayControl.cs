@@ -137,6 +137,10 @@ public partial class GameplayControl : Control
 			if(mapGen.MapData.ContainsKey(mapMousePosition))
 			{
 				var TileWindowStart = (TileWindow)TileWindowScene.Instantiate();
+				TileWindowStart.CellTerrain = mapGen.MapData[mapMousePosition].CellTerrain;
+				TileWindowStart.Token = mapGen.MapData[mapMousePosition].Token;
+				TileWindowStart.TileEvent = mapGen.MapData[mapMousePosition].TileEvent;
+				TileWindowStart.MonsterGroup = mapGen.MapData[mapMousePosition].MonsterGroup;
 				AddChild(TileWindowStart);
 			}
 		}
@@ -342,6 +346,7 @@ public partial class GameplayControl : Control
 		{
 			if (mapGen.MapData.ContainsKey(coords) && mapGen.MapData[coords].Token != null)
 			{
+				// "green" or "red" tokens are rampaging
 				if (mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
 				{
 					var already_fighting = false;
@@ -421,16 +426,12 @@ public partial class GameplayControl : Control
 		// Update all tokens in new position to corresponding colors
 		foreach (var coords in cellsInPos)
 		{
-			var coordExists = false;
-			if (mapGen.MapData.ContainsKey(coords))
-			{
-				coordExists = true;
-			}
-			else
+			if ( !mapGen.MapData.ContainsKey(coords))
 			{
 				continue;
 			}
-			if (mapGen.MapData[coords].Token != null && coordExists)
+			// For every monster adj, depending on where it is adj, give it a color accordingly. red is "top right" and rest of the colors go clockwise
+			if (mapGen.MapData[coords].Token != null)
 			{
 				var direction = coords - Pos;
 				if (direction == new Vector2I(0, 0) && mapGen.MapData[coords].Token.PosColour != Colors.Black)

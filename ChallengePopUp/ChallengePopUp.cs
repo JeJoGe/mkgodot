@@ -51,6 +51,7 @@ public partial class ChallengePopUp : Control
 			for (var enemy = GameSettings.ChallengeList.Count -1; enemy >= 0; enemy--)
 			{	
 				var tokenName = "";
+				// enemy is Placeholder/Unknown Color Token when Token ID = -1
 				if(GameSettings.ChallengeList[enemy].TokenId == -1)
 				{
 					// if token is place holder token and name includes a color of matching unchecked checkbox for a placeholder token that includes that color
@@ -76,6 +77,7 @@ public partial class ChallengePopUp : Control
 		if (GameSettings.ChallengeList.Count != 0){
 			foreach (var enemy in GameSettings.ChallengeList)
 			{
+				// Enemy is placeholder if Token ID = -1
 				if(enemy.TokenId == -1)
 				{
 					foreach (var monster in mapGen.MapData[enemy.MapPosition].MonsterGroup.ToList())
