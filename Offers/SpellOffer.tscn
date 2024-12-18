@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://vctows426n3l"]
+
+[ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="1_t2xu4"]
+[ext_resource type="Script" path="res://Offers/SpellOffer.cs" id="1_yt407"]
+
+[node name="SpellOffer" type="Node2D"]
+script = ExtResource("1_yt407")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_t2xu4")

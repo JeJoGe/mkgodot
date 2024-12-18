@@ -17,11 +17,11 @@ public partial class CardObj : Sprite2D
     public int xCoord { get; set; }
     public int yCoord { get; set; }
     public int copies { get; set; }
-    public string phase {get; set;}
-    public string character {get; set;}
-    public string replaces { get; set;} = "";
+    public string phase { get; set; }
+    public string character { get; set; }
+    public string replaces { get; set; } = "";
     public string topFunction { get; set; }
-    public string bottomFunction { get; set; }    
+    public string bottomFunction { get; set; }
     public OptionButton topOptionsButton = new OptionButton();
     public OptionButton bottomOptionsButton = new OptionButton();
     public CardObjOption currentOption { get; set; } = CardObjOption.top;
@@ -65,7 +65,7 @@ public partial class CardObj : Sprite2D
     * Quantity of Actions:
     * 5. The quantity of an action is denoted by (-) followed by a number. ie: move-4***** attack-fire-3
     */
-    public void parseFunction(string cardFunction, CardObjOption position)
+    virtual public void parseFunction(string cardFunction, CardObjOption position)
     {
         string[] function = cardFunction.Split(",");
         if (function.Count() > 1)
@@ -88,7 +88,9 @@ public partial class CardObj : Sprite2D
                         if (otherAction[x].Contains("*"))
                         {
                             ActionAdd(topSpecialOptionsActions, i, otherAction[x]);
-                        } else { 
+                        }
+                        else
+                        {
                             ActionAdd(topOptionActions, i, otherAction[x]);
                         }
                     }
@@ -97,7 +99,9 @@ public partial class CardObj : Sprite2D
                         if (otherAction[x].Contains("*"))
                         {
                             ActionAdd(bottomSpecialOptionsActions, i, otherAction[x]);
-                        } else { 
+                        }
+                        else
+                        {
                             ActionAdd(bottomOptionActions, i, otherAction[x]);
                         }
                     }
@@ -112,8 +116,9 @@ public partial class CardObj : Sprite2D
                 if (function[0].Contains("*"))
                 {
                     ActionAdd(topSpecialOptionsActions, 0, function[0]);
-                } else 
-                { 
+                }
+                else
+                {
                     NewActionAdd(topOptionActions, 0, function[0]);
                 }
             }
@@ -123,8 +128,9 @@ public partial class CardObj : Sprite2D
                 if (function[0].Contains("*"))
                 {
                     ActionAdd(bottomSpecialOptionsActions, 0, function[0]);
-                } else 
-                { 
+                }
+                else
+                {
                     NewActionAdd(bottomOptionActions, 0, function[0]);
                 }
             }
@@ -152,14 +158,17 @@ public partial class CardObj : Sprite2D
         }
     }
 
-    public Godot.Collections.Array<string> getSpecificAction(Dictionary<int, Godot.Collections.Array<string>> actionList, int index) {
+    public Godot.Collections.Array<string> getSpecificAction(Dictionary<int, Godot.Collections.Array<string>> actionList, int index)
+    {
         bool doesIndexExist = actionList.ContainsKey(index);
-        if(doesIndexExist) {
+        if (doesIndexExist)
+        {
             return actionList[index];
-        } else return null;
+        }
+        else return null;
     }
 
-    public void onPlayButtonPressed()
+    virtual public void onPlayButtonPressed()
     {
         int selectedId = 0;
         Godot.Collections.Array<string> basicAction = [];
@@ -167,7 +176,7 @@ public partial class CardObj : Sprite2D
         if (currentOption == CardObjOption.top)
         {
             selectedId = topOptionsButton.GetSelectedId();
-            
+
             if (selectedId == -1)
             {
                 selectedId = 0;
@@ -209,9 +218,9 @@ public partial class CardObj : Sprite2D
         }
     }
 
-    public void ImageCropping(AtlasTexture atlas)
+    virtual public void ImageCropping()
     {
-        var frame = (AtlasTexture)atlas.Duplicate();
+        var frame = (AtlasTexture)Utils.SpriteSheets["basic"].Duplicate();
         frame.Region = new Rect2(new Godot.Vector2(1000 * xCoord, 1400 * yCoord), new Godot.Vector2(1000, 1400));
         this.Texture = frame;
     }

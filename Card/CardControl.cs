@@ -4,7 +4,7 @@ using Godot;
 public partial class CardControl : Control
 {
 	private bool hover;
-	private string cardId;
+	public string cardId;
 	private Vector2 size;
 	public enum CardStates
 	{
@@ -31,7 +31,7 @@ public partial class CardControl : Control
 
 	private Godot.Vector2 originalBeforeFocusPos;
 	private bool isFocused = false;
-	private Vector2 discardArea;
+	public Vector2 discardArea;
 	private Vector2 backToHandPos;
 
 
@@ -94,9 +94,12 @@ public partial class CardControl : Control
 
 		}
 
-		if(hover) {
+		if (hover)
+		{
 			ZIndex = 1;
-		} else if(!hover) {
+		}
+		else if (!hover)
+		{
 			ZIndex = 0;
 		}
 	}
@@ -220,9 +223,12 @@ public partial class CardControl : Control
 	public void PlayedCardAnimation()
 	{
 		startPos = Position;
-		if(cardState == CardStates.InFocusEnlarged) {
+		if (cardState == CardStates.InFocusEnlarged)
+		{
 			backToHandPos = originalBeforeFocusPos;
-		} else {
+		}
+		else
+		{
 			backToHandPos = startPos;
 		}
 		targetPos = discardArea;

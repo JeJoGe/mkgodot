@@ -14,6 +14,10 @@ Yellows: 3000-3500
 Dark Crusader Rewards: 3700-3749
 Elementalist Rewards: 3750-3799
 
+---Card Ids---
+Wound: 0
+
+
 Token Resistance values:
 No Resistance: --
 Ice Resistance: 2

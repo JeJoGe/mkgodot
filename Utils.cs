@@ -20,7 +20,10 @@ public partial class Utils : Node
 		{"yellow","res://assets/TokenImages/YellowTokens/yellow_tokens_sheet.png"},
 		{"silver","res://assets/silverunits.jpg"},
 		{"gold","res://assets/goldunits.jpg"},
-		{"dice","res://assets/dice.jpg"}
+		{"dice","res://assets/dice.jpg"},
+		{"spell","res://assets/spells.jpg"},
+		{"basic", "res://assets/basics.jpg"},
+		{"wound", "res://assets/wound.png"}
 	};
 	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
 		{Source.Colour.Blue,(0,1)},
@@ -83,7 +86,8 @@ public partial class Utils : Node
 	public static Dictionary<Source.Colour, AtlasTexture> ManaSprites = new Dictionary<Source.Colour, AtlasTexture>();
 	public static Dictionary<int, MonsterObject> Bestiary;
 	public static Dictionary<int, UnitObject> UnitStats;
-	public static Dictionary<int,RuinObject> RuinEvents;
+	public static Dictionary<int, RuinObject> RuinEvents;
+	public static Dictionary<int, Spell> SpellBook;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -95,6 +99,7 @@ public partial class Utils : Node
 		LoadRuins();
 		GameSettings.createYellowStack();
 		LoadManaSprites();
+		LoadSpells();
 	}
 
 	public static MonsterColour ConvertStringToMonsterColour(string colour)
@@ -154,6 +159,13 @@ public partial class Utils : Node
 		UnitStats = JsonConvert.DeserializeObject<Dictionary<int, UnitObject>>(json);
 	}
 
+	private void LoadSpells()
+	{
+		StreamReader sr = new StreamReader("./Card/spells.json");
+		string json = sr.ReadToEnd();
+		SpellBook = JsonConvert.DeserializeObject<Dictionary<int, Spell>>(json);
+	}
+
 	private void LoadRuins()
 	{
 		StreamReader sr = new StreamReader("./Ruin/ruins.json");
@@ -206,7 +218,7 @@ public class MonsterObject
 	public int Fame { get; set; }
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
-	public List<MonsterAttack> Attacks { get; set; }
+	public List<AttackObject> Attacks { get; set; }
 	public MonsterColour Colour { get; set; }
 	public int X { get; set; } // this corresponds to the x offset on its corresponding spritesheet
 	public int Y { get; set; } // this corresponds to the y offset on its corresponding spritesheet
@@ -239,15 +251,12 @@ public class RuinObject
 	public int Y { get; set; }
 	public string Version { get; set; }
 }
-public class MonsterAttack
+public class AttackObject
 {
 	public int Value { get; set; }
 	public Element Element { get; set; }
-	public bool Blocked { get; set; } = false;
-	public bool Attacked { get; set; } = false;
-	public bool Attacking { get; set; } = true;
-	public bool Reduced { get; set; } = false;
 }
+
 
 public enum MonsterColour
 {

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://64eamkkykabi"]
+
+[ext_resource type="Script" path="res://Offers/OfferCard.cs" id="1_b56j4"]
+[ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="1_jbnvk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cwmt2"]
+size = Vector2(112, 144)
+
+[node name="OfferCard" type="Node2D"]
+script = ExtResource("1_b56j4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_jbnvk")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_cwmt2")
+
+[connection signal="input_event" from="Area2D" to="." method="OnInputEvent"]
