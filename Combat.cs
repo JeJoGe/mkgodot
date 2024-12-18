@@ -615,7 +615,6 @@ public partial class Combat : Node2D
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					_confirmButton.Disabled = true;
-					_errorLabel.Visible = false;
 					DeselectMonsters();
 					break;
 				}
@@ -662,7 +661,6 @@ public partial class Combat : Node2D
 					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
-					_errorLabel.Visible = false;
 					break;
 				}
 			case Phase.Block:
@@ -897,6 +895,7 @@ public partial class Combat : Node2D
 			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.CommitAction();
+			_undoButton.Disabled = false;
 		}
 		else
 		{
@@ -921,6 +920,7 @@ public partial class Combat : Node2D
 			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.CommitAction();
+			_undoButton.Disabled = false;
 		}
 		else
 		{
@@ -1236,6 +1236,7 @@ public partial class Combat : Node2D
 			default: break;
 		}
 		_confirmButton.Disabled = true;
+		_errorLabel.Visible = false;
 	}
 
 	private void OnUndoButtonPressed()
