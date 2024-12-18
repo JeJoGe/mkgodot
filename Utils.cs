@@ -23,7 +23,7 @@ public partial class Utils : Node
 		{"dice","res://assets/dice.jpg"},
 		{"spell","res://assets/spells.jpg"},
 		{"basic", "res://assets/basics.jpg"},
-		{"wound", "res://assets/cardback.jpg"}
+		{"wound", "res://assets/wound.png"}
 	};
 	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
 		{Source.Colour.Blue,(0,1)},

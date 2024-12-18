@@ -5,9 +5,33 @@ public partial class MonsterAttack : Node2D
 {
 	[Export]
 	private Button _button;
-	public int Value { get; set; }
+	private int _value;
+	public int Value
+	{
+		get
+		{
+			return _value;
+		}
+		set
+		{
+			_value = value;
+			UpdateButtonText();
+		}
+	}
 	public Element Element { get; set; }
-	public bool Blocked { get; set; } = false;
+	private bool _blocked = false;
+	public bool Blocked
+	{
+		get
+		{
+			return _blocked;
+		}
+		set
+		{
+			_blocked = value;
+			_button.Visible = !_blocked;
+		}
+	}
 	public bool Attacked { get; set; } = false;
 	private bool _attacking = true;
 	public bool Attacking
@@ -20,12 +44,9 @@ public partial class MonsterAttack : Node2D
 		{
 			_attacking = value;
 			var monster = GetParent<Monster>();
-			if (monster != null)
-			{
-				// update monster attacking visual indicator
-				monster.UpdateAttackingIndicator();
-			}
-			_button.Visible = _attacking;
+            // update monster attacking visual indicator
+            monster?.UpdateAttackingIndicator();
+            _button.Visible = _attacking;
 		}
 	}
 	private static readonly int _attackOffset = 40;
@@ -46,10 +67,34 @@ public partial class MonsterAttack : Node2D
 		GetNode<Combat>("../..").TargetAttack = this;
 	}
 
-	public void UpdateButtonText(string newText)
+	public void UpdateButtonText()
 	{
-		GetNode<Combat>("../..").UndoRedo.AddUndoProperty(_button, "text", _button.Text);
-		_button.Text = newText;
+		// update button text depending on current phase
+		var monster = GetParent<Monster>();
+		bool swift, brutal;
+		swift = brutal = false;
+		if (monster != null)
+		{
+			swift = monster.Abilities.Contains("swift");
+			brutal = monster.Abilities.Contains("brutal");
+		}
+		var buttonText = string.Format("{0} {1}", Element, _value);
+		switch (GetNode<Combat>("../..").CurrentPhase)
+		{
+			case Combat.Phase.Block:
+				{
+					buttonText = string.Format("{0} {1}", Element, _value + (swift ? _value : 0));
+					break;
+				}
+			case Combat.Phase.Damage:
+				{
+					buttonText = string.Format("{0} {1}", Element, _value + (brutal ? _value : 0));
+					break;
+				}
+			default: break;
+		}
+		_button.Text = buttonText;
+		ShowAttackButton();
 	}
 
 	public void ShowAttackButton()

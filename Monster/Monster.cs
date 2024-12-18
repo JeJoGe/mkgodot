@@ -121,32 +121,14 @@ public partial class Monster : Node2D
 		}
 	}
 
-	public void UpdateAttackForSwiftness()
+	public void RefreshAttacks()
 	{
 		for (int i = 0; i < Attacks.Count; i++)
 		{
 			var attack = Attacks[i];
-			var swift = Abilities.Contains("swift");
 			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
 			{
-				var newText = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0));
-				attack.UpdateButtonText(newText);
-				attack.ShowAttackButton();
-			}
-		}
-	}
-
-	public void UpdateAttackForBrutal()
-	{
-		for (int i = 0; i < Attacks.Count; i++)
-		{
-			var attack = Attacks[i];
-			var brutal = Abilities.Contains("brutal");
-			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
-			{
-				var newText = string.Format("{0} {1}", attack.Element, attack.Value + (brutal ? attack.Value : 0));
-				attack.UpdateButtonText(newText);
-				attack.ShowAttackButton();
+				attack.UpdateButtonText();
 			}
 		}
 	}

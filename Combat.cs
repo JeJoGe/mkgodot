@@ -430,11 +430,6 @@ public partial class Combat : Node2D
 		_confirmButton.Disabled = _totalAttack < _targetArmour || _targetArmour == 0;
 	}
 
-	private void UpdateMonsterAttack()
-	{
-
-	}
-
 	private void OnNextButtonPressed()
 	{
 		switch (CurrentPhase)
@@ -444,6 +439,8 @@ public partial class Combat : Node2D
 				{
 					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.PreventAttacks);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					break;
@@ -452,6 +449,8 @@ public partial class Combat : Node2D
 				{
 					_undoRedo.CreateAction("next phase");
 					NextCombatPhase(Phase.ReduceAttack);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					// check if any summons to prevent undoing
@@ -475,26 +474,17 @@ public partial class Combat : Node2D
 					if (ResolvingAction)
 					{
 						// finish resolving action
-						//_resolvingAction = false;
 						_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
 						_undoRedo.AddDoProperty(this, "_resolvingAction", false);
-						//_reducedAttacks.Clear();						
 						_undoRedo.AddUndoProperty(this, "_reducedAttacks", _reducedAttacks);
 						_undoRedo.AddDoProperty(this, "_reducedAttacks", new Godot.Collections.Array<MonsterAttack>());
-						//_nextButton.Text = "Block Enemies";
-						_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
-						_undoRedo.AddDoProperty(_nextButton, "text", "Block Enemies");
-						//_confirmButton.Text = "Reduce Attack By 1";
-						_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
-						_undoRedo.AddDoProperty(_confirmButton, "text", "Reduce Attack By 1");
-						_undoRedo.AddUndoProperty(_confirmButton, "disabled", _confirmButton.Disabled);
-						_undoRedo.AddDoProperty(_confirmButton, "disabled", true);
-						//_confirmButton.Disabled = true;
 					}
 					else
 					{
 						NextCombatPhase(Phase.Block);
 					}
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					break;
@@ -503,13 +493,15 @@ public partial class Combat : Node2D
 				{
 					_undoRedo.CreateAction("Skip Blocking");
 					NextCombatPhase(Phase.Damage);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					break;
 				}
 			case Phase.Damage:
 				{
-					// assign all damage to hero
+					// assign all remaining damage to hero
 					_undoRedo.CreateAction("Assign All Damage");
 					_undoRedo.AddUndoProperty(this, "_totalWounds", _totalWounds);
 					_undoRedo.AddUndoProperty(_totalWoundsLabel, "text", _totalWoundsLabel.Text);
@@ -532,6 +524,8 @@ public partial class Combat : Node2D
 					// hide all remaining attack buttons
 					HideAttackButtons();
 					NextCombatPhase(Phase.Attack);
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					break;
 				}
@@ -585,17 +579,13 @@ public partial class Combat : Node2D
 					_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
 					_undoRedo.AddDoProperty(_actionLabel, "visible", false);
 					_undoRedo.AddDoProperty(this, "_resolvingAction", false);
-					//_resolvingAction = false;
 					_undoRedo.AddUndoProperty(this, "_enemiesNotAttacking", _enemiesNotAttacking);
 					if (EnemiesNotAttacking == 0)
 					{
 						_undoRedo.AddUndoProperty(_targetAttack, "Attacking", _targetAttack.Attacking);
 						//_undoRedo.AddDoProperty(_targetAttack, "Attacking", false);
 						_targetAttack.Attacking = false;
-						//MonsterAttacks.GetPressedButton().Visible = false;
-						//var pressedButton = MonsterAttacks.GetPressedButton();
-						//_undoRedo.AddUndoProperty(pressedButton, "visible", pressedButton.Visible);
-						//_undoRedo.AddDoProperty(pressedButton, "visible", false);
+						_targetAttack = null;
 					}
 					else
 					{
@@ -616,6 +606,8 @@ public partial class Combat : Node2D
 						GD.Print("no enemies attacking");
 						NextCombatPhase(Phase.Attack);
 					}
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					_confirmButton.Disabled = true;
@@ -637,10 +629,6 @@ public partial class Combat : Node2D
 							_targetAttack.Value = 0;
 							_undoRedo.AddUndoProperty(_targetAttack, "Blocked", _targetAttack.Blocked);
 							_targetAttack.Blocked = true;
-							var attackButton = MonsterAttacks.GetPressedButton();
-							_undoRedo.AddUndoProperty(attackButton, "visible", attackButton.Visible);
-							_undoRedo.AddDoProperty(attackButton, "visible", false);
-							//MonsterAttacks.GetPressedButton().Visible = false;
 						}
 						_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
 						_resolvingAction = _reducedAttacks.Count < _maxAttacksReduce; // can still reduce attacks
@@ -664,14 +652,8 @@ public partial class Combat : Node2D
 							_targetAttack.Value = 0;
 							_undoRedo.AddUndoProperty(_targetAttack, "Blocked", _targetAttack.Blocked);
 							_targetAttack.Blocked = true;
-							var attackButton = MonsterAttacks.GetPressedButton();
-							_undoRedo.AddUndoProperty(attackButton, "visible", attackButton.Visible);
-							_undoRedo.AddDoProperty(attackButton, "visible", false);
-							//MonsterAttacks.GetPressedButton().Visible = false;
 						}
 					}
-					var newText = string.Format("{0} {1}", _targetAttack.Element, _targetAttack.Value);
-					_targetAttack.UpdateButtonText(newText);
 					// skip to attack phase if all attacks blocked (reduced to 0)
 					var allBlocked = AllEnemiesBlockedOrNotAttacking();
 					if (allBlocked)
@@ -682,6 +664,7 @@ public partial class Combat : Node2D
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					_confirmButton.Disabled = true;
+					_errorLabel.Visible = false;
 					break;
 				}
 			case Phase.Block:
@@ -690,10 +673,6 @@ public partial class Combat : Node2D
 					// block attack
 					_undoRedo.AddUndoProperty(_targetAttack, "Blocked", _targetAttack.Blocked);
 					_targetAttack.Blocked = true;
-					var button = MonsterAttacks.GetPressedButton();
-					_undoRedo.AddUndoProperty(button, "visible", button.Visible);
-					_undoRedo.AddDoProperty(button, "visible", false);
-					//button.QueueFree();					
 					_confirmButton.Disabled = true;
 					_undoRedo.AddUndoProperty(this, "_playerBlocks", _playerBlocks);
 					_undoRedo.AddUndoProperty(this, "_totalBlock", _totalBlock);
@@ -702,15 +681,6 @@ public partial class Combat : Node2D
 					};
 					_undoRedo.AddDoProperty(this, "_totalBlock", 0);
 					_undoRedo.AddDoProperty(this, "_playerBlocks", zeros);
-					/*
-					foreach (var kvp in _playerBlocks)
-					{
-						_playerBlocks[kvp.Key] = 0;
-					}*/
-					//_totalBlock = 0;
-					//UpdateUI();
-					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
-					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					// check if all enemies blocked
 					var allBlocked = AllEnemiesBlockedOrNotAttacking();
 					if (allBlocked)
@@ -718,6 +688,8 @@ public partial class Combat : Node2D
 						// skip damage phase
 						NextCombatPhase(Phase.Attack);
 					}
+					_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+					_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 					_undoRedo.CommitAction();
 					break;
 				}
@@ -730,7 +702,6 @@ public partial class Combat : Node2D
 					var button = MonsterAttacks.GetPressedButton();
 					_undoRedo.AddUndoProperty(button, "visible", button.Visible);
 					_undoRedo.AddDoProperty(button, "visible", false);
-					//button.QueueFree();
 					_confirmButton.Disabled = true;
 					// go to attack phase if no attacks remaining
 					var skipDamage = true;
@@ -785,17 +756,11 @@ public partial class Combat : Node2D
 				{
 					// zero any remaining attack
 					ResetAttacks();
-					_undoRedo.AddUndoProperty(_nextButton, "text", _nextButton.Text);
-					_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
-					//_nextButton.Text = "Enemies Attack";
-					//_confirmButton.Text = "Target Enemy Will Not Attack";
 					foreach (var enemy in _enemyList)
 					{
 						//enemy.Selected = false;
 						_undoRedo.AddDoProperty(enemy, "Selected", false);
 					}
-					_undoRedo.AddDoProperty(_nextButton, "text", "Enemies Attack");
-					_undoRedo.AddDoProperty(_confirmButton, "text", "Target Enemy Will Not Attack");
 					break;
 				}
 			case Phase.ReduceAttack:
@@ -958,31 +923,17 @@ public partial class Combat : Node2D
 	{
 		GD.Print(string.Format("prevent {0} enemies from attacking; unfortified only: {1}", numAttacksPrevented, targetUnfortified));
 		var result = false; // return false if still in middle of resolving a cancel attack action
-		string actionLabelText;
 		if (!ResolvingAction)
 		{
 			_undoRedo.CreateAction("prevent attack");
 			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
-			_undoRedo.AddUndoProperty(_actionLabel, "visible", _actionLabel.Visible);
-			_undoRedo.AddUndoProperty(_confirmButton, "text", _confirmButton.Text);
-			_undoRedo.AddUndoProperty(_errorLabel, "visible", _errorLabel.Visible);
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.HideAttackButtons));
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.DeselectMonsters));
 			_resolvingAction = result = true;
 			PreventOnlyUnfortified = targetUnfortified;
 			_enemiesNotAttacking = numAttacksPrevented; // if 0 then cancel single attack
-			var str = "Target Enemies Will Not Attack";
-			actionLabelText = string.Format("[color=white]Prevent up to {0} ", numAttacksPrevented)
-			+ (PreventOnlyUnfortified ? "unfortified " : "") + (numAttacksPrevented > 1 ? "enemies" : "enemy")
-			+ " from attacking this combat[/color]";
-			if (numAttacksPrevented == 0)
-			{
-				str = "Cancel Single Attack";
-				actionLabelText = "[color=white]Cancel one enemy attack[/color]";
-			}
-			_confirmButton.Text = str;
-			_actionLabel.Text = actionLabelText;
-			_actionLabel.Visible = true;
+			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.CommitAction();
 		}
 		else
@@ -998,13 +949,21 @@ public partial class Combat : Node2D
 		var result = false; // return false if still resolving another action
 		if (!ResolvingAction)
 		{
+			_undoRedo.CreateAction("reduce attack");
 			GD.Print(string.Format("reduce {0} attack by {1}", numAttacks, amountReduced));
+			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
 			_resolvingAction = result = true;
 			_maxAttacksReduce = numAttacks; // maximum number of different attacks to be reduced by this action
 			_reduceAttackAmount = amountReduced;
 			_reducedAttacks.Clear();
-			_confirmButton.Text = "Reduce Attack By " + amountReduced;
-			_nextButton.Text = "Skip Reducing Attacks";
+			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.CommitAction();
+		}
+		else
+		{
+			_errorLabel.Text = "[color=red]ERROR: Resolve current action first[/color]";
+			_errorLabel.Visible = true;
 		}
 		return result;
 	}
@@ -1038,8 +997,6 @@ public partial class Combat : Node2D
 				_undoRedo.AddUndoProperty(enemy, "visible", true);
 				_undoRedo.AddUndoProperty(enemy, "Defeated", false);
 				_totalFame += enemy.Fame;
-				//enemy.Defeated = true;
-				//enemy.Visible = false;
 				_undoRedo.AddDoProperty(enemy, "Defeated", true);
 				_undoRedo.AddDoProperty(enemy, "visible", false);
 				enemy.Selected = false;
@@ -1182,7 +1139,6 @@ public partial class Combat : Node2D
 			if (!enemy.Defeated && enemy.Attacking)
 			{
 				enemy.Attack();
-				//_undoRedo.AddDoMethod(new Callable(enemy, Monster.MethodName.Attack));
 			}
 		}
 	}
@@ -1198,28 +1154,29 @@ public partial class Combat : Node2D
 				switch (CurrentPhase)
 				{
 					case Phase.ReduceAttack:
-					{
-						enemy.Attack();
-						break;
-					}
+						{
+							enemy.Attack();
+							break;
+						}
 					case Phase.Block:
-					{
-						enemy.UpdateAttackForSwiftness();
-						break;
-					}
+						{
+							enemy.RefreshAttacks();
+							break;
+						}
 					case Phase.Damage:
-					{
-						enemy.UpdateAttackForBrutal();
-						break;
-					}
+						{
+							enemy.RefreshAttacks();
+							break;
+						}
 					default: break;
 				}
 			}
-		}		
+		}
 	}
 
 	private void UpdateUI()
 	{
+		// update attack or block values
 		var cellStrings = "";
 		var cellCount = 0;
 		if (CurrentPhase == Phase.Ranged || CurrentPhase == Phase.Attack || CurrentPhase == Phase.PreventAttacks)
@@ -1254,6 +1211,69 @@ public partial class Combat : Node2D
 			_blockLabel.Size = new Vector2(64 * cellCount, 48);
 			_blockLabel.Visible = cellCount > 0;
 		}
+		// update buttons and labels according to current phase
+		switch (CurrentPhase)
+		{
+			case Phase.Ranged:
+				{
+					_nextButton.Text = "Skip Attacking";
+					_confirmButton.Text = "Confirm Attack";
+					break;
+				}
+			case Phase.PreventAttacks:
+				{
+					_nextButton.Text = "Enemies Attack";
+					_confirmButton.Text = "Target Enemy Will Not Attack";
+					_actionLabel.Visible = false;
+					if (ResolvingAction)
+					{
+						var str = "Target Enemies Will Not Attack";
+						string actionLabelText = string.Format("[color=white]Prevent up to {0} ", _enemiesNotAttacking)
+						+ (PreventOnlyUnfortified ? "unfortified " : "") + (_enemiesNotAttacking > 1 ? "enemies" : "enemy")
+						+ " from attacking this combat[/color]";
+						if (_enemiesNotAttacking == 0)
+						{
+							str = "Cancel Single Attack";
+							actionLabelText = "[color=white]Cancel one enemy attack[/color]";
+						}
+						_actionLabel.Text = actionLabelText;
+						_actionLabel.Visible = true;
+						_confirmButton.Text = str;
+					}
+					break;
+				}
+			case Phase.ReduceAttack:
+				{
+					_nextButton.Text = "Block Enemies";
+					_confirmButton.Text = "Reduce Attack by 1";
+					if (ResolvingAction)
+					{
+						_confirmButton.Text = "Reduce Attack By " + _reduceAttackAmount;
+						_nextButton.Text = "Skip Reducing Attacks";
+					}
+					break;
+				}
+			case Phase.Block:
+				{
+					_nextButton.Text = "Skip Blocking";
+					_confirmButton.Text = "Confirm Block";
+					break;
+				}
+			case Phase.Damage:
+				{
+					_nextButton.Text = "Assign All Remaining Damage to Hero";
+					_confirmButton.Text = "Confirm Damage";
+					break;
+				}
+			case Phase.Attack:
+				{
+					_nextButton.Text = "Skip Attacking";
+					_confirmButton.Text = "Confirm Attack";
+					break;
+				}
+			default: break;
+		}
+		_confirmButton.Disabled = true;
 	}
 
 	private void OnUndoButtonPressed()
