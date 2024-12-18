@@ -24,6 +24,9 @@ public partial class MapGen : TileMap
 		{10,0} // Nowhere
 	};
 
+	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
+	public Dictionary<Vector2I, TileData> MapData = new Dictionary<Vector2I, TileData>();
+
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
 	int[] greenTiles = Enumerable.Range(2, 14).ToArray();
@@ -37,6 +40,15 @@ public partial class MapGen : TileMap
 		tileStack = new Stack<int> (greenTiles.Shuffle());
 		//GD.Print("GreenTiles: " + string.Join("\n", greenTiles));
 		//tileStack = new Stack<int>(greenTiles);
+		var patternMapCoords = getPatternMapCoords(new Vector2I(-1,-1));
+		foreach (var patternTile in patternMapCoords)
+		{
+			var patternTileData = GetCellTileData(MainLayer, patternTile);
+			var cellTerrain = patternTileData.Terrain;
+			string eventData = patternTileData.GetCustomData("Event").ToString();
+			var tileData = new TileData(cellTerrain, null, eventData, new List<MapToken>());
+			MapData.Add(patternTile, tileData);
+		}
 	}
 
 	// Don't know where to place this as can reuse for many things
@@ -89,20 +101,52 @@ public partial class MapGen : TileMap
 				{
 					// Take custom data on tile under "Token" if any
 					var patternTileData = GetCellTileData(MainLayer, patternTile);
+					var cellTerrain = patternTileData.Terrain;
 					string tokenData = patternTileData.GetCustomData("Token").ToString();
+					string eventData = patternTileData.GetCustomData("Event").ToString();
+					var tokenExists = false;
+					var mapToken = new MapToken();
+					
 					//GD.Print("Point 1: "+ tokenData);
 					//GD.Print("Point 2: "+ patternTileData.GetCustomData("Token").ToString());
 					if (tokenData != "" && tokenData != "yellow")
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						gameplayControl.MonsterGen(tokenData, (patternTileData.GetCustomData("Event").ToString() == "") ? 0 : 1, patternTile);
+						mapToken = gameplayControl.MonsterGen(tokenData, (eventData == "") ? 0 : 1, patternTile);
+						tokenExists = true;
 					}
 					else if (tokenData == "yellow")
 					{
 						// May need to add in switch statement for whether token is flipped
 						// Generate monster from color stack, site fortifications from what site it's on, on what tile
-						gameplayControl.RuinGen(patternTile);
+						mapToken = gameplayControl.RuinGen(patternTile);
+						tokenExists = true;
+					}
+					else
+					{
+						tokenExists = false;
+					}
+					if (tokenExists)
+					{	
+						mapToken.Visible = true;
+						mapToken.GlobalPosition = ToGlobal(MapToLocal(patternTile));
+						var tileData = new TileData(cellTerrain, mapToken, eventData, new List<MapToken>());
+						gameplayControl.AddChild(mapToken);
+						MapData.Add(patternTile, tileData);
+						if (tokenData == "red" || tokenData == "green")
+						{
+							mapToken.Facedown = false;
+						}
+						else if (tokenData == "yellow" && GameSettings.NightTime != true)
+						{
+							mapToken.Facedown = false;
+						}
+					}
+					else
+					{
+						var tileData = new TileData(cellTerrain, null, eventData, new List<MapToken>());
+						MapData.Add(patternTile, tileData);
 					}
 				}
 
@@ -135,6 +179,7 @@ public partial class MapGen : TileMap
 
 		return patternMapCoords;
 	}
+	
 
 	// Using math to determine how to position tile. Don't understand why it works, it just does
 	private Vector2I DetermineMapPlacement(Vector2I posClicked)

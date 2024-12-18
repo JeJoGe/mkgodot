@@ -23,6 +23,7 @@ public partial class GamePlay : Node2D
 	{
 		tactics.StartRound += onStartRound;
 		tactics.TacticSelected += tacticChosen => onResolveTactic(tacticChosen);
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
