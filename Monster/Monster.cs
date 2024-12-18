@@ -59,31 +59,14 @@ public partial class Monster : Node2D
 	// MapPosition is direction relative to player
 	public Vector2I MapPosition { get; set; }
 	public int MonsterId { get; set; }
-	private static readonly int _attackOffset = 40;
 	private bool _flag { get; set; } = false;
+	private PackedScene _attackScene = GD.Load<PackedScene>("res://Monster/MonsterAttack.tscn");
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		GetNode<Area2D>("Area2D").InputEvent += OnInputEvent;
 		_colorRect.Visible = false;
-		// create attack buttons
-		var combat = GetParent<Combat>();
-		for (int i = 0; i < Attacks.Count; i++)
-		{
-			var attack = Attacks[i];
-			var button = new Button
-			{
-				ButtonGroup = combat.MonsterAttacks,
-				Text = string.Format("{0} {1}", attack.Element, attack.Value),
-				ToggleMode = true,
-				Position = new Vector2(-46, 60 + _attackOffset * i),
-				Name = string.Format("AttackButton{0}", i),
-				Visible = false
-			};
-			button.Pressed += () => OnAttackButtonToggled(attack);
-			AddChild(button);
-		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -93,14 +76,15 @@ public partial class Monster : Node2D
 
 	public void PopulateStats(MonsterObject data, int id)
 	{
+		var combat = GetParent<Combat>();
 		Armour = data.Armour;
-		foreach (var attackData in data.Attacks)
+		// create attack buttons
+		for (int i = 0; i < data.Attacks.Count; i++)
 		{
-			var monsterAttack = new MonsterAttack
-			{
-				Element = attackData.Element,
-				Value = attackData.Value
-			};
+			var attackObject = data.Attacks[i];
+			var monsterAttack = (MonsterAttack)_attackScene.Instantiate();
+			AddChild(monsterAttack);
+			monsterAttack.Initialize(attackObject, i, combat.MonsterAttacks);
 			Attacks.Add(monsterAttack);
 		}
 		Abilities = new List<string>(data.Abilities);
@@ -115,7 +99,7 @@ public partial class Monster : Node2D
 		for (int i = 0; i < Attacks.Count; i++)
 		{
 			var attack = Attacks[i];
-			if (attack.Attacking)
+			if (attack.Attacking && !attack.Attacked)
 			{
 				var combat = GetParent<Combat>();
 				if (attack.Element == Element.Summon)
@@ -132,53 +116,21 @@ public partial class Monster : Node2D
 					attack.Attacked = true;
 					break;
 				}
-				var button = GetNode<Button>(string.Format("AttackButton{0}", i));
-				button.Visible = true;
-				/*var button = new Button
-				{
-					ButtonGroup = combat.MonsterAttacks,
-					Text = string.Format("{0} {1}", attack.Element, attack.Value),
-					ToggleMode = true,
-					Position = new Vector2(-46, 60 + _attackOffset * i),
-					Name = string.Format("AttackButton{0}", i)
-				};
-				button.Pressed += () => OnAttackButtonToggled(attack);
-				AddChild(button);*/
+				attack.ShowAttackButton();
 			}
 		}
 	}
 
-	public void UpdateAttackForSwiftness()
+	public void RefreshAttacks()
 	{
 		for (int i = 0; i < Attacks.Count; i++)
 		{
 			var attack = Attacks[i];
-			var swift = Abilities.Contains("swift");
 			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
 			{
-				var button = GetNode<Button>("AttackButton" + i.ToString());
-				button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (swift ? attack.Value : 0));
+				attack.UpdateButtonText();
 			}
 		}
-	}
-
-	public void Damage()
-	{
-		for (int i = 0; i < Attacks.Count; i++)
-		{
-			var attack = Attacks[i];
-			var brutal = Abilities.Contains("brutal");
-			if (!attack.Blocked && attack.Element != Element.Summon && attack.Attacking)
-			{
-				var button = GetNode<Button>("AttackButton" + i.ToString());
-				button.Text = string.Format("{0} {1}", attack.Element, attack.Value + (brutal ? attack.Value : 0));
-			}
-		}
-	}
-
-	private void OnAttackButtonToggled(MonsterAttack attack)
-	{
-		GetParent<Combat>().TargetAttack = attack;
 	}
 
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
@@ -226,19 +178,10 @@ public partial class Monster : Node2D
 									for (int i = 0; i < Attacks.Count; i++)
 									{
 										var attack = Attacks[i];
-										var button = GetNode<Button>(string.Format("AttackButton{0}", i));
-										button.Visible = attack.Attacking;
-										/*
-										var button = new Button
+										if (attack.Attacking)
 										{
-											ButtonGroup = combatInstance.MonsterAttacks,
-											Text = string.Format("{0} {1}", attack.Element, attack.Value),
-											ToggleMode = true,
-											Position = new Vector2(-46, 60 + _attackOffset * i),
-											Name = string.Format("AttackButton{0}", i)
-										};
-										button.Pressed += () => OnAttackButtonToggled(attack);
-										AddChild(button);*/
+											attack.ShowAttackButton();
+										}
 									}
 									combatInstance.UpdateCancelledAttacks();
 								}
@@ -281,6 +224,20 @@ public partial class Monster : Node2D
 	{
 		_colorRect.Color = PosColour;
 		_colorRect.Visible = true;
+	}
+
+	public void UpdateAttackingIndicator()
+	{
+		var attacking = false;
+		foreach (var attack in Attacks)
+		{
+			if (attack.Attacking)
+			{
+				attacking = true;
+				break;
+			}
+		}
+		_noAttack.Visible = !attacking;
 	}
 
 	public void PrintStats()

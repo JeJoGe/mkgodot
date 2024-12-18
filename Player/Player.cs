@@ -6,7 +6,9 @@ using System.Linq;
 using System.Numerics;
 
 public partial class Player : Node2D
-{
+{	
+	[Export]
+	private Deck _deck;
 	GameplayControl gameplayControl;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
@@ -55,6 +57,7 @@ public partial class Player : Node2D
 		isCombatSceneActive = true;
 		Combat = CombatStart;
 		AddChild(CombatStart);
+		Combat.Wound += _deck.AddWoundToHand;
 		CombatStart.GlobalPosition = new Godot.Vector2(270, 0);
 		GetTree().Paused = true;
 	}

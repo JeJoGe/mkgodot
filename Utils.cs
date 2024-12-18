@@ -23,7 +23,7 @@ public partial class Utils : Node
 		{"dice","res://assets/dice.jpg"},
 		{"spell","res://assets/spells.jpg"},
 		{"basic", "res://assets/basics.jpg"},
-		{"wound", "res://assets/cardback.jpg"}
+		{"wound", "res://assets/wound.png"}
 	};
 	public static readonly Dictionary<Source.Colour, (int, int)> DiceCoordinates = new Dictionary<Source.Colour, (int, int)>{
 		{Source.Colour.Blue,(0,1)},
@@ -218,7 +218,7 @@ public class MonsterObject
 	public int Fame { get; set; }
 	public List<string> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
-	public List<MonsterAttack> Attacks { get; set; }
+	public List<AttackObject> Attacks { get; set; }
 	public MonsterColour Colour { get; set; }
 	public int X { get; set; } // this corresponds to the x offset on its corresponding spritesheet
 	public int Y { get; set; } // this corresponds to the y offset on its corresponding spritesheet
@@ -251,13 +251,10 @@ public class RuinObject
 	public int Y { get; set; }
 	public string Version { get; set; }
 }
-public partial class MonsterAttack : GodotObject
+public class AttackObject
 {
 	public int Value { get; set; }
 	public Element Element { get; set; }
-	public bool Blocked { get; set; } = false;
-	public bool Attacked { get; set; } = false;
-	public bool Attacking { get; set; } = true;
 }
 
 
