@@ -10,10 +10,11 @@ public enum CardObjOption
 public partial class CardObj : Sprite2D
 {
     [Signal]
-    public delegate void CardPlayedEventHandler(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction);
+    public delegate void CardPlayedEventHandler(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction,
+    Godot.Collections.Array<string> manaCosts);
     public int id { get; set; }
     public string cardId { get; set; }
-    public string color { get; set; }
+    public string colour { get; set; }
     public int xCoord { get; set; }
     public int yCoord { get; set; }
     public int copies { get; set; }
@@ -173,6 +174,7 @@ public partial class CardObj : Sprite2D
         int selectedId = 0;
         Godot.Collections.Array<string> basicAction = [];
         Godot.Collections.Array<string> specialAction = [];
+        Godot.Collections.Array<string> manaCosts = [];
         if (currentOption == CardObjOption.top)
         {
             selectedId = topOptionsButton.GetSelectedId();
@@ -195,8 +197,10 @@ public partial class CardObj : Sprite2D
             basicAction = getSpecificAction(bottomOptionActions, selectedId);
             specialAction = getSpecificAction(bottomSpecialOptionsActions, selectedId);
 
+            // determine mana cost of played options NAIVE IMPLEMENTATION
+            manaCosts.Add(colour);
         }
-        EmitSignal(SignalName.CardPlayed, basicAction, specialAction);
+        EmitSignal(SignalName.CardPlayed, basicAction, specialAction, manaCosts);
     }
 
     public void toggleActionPressed()
