@@ -16,6 +16,15 @@ public partial class GamePlay : Node2D
 	private Tactics tactics;
 	[Export]
 	private Inventory inventory;
+	[Export]
+	private PlayerArea _playerArea;
+	private bool _resolvingAction = false;
+	private CardObj _currentCard;
+	private CardControl _currentCardControl;
+	private Godot.Collections.Array<string> _currentBasicActions;
+	private Godot.Collections.Array<string> _currentSpecialActions;
+	private Godot.Collections.Array<string> _currentManaCosts;
+	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
 
 	// Called when the node enters the scene tree for the first time.
 	// TODO: Optimize the Callable initialization by calling it in _Ready
@@ -23,7 +32,6 @@ public partial class GamePlay : Node2D
 	{
 		tactics.StartRound += onStartRound;
 		tactics.TacticSelected += tacticChosen => onResolveTactic(tacticChosen);
-		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,7 +63,42 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	public void OnCardPlayed(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
+	public void OnCardPlayed(Godot.Collections.Array<string> manaCosts,
+	Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
+	{
+		if (!ResolvingAction)
+		{
+			_currentManaCosts = manaCosts;
+			_currentBasicActions = basicAction;
+			_currentSpecialActions = specialAction;
+			_currentCard = card;
+			_currentCardControl = cardControl;
+			ResolveManaCosts();
+		}
+	}
+
+	private void OnManaPaid()
+	{
+		_currentManaCosts.RemoveAt(0);
+		ResolveManaCosts();
+	}
+
+	private void ResolveManaCosts()
+	{
+		if (_currentManaCosts.Count == 0)
+		{
+			// all mana costs paid TODO: this will not necessarily be a card action (could be unit/skill)
+			PerformCardActions(_currentBasicActions, _currentSpecialActions, _currentCard, _currentCardControl);
+			_resolvingAction = false;
+		}
+		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0])))
+		{
+			// no mana available to complete action TODO: return already spent mana
+			_resolvingAction = false;
+		}
+	}
+
+	private void PerformCardActions(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
 	{
 		Utils.undoRedo.CreateAction("Card Play Action");
 
@@ -283,7 +326,7 @@ public partial class GamePlay : Node2D
 		{
 			var currCardControl = (CardControl)card;
 			var currCard = (CardObj)currCardControl.GetChild(0);
-			currCard.CardPlayed += (basicAction, specialAction) => OnCardPlayed(basicAction, specialAction, currCard, currCardControl);
+			currCard.CardPlayed += (basicAction, specialAction, manaCosts) => OnCardPlayed(manaCosts, basicAction, specialAction, currCard, currCardControl);
 		}
 		catch
 		{
