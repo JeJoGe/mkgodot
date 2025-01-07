@@ -16,10 +16,6 @@ public partial class TileWindowControl : NinePatchRect
 	public void on_button_pressed()
 	{
 		var window = GetNode<TileWindow>("..");
-		if (window != null)
-		{
-			GD.Print("tile window found!!!");
-		}
 		GetNode<TileWindow>("..").QueueFree();
 	}
 }
