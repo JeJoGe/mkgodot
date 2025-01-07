@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public partial class PlayerArea : Node2D
 {
+	[Signal]
+	public delegate void ManaPaidEventHandler();
 	[Export]
 	private Source _source;
 	[Export]
@@ -165,6 +167,7 @@ public partial class PlayerArea : Node2D
 				}
 			default: break;
 		}
+		EmitSignal(SignalName.ManaPaid);
 	}
 
 	private void OnEndTurn()
