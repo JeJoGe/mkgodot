@@ -70,7 +70,7 @@ public partial class PlayerArea : Node2D
 		}
 	}
 
-	public void CreateManaPopup()
+	private void CreateManaPopup()
 	{
 		var popup = (Window)_manaPopup.Instantiate();
 		_popup = (ManaPopup)popup.GetChild(0);
