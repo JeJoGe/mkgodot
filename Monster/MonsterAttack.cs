@@ -32,7 +32,16 @@ public partial class MonsterAttack : Node2D
 			_button.Visible = !_blocked;
 		}
 	}
-	public bool Attacked { get; set; } = false;
+	private bool _attacked = false;
+	public bool Attacked
+	{
+		get => _attacked;
+		set
+		{
+			_attacked = value;
+			_button.Visible = !_attacked;
+		}
+	}
 	private bool _attacking = true;
 	public bool Attacking
 	{
@@ -53,7 +62,7 @@ public partial class MonsterAttack : Node2D
 
 	public void Initialize(AttackObject data, int index, ButtonGroup group)
 	{
-		Value = data.Value;
+		_value = data.Value;
 		Element = data.Element;
 		_button.Position = new Vector2(-46, 60 + _attackOffset * index);
 		_button.ButtonGroup = group;
