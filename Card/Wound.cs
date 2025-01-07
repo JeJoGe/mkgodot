@@ -13,7 +13,7 @@ public partial class Wound : CardObj
     ******************************************/
     public new int id = 0;
     public new string cardId = "Wound";
-    public new string color = null;
+    public new string colour = null;
     public new int xCoord = 0;
     public new int yCoord = 0;
     public new string phase = "";
