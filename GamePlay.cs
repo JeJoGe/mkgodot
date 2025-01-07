@@ -23,7 +23,7 @@ public partial class GamePlay : Node2D
 	{
 		tactics.StartRound += onStartRound;
 		tactics.TacticSelected += tacticChosen => onResolveTactic(tacticChosen);
-		
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -58,6 +58,8 @@ public partial class GamePlay : Node2D
 	public void OnCardPlayed(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction, CardObj card, CardControl cardControl)
 	{
 		Utils.undoRedo.CreateAction("Card Play Action");
+		GD.Print(basicAction);
+
 
 		if (basicAction != null)
 		{
@@ -66,123 +68,131 @@ public partial class GamePlay : Node2D
 
 			for (int i = 0; i < basicAction.Count(); i++)
 			{
-				string[] action = basicAction[i].Split('-');
-				int quantity = 0;
+				string[] actions = basicAction[i].Split("&");
+				foreach (string completeAction in actions)
+				{
+					string[] action = completeAction.Split('-');
+					int quantity = 0;
+					bool isQuantity = true;
 
-				if (action[0] == nameof(BasicCardActions.attack))
-				{
-					quantity = Convert.ToInt16(action[3]);
-				}
-				else if (action[0] != nameof(BasicCardActions.gainManaTokens))
-				{
-					quantity = Convert.ToInt16(action[1]);
-				}
+					if (action[0] == nameof(BasicCardActions.attack))
+					{
+						quantity = Convert.ToInt16(action[3]);
+					}
+					else
+					{
+						isQuantity = int.TryParse(action[1], out quantity);
+					}
 
-				switch (action[0])
-				{
-					case nameof(BasicCardActions.attack):
-						Callable CombatConversionAttackAdd = Callable.From(() =>
-						{
-							combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
-							card.ManipulateButtons(false);
-							cardControl.PlayedCardAnimation();
-							deck.onRemoveFromCurrentHand(cardControl);
-						});
-						Callable CombatConversionAttackMinus = Callable.From(() =>
-						{
-							combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
-							card.ManipulateButtons(true);
-							cardControl.UndoPlayedCardAnimation();
-							deck.onAddToCurrentHand(cardControl);
-						});
-						doMethodList.Add(CombatConversionAttackAdd);
-						undoMethodList.Add(CombatConversionAttackMinus);
-						break;
-					case nameof(BasicCardActions.heal):
-						healingConversion(quantity);
-						break;
-					case nameof(BasicCardActions.draw):
-						drawConversion(quantity);
-						cardControl.PlayedCardAnimation();
-						Utils.undoRedo.ClearHistory();
-						Utils.undoRedo.CommitAction();
-						break;
-					case nameof(BasicCardActions.move):
-						Callable MoveConversionAdd = Callable.From(() =>
-						{
-							moveConversion(quantity);
-							card.ManipulateButtons(false);
-							cardControl.PlayedCardAnimation();
-							deck.onRemoveFromCurrentHand(cardControl);
-						});
-						Callable MoveConversionMinus = Callable.From(() =>
-						{
-							moveConversion(-quantity);
-							card.ManipulateButtons(true);
-							cardControl.UndoPlayedCardAnimation();
-							deck.onAddToCurrentHand(cardControl);
-						});
-						doMethodList.Add(MoveConversionAdd);
-						undoMethodList.Add(MoveConversionMinus);
-						break;
-					case nameof(BasicCardActions.influence):
-						Callable influenceConversionAdd = Callable.From(() =>
-						{
-							influenceConversion(quantity);
-							card.ManipulateButtons(false);
-							cardControl.PlayedCardAnimation();
-							deck.onRemoveFromCurrentHand(cardControl);
-						});
-						Callable influenceConversionMinus = Callable.From(() =>
-						{
-							influenceConversion(-quantity);
-							card.ManipulateButtons(true);
-							cardControl.UndoPlayedCardAnimation();
-							deck.onAddToCurrentHand(cardControl);
-						});
-						doMethodList.Add(influenceConversionAdd);
-						undoMethodList.Add(influenceConversionMinus);
-						break;
-					case nameof(BasicCardActions.block):
-						Callable CombatConversionBlockAdd = Callable.From(() =>
-						{
-							combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
-							card.ManipulateButtons(false);
-							cardControl.PlayedCardAnimation();
-							deck.onRemoveFromCurrentHand(cardControl);
-						});
-						Callable CombatConversionBlockMinus = Callable.From(() =>
-						{
-							combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
-							card.ManipulateButtons(true);
-							cardControl.UndoPlayedCardAnimation();
-							deck.onAddToCurrentHand(cardControl);
-						});
-						doMethodList.Add(CombatConversionBlockAdd);
-						undoMethodList.Add(CombatConversionBlockMinus);
-						break;
-					case nameof(BasicCardActions.gainManaTokens):
-						Source.Colour colour = determineColour(action[1]);
-						if (colour == Source.Colour.Gold)
-						{
-							GD.Print("Error in determining color of manatoken");
+					switch (action[0])
+					{
+						case nameof(BasicCardActions.attack):
+							Callable CombatConversionAttackAdd = Callable.From(() =>
+							{
+								combatConversion(nameof(BasicCardActions.attack), action[1], action[2], quantity);
+								doMethodCardDeckUpdates(card, cardControl);
+							});
+							Callable CombatConversionAttackMinus = Callable.From(() =>
+							{
+								combatConversion(nameof(BasicCardActions.attack), action[1], action[2], -quantity);
+								undoMethodCardDeckUpdates(card, cardControl);
+							});
+							doMethodList.Add(CombatConversionAttackAdd);
+							undoMethodList.Add(CombatConversionAttackMinus);
 							break;
-						}
-						Callable GainManaToken = Callable.From(() =>
-						{
-							inventory.AddToken((int)colour);
-						});
-						Callable RemoveManaToken = Callable.From(() =>
-						{
-							inventory.ConsumeToken((int)colour);
-						});
-						break;
-					case nameof(BasicCardActions.useAdditionalDice):
-						break;
-					case nameof(BasicCardActions.gainCrystals):
-						break;
-					default:
-						break;
+						case nameof(BasicCardActions.heal):
+							Callable HealingConversion = Callable.From(() =>
+							{
+								deck.RemoveWoundFromHand(quantity);
+							});
+							Callable ReinstateWound = Callable.From(() =>
+							{
+								deck.AddWoundToHand(quantity);
+							});
+							doMethodList.Add(HealingConversion);
+							undoMethodList.Add(ReinstateWound);
+							break;
+						case nameof(BasicCardActions.draw):
+							deck.OnDeckButtonPressed(quantity);
+							cardControl.PlayedCardAnimation();
+							Utils.undoRedo.ClearHistory();
+							Utils.undoRedo.CommitAction();
+							break;
+						case nameof(BasicCardActions.move):
+							Callable MoveConversionAdd = Callable.From(() =>
+							{
+								player.MovePoints += quantity;
+								doMethodCardDeckUpdates(card, cardControl);
+
+							});
+							Callable MoveConversionMinus = Callable.From(() =>
+							{
+								player.MovePoints -= quantity;
+								undoMethodCardDeckUpdates(card, cardControl);
+							});
+							doMethodList.Add(MoveConversionAdd);
+							undoMethodList.Add(MoveConversionMinus);
+							break;
+						case nameof(BasicCardActions.influence):
+							Callable influenceConversionAdd = Callable.From(() =>
+							{
+								player.influence += quantity;
+								doMethodCardDeckUpdates(card, cardControl);
+							});
+							Callable influenceConversionMinus = Callable.From(() =>
+							{
+								player.influence -= quantity;
+								undoMethodCardDeckUpdates(card, cardControl);
+							});
+							doMethodList.Add(influenceConversionAdd);
+							undoMethodList.Add(influenceConversionMinus);
+							break;
+						case nameof(BasicCardActions.block):
+							Callable CombatConversionBlockAdd = Callable.From(() =>
+							{
+								combatConversion(nameof(BasicCardActions.block), action[1], action[2], quantity);
+								doMethodCardDeckUpdates(card, cardControl);
+							});
+							Callable CombatConversionBlockMinus = Callable.From(() =>
+							{
+								combatConversion(nameof(BasicCardActions.block), action[1], action[2], -quantity);
+								undoMethodCardDeckUpdates(card, cardControl);
+							});
+							doMethodList.Add(CombatConversionBlockAdd);
+							undoMethodList.Add(CombatConversionBlockMinus);
+							break;
+						case nameof(BasicCardActions.gainManaTokens):
+							Source.Colour colour = determineColour(action[1]);
+							if (colour == Source.Colour.Gold)
+							{
+								GD.Print("Error in determining color of manatoken");
+								break;
+							}
+							Callable GainManaToken = Callable.From(() =>
+							{
+								inventory.AddToken((int)colour);
+								doMethodCardDeckUpdates(card, cardControl);
+
+							});
+							Callable RemoveManaToken = Callable.From(() =>
+							{
+								inventory.ConsumeToken((int)colour);
+								undoMethodCardDeckUpdates(card, cardControl);
+
+							});
+							doMethodList.Add(GainManaToken);
+							undoMethodList.Add(RemoveManaToken);
+							break;
+						case nameof(BasicCardActions.useAdditionalDice):
+							break;
+						case nameof(BasicCardActions.gainCrystals):
+
+							break;
+						case nameof(BasicCardActions.payMana):
+							break;
+						default:
+							break;
+					}
 				}
 
 
@@ -202,14 +212,31 @@ public partial class GamePlay : Node2D
 				});
 				Utils.undoRedo.AddDoMethod(doCallable);
 				Utils.undoRedo.AddUndoMethod(undoCallable);
-				Utils.undoRedo.CommitAction();
 			}
+			Utils.undoRedo.CommitAction();
+
 		}
 
 		if (specialAction != null)
 		{
 
 		}
+	}
+
+	private void doMethodCardDeckUpdates(CardObj card, CardControl cardControl)
+	{
+		card.ManipulateButtons(false);
+		cardControl.PlayedCardAnimation();
+		deck.onRemoveFromCurrentHand(cardControl);
+
+	}
+
+	private void undoMethodCardDeckUpdates(CardObj card, CardControl cardControl)
+	{
+		card.ManipulateButtons(true);
+		cardControl.UndoPlayedCardAnimation();
+		deck.onAddToCurrentHand(cardControl);
+
 	}
 
 	private void combatConversion(string phase, string element, string attackRange, int quantity)
@@ -250,28 +277,6 @@ public partial class GamePlay : Node2D
 		{
 			combatScene.AddBlock(quantity, type);
 		}
-
-	}
-
-	private void drawConversion(int quantity)
-	{
-		deck.OnDeckButtonPressed(quantity);
-	}
-
-	private void moveConversion(int quantity)
-	{
-		player.MovePoints += quantity;
-		GD.Print(player.MovePoints);
-	}
-
-	private void influenceConversion(int quantity)
-	{
-		player.influence += quantity;
-		GD.Print("Influence Points: ", player.influence);
-	}
-
-	private void healingConversion(int quantity)
-	{
 
 	}
 

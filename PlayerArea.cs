@@ -25,12 +25,12 @@ public partial class PlayerArea : Node2D
 	{
 	}
 
-	public bool PayMana(Source.Colour colour)
+	public bool PayMana(Source.Colour colour, bool isCard)
 	{
-        var list = GetOptions(colour);
-        // get options for colour
-        bool result = list.Count > 0;
-        CreateManaPopup();
+		var list = GetOptions(colour);
+		// get options for colour
+		bool result = list.Count > 0;
+		CreateManaPopup();
 		if (_skills.ContainsKey("AR08") && _skills["AR08"])
 		{
 			// get options for colour with polarization
@@ -68,7 +68,7 @@ public partial class PlayerArea : Node2D
 		}
 	}
 
-	private void CreateManaPopup()
+	public void CreateManaPopup()
 	{
 		var popup = (Window)_manaPopup.Instantiate();
 		_popup = (ManaPopup)popup.GetChild(0);
@@ -154,15 +154,15 @@ public partial class PlayerArea : Node2D
 					break;
 				}
 			case ManaPopup.ManaType.Crystal:
-			{
-				_inventory.ConsumeCrystal(colour);
-				break;
-			}
+				{
+					_inventory.ConsumeCrystal(colour);
+					break;
+				}
 			case ManaPopup.ManaType.Token:
-			{
-				_inventory.ConsumeToken(colour);
-				break;
-			}
+				{
+					_inventory.ConsumeToken(colour);
+					break;
+				}
 			default: break;
 		}
 	}
