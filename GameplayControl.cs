@@ -137,6 +137,10 @@ public partial class GameplayControl : Control
 			if(mapGen.MapData.ContainsKey(mapMousePosition))
 			{
 				var TileWindowStart = (TileWindow)TileWindowScene.Instantiate();
+				TileWindowStart.CellTerrain = mapGen.MapData[mapMousePosition].CellTerrain;
+    			TileWindowStart.Token = mapGen.MapData[mapMousePosition].Token;
+    			TileWindowStart.TileEvent = mapGen.MapData[mapMousePosition].TileEvent;
+    			TileWindowStart.MonsterGroup = mapGen.MapData[mapMousePosition].MonsterGroup;
 				AddChild(TileWindowStart);
 			}
 		}
