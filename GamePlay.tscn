@@ -1382,10 +1382,9 @@ position = Vector2(969, 543)
 process_callback = 0
 script = ExtResource("4_15lwj")
 
-[node name="Player" type="Node2D" parent="GameplayControl" node_paths=PackedStringArray("_deck")]
+[node name="Player" type="Node2D" parent="GameplayControl"]
 position = Vector2(672, 856)
 script = ExtResource("4_jr7il")
-_deck = NodePath("../PlayerUI/PlayerArea/Deck")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")
@@ -1426,7 +1425,6 @@ patch_margin_bottom = 30
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
-[connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1444,10 +1442,7 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
 [connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
-[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToDiscard" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToDiscard" binds= [1]]
-[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToHand" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToHand" binds= [1]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/DeleteHandWound" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="RemoveWoundFromHand"]
-[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/DeleteDiscardWound" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="RemoveWoundFromDiscard" binds= [1]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/SpellTestingButton" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]

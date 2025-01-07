@@ -4,20 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_06y1k"]
 [ext_resource type="ButtonGroup" uid="uid://cu8kolstgunxd" path="res://CombatSim/combatsimbuttons.tres" id="3_de76w"]
 
-[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton", "_nextButton", "_undoButton", "_attackLabel", "_blockLabel", "_fameLabel", "_woundsLabel", "_totalWoundsLabel", "_actionLabel", "_errorLabel")]
+[node name="Combat" type="Node2D" node_paths=PackedStringArray("_confirmDialog", "_confirmButton")]
 process_mode = 2
 script = ExtResource("1_2aaos")
 _confirmDialog = NodePath("NinePatchRect/ConfirmationDialog")
 _confirmButton = NodePath("NinePatchRect/ConfirmButton")
-_nextButton = NodePath("NinePatchRect/NextButton")
-_undoButton = NodePath("NinePatchRect/UndoButton")
-_attackLabel = NodePath("NinePatchRect/AttackLabel")
-_blockLabel = NodePath("NinePatchRect/BlockLabel")
-_fameLabel = NodePath("NinePatchRect/TotalFameLabel")
-_woundsLabel = NodePath("NinePatchRect/WoundsLabel")
-_totalWoundsLabel = NodePath("NinePatchRect/TotalWoundsLabel")
-_actionLabel = NodePath("NinePatchRect/ActionLabel")
-_errorLabel = NodePath("NinePatchRect/ErrorLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 show_behind_parent = true
@@ -380,5 +371,4 @@ text = "Undo"
 [connection signal="pressed" from="NinePatchRect/TargetEnemyButton" to="." method="PreventAttack" binds= [1, false]]
 [connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [4, 1]]
 [connection signal="pressed" from="NinePatchRect/Reduce2AttacksButton" to="." method="ReduceAttack" binds= [2, 2]]
-[connection signal="pressed" from="NinePatchRect/MovementButton" to="." method="AddMovement" binds= [1]]
 [connection signal="pressed" from="NinePatchRect/UndoButton" to="." method="OnUndoButtonPressed"]

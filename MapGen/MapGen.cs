@@ -44,9 +44,6 @@ public partial class MapGen : TileMap
 	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
 	public Dictionary<Vector2I, TileData> MapData = new Dictionary<Vector2I, TileData>();
 
-	// key: coords, value: list with cellTerrain, Token, Event, MonsterGroup,
-	public Dictionary<Vector2I, TileData> MapData = new Dictionary<Vector2I, TileData>();
-
 	//Initial stack of Green Tiles and Brown Tiles
 	int[] brownTiles = Enumerable.Range(16, 10).ToArray();
 	int[] greenTiles = Enumerable.Range(2, 14).ToArray();
