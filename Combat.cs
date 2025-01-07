@@ -157,6 +157,7 @@ public partial class Combat : Node2D
 		{2, "res://assets/CombatIcons/iceblock.png"},
 		{3, "res://assets/CombatIcons/coldfireblock.png"}
 	};
+	private static readonly string _moveIcon = "res://assets/CombatIcons/move.png";
 	private UndoRedo _undoRedo;
 	public UndoRedo UndoRedo { get => _undoRedo; }
 	private ulong _undoVersion = 1; // oldest undo version the user is allowed to revert to

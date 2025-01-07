@@ -73,7 +73,7 @@ public partial class Deck : Node2D
 						{
 							id = index,
 							cardId = card.cardId + "-1",
-							color = card.color,
+							colour = card.colour,
 							xCoord = card.xCoord,
 							yCoord = card.yCoord,
 							copies = card.copies,
