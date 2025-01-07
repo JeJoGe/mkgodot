@@ -91,7 +91,7 @@ public partial class GamePlay : Node2D
 			PerformCardActions(_currentBasicActions, _currentSpecialActions, _currentCard, _currentCardControl);
 			_resolvingAction = false;
 		}
-		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0])))
+		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0]), true)) // TODO
 		{
 			// no mana available to complete action TODO: return already spent mana
 			_resolvingAction = false;
