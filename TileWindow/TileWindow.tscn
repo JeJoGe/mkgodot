@@ -96,6 +96,6 @@ offset_bottom = 1062.0
 text = "Close"
 
 [node name="TokenSprite" type="Sprite2D" parent="TileWindowControl"]
-position = Vector2(250, 210)
+position = Vector2(350, 250)
 
 [connection signal="pressed" from="TileWindowControl/Button" to="TileWindowControl" method="on_button_pressed"]

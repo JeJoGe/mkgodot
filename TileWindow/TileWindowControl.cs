@@ -10,7 +10,7 @@ public partial class TileWindowControl : NinePatchRect
 	{
 		TWindow = GetNode<TileWindow>("..");
 		GetNode<Label>("TerrainText").Text = TWindow.Terrain;
-		GetNode<Label>("ActionsText").Text = TWindow.TileEvent;
+		GetNode<Label>("ActionsText").Text = (TWindow.Token.Colour == "yellow" ? "Enter Ruin" : TWindow.TileEvent);
 		Sprite2D tokenSprite = GetNode<Sprite2D>("TokenSprite");
 		tokenSprite.Texture = createTokenSprite(TWindow.Token);
 		var x = 1;
@@ -18,9 +18,10 @@ public partial class TileWindowControl : NinePatchRect
 		foreach (var monster in TWindow.MonsterGroup)
 		{
 			var monsterSprite = new Sprite2D();
-			monsterSprite.Position = new Vector2(550*x, y);
+			monsterSprite.Position = new Vector2(425 + 200*x, y + 100);
 			monsterSprite.Texture = createTokenSprite(monster);
 			AddChild(monsterSprite);
+			x = x + 1;
 		}
 	}
 
@@ -36,23 +37,23 @@ public partial class TileWindowControl : NinePatchRect
 
 	public AtlasTexture createTokenSprite(MapToken mapToken)
 	{
-		var atlas = (AtlasTexture)Utils.SpriteSheets[TWindow.Token.Colour].Duplicate();
+		var atlas = (AtlasTexture)Utils.SpriteSheets[mapToken.Colour].Duplicate();
 		int X;
 		int Y;
-		if(TWindow.Token.TokenId == -1)
+		if(mapToken.TokenId == -1 || mapToken.Facedown == true)
 		{
 			X = 0;
 			Y = 0;
 		}
-		else if (TWindow.Token.Colour != "yellow")
+		else if (mapToken.Colour != "yellow")
 		{
-			var stats = Utils.Bestiary[TWindow.Token.TokenId];
+			var stats = Utils.Bestiary[mapToken.TokenId];
 			X = stats.X;
 			Y = stats.Y;
 		}
 		else
 		{
-			var stats = Utils.RuinEvents[TWindow.Token.TokenId];
+			var stats = Utils.RuinEvents[mapToken.TokenId];
 			X = stats.X;
 			Y = stats.Y;
 		}
