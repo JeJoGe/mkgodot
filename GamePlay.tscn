@@ -1070,7 +1070,7 @@ player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
 inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
 
-[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
+[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("playerArea", "mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
 layout_mode = 3
 anchors_preset = 15
@@ -1082,6 +1082,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("2_7jlcl")
+playerArea = NodePath("PlayerUI/PlayerArea")
 mapGen = NodePath("MapGen")
 player = NodePath("Player")
 gamePlay = NodePath("..")

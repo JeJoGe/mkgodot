@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 public partial class GameplayControl : Control
 {
 	[Export]
+	private PlayerArea playerArea;
+	[Export]
 	private MapGen mapGen;
 	[Export]
 	private Player player;
@@ -554,7 +556,11 @@ public partial class GameplayControl : Control
 						}
 						else if (ruinData.Event == "mana")
 						{
-
+							foreach (var manaRequirement in ruinData.Requirements)
+							{
+								GD.Print("Mana req is: " + manaRequirement);
+								playerArea.PayMana(((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement)));
+							}
 						}
 						else						
 						{
