@@ -558,8 +558,7 @@ public partial class GameplayControl : Control
 						{
 							foreach (var manaRequirement in ruinData.Requirements)
 							{
-								GD.Print("Mana req is: " + manaRequirement);
-								playerArea.PayMana(((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement)));
+								playerArea.PayMana((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement), false);
 							}
 						}
 						else						

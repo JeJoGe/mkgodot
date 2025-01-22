@@ -213,10 +213,11 @@ public partial class Source : Node2D
 	{
 		if (_dice[colour] > 0)
 		{
-			Utils.undoRedo.CreateAction("Take Die");
+			_dice[colour]--;
+			/*Utils.undoRedo.CreateAction("Take Die");
 			Utils.undoRedo.AddDoProperty(this, "_dice[colour]", _dice[colour]--);
 			Utils.undoRedo.AddUndoProperty(this, "_dice[colour]", _dice[colour]++);
-			Utils.undoRedo.CommitAction();
+			Utils.undoRedo.CommitAction();*/
 			switch (colour)
 			{
 				case Colour.Blue:
