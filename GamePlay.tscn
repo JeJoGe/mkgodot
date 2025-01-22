@@ -1440,6 +1440,7 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea" method="OnNewRoundButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="NewRound"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="." method="OnEndTurn"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="EndTurn"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea" method="OnEndTurn"]
