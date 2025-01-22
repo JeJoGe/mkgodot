@@ -48,7 +48,7 @@ text = "Terrain:"
 layout_mode = 0
 offset_left = 250.0
 offset_top = 50.0
-offset_right = 440.0
+offset_right = 500.0
 offset_bottom = 119.0
 theme_override_font_sizes/font_size = 50
 
@@ -70,6 +70,14 @@ offset_bottom = 499.0
 theme_override_font_sizes/font_size = 50
 text = "Actions:"
 
+[node name="ActionsText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 430.0
+offset_right = 860.0
+offset_bottom = 499.0
+theme_override_font_sizes/font_size = 50
+
 [node name="AdditionalTokensLabelText" type="Label" parent="TileWindowControl"]
 layout_mode = 0
 offset_left = 50.0
@@ -86,5 +94,8 @@ offset_top = 1000.0
 offset_right = 1010.0
 offset_bottom = 1062.0
 text = "Close"
+
+[node name="TokenSprite" type="Sprite2D" parent="TileWindowControl"]
+position = Vector2(350, 250)
 
 [connection signal="pressed" from="TileWindowControl/Button" to="TileWindowControl" method="on_button_pressed"]
