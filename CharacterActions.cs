@@ -1,16 +1,20 @@
-public enum BasicCardActions {
-    move, heal, draw, block, discard, ready, influence, attack, gainManaTokens, useAdditionalDice, gainCrystals
+public enum BasicCardActions
+{
+    move, heal, draw, block, discard, ready, influence, attack, gainManaTokens, useAdditionalDice, gainCrystals, payMana
 }
 
-public enum AttackType {
+public enum AttackType
+{
     ranged, siege, melee
 }
 
-public enum AttackBlockElement {
+public enum AttackBlockElement
+{
     ice, fire, coldFire, physical
 }
 
-public enum SpecialCardActions {
+public enum SpecialCardActions
+{
     // next card played gets +# if move, influence, block or any type of attack
     enhanceBottom,
     gainManaTokens,
@@ -27,7 +31,8 @@ public enum SpecialCardActions {
     discount
 }
 
-public enum CharacterPhases {
+public enum CharacterPhases
+{
     movement,
     interaction,
     combat,

@@ -1061,7 +1061,7 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea")]
 z_index = -1
 script = ExtResource("1_m0gf8")
 mapGen = NodePath("GameplayControl/MapGen")
@@ -1069,6 +1069,7 @@ deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
 player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
 inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
+_playerArea = NodePath("GameplayControl/PlayerUI/PlayerArea")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("playerArea", "mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
@@ -1428,6 +1429,7 @@ patch_margin_bottom = 30
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
+[connection signal="ManaPaid" from="GameplayControl/PlayerUI/PlayerArea" to="." method="OnManaPaid"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]

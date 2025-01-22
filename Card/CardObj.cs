@@ -10,10 +10,11 @@ public enum CardObjOption
 public partial class CardObj : Sprite2D
 {
     [Signal]
-    public delegate void CardPlayedEventHandler(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction);
+    public delegate void CardPlayedEventHandler(Godot.Collections.Array<string> basicAction, Godot.Collections.Array<string> specialAction,
+    Godot.Collections.Array<string> manaCosts);
     public int id { get; set; }
     public string cardId { get; set; }
-    public string color { get; set; }
+    public string colour { get; set; }
     public int xCoord { get; set; }
     public int yCoord { get; set; }
     public int copies { get; set; }
@@ -27,10 +28,10 @@ public partial class CardObj : Sprite2D
     public CardObjOption currentOption { get; set; } = CardObjOption.top;
     public bool topOptionExists = true;
     public bool bottomOptionExists = true;
-    private Dictionary<int, Godot.Collections.Array<string>> topSpecialOptionsActions = new Dictionary<int, Godot.Collections.Array<string>>();
-    private Dictionary<int, Godot.Collections.Array<string>> bottomSpecialOptionsActions = new Dictionary<int, Godot.Collections.Array<string>>();
-    public Dictionary<int, Godot.Collections.Array<string>> topOptionActions = new Dictionary<int, Godot.Collections.Array<string>>();
-    public Dictionary<int, Godot.Collections.Array<string>> bottomOptionActions = new Dictionary<int, Godot.Collections.Array<string>>();
+    private Dictionary<int, string> topSpecialOptionsActions = new Dictionary<int, string>();
+    private Dictionary<int, string> bottomSpecialOptionsActions = new Dictionary<int, string>();
+    public Dictionary<int, string> topOptionActions = new Dictionary<int, string>();
+    public Dictionary<int, string> bottomOptionActions = new Dictionary<int, string>();
     public override void _Ready()
     {
         this.Position = new Godot.Vector2(500, 700);
@@ -59,7 +60,6 @@ public partial class CardObj : Sprite2D
     /* Card Parsing Rules:
     * Actions:
     * 1. If there are more than one action to choose on card, separate by comma (,)
-    * 2. Options to choose within one action (gainManaTokens), separated by forward slash (/)
     * 3. If there is one multiple actions that all happen on card, separated by (&)
     * 4, Special Actions are denoted by (*)
     * Quantity of Actions:
@@ -74,37 +74,28 @@ public partial class CardObj : Sprite2D
             {
                 if (position == CardObjOption.top)
                 {
+                    if (function[i].Contains("*"))
+                    {
+                        topSpecialOptionsActions.Add(i, function[i]);
+                    }
+                    else
+                    {
+                        topOptionActions.Add(i, function[i]);
+
+                    }
                     topOptionsButton.AddItem(function[i], i);
                 }
                 else
                 {
-                    bottomOptionsButton.AddItem(function[i], i);
-                }
-                string[] otherAction = function[i].Split("&");
-                for (int x = 0; x < otherAction.Count(); ++x)
-                {
-                    if (position == CardObjOption.top)
+                    if (function[i].Contains("*"))
                     {
-                        if (otherAction[x].Contains("*"))
-                        {
-                            ActionAdd(topSpecialOptionsActions, i, otherAction[x]);
-                        }
-                        else
-                        {
-                            ActionAdd(topOptionActions, i, otherAction[x]);
-                        }
+                        bottomSpecialOptionsActions.Add(i, function[i]);
                     }
                     else
                     {
-                        if (otherAction[x].Contains("*"))
-                        {
-                            ActionAdd(bottomSpecialOptionsActions, i, otherAction[x]);
-                        }
-                        else
-                        {
-                            ActionAdd(bottomOptionActions, i, otherAction[x]);
-                        }
+                        bottomOptionActions.Add(i, function[i]);
                     }
+                    bottomOptionsButton.AddItem(function[i], i);
                 }
             }
         }
@@ -115,11 +106,11 @@ public partial class CardObj : Sprite2D
                 topOptionExists = false;
                 if (function[0].Contains("*"))
                 {
-                    ActionAdd(topSpecialOptionsActions, 0, function[0]);
+                    topSpecialOptionsActions.Add(0, function[0]);
                 }
                 else
                 {
-                    NewActionAdd(topOptionActions, 0, function[0]);
+                    topOptionActions.Add(0, function[0]);
                 }
             }
             else
@@ -127,45 +118,26 @@ public partial class CardObj : Sprite2D
                 bottomOptionExists = false;
                 if (function[0].Contains("*"))
                 {
-                    ActionAdd(bottomSpecialOptionsActions, 0, function[0]);
+                    bottomSpecialOptionsActions.Add(0, function[0]);
                 }
                 else
                 {
-                    NewActionAdd(bottomOptionActions, 0, function[0]);
+                    bottomOptionActions.Add(0, function[0]);
                 }
             }
         }
     }
 
-    public void NewActionAdd(Dictionary<int, Godot.Collections.Array<string>> actionList, int index, string action)
+    // Parses each string that contains & and splits them to individual actions.
+    public Godot.Collections.Array<string> parseAction(string action)
     {
-        Godot.Collections.Array<string> currList = new Godot.Collections.Array<string>() {
-                action
-            };
-        actionList.Add(index, currList);
-    }
-
-    public void ActionAdd(Dictionary<int, Godot.Collections.Array<string>> actionList, int index, string action)
-    {
-        bool doesIndexExist = actionList.ContainsKey(index);
-        if (doesIndexExist)
+        Godot.Collections.Array<string> actionList = new Godot.Collections.Array<string>();
+        string[] actions = action.Split('&');
+        foreach (string actualAction in actions)
         {
-            actionList[index].Add(action);
+            actionList.Add(actualAction);
         }
-        else
-        {
-            NewActionAdd(actionList, index, action);
-        }
-    }
-
-    public Godot.Collections.Array<string> getSpecificAction(Dictionary<int, Godot.Collections.Array<string>> actionList, int index)
-    {
-        bool doesIndexExist = actionList.ContainsKey(index);
-        if (doesIndexExist)
-        {
-            return actionList[index];
-        }
-        else return null;
+        return actionList;
     }
 
     virtual public void onPlayButtonPressed()
@@ -173,6 +145,7 @@ public partial class CardObj : Sprite2D
         int selectedId = 0;
         Godot.Collections.Array<string> basicAction = [];
         Godot.Collections.Array<string> specialAction = [];
+        Godot.Collections.Array<string> manaCosts = [];
         if (currentOption == CardObjOption.top)
         {
             selectedId = topOptionsButton.GetSelectedId();
@@ -181,8 +154,16 @@ public partial class CardObj : Sprite2D
             {
                 selectedId = 0;
             }
-            basicAction = getSpecificAction(topOptionActions, selectedId);
-            specialAction = getSpecificAction(topSpecialOptionsActions, selectedId);
+
+            if (topOptionActions.ContainsKey(selectedId))
+            {
+                basicAction = parseAction(topOptionActions[selectedId]);
+            }
+            if (topSpecialOptionsActions.ContainsKey(selectedId))
+            {
+                specialAction = parseAction(topSpecialOptionsActions[selectedId]);
+
+            }
 
         }
         else
@@ -192,11 +173,23 @@ public partial class CardObj : Sprite2D
             {
                 selectedId = 0;
             }
-            basicAction = getSpecificAction(bottomOptionActions, selectedId);
-            specialAction = getSpecificAction(bottomSpecialOptionsActions, selectedId);
 
+            if (bottomOptionActions.ContainsKey(selectedId))
+            {
+                basicAction = parseAction(bottomOptionActions[selectedId]);
+            }
+
+            if (bottomSpecialOptionsActions.ContainsKey(selectedId))
+            {
+                specialAction = parseAction(bottomSpecialOptionsActions[selectedId]);
+
+            }
+
+
+            // determine mana cost of played options NAIVE IMPLEMENTATION
+            manaCosts.Add(colour);
         }
-        EmitSignal(SignalName.CardPlayed, basicAction, specialAction);
+        EmitSignal(SignalName.CardPlayed, basicAction, specialAction, manaCosts);
     }
 
     public void toggleActionPressed()

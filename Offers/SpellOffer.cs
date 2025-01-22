@@ -46,7 +46,7 @@ public partial class SpellOffer : Node2D
 		{
 			// move first card to bottom of deck
 			var currNode = _offer.First;
-			var colour = Utils.ConvertStringToSourceColour(Utils.SpellBook[currNode.Value].color);
+			var colour = Utils.ConvertStringToSourceColour(Utils.SpellBook[currNode.Value].colour);
 			_offer.RemoveFirst();
 			_offer.AddLast(currNode);
 			RefreshOffer();
