@@ -8,12 +8,22 @@
 [ext_resource type="Texture2D" uid="uid://diy081yegwmp3" path="res://assets/goldmana.png" id="6_enxnv"]
 [ext_resource type="Texture2D" uid="uid://cbh5wxp2pxap1" path="res://assets/blackmana.png" id="7_03d11"]
 
-[node name="Inventory" type="Node2D" node_paths=PackedStringArray("_blueCrystalLabel", "_redCrystalLabel", "_greenCrystalLabel", "_whiteCrystalLabel", "_blueManaLabel", "_redManaLabel", "_greenManaLabel", "_whiteManaLabel", "_goldManaLabel", "_blackManaLabel")]
+[node name="Inventory" type="Node2D" node_paths=PackedStringArray("_blueCrystalLabel", "_redCrystalLabel", "_greenCrystalLabel", "_whiteCrystalLabel", "_blueCrystal", "_redCrystal", "_greenCrystal", "_whiteCrystal", "_blueMana", "_redMana", "_greenMana", "_whiteMana", "_goldMana", "_blackMana", "_blueManaLabel", "_redManaLabel", "_greenManaLabel", "_whiteManaLabel", "_goldManaLabel", "_blackManaLabel")]
 script = ExtResource("1_hlfkb")
 _blueCrystalLabel = NodePath("Label")
 _redCrystalLabel = NodePath("Label2")
 _greenCrystalLabel = NodePath("Label3")
 _whiteCrystalLabel = NodePath("Label4")
+_blueCrystal = NodePath("Polygon2D2")
+_redCrystal = NodePath("Polygon2D3")
+_greenCrystal = NodePath("Polygon2D4")
+_whiteCrystal = NodePath("Polygon2D5")
+_blueMana = NodePath("Sprite2D")
+_redMana = NodePath("Sprite2D4")
+_greenMana = NodePath("Sprite2D3")
+_whiteMana = NodePath("Sprite2D5")
+_goldMana = NodePath("Sprite2D2")
+_blackMana = NodePath("Sprite2D6")
 _blueManaLabel = NodePath("Label5")
 _redManaLabel = NodePath("Label6")
 _greenManaLabel = NodePath("Label7")
@@ -45,31 +55,37 @@ scale = Vector2(0.4, 0.4)
 polygon = PackedVector2Array(128, -104, 128, -80, 136, -64, 128, -56, 232, -56, 224, -64, 232, -96, 224, -128, 208, -120, 200, -136, 168, -152, 144, -128, 152, -96)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(72, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_nauwr")
 
 [node name="Sprite2D4" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(128, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_2r60u")
 
 [node name="Sprite2D3" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(184, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_bur5q")
 
 [node name="Sprite2D5" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(245, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("5_pjxpy")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(304, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("6_enxnv")
 
 [node name="Sprite2D6" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(360, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("7_03d11")
@@ -107,6 +123,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label5" type="Label" parent="."]
+visible = false
 offset_left = 51.0
 offset_top = 168.0
 offset_right = 91.0
@@ -115,6 +132,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label6" type="Label" parent="."]
+visible = false
 offset_left = 107.0
 offset_top = 168.0
 offset_right = 147.0
@@ -123,6 +141,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label7" type="Label" parent="."]
+visible = false
 offset_left = 163.0
 offset_top = 168.0
 offset_right = 203.0
@@ -131,6 +150,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label8" type="Label" parent="."]
+visible = false
 offset_left = 227.0
 offset_top = 168.0
 offset_right = 267.0
@@ -139,6 +159,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label9" type="Label" parent="."]
+visible = false
 offset_left = 283.0
 offset_top = 168.0
 offset_right = 323.0
@@ -147,6 +168,7 @@ text = "3"
 horizontal_alignment = 1
 
 [node name="Label10" type="Label" parent="."]
+visible = false
 offset_left = 339.0
 offset_top = 168.0
 offset_right = 379.0
