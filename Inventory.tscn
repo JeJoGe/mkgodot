@@ -8,8 +8,18 @@
 [ext_resource type="Texture2D" uid="uid://diy081yegwmp3" path="res://assets/goldmana.png" id="6_enxnv"]
 [ext_resource type="Texture2D" uid="uid://cbh5wxp2pxap1" path="res://assets/blackmana.png" id="7_03d11"]
 
-[node name="Inventory" type="Node2D"]
+[node name="Inventory" type="Node2D" node_paths=PackedStringArray("_blueCrystalLabel", "_redCrystalLabel", "_greenCrystalLabel", "_whiteCrystalLabel", "_blueManaLabel", "_redManaLabel", "_greenManaLabel", "_whiteManaLabel", "_goldManaLabel", "_blackManaLabel")]
 script = ExtResource("1_hlfkb")
+_blueCrystalLabel = NodePath("Label")
+_redCrystalLabel = NodePath("Label2")
+_greenCrystalLabel = NodePath("Label3")
+_whiteCrystalLabel = NodePath("Label4")
+_blueManaLabel = NodePath("Label5")
+_redManaLabel = NodePath("Label6")
+_greenManaLabel = NodePath("Label7")
+_whiteManaLabel = NodePath("Label8")
+_goldManaLabel = NodePath("Label9")
+_blackManaLabel = NodePath("Label10")
 
 [node name="Polygon2D2" type="Polygon2D" parent="."]
 position = Vector2(0, 120)
@@ -63,3 +73,83 @@ texture = ExtResource("6_enxnv")
 position = Vector2(360, 144)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("7_03d11")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 51.0
+offset_top = 96.0
+offset_right = 91.0
+offset_bottom = 119.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 104.0
+offset_top = 96.0
+offset_right = 144.0
+offset_bottom = 119.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 153.0
+offset_top = 96.0
+offset_right = 193.0
+offset_bottom = 119.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="."]
+offset_left = 203.0
+offset_top = 96.0
+offset_right = 243.0
+offset_bottom = 119.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="."]
+offset_left = 51.0
+offset_top = 168.0
+offset_right = 91.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="."]
+offset_left = 107.0
+offset_top = 168.0
+offset_right = 147.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="."]
+offset_left = 163.0
+offset_top = 168.0
+offset_right = 203.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="."]
+offset_left = 227.0
+offset_top = 168.0
+offset_right = 267.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label9" type="Label" parent="."]
+offset_left = 283.0
+offset_top = 168.0
+offset_right = 323.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
+
+[node name="Label10" type="Label" parent="."]
+offset_left = 339.0
+offset_top = 168.0
+offset_right = 379.0
+offset_bottom = 191.0
+text = "3"
+horizontal_alignment = 1
