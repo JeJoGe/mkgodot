@@ -24,6 +24,14 @@ public partial class Inventory : Node2D
 		{Source.Colour.Gold,0},
 		{Source.Colour.Black,0}
 	};
+	[Export]
+	private Label _blueCrystalLabel, _redCrystalLabel, _greenCrystalLabel, _whiteCrystalLabel;
+	[Export]
+	private Polygon2D _blueCrystal, _redCrystal, _greenCrystal, _whiteCrystal;
+	[Export]
+	private Sprite2D _blueMana, _redMana, _greenMana, _whiteMana, _goldMana, _blackMana;
+	[Export]
+	private Label _blueManaLabel, _redManaLabel, _greenManaLabel, _whiteManaLabel, _goldManaLabel, _blackManaLabel;
 	private List<ManaDie> _usedDiceScenes = new List<ManaDie>();
 	private ManaDie _manaStolenDieScene;
 	private PackedScene _dieScene = GD.Load<PackedScene>("res://ManaDie.tscn");
@@ -63,6 +71,7 @@ public partial class Inventory : Node2D
 			_crystals[crystalColour] = _crystals[crystalColour] + 1;
 			GD.Print(string.Format("{0} token added", crystalColour.ToString()));
 			GD.Print(string.Format("{0} {1} tokens currently", _crystals[crystalColour], crystalColour.ToString()));
+			UpdateCrystal(crystalColour);
 		}
 		return result;
 	}
@@ -80,8 +89,99 @@ public partial class Inventory : Node2D
 		{
 			result = true;
 			_crystals[colour] = _crystals[colour] - 1;
+			UpdateCrystal(colour);
 		}
 		return result;
+	}
+
+	private void UpdateCrystal(Source.Colour colour)
+	{
+		var newString = _crystals[colour].ToString();
+		var visible = _crystals[colour] > 0;
+		switch (colour)
+		{
+			case Source.Colour.Blue:
+				{
+					_blueCrystalLabel.Text = newString;
+					_blueCrystalLabel.Visible = visible;
+					_blueCrystal.Visible = visible;
+					break;
+				}
+			case Source.Colour.Red:
+				{
+					_redCrystalLabel.Text = newString;
+					_redCrystalLabel.Visible = visible;
+					_redCrystal.Visible = visible;
+					break;
+				}
+			case Source.Colour.Green:
+				{
+					_greenCrystalLabel.Text = newString;
+					_greenCrystalLabel.Visible = visible;
+					_greenCrystal.Visible = visible;
+					break;
+				}
+			case Source.Colour.White:
+				{
+					_whiteCrystalLabel.Text = newString;
+					_whiteCrystalLabel.Visible = visible;
+					_whiteCrystal.Visible = visible;
+					break;
+				}
+			default: break;
+		}
+	}
+
+	private void UpdateToken(Source.Colour colour)
+	{
+		var newString = _tokens[colour].ToString();
+		var visible = _tokens[colour] > 0;
+		switch (colour) 
+		{
+			case Source.Colour.Blue:
+				{
+					_blueManaLabel.Text = newString;
+					_blueManaLabel.Visible = visible;
+					_blueMana.Visible = visible;
+					break;
+				}
+			case Source.Colour.Red:
+				{
+					_redManaLabel.Text = newString;
+					_redManaLabel.Visible = visible;
+					_redMana.Visible = visible;
+					break;
+				}
+			case Source.Colour.Green:
+				{
+					_greenManaLabel.Text = newString;
+					_greenManaLabel.Visible = visible;
+					_greenMana.Visible = visible;
+					break;
+				}
+			case Source.Colour.White:
+				{
+					_whiteManaLabel.Text = newString;
+					_whiteManaLabel.Visible = visible;
+					_whiteMana.Visible = visible;
+					break;
+				}
+			case Source.Colour.Gold:
+				{
+					_goldManaLabel.Text = newString;
+					_goldManaLabel.Visible = visible;
+					_goldMana.Visible = visible;
+					break;
+				}
+			case Source.Colour.Black:
+				{
+					_blackManaLabel.Text = newString;
+					_blackManaLabel.Visible = visible;
+					_blackMana.Visible = visible;
+					break;
+				}
+			default: break;
+		}
 	}
 
 	public bool AddToken(int colour)
@@ -94,6 +194,7 @@ public partial class Inventory : Node2D
 			_tokens[tokenColour] = _tokens[tokenColour] + 1;
 			GD.Print(string.Format("{0} token added", tokenColour.ToString()));
 			GD.Print(string.Format("{0} {1} tokens currently", _tokens[tokenColour], tokenColour.ToString()));
+			UpdateToken(tokenColour);
 		}
 		return result;
 	}
@@ -111,6 +212,7 @@ public partial class Inventory : Node2D
 		{
 			result = true;
 			_tokens[colour] = _tokens[colour] - 1;
+			UpdateToken(colour);
 		}
 		return result;
 	}
