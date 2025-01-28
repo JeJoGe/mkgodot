@@ -68,6 +68,7 @@ public partial class Combat : Node2D
 	private Godot.Collections.Array<MonsterAttack> _reducedAttacks = []; // list of monster attacks reduced by current action
 	private int _maxAttacksReduce; // max number of monster attacks that can be reduced for current action
 	private int _reduceAttackAmount; // amount by which attack is to be reduced for current action
+	private int _reduceArmourAmount; // amount by which enemy armour is to be reduced for current action
 	private MonsterAttack _targetAttack;
 	public MonsterAttack TargetAttack
 	{
@@ -722,9 +723,25 @@ public partial class Combat : Node2D
 			case Phase.Attack:
 				{
 					_undoRedo.CreateAction("defeat enemies");
-					DefeatEnemies();
-					_confirmButton.Disabled = true;
-					ResetAttacks();
+					if (ResolvingAction)
+					{
+						// reduce armour of selected monster\
+						// reduce armour of all monsters without arcane immunity
+						for (int i = 0; i < _enemyList.Count; i++)
+						{
+							var enemy = _enemyList[i];
+							if (!enemy.Abilities.Contains("immunity"))
+							{
+								enemy.Armour -= _reduceArmourAmount;
+							}
+						}
+					}
+					else
+					{ 
+						DefeatEnemies();
+						_confirmButton.Disabled = true;
+						ResetAttacks();
+					}
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					// exit combat if all enemies defeated

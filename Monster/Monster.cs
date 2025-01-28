@@ -50,7 +50,15 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Summoned { get; set; } = false;
-	public int Armour { get; set; }
+	private int _armour;
+	public int Armour
+	{
+		get => _armour;
+		set
+		{
+			_armour = value < 1 ? 1 : value; // armour can not be less than 1
+		}
+	}
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; } = new List<MonsterAttack>();
 	public List<string> Abilities { get; set; }
