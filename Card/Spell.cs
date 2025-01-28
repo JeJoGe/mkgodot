@@ -12,7 +12,19 @@ public partial class Spell : CardObj
 
     public new void onPlayButtonPressed()
     {
-        throw new NotImplementedException();
+        Godot.Collections.Array<string> basicAction = [];
+        Godot.Collections.Array<string> specialAction = [];
+        Godot.Collections.Array<string> manaCosts = [];
+        if (currentOption == CardObjOption.top)
+        {
+            manaCosts.Add(colour);
+        }
+        else
+        {
+            manaCosts.Add(colour);
+            manaCosts.Add("black");
+        }
+        EmitSignal(SignalName.CardPlayed, basicAction, specialAction, manaCosts);
     }
 
     public new void ImageCropping()

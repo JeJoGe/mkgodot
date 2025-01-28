@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 public partial class GameplayControl : Control
 {
 	[Export]
+	private PlayerArea playerArea;
+	[Export]
 	private MapGen mapGen;
 	[Export]
 	private Player player;
@@ -137,6 +139,10 @@ public partial class GameplayControl : Control
 			if(mapGen.MapData.ContainsKey(mapMousePosition))
 			{
 				var TileWindowStart = (TileWindow)TileWindowScene.Instantiate();
+				TileWindowStart.CellTerrain = mapGen.MapData[mapMousePosition].CellTerrain;
+    			TileWindowStart.Token = mapGen.MapData[mapMousePosition].Token;
+    			TileWindowStart.TileEvent = mapGen.MapData[mapMousePosition].TileEvent;
+    			TileWindowStart.MonsterGroup = mapGen.MapData[mapMousePosition].MonsterGroup;
 				AddChild(TileWindowStart);
 			}
 		}
@@ -550,7 +556,10 @@ public partial class GameplayControl : Control
 						}
 						else if (ruinData.Event == "mana")
 						{
-
+							foreach (var manaRequirement in ruinData.Requirements)
+							{
+								playerArea.PayMana((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement), false);
+							}
 						}
 						else						
 						{

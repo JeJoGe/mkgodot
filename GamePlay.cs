@@ -345,6 +345,11 @@ public partial class GamePlay : Node2D
 		deck.OnDeckButtonPressed(player.cardDrawLimit);
 	}
 
+	private void OnEndTurn()
+	{
+		deck.OnDeckButtonPressed(player.cardDrawLimit - deck.CurrentHand.Count);
+	}
+
 	public void onResolveTactic(string TacticChosen)
 	{
 		switch (TacticChosen)
