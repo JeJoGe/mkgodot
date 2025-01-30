@@ -299,6 +299,26 @@ offset_bottom = 263.0
 button_group = ExtResource("3_de76w")
 text = "Reduce 2 Attacks"
 
+[node name="ReduceArmorButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 312.0
+offset_right = 1060.0
+offset_bottom = 343.0
+button_group = ExtResource("3_de76w")
+text = "Reduce Armor by 2"
+
+[node name="ReduceAllArmorButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 352.0
+offset_right = 1060.0
+offset_bottom = 383.0
+button_group = ExtResource("3_de76w")
+text = "Reduce All Armor"
+
 [node name="MovementButton" type="Button" parent="NinePatchRect"]
 visible = false
 layout_mode = 0

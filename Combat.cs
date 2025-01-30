@@ -69,6 +69,7 @@ public partial class Combat : Node2D
 	private int _maxAttacksReduce; // max number of monster attacks that can be reduced for current action
 	private int _reduceAttackAmount; // amount by which attack is to be reduced for current action
 	private int _reduceArmourAmount; // amount by which enemy armour is to be reduced for current action
+	private bool _reduceAllArmour; // reduce armour of all possible enemies
 	private MonsterAttack _targetAttack;
 	public MonsterAttack TargetAttack
 	{
@@ -937,6 +938,27 @@ public partial class Combat : Node2D
 			_reducedAttacks.Clear();
 			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.CommitAction();
+			_undoButton.Disabled = false;
+		}
+		else
+		{
+			_errorLabel.Text = "[color=red]ERROR: Resolve current action first[/color]";
+			_errorLabel.Visible = true;
+		}
+		return result;
+	}
+
+	public bool ReduceArmour(int armourReduced, bool singleTarget)
+	{
+		var result = false;
+		if (!ResolvingAction)
+		{
+			_undoRedo.CreateAction("reduce armour");
+			GD.Print("reduce armour");
+			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+			_resolvingAction = result = true;
+			_reduceArmourAmount = armourReduced;
 			_undoRedo.CommitAction();
 			_undoButton.Disabled = false;
 		}
