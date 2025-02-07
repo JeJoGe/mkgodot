@@ -137,12 +137,14 @@ public partial class ManaPopup : VSplitContainer
 		}
 		// consume selected option
 		playerArea.ConsumeMana(_selectedOption.Item1,_selectedOption.Item2);
+		GetTree().Paused = false;
 		_window.QueueFree();
 	}
 
 	private void OnCancelButtonPressed()
 	{
 		GD.Print("cancel pressed");
+		GetTree().Paused = false;
 		_window.QueueFree();
 	}
 

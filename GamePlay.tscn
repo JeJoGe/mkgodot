@@ -1183,6 +1183,7 @@ _confirmDialog = NodePath("../../ConfirmationDialog")
 _deck = NodePath("../../PlayerArea/Deck")
 
 [node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
+process_mode = 1
 script = ExtResource("2_khnnw")
 _source = NodePath("../SharedArea/Source")
 _inventory = NodePath("Inventory")

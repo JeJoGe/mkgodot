@@ -559,6 +559,7 @@ public partial class GameplayControl : Control
 							foreach (var manaRequirement in ruinData.Requirements)
 							{
 								playerArea.PayMana((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement), false);
+								GetTree().Paused = true;
 							}
 						}
 						else						
