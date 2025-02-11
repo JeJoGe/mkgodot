@@ -62,12 +62,16 @@ public partial class Combat : Node2D
 	private int _maxHandSize = 5;
 	private bool _resolvingAction = false;
 	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
+	private Source.Colour _actionColour = Source.Colour.Gold;
+	public Source.Colour ActionColour { get => _actionColour; } // colour of current effect
 	private int _enemiesNotAttacking;
 	public int EnemiesNotAttacking { get => _enemiesNotAttacking; } // number of enemies to be prevented from attacking, 0 -> cancel single attack
 	public bool PreventOnlyUnfortified { get; set; } // only cancel attacks from unfortified enemy
 	private Godot.Collections.Array<MonsterAttack> _reducedAttacks = []; // list of monster attacks reduced by current action
 	private int _maxAttacksReduce; // max number of monster attacks that can be reduced for current action
 	private int _reduceAttackAmount; // amount by which attack is to be reduced for current action
+	private int _reduceArmourAmount; // amount by which enemy armour is to be reduced for current action
+	private bool _reduceAllArmour; // reduce armour of all possible enemies
 	private MonsterAttack _targetAttack;
 	public MonsterAttack TargetAttack
 	{
@@ -722,9 +726,26 @@ public partial class Combat : Node2D
 			case Phase.Attack:
 				{
 					_undoRedo.CreateAction("defeat enemies");
-					DefeatEnemies();
-					_confirmButton.Disabled = true;
-					ResetAttacks();
+					if (ResolvingAction)
+					{
+						// reduce armour of selected monster
+						for (int i = 0; i < _enemyList.Count; i++)
+						{
+							var enemy = _enemyList[i];
+							if (enemy.Selected)
+							{
+								_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
+								enemy.Armour -= _reduceArmourAmount;
+								DeselectMonsters();
+							}
+						}
+					}
+					else
+					{ 
+						DefeatEnemies();
+						_confirmButton.Disabled = true;
+						ResetAttacks();
+					}
 					_undoRedo.CommitAction();
 					_undoButton.Disabled = false;
 					// exit combat if all enemies defeated
@@ -920,6 +941,48 @@ public partial class Combat : Node2D
 			_reducedAttacks.Clear();
 			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.CommitAction();
+			_undoButton.Disabled = false;
+		}
+		else
+		{
+			_errorLabel.Text = "[color=red]ERROR: Resolve current action first[/color]";
+			_errorLabel.Visible = true;
+		}
+		return result;
+	}
+
+	public bool ReduceArmour(int armourReduced, bool singleTarget = true, int colour = 4)
+	{
+		var result = false;
+		if (!ResolvingAction)
+		{
+			_undoRedo.CreateAction("reduce armour");
+			GD.Print("reduce armour");
+			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+			result = true;
+			_reduceArmourAmount = armourReduced;
+			_actionColour = (Source.Colour)colour;
+			if (!singleTarget)
+			{
+				// reduce armour of all eligible enemies
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Abilities.Contains("immunity") &&
+					!(_actionColour == Source.Colour.Red && enemy.Resistances.Contains(Element.Fire)) &&
+					!(_actionColour == Source.Colour.Blue && enemy.Resistances.Contains(Element.Ice)))
+					{
+						_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
+						enemy.Armour -= armourReduced;
+						GD.Print(string.Format("MonsterID: {0} Armour: {1}", enemy.MonsterId, enemy.Armour));
+					}
+				}
+			}
+			else
+			{
+				_resolvingAction = true;
+			}
 			_undoRedo.CommitAction();
 			_undoButton.Disabled = false;
 		}

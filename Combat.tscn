@@ -299,6 +299,26 @@ offset_bottom = 263.0
 button_group = ExtResource("3_de76w")
 text = "Reduce 2 Attacks"
 
+[node name="ReduceArmorButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 312.0
+offset_right = 1060.0
+offset_bottom = 343.0
+button_group = ExtResource("3_de76w")
+text = "Reduce Armor by 2"
+
+[node name="ReduceAllArmorButton" type="Button" parent="NinePatchRect"]
+visible = false
+layout_mode = 0
+offset_left = 920.0
+offset_top = 352.0
+offset_right = 1060.0
+offset_bottom = 383.0
+button_group = ExtResource("3_de76w")
+text = "Reduce All Armor"
+
 [node name="MovementButton" type="Button" parent="NinePatchRect"]
 visible = false
 layout_mode = 0
@@ -380,5 +400,7 @@ text = "Undo"
 [connection signal="pressed" from="NinePatchRect/TargetEnemyButton" to="." method="PreventAttack" binds= [1, false]]
 [connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [4, 1]]
 [connection signal="pressed" from="NinePatchRect/Reduce2AttacksButton" to="." method="ReduceAttack" binds= [2, 2]]
+[connection signal="pressed" from="NinePatchRect/ReduceArmorButton" to="." method="ReduceArmour" binds= [2, true, 0]]
+[connection signal="pressed" from="NinePatchRect/ReduceAllArmorButton" to="." method="ReduceArmour" binds= [1, false, 1]]
 [connection signal="pressed" from="NinePatchRect/MovementButton" to="." method="AddMovement" binds= [1]]
 [connection signal="pressed" from="NinePatchRect/UndoButton" to="." method="OnUndoButtonPressed"]
