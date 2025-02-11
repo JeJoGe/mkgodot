@@ -951,7 +951,7 @@ public partial class Combat : Node2D
 		return result;
 	}
 
-	public bool ReduceArmour(int armourReduced, bool singleTarget = true, Source.Colour colour = Source.Colour.Gold)
+	public bool ReduceArmour(int armourReduced, bool singleTarget = true, int colour = 4)
 	{
 		var result = false;
 		if (!ResolvingAction)
@@ -959,21 +959,28 @@ public partial class Combat : Node2D
 			_undoRedo.CreateAction("reduce armour");
 			GD.Print("reduce armour");
 			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
-			_resolvingAction = result = true;
+			result = true;
 			_reduceArmourAmount = armourReduced;
-			_actionColour = colour;
+			_actionColour = (Source.Colour)colour;
 			if (!singleTarget)
 			{
 				// reduce armour of all eligible enemies
 				for (int i = 0; i < _enemyList.Count; i++)
 				{
 					var enemy = _enemyList[i];
-					if (!enemy.Abilities.Contains("immunity") && !(colour == Source.Colour.Red && enemy.Resistances.Contains(Element.Fire)) &&
-					!(colour == Source.Colour.Blue && enemy.Resistances.Contains(Element.Ice)))
+					if (!enemy.Abilities.Contains("immunity") &&
+					!(_actionColour == Source.Colour.Red && enemy.Resistances.Contains(Element.Fire)) &&
+					!(_actionColour == Source.Colour.Blue && enemy.Resistances.Contains(Element.Ice)))
 					{
+						_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
 						enemy.Armour -= armourReduced;
+						GD.Print(string.Format("MonsterID: {0} Armour: {1}", enemy.MonsterId, enemy.Armour));
 					}
 				}
+			}
+			else
+			{
+				_resolvingAction = true;
 			}
 			_undoRedo.CommitAction();
 			_undoButton.Disabled = false;

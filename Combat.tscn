@@ -400,5 +400,7 @@ text = "Undo"
 [connection signal="pressed" from="NinePatchRect/TargetEnemyButton" to="." method="PreventAttack" binds= [1, false]]
 [connection signal="pressed" from="NinePatchRect/ReduceAttackButton" to="." method="ReduceAttack" binds= [4, 1]]
 [connection signal="pressed" from="NinePatchRect/Reduce2AttacksButton" to="." method="ReduceAttack" binds= [2, 2]]
+[connection signal="pressed" from="NinePatchRect/ReduceArmorButton" to="." method="ReduceArmour" binds= [2, true, 0]]
+[connection signal="pressed" from="NinePatchRect/ReduceAllArmorButton" to="." method="ReduceArmour" binds= [1, false, 1]]
 [connection signal="pressed" from="NinePatchRect/MovementButton" to="." method="AddMovement" binds= [1]]
 [connection signal="pressed" from="NinePatchRect/UndoButton" to="." method="OnUndoButtonPressed"]
