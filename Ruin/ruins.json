@@ -68,7 +68,7 @@
         "x":0,
         "y":2,
         "event":"mana",
-		"requirements":["blue","blue","blue"],
+		"requirements":["Blue","Blue","Blue"],
 		"rewards":["7"]
     },
 	"3008":{
@@ -77,7 +77,7 @@
         "x":1,
         "y":2,
         "event":"mana",
-		"requirements":["red","red","red"],
+		"requirements":["Red","Red","Red"],
 		"rewards":["7"]
     },
 	"3009":{
@@ -86,7 +86,7 @@
         "x":2,
         "y":2,
         "event":"mana",
-		"requirements":["white","white","white"],
+		"requirements":["White","White","White"],
 		"rewards":["7"]
     },
 	"3010":{
@@ -104,7 +104,7 @@
         "x":0,
         "y":3,
         "event":"mana",
-		"requirements":["green","blue","white","red"],
+		"requirements":["Green","Blue","White","Red"],
 		"rewards":["10"]
     },
 	"3012":{
