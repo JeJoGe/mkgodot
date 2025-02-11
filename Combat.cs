@@ -728,14 +728,15 @@ public partial class Combat : Node2D
 					_undoRedo.CreateAction("defeat enemies");
 					if (ResolvingAction)
 					{
-						// reduce armour of selected monster\
-						// reduce armour of all monsters without arcane immunity
+						// reduce armour of selected monster
 						for (int i = 0; i < _enemyList.Count; i++)
 						{
 							var enemy = _enemyList[i];
-							if (!enemy.Abilities.Contains("immunity"))
+							if (enemy.Selected)
 							{
+								_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
 								enemy.Armour -= _reduceArmourAmount;
+								DeselectMonsters();
 							}
 						}
 					}
