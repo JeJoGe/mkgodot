@@ -62,6 +62,8 @@ public partial class Combat : Node2D
 	private int _maxHandSize = 5;
 	private bool _resolvingAction = false;
 	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
+	private Source.Colour _actionColour = Source.Colour.Gold;
+	public Source.Colour ActionColour { get => _actionColour; } // colour of current effect
 	private int _enemiesNotAttacking;
 	public int EnemiesNotAttacking { get => _enemiesNotAttacking; } // number of enemies to be prevented from attacking, 0 -> cancel single attack
 	public bool PreventOnlyUnfortified { get; set; } // only cancel attacks from unfortified enemy
@@ -949,7 +951,7 @@ public partial class Combat : Node2D
 		return result;
 	}
 
-	public bool ReduceArmour(int armourReduced, bool singleTarget)
+	public bool ReduceArmour(int armourReduced, bool singleTarget = true, Source.Colour colour = Source.Colour.Gold)
 	{
 		var result = false;
 		if (!ResolvingAction)
@@ -959,6 +961,20 @@ public partial class Combat : Node2D
 			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
 			_resolvingAction = result = true;
 			_reduceArmourAmount = armourReduced;
+			_actionColour = colour;
+			if (!singleTarget)
+			{
+				// reduce armour of all eligible enemies
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Abilities.Contains("immunity") && !(colour == Source.Colour.Red && enemy.Resistances.Contains(Element.Fire)) &&
+					!(colour == Source.Colour.Blue && enemy.Resistances.Contains(Element.Ice)))
+					{
+						enemy.Armour -= armourReduced;
+					}
+				}
+			}
 			_undoRedo.CommitAction();
 			_undoButton.Disabled = false;
 		}

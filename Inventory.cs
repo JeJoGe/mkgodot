@@ -96,36 +96,27 @@ public partial class Inventory : Node2D
 
 	private void UpdateCrystal(Source.Colour colour)
 	{
-		var newString = _crystals[colour].ToString();
-		var visible = _crystals[colour] > 0;
+		var newValue = _crystals[colour];
 		switch (colour)
 		{
 			case Source.Colour.Blue:
 				{
-					_blueCrystalLabel.Text = newString;
-					_blueCrystalLabel.Visible = visible;
-					_blueCrystal.Visible = visible;
+					UpdateGraphic(_blueCrystalLabel, _blueCrystal, newValue);
 					break;
 				}
 			case Source.Colour.Red:
 				{
-					_redCrystalLabel.Text = newString;
-					_redCrystalLabel.Visible = visible;
-					_redCrystal.Visible = visible;
+					UpdateGraphic(_redCrystalLabel, _redCrystal, newValue);
 					break;
 				}
 			case Source.Colour.Green:
 				{
-					_greenCrystalLabel.Text = newString;
-					_greenCrystalLabel.Visible = visible;
-					_greenCrystal.Visible = visible;
+					UpdateGraphic(_greenCrystalLabel, _greenCrystal, newValue);
 					break;
 				}
 			case Source.Colour.White:
 				{
-					_whiteCrystalLabel.Text = newString;
-					_whiteCrystalLabel.Visible = visible;
-					_whiteCrystal.Visible = visible;
+					UpdateGraphic(_whiteCrystalLabel, _whiteCrystal, newValue);
 					break;
 				}
 			default: break;
@@ -134,54 +125,49 @@ public partial class Inventory : Node2D
 
 	private void UpdateToken(Source.Colour colour)
 	{
-		var newString = _tokens[colour].ToString();
-		var visible = _tokens[colour] > 0;
+		var newValue = _tokens[colour];
 		switch (colour) 
 		{
 			case Source.Colour.Blue:
 				{
-					_blueManaLabel.Text = newString;
-					_blueManaLabel.Visible = visible;
-					_blueMana.Visible = visible;
+					UpdateGraphic(_blueManaLabel, _blueMana, newValue);
 					break;
 				}
 			case Source.Colour.Red:
 				{
-					_redManaLabel.Text = newString;
-					_redManaLabel.Visible = visible;
-					_redMana.Visible = visible;
+					UpdateGraphic(_redManaLabel, _redMana, newValue);
 					break;
 				}
 			case Source.Colour.Green:
 				{
-					_greenManaLabel.Text = newString;
-					_greenManaLabel.Visible = visible;
-					_greenMana.Visible = visible;
+					UpdateGraphic(_greenManaLabel, _greenMana, newValue);
 					break;
 				}
 			case Source.Colour.White:
 				{
-					_whiteManaLabel.Text = newString;
-					_whiteManaLabel.Visible = visible;
-					_whiteMana.Visible = visible;
+					UpdateGraphic(_whiteManaLabel, _whiteMana, newValue);
 					break;
 				}
 			case Source.Colour.Gold:
 				{
-					_goldManaLabel.Text = newString;
-					_goldManaLabel.Visible = visible;
-					_goldMana.Visible = visible;
+					UpdateGraphic(_goldManaLabel, _goldMana, newValue);
 					break;
 				}
 			case Source.Colour.Black:
 				{
-					_blackManaLabel.Text = newString;
-					_blackManaLabel.Visible = visible;
-					_blackMana.Visible = visible;
+					UpdateGraphic(_blackManaLabel, _blackMana, newValue);
 					break;
 				}
 			default: break;
 		}
+	}
+
+	private static void UpdateGraphic(Label label, Node2D sprite, int value)
+	{
+		var visible = value > 0;
+		label.Text = value.ToString();
+		label.Visible = visible;
+		sprite.Visible = visible;
 	}
 
 	public bool AddToken(int colour)
