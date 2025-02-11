@@ -24,6 +24,7 @@ public partial class GamePlay : Node2D
 	private Godot.Collections.Array<string> _currentBasicActions;
 	private Godot.Collections.Array<string> _currentSpecialActions;
 	private Godot.Collections.Array<string> _currentManaCosts;
+	private Godot.Collections.Array<string> _currentRewards;
 	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
 
 	// Called when the node enters the scene tree for the first time.
@@ -78,6 +79,13 @@ public partial class GamePlay : Node2D
 		}
 	}
 
+	public void OnManaRuinsInteract(Godot.Collections.Array<string> manaCosts, Godot.Collections.Array<string> rewards)
+	{
+		_currentManaCosts = manaCosts;
+		_currentRewards = rewards;
+		ResolveManaCosts();
+	}
+
 	private void OnManaPaid()
 	{
 		_currentManaCosts.RemoveAt(0);
@@ -86,11 +94,21 @@ public partial class GamePlay : Node2D
 
 	private void ResolveManaCosts()
 	{
+		//GD.Print("Color: " + _currentManaCosts[0]);
 		if (_currentManaCosts.Count == 0)
 		{
-			// all mana costs paid TODO: this will not necessarily be a card action (could be unit/skill)
-			PerformCardActions(_currentBasicActions, _currentSpecialActions, _currentCard, _currentCardControl);
-			_resolvingAction = false;
+			if (_currentCard != null)
+			{
+				// all mana costs paid TODO: this will not necessarily be a card action (could be unit/skill)
+				PerformCardActions(_currentBasicActions, _currentSpecialActions, _currentCard, _currentCardControl);
+				_resolvingAction = false;
+				_currentCard = null;
+			}
+			else if (_currentRewards.Count != 0)
+			{
+				GetTree().Paused = false;
+				// Perform rewards
+			}
 		}
 		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0]), true)) // TODO
 		{

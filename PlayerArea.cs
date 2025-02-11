@@ -20,6 +20,7 @@ public partial class PlayerArea : Node2D
 	{
 		// TESTING ONLY
 		_skills.Add("AR08", true); // add polarization to skill list
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

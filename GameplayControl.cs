@@ -64,7 +64,7 @@ public partial class GameplayControl : Control
 			else if (mapGen.GetSurroundingCells(player.PlayerPos).Contains(posClicked))
 			{
 				var cellTerrain = mapGen.GetCellTileData(MapGen.MainLayer, posClicked).Terrain; // Get terrain of tile
-				// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
+																								// GD.Print("Terrain: " + mapGen.TileSet.GetTerrainName(MainTerrainSet, cellTerrain));
 				var movementMod = 0;
 				if (player.MovePoints >= mapGen.terrainCosts[cellTerrain])
 				{
@@ -88,7 +88,7 @@ public partial class GameplayControl : Control
 								if (mapGen.MapData.ContainsKey(coords) && mapGen.MapData[coords].Token != null)
 								{
 									// Enemy adjacent and moving to another tile adjacent to enemy
-									if ((mapGen.GetSurroundingCells(posClicked).Contains(coords) && (mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red") 
+									if ((mapGen.GetSurroundingCells(posClicked).Contains(coords) && (mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
 									&& player.IsWallBetween(posClicked, mapGen.MapData[coords].Token.MapPosition) == false) || ((mapGen.MapData[coords].Token.MapPosition == posClicked) && (mapGen.MapData[coords].Token.Colour != "yellow")))
 									{
 										player.LastPos = player.PlayerPos;
@@ -121,8 +121,8 @@ public partial class GameplayControl : Control
 								MapUpdateOnPlayerMovement(posClicked, cellTerrain, movementMod, mapEvent);
 							}
 						}
-					//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
-					
+						//GD.Print("Wall is between: " + player.IsWallBetween(player.playerPos, posClicked).ToString());
+
 					}
 				}
 				else
@@ -132,17 +132,17 @@ public partial class GameplayControl : Control
 			}
 
 		}
-		else if(@event.IsActionPressed("control"))
+		else if (@event.IsActionPressed("control"))
 		{
 			var globalMousePosition = GetGlobalMousePosition();
 			var mapMousePosition = mapGen.LocalToMap(mapGen.ToLocal(globalMousePosition));
-			if(mapGen.MapData.ContainsKey(mapMousePosition))
+			if (mapGen.MapData.ContainsKey(mapMousePosition))
 			{
 				var TileWindowStart = (TileWindow)TileWindowScene.Instantiate();
 				TileWindowStart.CellTerrain = mapGen.MapData[mapMousePosition].CellTerrain;
-    			TileWindowStart.Token = mapGen.MapData[mapMousePosition].Token;
-    			TileWindowStart.TileEvent = mapGen.MapData[mapMousePosition].TileEvent;
-    			TileWindowStart.MonsterGroup = mapGen.MapData[mapMousePosition].MonsterGroup;
+				TileWindowStart.Token = mapGen.MapData[mapMousePosition].Token;
+				TileWindowStart.TileEvent = mapGen.MapData[mapMousePosition].TileEvent;
+				TileWindowStart.MonsterGroup = mapGen.MapData[mapMousePosition].MonsterGroup;
 				AddChild(TileWindowStart);
 			}
 		}
@@ -183,7 +183,7 @@ public partial class GameplayControl : Control
 		monsterToken.TokenId = -1;
 		monsterToken.Facedown = true;
 		monsterToken.Visible = false;
-		return(monsterToken);
+		return (monsterToken);
 	}
 
 	// Need movement function so that if challenge canceled, don't do movement
@@ -203,7 +203,7 @@ public partial class GameplayControl : Control
 				continue;
 			}
 
-			if(mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
+			if (mapGen.MapData[coords].Token.Colour == "green" || mapGen.MapData[coords].Token.Colour == "red")
 			{
 				nextToRampage = true;
 				if (challengeButton.Disabled == true)
@@ -211,15 +211,15 @@ public partial class GameplayControl : Control
 					challengeButton.Disabled = false;
 				}
 			}
-			
+
 			else if (tileEvent.Contains("castle") && mapGen.MapData[coords].Token != null)
 			{
 
 			}
 
-			else if(!GameSettings.NightTime)
+			else if (!GameSettings.NightTime)
 			{
-				if((tileEvent == "keep" || tileEvent == "tower") && mapGen.MapData[coords].Token != null)
+				if ((tileEvent == "keep" || tileEvent == "tower") && mapGen.MapData[coords].Token != null)
 				{
 					if (mapGen.MapData[coords].Token.Facedown)
 					{
@@ -261,7 +261,7 @@ public partial class GameplayControl : Control
 				}
 			}
 		}*/
-		if(nextToRampage && challengeButton.Disabled == true)
+		if (nextToRampage && challengeButton.Disabled == true)
 		{
 			challengeButton.Disabled = false;
 		}
@@ -271,9 +271,9 @@ public partial class GameplayControl : Control
 		}
 		if (mapEvent != "" && !mapEvent.Contains("mine") && mapEvent != "glade") // need to change later to check if magic familiars out
 		{
-			if (interactButton.Disabled == true) 
-			{ 
-				interactButton.Disabled = false; 
+			if (interactButton.Disabled == true)
+			{
+				interactButton.Disabled = false;
 			}
 		}
 		else if (interactButton.Disabled == false)
@@ -360,7 +360,7 @@ public partial class GameplayControl : Control
 					}
 					if (already_fighting)
 					{
-					continue;
+						continue;
 					}
 					else if (player.IsWallBetween(posClicked, mapGen.MapData[coords].Token.MapPosition))
 					{
@@ -372,7 +372,7 @@ public partial class GameplayControl : Control
 					}
 					GameSettings.ChallengeList.Add(mapGen.MapData[coords].Token);
 				}
-				
+
 			}
 			/*if ((enemy.Colour == "green" || enemy.Colour == "red") && mapGen.GetSurroundingCells(posClicked).Contains(enemy.MapPosition))
 			{
@@ -402,7 +402,7 @@ public partial class GameplayControl : Control
 		var ChallengeStart = (ChallengeWindow)ChallengeScene.Instantiate();
 		AddChild(ChallengeStart);
 		ChallengeStart.Position = new Godot.Vector2I(300, 500);
-		ChallengeStart.posClicked = posClicked; 
+		ChallengeStart.posClicked = posClicked;
 		ChallengeStart.cellTerrain = cellTerrain;
 		ChallengeStart.movementMod = movementMod;
 		ChallengeStart.mapEvent = mapEvent;
@@ -548,7 +548,7 @@ public partial class GameplayControl : Control
 							var ChallengeStart = (ChallengeWindow)ChallengeScene.Instantiate();
 							AddChild(ChallengeStart);
 							ChallengeStart.Position = new Godot.Vector2I(300, 500);
-							ChallengeStart.posClicked = player.PlayerPos; 
+							ChallengeStart.posClicked = player.PlayerPos;
 							ChallengeStart.cellTerrain = 10;
 							ChallengeStart.movementMod = 0;
 							ChallengeStart.mapEvent = mapEvent;
@@ -556,12 +556,10 @@ public partial class GameplayControl : Control
 						}
 						else if (ruinData.Event == "mana")
 						{
-							foreach (var manaRequirement in ruinData.Requirements)
-							{
-								playerArea.PayMana((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement), false);
-							}
+							gamePlay.OnManaRuinsInteract(Variant.From(ruinData.Requirements.ToArray<string>()).AsGodotArray<string>(), Variant.From(ruinData.Rewards.ToArray<string>()).AsGodotArray<string>());
+							GetTree().Paused = true;
 						}
-						else						
+						else
 						{
 							GD.Print("Error with identifying ruin event");
 						}
