@@ -6,15 +6,15 @@ using System.Linq;
 using System.Numerics;
 
 public partial class Player : Node2D
-{	
+{
 	[Export]
 	private Deck _deck;
 	GameplayControl gameplayControl;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
 	private Vector2I _playerPos;
-	private Vector2I _lastPos = new Vector2I(0,0);
-	public Vector2I PlayerPos { get => _playerPos; set { _lastPos = _playerPos; _playerPos = value; }}
+	private Vector2I _lastPos = new Vector2I(0, 0);
+	public Vector2I PlayerPos { get => _playerPos; set { _lastPos = _playerPos; _playerPos = value; } }
 	public Vector2I LastPos { get => _lastPos; set => _lastPos = value; }
 	private int _movePoints = 9999;
 	public int MovePoints { get => _movePoints; set => _movePoints = value; }
@@ -67,10 +67,10 @@ public partial class Player : Node2D
 		GetTree().Paused = false;
 		foreach (var defeatedEnemy in defeated)
 		{
-			
+
 		}
 		var currHexSafe = true; // check if current hex is safe
-		if (!currHexSafe) 
+		if (!currHexSafe)
 		{
 			// retreat to last safe space
 		}

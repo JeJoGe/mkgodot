@@ -52,7 +52,7 @@ public partial class ManaPopup : VSplitContainer
 	private void ResizeWindow()
 	{
 		var numOptions = _polarization ? _polarizationButtonGroup.GetButtons().Count : _optionGroup.GetButtons().Count;
-		_window.Size = new Vector2I((_optionSize * numOptions)+100, (int)Size.Y+100);
+		_window.Size = new Vector2I((_optionSize * numOptions) + 100, (int)Size.Y + 100);
 		//use below when using hsplitcontainer for bottom container
 		//var halfway = _optionSize * numOptions / 2;
 		//_bottomContainer.SplitOffset = halfway;
@@ -68,7 +68,7 @@ public partial class ManaPopup : VSplitContainer
 		var textureRect = new TextureRect
 		{
 			ExpandMode = TextureRect.ExpandModeEnum.FitWidthProportional,
-			CustomMinimumSize = new Vector2(_optionSize,_optionSize)
+			CustomMinimumSize = new Vector2(_optionSize, _optionSize)
 		};
 		AtlasTexture atlas = new AtlasTexture();
 		switch (type)
@@ -84,7 +84,7 @@ public partial class ManaPopup : VSplitContainer
 			case ManaType.Token:
 				{
 					atlas = (AtlasTexture)Utils.ManaSprites[colour].Duplicate();
-					atlas.Region = new Rect2(new Vector2(0,0), new Vector2(246,246));
+					atlas.Region = new Rect2(new Vector2(0, 0), new Vector2(246, 246));
 					break;
 				}
 			case ManaType.Crystal:
@@ -97,7 +97,7 @@ public partial class ManaPopup : VSplitContainer
 					else
 					{
 						atlas = (AtlasTexture)Utils.CrystalSprites[colour].Duplicate();
-						atlas.Region = new Rect2(new Vector2(0,0), new Vector2(306,280)); //TODO: remake white crystal sprite to meet dimensions
+						atlas.Region = new Rect2(new Vector2(0, 0), new Vector2(306, 280)); //TODO: remake white crystal sprite to meet dimensions
 					}
 					break;
 				}
@@ -110,7 +110,7 @@ public partial class ManaPopup : VSplitContainer
 			ButtonGroup = polarization ? _polarizationButtonGroup : _optionGroup,
 			Visible = !polarization
 		};
-		button.Pressed += () => OnOptionSelected(colour,type);
+		button.Pressed += () => OnOptionSelected(colour, type);
 		button.AddChild(textureRect);
 		_optionContainer.AddChild(button);
 	}
@@ -119,7 +119,7 @@ public partial class ManaPopup : VSplitContainer
 	{
 		// enable confirm button
 		_confirmButton.Disabled = false;
-		GD.Print(string.Format("{0} {1}",colour.ToString(),type.ToString()));
+		GD.Print(string.Format("{0} {1}", colour.ToString(), type.ToString()));
 		_selectedOption = (colour, type);
 	}
 
@@ -136,8 +136,7 @@ public partial class ManaPopup : VSplitContainer
 			}
 		}
 		// consume selected option
-		playerArea.ConsumeMana(_selectedOption.Item1,_selectedOption.Item2);
-		GetTree().Paused = false;
+		playerArea.ConsumeMana(_selectedOption.Item1, _selectedOption.Item2);
 		_window.QueueFree();
 	}
 
@@ -150,7 +149,7 @@ public partial class ManaPopup : VSplitContainer
 
 	private void OnPolarizationToggled(bool toggledOn)
 	{
-		GD.Print("polarization toggled"+toggledOn);
+		GD.Print("polarization toggled" + toggledOn);
 		_polarization = toggledOn;
 		foreach (var button in _optionGroup.GetButtons())
 		{

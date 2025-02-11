@@ -95,7 +95,7 @@ public partial class GamePlay : Node2D
 	{
 		//GD.Print("Color: " + _currentManaCosts[0]);
 		if (_currentManaCosts.Count == 0)
-		{	
+		{
 			if (_currentCard != null)
 			{
 				// all mana costs paid TODO: this will not necessarily be a card action (could be unit/skill)
