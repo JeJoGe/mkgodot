@@ -16,7 +16,7 @@ public partial class Player : Node2D
 	private Vector2I _lastPos = new Vector2I(0,0);
 	public Vector2I PlayerPos { get => _playerPos; set { _lastPos = _playerPos; _playerPos = value; }}
 	public Vector2I LastPos { get => _lastPos; set => _lastPos = value; }
-	private int _movePoints = 100;
+	private int _movePoints = 9999;
 	public int MovePoints { get => _movePoints; set => _movePoints = value; }
 	private int _experiencePoints = 0;
 	public int ExperiencePoints { get => _experiencePoints; set => _experiencePoints = value; }

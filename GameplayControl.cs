@@ -556,11 +556,8 @@ public partial class GameplayControl : Control
 						}
 						else if (ruinData.Event == "mana")
 						{
-							foreach (var manaRequirement in ruinData.Requirements)
-							{
-								playerArea.PayMana((Source.Colour) Enum.Parse(typeof(Source.Colour), manaRequirement), false);
-								GetTree().Paused = true;
-							}
+							gamePlay.OnManaRuinsInteract(Variant.From(ruinData.Requirements.ToArray<string>()).AsGodotArray<string>(), Variant.From(ruinData.Rewards.ToArray<string>()).AsGodotArray<string>());
+							GetTree().Paused = true;
 						}
 						else						
 						{
