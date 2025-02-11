@@ -50,7 +50,15 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Summoned { get; set; } = false;
-	public int Armour { get; set; }
+	private int _armour;
+	public int Armour
+	{
+		get => _armour;
+		set
+		{
+			_armour = value < 1 ? 1 : value; // armour can not be less than 1
+		}
+	}
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; } = new List<MonsterAttack>();
 	public List<string> Abilities { get; set; }
@@ -142,7 +150,25 @@ public partial class Monster : Node2D
 			{
 				case Combat.Phase.Ranged:
 					{
-						if (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1))
+						// only allowed to select monster to have armour reduced if action is resolving and
+						// the monster does not have arcane immunity and the effect is not red while the monster
+						// has fire resistance and the effect is not blue while the monster has ice resistance
+						if (combatInstance.ResolvingAction)
+						{
+							if (!Abilities.Contains("immunity") &&
+							!((combatInstance.ActionColour == Source.Colour.Blue) && Resistances.Contains(Element.Ice)) &&
+							!((combatInstance.ActionColour == Source.Colour.Red) && Resistances.Contains(Element.Fire)))
+							{
+								_flag = true;
+								Selected = !Selected;
+								combatInstance.DeselectMonsters();
+							}
+							else
+							{
+								GD.Print("can not target due to immunity or resistance");
+							}
+						}
+						else if (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1))
 						{
 							// can not target if double fortified during ranged phase
 							GD.Print("untargetable");
