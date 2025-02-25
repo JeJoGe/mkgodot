@@ -559,28 +559,27 @@ public partial class Combat : Node2D
 		{
 			case Phase.Ranged:
 				{
-					_undoRedo.CreateAction("defeat enemies");
-					// remove defeated enemies
-					DefeatEnemies();
-					_confirmButton.Disabled = true;
-					ResetAttacks();
-					_undoRedo.CommitAction();
-					_undoButton.Disabled = false;
-					var remaining = _enemyList.Count; // only for debugging
-					for (int i = _enemyList.Count - 1; i >= 0; i--)
+					if (ResolvingAction)
 					{
-						if (_enemyList[i].Defeated)
-						{
-							remaining--;
-						}
+						// reduce armour of selected enemy
+						OnConfirmReduceArmour();
 					}
-					GD.Print(string.Format("enemies remaining: {0}", remaining));
-					// exit combat if all enemies defeated		
-					if (CheckVictory())
+					else
 					{
-						GD.Print("all enemies defeated");
-						// exit combat
-						EndCombat(true);
+						// remove defeated enemies
+						_undoRedo.CreateAction("defeate enemies");
+						DefeatEnemies();
+						_confirmButton.Disabled = true;
+						ResetAttacks();
+						_undoRedo.CommitAction();
+						_undoButton.Disabled = false;
+						// exit combat if all enemies defeated		
+						if (CheckVictory())
+						{
+							GD.Print("all enemies defeated");
+							// exit combat
+							EndCombat(true);
+						}
 					}
 					break;
 				}
@@ -729,31 +728,23 @@ public partial class Combat : Node2D
 					if (ResolvingAction)
 					{
 						// reduce armour of selected monster
-						for (int i = 0; i < _enemyList.Count; i++)
-						{
-							var enemy = _enemyList[i];
-							if (enemy.Selected)
-							{
-								_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
-								enemy.Armour -= _reduceArmourAmount;
-								DeselectMonsters();
-							}
-						}
+						OnConfirmReduceArmour();
 					}
 					else
 					{ 
+						_undoRedo.CreateAction("defeat enemies");
 						DefeatEnemies();
-						_confirmButton.Disabled = true;
 						ResetAttacks();
-					}
-					_undoRedo.CommitAction();
-					_undoButton.Disabled = false;
-					// exit combat if all enemies defeated
-					if (CheckVictory())
-					{
-						GD.Print("all enemies defeated");
-						// exit combat
-						EndCombat(true);
+						_undoRedo.CommitAction();
+						_undoButton.Disabled = false;
+						_confirmButton.Disabled = true;
+						// exit combat if all enemies defeated
+						if (CheckVictory())
+						{
+							GD.Print("all enemies defeated");
+							// exit combat
+							EndCombat(true);
+						}
 					}
 					break;
 				}
@@ -983,6 +974,8 @@ public partial class Combat : Node2D
 			{
 				_resolvingAction = true;
 			}
+			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
 			_undoRedo.CommitAction();
 			_undoButton.Disabled = false;
 		}
@@ -992,6 +985,29 @@ public partial class Combat : Node2D
 			_errorLabel.Visible = true;
 		}
 		return result;
+	}
+
+	private void OnConfirmReduceArmour()
+	{
+		_undoRedo.CreateAction("reduce armour");
+		foreach (var enemy in _enemyList)
+		{
+			if (enemy.Selected)
+			{
+				_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
+				enemy.Armour -= _reduceArmourAmount;
+				GD.Print(string.Format("MonsterID: {0} Armour: {1}", enemy.MonsterId, enemy.Armour));
+				break;
+			}
+		}
+		DeselectMonsters();
+		_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+		_resolvingAction = false;
+		_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+		_undoRedo.CommitAction();
+		_undoButton.Disabled = false;
+		_confirmButton.Disabled = true;
 	}
 
 	private bool CheckVictory()
@@ -1244,6 +1260,10 @@ public partial class Combat : Node2D
 				{
 					_nextButton.Text = "Skip Attacking";
 					_confirmButton.Text = "Confirm Attack";
+					if (ResolvingAction)
+					{
+						_confirmButton.Text = "Reduce Armour By " + _reduceArmourAmount;
+					}
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -1295,6 +1315,10 @@ public partial class Combat : Node2D
 				{
 					_nextButton.Text = "Skip Attacking";
 					_confirmButton.Text = "Confirm Attack";
+					if (ResolvingAction)
+					{
+						_confirmButton.Text = "Reduce Armour By " + _reduceArmourAmount;
+					}
 					break;
 				}
 			default: break;

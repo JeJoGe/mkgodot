@@ -12,12 +12,13 @@ region = Rect2(0, 0, 258, 258)
 [sub_resource type="CircleShape2D" id="CircleShape2D_cotig"]
 radius = 46.0
 
-[node name="Monster" type="Node2D" node_paths=PackedStringArray("_halo", "_colorRect", "_noAttack")]
+[node name="Monster" type="Node2D" node_paths=PackedStringArray("_halo", "_colorRect", "_noAttack", "_armourLabel")]
 z_index = 1
 script = ExtResource("1_m3i1r")
 _halo = NodePath("Halo")
 _colorRect = NodePath("ColorRect")
 _noAttack = NodePath("NoAttack")
+_armourLabel = NodePath("Armour")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 1
@@ -46,3 +47,12 @@ z_index = 2
 position = Vector2(-32, 2)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_jb2xd")
+
+[node name="Armour" type="Label" parent="."]
+z_index = 2
+offset_left = -24.0
+offset_top = -40.0
+offset_right = 21.0
+offset_bottom = -17.0
+text = "8"
+horizontal_alignment = 1
