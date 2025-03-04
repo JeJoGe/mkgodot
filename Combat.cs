@@ -1094,6 +1094,11 @@ public partial class Combat : Node2D
 		}
 	}
 
+	public void DisableConfirmButton(bool disabled)
+	{
+		_confirmButton.Disabled = disabled;
+	}
+
 	private void DamageHero(int damage, int poison, bool paralyze) // damage must always be greater than 0
 	{
 		var wounds = (damage - 1) / _armour + 1; // integer division without having to use Math.Ceiling
@@ -1337,15 +1342,6 @@ public partial class Combat : Node2D
 			GD.Print("attack value: " + kvp.Value);
 		}
 		GD.Print("total attack: " + _totalAttack);
-		var remaining = _enemyList.Count; // only for debugging
-		for (int i = _enemyList.Count - 1; i >= 0; i--)
-		{
-			if (_enemyList[i].Defeated)
-			{
-				remaining--;
-			}
-		}
-		GD.Print(string.Format("enemies remaining: {0}", remaining));
 		GD.Print(string.Format("current phase: {0}", CurrentPhase));
 	}
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b3cy63d58f762"]
+[gd_scene load_steps=8 format=3 uid="uid://b3cy63d58f762"]
 
 [ext_resource type="Script" path="res://Monster/Monster.cs" id="1_m3i1r"]
 [ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="2_mspwl"]
 [ext_resource type="Texture2D" uid="uid://ilcvkcnomb4v" path="res://assets/halo.png" id="3_ud460"]
 [ext_resource type="Texture2D" uid="uid://lpqlbbl8jbbx" path="res://assets/CombatIcons/noattack.png" id="4_jb2xd"]
+[ext_resource type="Texture2D" uid="uid://c5vhpqx1bwrks" path="res://assets/CombatIcons/armour.png" id="5_helyf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7iqo"]
 atlas = ExtResource("2_mspwl")
@@ -47,6 +48,12 @@ z_index = 2
 position = Vector2(-32, 2)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_jb2xd")
+
+[node name="ArmourSprite" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(-1, -28)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_helyf")
 
 [node name="Armour" type="Label" parent="."]
 z_index = 2

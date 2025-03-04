@@ -76,6 +76,11 @@ public partial class Inventory : Node2D
 		return result;
 	}
 
+	public bool AddCrystal(Source.Colour colour)
+	{
+		return AddCrystal((int)colour);
+	}
+
 	public bool ConsumeCrystal(int colour)
 	{
 		var crystalColour = (Source.Colour)colour;

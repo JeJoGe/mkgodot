@@ -165,6 +165,7 @@ public partial class Monster : Node2D
 								_flag = true;
 								Selected = !Selected;
 								combatInstance.DeselectMonsters();
+								combatInstance.DisableConfirmButton(!Selected);
 							}
 							else
 							{
