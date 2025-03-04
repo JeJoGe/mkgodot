@@ -23,6 +23,8 @@ public partial class Monster : Node2D
 	private ColorRect _colorRect;
 	[Export]
 	private Sprite2D _noAttack;
+	[Export]
+	private Label _armourLabel;
 	public Color PosColour { get; set; }
 	public bool Blocked
 	{
@@ -57,6 +59,7 @@ public partial class Monster : Node2D
 		set
 		{
 			_armour = value < 1 ? 1 : value; // armour can not be less than 1
+			_armourLabel.Text = _armour.ToString();
 		}
 	}
 	public int Fame { get; set; }
@@ -162,6 +165,7 @@ public partial class Monster : Node2D
 								_flag = true;
 								Selected = !Selected;
 								combatInstance.DeselectMonsters();
+								combatInstance.DisableConfirmButton(!Selected);
 							}
 							else
 							{
