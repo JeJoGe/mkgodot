@@ -7,10 +7,21 @@ public partial class Unit : Node2D
 	public int Armour { get; set; }
 	public int Level { get; set; }
 	public List<Element> Resistances { get; set; }
-	public int Wounds { get; set; }
+	private int _wounds = 0;
+	public int Wounds
+	{
+		get => _wounds;
+		set
+		{
+			_wounds = value;
+			_woundSprite.Visible = _wounds > 0;
+		}
+	}
 	public bool Selected { get; set; } = false;
 	public bool Damaged { get; set; } = false;
 	private bool _flag { get; set; } = false;
+	[Export]
+	private Sprite2D _woundSprite;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

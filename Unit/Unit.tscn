@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://csblcvrl8fhnm"]
+[gd_scene load_steps=6 format=3 uid="uid://csblcvrl8fhnm"]
 
 [ext_resource type="Script" path="res://Unit/Unit.cs" id="1_7qnqd"]
 [ext_resource type="Texture2D" uid="uid://5g46ps0sr2f5" path="res://assets/silverunits.jpg" id="1_18t5v"]
+[ext_resource type="Texture2D" uid="uid://bfsbrgw3xsb6v" path="res://assets/CombatIcons/blood.png" id="3_mpsse"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q05kk"]
 atlas = ExtResource("1_18t5v")
@@ -10,9 +11,10 @@ region = Rect2(0, 0, 1000, 1400)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3pdd"]
 size = Vector2(176, 256)
 
-[node name="Unit" type="Node2D"]
+[node name="Unit" type="Node2D" node_paths=PackedStringArray("_woundSprite")]
 z_index = 1
 script = ExtResource("1_7qnqd")
+_woundSprite = NodePath("Blood")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.18, 0.18)
@@ -22,3 +24,9 @@ texture = SubResource("AtlasTexture_q05kk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_l3pdd")
+
+[node name="Blood" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -50)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_mpsse")
