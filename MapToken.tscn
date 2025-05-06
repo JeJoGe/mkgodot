@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c1c2oi2pm4jyx"]
 
-[ext_resource type="Script" path="res://MapToken.cs" id="1_yl16r"]
-[ext_resource type="Script" path="res://MapTokenControl.cs" id="2_w3sm5"]
+[ext_resource type="Script" uid="uid://barf3snyyq7yo" path="res://MapToken.cs" id="1_yl16r"]
+[ext_resource type="Script" uid="uid://dfg31m38t3h44" path="res://MapTokenControl.cs" id="2_w3sm5"]
 [ext_resource type="Texture2D" uid="uid://dyarxj8y7ix41" path="res://assets/TokenImages/GreenTokens/green_tokens_sheet.png" id="3_dk54g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h80h3"]
