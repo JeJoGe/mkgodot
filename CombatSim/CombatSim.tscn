@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://du03m5ip3ckfx"]
 
-[ext_resource type="Script" path="res://CombatSim/CombatSim.cs" id="1_e4uvr"]
+[ext_resource type="Script" uid="uid://bk7aigsg7jgy7" path="res://CombatSim/CombatSim.cs" id="1_e4uvr"]
 
 [node name="CombatSim" type="Node2D"]
 script = ExtResource("1_e4uvr")

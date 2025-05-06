@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://vctows426n3l"]
 
 [ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="1_t2xu4"]
-[ext_resource type="Script" path="res://Offers/SpellOffer.cs" id="1_yt407"]
+[ext_resource type="Script" uid="uid://okuqc7ab0gog" path="res://Offers/SpellOffer.cs" id="1_yt407"]
 
 [node name="SpellOffer" type="Node2D"]
 script = ExtResource("1_yt407")
