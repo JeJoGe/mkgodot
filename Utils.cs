@@ -34,7 +34,6 @@ public partial class Utils : Node
 		{Source.Colour.Black,(0,2)}
 	};
 	public const float DiceSize = 682.66F;
-	public const float FliceSize = 23F;
 	private static readonly Dictionary<Source.Colour, string> _crystalPaths = new Dictionary<Source.Colour, string>{
 		{Source.Colour.Blue,"res://assets/bluecrystal.png"},
 		{Source.Colour.Red,"res://assets/redcrystal.png"},
