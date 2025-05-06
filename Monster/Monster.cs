@@ -23,6 +23,8 @@ public partial class Monster : Node2D
 	private ColorRect _colorRect;
 	[Export]
 	private Sprite2D _noAttack;
+	[Export]
+	private Label _armourLabel;
 	public Color PosColour { get; set; }
 	public bool Blocked
 	{
@@ -50,7 +52,16 @@ public partial class Monster : Node2D
 		}
 	}
 	public bool Summoned { get; set; } = false;
-	public int Armour { get; set; }
+	private int _armour;
+	public int Armour
+	{
+		get => _armour;
+		set
+		{
+			_armour = value < 1 ? 1 : value; // armour can not be less than 1
+			_armourLabel.Text = _armour.ToString();
+		}
+	}
 	public int Fame { get; set; }
 	public List<MonsterAttack> Attacks { get; set; } = new List<MonsterAttack>();
 	public List<string> Abilities { get; set; }
@@ -142,7 +153,11 @@ public partial class Monster : Node2D
 			{
 				case Combat.Phase.Ranged:
 					{
-						if (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1))
+						if (combatInstance.ResolvingAction)
+						{
+							OnClickWhileReducingArmour(combatInstance);
+						}
+						else if (SiteFortifications == 2 || (Abilities.Contains("fortified") && SiteFortifications == 1))
 						{
 							// can not target if double fortified during ranged phase
 							GD.Print("untargetable");
@@ -198,8 +213,15 @@ public partial class Monster : Node2D
 					}
 				case Combat.Phase.Attack:
 					{
-						Selected = !Selected;
-						combatInstance.UpdateTargets();
+						if (combatInstance.ResolvingAction)
+						{
+							OnClickWhileReducingArmour(combatInstance);
+						}
+						else
+						{
+							Selected = !Selected;
+							combatInstance.UpdateTargets();
+						}
 						break;
 					}
 				default: break;
@@ -259,5 +281,23 @@ public partial class Monster : Node2D
 		GD.Print(string.Format("blocked: {0}", Blocked));
 	}
 
-
+	// only allowed to select monster to have armour reduced if action is resolving and
+	// the monster does not have arcane immunity and the effect is not red while the monster
+	// has fire resistance and the effect is not blue while the monster has ice resistance
+	private void OnClickWhileReducingArmour(Combat combatInstance)
+	{
+		if (!Abilities.Contains("immunity") &&
+		!((combatInstance.ActionColour == Source.Colour.Blue) && Resistances.Contains(Element.Ice)) &&
+		!((combatInstance.ActionColour == Source.Colour.Red) && Resistances.Contains(Element.Fire)))
+		{
+			_flag = true;
+			Selected = !Selected;
+			combatInstance.DeselectMonsters();
+			combatInstance.DisableConfirmButton(!Selected);
+		}
+		else
+		{
+			GD.Print("can not target due to immunity or resistance");
+		}
+	}
 }

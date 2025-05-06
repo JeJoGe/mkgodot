@@ -62,12 +62,16 @@ public partial class Combat : Node2D
 	private int _maxHandSize = 5;
 	private bool _resolvingAction = false;
 	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
+	private Source.Colour _actionColour = Source.Colour.Gold;
+	public Source.Colour ActionColour { get => _actionColour; } // colour of current effect
 	private int _enemiesNotAttacking;
 	public int EnemiesNotAttacking { get => _enemiesNotAttacking; } // number of enemies to be prevented from attacking, 0 -> cancel single attack
 	public bool PreventOnlyUnfortified { get; set; } // only cancel attacks from unfortified enemy
 	private Godot.Collections.Array<MonsterAttack> _reducedAttacks = []; // list of monster attacks reduced by current action
 	private int _maxAttacksReduce; // max number of monster attacks that can be reduced for current action
 	private int _reduceAttackAmount; // amount by which attack is to be reduced for current action
+	private int _reduceArmourAmount; // amount by which enemy armour is to be reduced for current action
+	private bool _reduceAllArmour; // reduce armour of all possible enemies
 	private MonsterAttack _targetAttack;
 	public MonsterAttack TargetAttack
 	{
@@ -555,28 +559,27 @@ public partial class Combat : Node2D
 		{
 			case Phase.Ranged:
 				{
-					_undoRedo.CreateAction("defeat enemies");
-					// remove defeated enemies
-					DefeatEnemies();
-					_confirmButton.Disabled = true;
-					ResetAttacks();
-					_undoRedo.CommitAction();
-					_undoButton.Disabled = false;
-					var remaining = _enemyList.Count; // only for debugging
-					for (int i = _enemyList.Count - 1; i >= 0; i--)
+					if (ResolvingAction)
 					{
-						if (_enemyList[i].Defeated)
-						{
-							remaining--;
-						}
+						// reduce armour of selected enemy
+						OnConfirmReduceArmour();
 					}
-					GD.Print(string.Format("enemies remaining: {0}", remaining));
-					// exit combat if all enemies defeated		
-					if (CheckVictory())
+					else
 					{
-						GD.Print("all enemies defeated");
-						// exit combat
-						EndCombat(true);
+						// remove defeated enemies
+						_undoRedo.CreateAction("defeate enemies");
+						DefeatEnemies();
+						_confirmButton.Disabled = true;
+						ResetAttacks();
+						_undoRedo.CommitAction();
+						_undoButton.Disabled = false;
+						// exit combat if all enemies defeated		
+						if (CheckVictory())
+						{
+							GD.Print("all enemies defeated");
+							// exit combat
+							EndCombat(true);
+						}
 					}
 					break;
 				}
@@ -722,17 +725,26 @@ public partial class Combat : Node2D
 			case Phase.Attack:
 				{
 					_undoRedo.CreateAction("defeat enemies");
-					DefeatEnemies();
-					_confirmButton.Disabled = true;
-					ResetAttacks();
-					_undoRedo.CommitAction();
-					_undoButton.Disabled = false;
-					// exit combat if all enemies defeated
-					if (CheckVictory())
+					if (ResolvingAction)
 					{
-						GD.Print("all enemies defeated");
-						// exit combat
-						EndCombat(true);
+						// reduce armour of selected monster
+						OnConfirmReduceArmour();
+					}
+					else
+					{ 
+						_undoRedo.CreateAction("defeat enemies");
+						DefeatEnemies();
+						ResetAttacks();
+						_undoRedo.CommitAction();
+						_undoButton.Disabled = false;
+						_confirmButton.Disabled = true;
+						// exit combat if all enemies defeated
+						if (CheckVictory())
+						{
+							GD.Print("all enemies defeated");
+							// exit combat
+							EndCombat(true);
+						}
 					}
 					break;
 				}
@@ -931,6 +943,73 @@ public partial class Combat : Node2D
 		return result;
 	}
 
+	public bool ReduceArmour(int armourReduced, bool singleTarget = true, int colour = 4)
+	{
+		var result = false;
+		if (!ResolvingAction)
+		{
+			_undoRedo.CreateAction("reduce armour");
+			GD.Print("reduce armour");
+			_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+			result = true;
+			_reduceArmourAmount = armourReduced;
+			_actionColour = (Source.Colour)colour;
+			if (!singleTarget)
+			{
+				// reduce armour of all eligible enemies
+				for (int i = 0; i < _enemyList.Count; i++)
+				{
+					var enemy = _enemyList[i];
+					if (!enemy.Abilities.Contains("immunity") &&
+					!(_actionColour == Source.Colour.Red && enemy.Resistances.Contains(Element.Fire)) &&
+					!(_actionColour == Source.Colour.Blue && enemy.Resistances.Contains(Element.Ice)))
+					{
+						_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
+						enemy.Armour -= armourReduced;
+						GD.Print(string.Format("MonsterID: {0} Armour: {1}", enemy.MonsterId, enemy.Armour));
+					}
+				}
+			}
+			else
+			{
+				_resolvingAction = true;
+			}
+			_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+			_undoRedo.CommitAction();
+			_undoButton.Disabled = false;
+		}
+		else
+		{
+			_errorLabel.Text = "[color=red]ERROR: Resolve current action first[/color]";
+			_errorLabel.Visible = true;
+		}
+		return result;
+	}
+
+	private void OnConfirmReduceArmour()
+	{
+		_undoRedo.CreateAction("reduce armour");
+		foreach (var enemy in _enemyList)
+		{
+			if (enemy.Selected)
+			{
+				_undoRedo.AddUndoProperty(enemy, "Armour", enemy.Armour);
+				enemy.Armour -= _reduceArmourAmount;
+				GD.Print(string.Format("MonsterID: {0} Armour: {1}", enemy.MonsterId, enemy.Armour));
+				break;
+			}
+		}
+		DeselectMonsters();
+		_undoRedo.AddUndoProperty(this, "_resolvingAction", _resolvingAction);
+		_resolvingAction = false;
+		_undoRedo.AddDoMethod(new Callable(this, MethodName.UpdateUI));
+		_undoRedo.AddUndoMethod(new Callable(this, MethodName.UpdateUI));
+		_undoRedo.CommitAction();
+		_undoButton.Disabled = false;
+		_confirmButton.Disabled = true;
+	}
+
 	private bool CheckVictory()
 	{
 		var result = true;
@@ -1013,6 +1092,11 @@ public partial class Combat : Node2D
 		{
 			enemy.Deselect();
 		}
+	}
+
+	public void DisableConfirmButton(bool disabled)
+	{
+		_confirmButton.Disabled = disabled;
 	}
 
 	private void DamageHero(int damage, int poison, bool paralyze) // damage must always be greater than 0
@@ -1181,6 +1265,10 @@ public partial class Combat : Node2D
 				{
 					_nextButton.Text = "Skip Attacking";
 					_confirmButton.Text = "Confirm Attack";
+					if (ResolvingAction)
+					{
+						_confirmButton.Text = "Reduce Armour By " + _reduceArmourAmount;
+					}
 					break;
 				}
 			case Phase.PreventAttacks:
@@ -1232,6 +1320,10 @@ public partial class Combat : Node2D
 				{
 					_nextButton.Text = "Skip Attacking";
 					_confirmButton.Text = "Confirm Attack";
+					if (ResolvingAction)
+					{
+						_confirmButton.Text = "Reduce Armour By " + _reduceArmourAmount;
+					}
 					break;
 				}
 			default: break;
@@ -1250,15 +1342,6 @@ public partial class Combat : Node2D
 			GD.Print("attack value: " + kvp.Value);
 		}
 		GD.Print("total attack: " + _totalAttack);
-		var remaining = _enemyList.Count; // only for debugging
-		for (int i = _enemyList.Count - 1; i >= 0; i--)
-		{
-			if (_enemyList[i].Defeated)
-			{
-				remaining--;
-			}
-		}
-		GD.Print(string.Format("enemies remaining: {0}", remaining));
 		GD.Print(string.Format("current phase: {0}", CurrentPhase));
 	}
 

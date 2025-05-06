@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://ddlsl1mpmfruu"]
 
-[ext_resource type="Script" path="res://Inventory.cs" id="1_hlfkb"]
+[ext_resource type="Script" uid="uid://cqewbt7mwl8b6" path="res://Inventory.cs" id="1_hlfkb"]
 [ext_resource type="Texture2D" uid="uid://c21wal60lfrgg" path="res://assets/bluemana.png" id="2_nauwr"]
 [ext_resource type="Texture2D" uid="uid://sd7tow3lbh58" path="res://assets/redmana.png" id="3_2r60u"]
 [ext_resource type="Texture2D" uid="uid://cyx0axcr7kmq5" path="res://assets/greenmana.png" id="4_bur5q"]
