@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://csblcvrl8fhnm"]
 
-[ext_resource type="Script" path="res://Unit/Unit.cs" id="1_7qnqd"]
+[ext_resource type="Script" uid="uid://badtu2yxysrl4" path="res://Unit/Unit.cs" id="1_7qnqd"]
 [ext_resource type="Texture2D" uid="uid://5g46ps0sr2f5" path="res://assets/silverunits.jpg" id="1_18t5v"]
 [ext_resource type="Texture2D" uid="uid://bfsbrgw3xsb6v" path="res://assets/CombatIcons/blood.png" id="3_mpsse"]
 

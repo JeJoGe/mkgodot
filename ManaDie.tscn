@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cvcdnf04umebj"]
 
-[ext_resource type="Script" path="res://ManaDie.cs" id="1_hihwa"]
+[ext_resource type="Script" uid="uid://ce850f841wnk4" path="res://ManaDie.cs" id="1_hihwa"]
 [ext_resource type="Texture2D" uid="uid://dyqfm10iw1swb" path="res://assets/dice.jpg" id="2_5bsks"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dt61"]

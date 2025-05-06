@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dpkfg3i2uq1dl"]
 
-[ext_resource type="Script" path="res://ChallengePopUp/ChallengePopUp.cs" id="1_55dua"]
-[ext_resource type="Script" path="res://ChallengePopUp/ChallengeWindow.cs" id="1_edn05"]
-[ext_resource type="Script" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
+[ext_resource type="Script" uid="uid://c0m8rkn88dxaj" path="res://ChallengePopUp/ChallengePopUp.cs" id="1_55dua"]
+[ext_resource type="Script" uid="uid://54hrdm8p7sj2" path="res://ChallengePopUp/ChallengeWindow.cs" id="1_edn05"]
+[ext_resource type="Script" uid="uid://m7nwdwnw64at" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
 
 [node name="ChallengeWindow" type="Window"]
 position = Vector2i(0, 36)

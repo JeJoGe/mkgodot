@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dwyjksssv5ygp"]
 
-[ext_resource type="Script" path="res://ManaPopUp/ManaPopup.cs" id="1_ekovf"]
+[ext_resource type="Script" uid="uid://db4rxh0fi4ane" path="res://ManaPopUp/ManaPopup.cs" id="1_ekovf"]
 
 [node name="Window" type="Window"]
 process_mode = 3
