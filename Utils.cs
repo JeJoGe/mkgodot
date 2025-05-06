@@ -208,6 +208,20 @@ public partial class Utils : Node
 			GD.Print("=====");
 		}
 	}
+
+	public static void PrintUnitStats()
+	{
+		foreach (var kvp in UnitStats)
+		{
+			GD.Print(string.Format("{0} {1}", kvp.Key, kvp.Value.Name));
+			GD.Print("Abilities\n=====");
+			foreach (var ability in kvp.Value.Abilities)
+			{
+				GD.Print(string.Format("{0}: {1}", string.Join(",", ability.ManaCosts), ability.Effect));
+			}
+			GD.Print("=====");
+		}
+	}
 }
 
 public class MonsterObject
@@ -229,7 +243,7 @@ public class UnitObject
 {
 	public string Name { get; set; }
 	public int Armour { get; set; }
-	public List<string> Abilities { get; set; }
+	public List<AbilityObject> Abilities { get; set; }
 	public List<Element> Resistances { get; set; }
 	public List<UnitType> Types { get; set; }
 	public int Level { get; set; }
@@ -238,6 +252,12 @@ public class UnitObject
 	public int Y { get; set; }
 	public string Version { get; set; }
 	public int Count { get; set; }
+}
+
+public class AbilityObject
+{
+	public List<string> ManaCosts { get; set; }
+	public string Effect { get; set; }
 }
 
 public class RuinObject

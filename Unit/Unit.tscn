@@ -11,10 +11,12 @@ region = Rect2(0, 0, 1000, 1400)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l3pdd"]
 size = Vector2(176, 256)
 
-[node name="Unit" type="Node2D" node_paths=PackedStringArray("_woundSprite")]
+[node name="Unit" type="Node2D" node_paths=PackedStringArray("_woundSprite", "_abilitiesDropdown", "_activateButton")]
 z_index = 1
 script = ExtResource("1_7qnqd")
 _woundSprite = NodePath("Blood")
+_abilitiesDropdown = NodePath("OptionButton")
+_activateButton = NodePath("ActivateButton")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.18, 0.18)
@@ -30,3 +32,18 @@ visible = false
 position = Vector2(0, -50)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_mpsse")
+
+[node name="OptionButton" type="OptionButton" parent="."]
+offset_left = -80.0
+offset_top = 24.0
+offset_right = -48.0
+offset_bottom = 44.0
+
+[node name="ActivateButton" type="Button" parent="."]
+offset_left = -32.0
+offset_top = -72.0
+offset_right = 39.0
+offset_bottom = -41.0
+text = "Activate"
+
+[connection signal="pressed" from="ActivateButton" to="." method="OnActivateButtonClicked"]

@@ -78,6 +78,17 @@ public partial class GamePlay : Node2D
 		}
 	}
 
+	public void OnUnitActivated(Godot.Collections.Array<string> manaCosts, string effect)
+	{
+		if (!ResolvingAction)
+		{
+			_currentManaCosts = manaCosts;
+			_currentBasicActions = [effect];
+			GD.Print("unit activated");
+			ResolveManaCosts();
+		}
+	}
+
 	public void OnManaRuinsInteract(Godot.Collections.Array<string> manaCosts, Godot.Collections.Array<string> rewards)
 	{
 		_currentManaCosts = manaCosts;

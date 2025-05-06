@@ -183,7 +183,7 @@ public partial class Combat : Node2D
 		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 0;
 		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 0;
 		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 0;
-		GameSettings.UnitList = new List<(int, int)>([(1, 0), (2, 0), (6, 2)]);
+		GameSettings.UnitList = new List<(int, bool, int)>([(1, true, 0), (2, true, 0), (6, true, 2)]);
 		//Utils.PrintBestiary();
 		// get duplicate monsters on different hexes
 		var duplicates = GameSettings.EnemyList.GroupBy(x => x.Item1)
@@ -209,7 +209,8 @@ public partial class Combat : Node2D
 			var unit = GameSettings.UnitList[i];
 			var unitCard = (Unit)unitScene.Instantiate();
 			// get unit stats
-			unitCard.Wounds = unit.Item2;
+			unitCard.Wounds = unit.Item3;
+			unitCard.UnitReady = unit.Item2;
 			var unitStats = Utils.UnitStats[unit.Item1];
 			unitCard.PopulateStats(unitStats);
 			var unitSprite = unitCard.GetNode<Sprite2D>("Sprite2D");
