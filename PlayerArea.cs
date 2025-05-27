@@ -6,10 +6,16 @@ public partial class PlayerArea : Node2D
 {
 	[Signal]
 	public delegate void ManaPaidEventHandler();
+	[Signal]
+	public delegate void OnAwardSpellEventHandler();
 	[Export]
 	private Source _source;
 	[Export]
 	private Inventory _inventory;
+	[Export]
+	private Player _player;
+	[Export]
+	private SpellOffer _spellOffer;
 	private PackedScene _manaPopup = GD.Load<PackedScene>("res://ManaPopUp/ManaPopup.tscn");
 	private Dictionary<string, bool> _skills = new();
 	private ManaPopup _popup;
@@ -181,17 +187,19 @@ public partial class PlayerArea : Node2D
 		switch (reward)
 		{
 			case Reward.crystal:
-				_inventory.AddCrystal();
+				_inventory.AddCrystal(num);
 				break;
 			case Reward.fame:
+				_player.Fame = _player.Fame + num;
 				break;
-			case Reward.reputation:
-				break;
+			//case Reward.reputation:  //Actually reputation shouldn't be a reward as its not reward from token.
+			//	break;                 //Should be checked on combat victory and given directly as multiple variables
 			case Reward.unit:
 				break;
 			case Reward.advanced:
 				break;
 			case Reward.spell:
+				EmitSignal(SignalName.OnAwardSpell);
 				break;
 			case Reward.artifact:
 				break;

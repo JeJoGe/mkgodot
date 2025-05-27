@@ -112,9 +112,25 @@ public partial class GamePlay : Node2D
 					{
 						_playerArea.GainReward(PlayerArea.Reward.fame, n);
 					}
-					else if()
+					else if(_currentRewards[0] == "unit")
 					{
-						
+						_playerArea.GainReward(PlayerArea.Reward.unit);
+					}
+					else if(_currentRewards[0] == "spell")
+					{
+						_playerArea.GainReward(PlayerArea.Reward.spell);
+					}
+					else if(_currentRewards[0] == "advanced")
+					{
+						_playerArea.GainReward(PlayerArea.Reward.advanced);
+					}
+					else if(_currentRewards[0] == "artifact")
+					{
+						_playerArea.GainReward(PlayerArea.Reward.artifact);
+					}
+					else
+					{
+						_playerArea.GainReward(PlayerArea.Reward.crystal, (int)Utils.ConvertStringToSourceColour(_currentRewards[0]));
 					}
 				}
 				GetTree().Paused = false;
@@ -259,7 +275,6 @@ public partial class GamePlay : Node2D
 						case nameof(BasicCardActions.useAdditionalDice):
 							break;
 						case nameof(BasicCardActions.gainCrystals):
-
 							break;
 						case nameof(BasicCardActions.payMana):
 							break;

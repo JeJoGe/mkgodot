@@ -18,8 +18,8 @@ public partial class Player : Node2D
 	public Vector2I LastPos { get => _lastPos; set => _lastPos = value; }
 	private int _movePoints = 9999;
 	public int MovePoints { get => _movePoints; set => _movePoints = value; }
-	private int _experiencePoints = 0;
-	public int ExperiencePoints { get => _experiencePoints; set => _experiencePoints = value; }
+	private int _fame = 0;
+	public int Fame { get => _fame; set => _fame = value; }
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
@@ -67,7 +67,8 @@ public partial class Player : Node2D
 		GetTree().Paused = false;
 		foreach (var defeatedEnemy in defeated)
 		{
-
+			//for each color, determine the location of each defeated enemy and the site. Depending on site, do something 
+			//different for victory conditions like get spells, add markers, etc.
 		}
 		var currHexSafe = true; // check if current hex is safe
 		if (!currHexSafe)
@@ -133,4 +134,5 @@ public partial class Player : Node2D
 	{
 		Utils.undoRedo.Undo();
 	}
+	
 }
