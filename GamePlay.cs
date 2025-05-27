@@ -105,6 +105,18 @@ public partial class GamePlay : Node2D
 			}
 			else if (_currentRewards.Count != 0)
 			{
+				while(_currentRewards.Count != 0)
+				{
+					var isNumeric = int.TryParse(_currentRewards[0], out int n);
+					if(isNumeric)
+					{
+						_playerArea.GainReward(PlayerArea.Reward.fame, n);
+					}
+					else if()
+					{
+						
+					}
+				}
 				GetTree().Paused = false;
 				// Perform rewards
 			}

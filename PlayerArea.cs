@@ -15,6 +15,11 @@ public partial class PlayerArea : Node2D
 	private ManaPopup _popup;
 	private bool _night = false;
 
+	public enum Reward
+	{
+		crystal, fame, reputation, unit, advanced, spell, artifact
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -171,6 +176,27 @@ public partial class PlayerArea : Node2D
 		EmitSignal(SignalName.ManaPaid);
 	}
 
+	public void GainReward(Reward reward, int num=0)
+	{
+		switch (reward)
+		{
+			case Reward.crystal:
+				_inventory.AddCrystal();
+				break;
+			case Reward.fame:
+				break;
+			case Reward.reputation:
+				break;
+			case Reward.unit:
+				break;
+			case Reward.advanced:
+				break;
+			case Reward.spell:
+				break;
+			case Reward.artifact:
+				break;
+		}
+	}
 	private void OnEndTurn()
 	{
 		// refresh all once per turn skills

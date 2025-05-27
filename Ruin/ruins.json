@@ -68,7 +68,7 @@
         "x":0,
         "y":2,
         "event":"mana",
-		"requirements":["Blue","Blue","Blue"],
+		"requirements":["blue","blue","blue"],
 		"rewards":["7"]
     },
 	"3008":{
@@ -77,7 +77,7 @@
         "x":1,
         "y":2,
         "event":"mana",
-		"requirements":["Red","Red","Red"],
+		"requirements":["red","red","red"],
 		"rewards":["7"]
     },
 	"3009":{
@@ -86,7 +86,7 @@
         "x":2,
         "y":2,
         "event":"mana",
-		"requirements":["White","White","White"],
+		"requirements":["white","white","white"],
 		"rewards":["7"]
     },
 	"3010":{
@@ -104,7 +104,7 @@
         "x":0,
         "y":3,
         "event":"mana",
-		"requirements":["Green","Blue","White","Red"],
+		"requirements":["green","blue","white","red"],
 		"rewards":["10"]
     },
 	"3012":{
@@ -124,5 +124,5 @@
         "event":"monster",
 		"requirements":["purple","purple"],
 		"rewards":["spell","advanced"]
-    },
+    }
 }
