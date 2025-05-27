@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=59 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" uid="uid://cn07nl0ohrm7v" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
+[ext_resource type="PackedScene" uid="uid://b5j4ylu6cvn5p" path="res://Offers/UnitOffer.tscn" id="9_6taxa"]
 [ext_resource type="Script" uid="uid://86ofhtdtnse5" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="PackedScene" uid="uid://vctows426n3l" path="res://Offers/SpellOffer.tscn" id="10_h555x"]
 [ext_resource type="Script" uid="uid://dmwa0dyqkeguw" path="res://TurnOrderTracker.cs" id="12_js350"]
@@ -1061,7 +1062,7 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea", "_unitOffer")]
 z_index = -1
 script = ExtResource("1_m0gf8")
 mapGen = NodePath("GameplayControl/MapGen")
@@ -1070,6 +1071,7 @@ player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
 inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
 _playerArea = NodePath("GameplayControl/PlayerUI/PlayerArea")
+_unitOffer = NodePath("GameplayControl/PlayerUI/SharedArea/UnitOffer")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("playerArea", "mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
@@ -1173,6 +1175,9 @@ process_mode = 3
 script = ExtResource("10_bkisu")
 _roundMarker = NodePath("../../RoundMarker")
 gameplayControl = NodePath("../..")
+
+[node name="UnitOffer" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("9_6taxa")]
+position = Vector2(984, 328)
 
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
@@ -1427,6 +1432,7 @@ patch_margin_bottom = 30
 [connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/UnitOffer" method="NewRound"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]

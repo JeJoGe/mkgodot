@@ -18,6 +18,8 @@ public partial class GamePlay : Node2D
 	private Inventory inventory;
 	[Export]
 	private PlayerArea _playerArea;
+	[Export]
+	private UnitOffer _unitOffer;
 	private bool _resolvingAction = false;
 	private CardObj _currentCard;
 	private CardControl _currentCardControl;
@@ -366,6 +368,11 @@ public partial class GamePlay : Node2D
 		{
 			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
+	}
+
+	private void OnUnitAdded()
+	{
+
 	}
 
 	public void onStartRound()
