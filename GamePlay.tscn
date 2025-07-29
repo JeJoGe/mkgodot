@@ -1182,11 +1182,13 @@ position = Vector2(984, 176)
 _confirmDialog = NodePath("../../ConfirmationDialog")
 _deck = NodePath("../../PlayerArea/Deck")
 
-[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory", "_player", "_spellOffer")]
 process_mode = 1
 script = ExtResource("2_khnnw")
 _source = NodePath("../SharedArea/Source")
 _inventory = NodePath("Inventory")
+_player = NodePath("../../Player")
+_spellOffer = NodePath("../SharedArea/SpellOffer")
 
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
@@ -1431,6 +1433,7 @@ patch_margin_bottom = 30
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
 [connection signal="ManaPaid" from="GameplayControl/PlayerUI/PlayerArea" to="." method="OnManaPaid"]
+[connection signal="OnAwardSpell" from="GameplayControl/PlayerUI/PlayerArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]

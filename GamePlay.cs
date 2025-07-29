@@ -87,6 +87,7 @@ public partial class GamePlay : Node2D
 
 	private void OnManaPaid()
 	{
+		GD.Print("Mana Paid");
 		_currentManaCosts.RemoveAt(0);
 		ResolveManaCosts();
 	}

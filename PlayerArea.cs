@@ -191,6 +191,7 @@ public partial class PlayerArea : Node2D
 				break;
 			case Reward.fame:
 				_player.Fame = _player.Fame + num;
+				GD.Print(_player.Fame);
 				break;
 			//case Reward.reputation:  //Actually reputation shouldn't be a reward as its not reward from token.
 			//	break;                 //Should be checked on combat victory and given directly as multiple variables
