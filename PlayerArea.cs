@@ -13,9 +13,7 @@ public partial class PlayerArea : Node2D
 	[Export]
 	private Inventory _inventory;
 	[Export]
-	private Player _player;
-	[Export]
-	private SpellOffer _spellOffer;
+	private UnitArea _unitArea;
 	private PackedScene _manaPopup = GD.Load<PackedScene>("res://ManaPopUp/ManaPopup.tscn");
 	private Dictionary<string, bool> _skills = new();
 	private ManaPopup _popup;
@@ -211,5 +209,10 @@ public partial class PlayerArea : Node2D
 		// refresh all once per turn skills
 		// TESTING ONLY
 		_skills["AR08"] = true;
+	}
+
+	private void OnUnitsButtonToggled(bool toggleMode)
+	{
+		_unitArea.Visible = toggleMode;
 	}
 }

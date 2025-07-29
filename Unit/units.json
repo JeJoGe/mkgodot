@@ -4,7 +4,16 @@
         "level":1,
         "armour":4,
         "resistances":[],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts": [],
+                "effect": "move-2"
+            },
+            {
+                "manacosts": [],
+                "effect": "block-3"
+            }
+        ],
         "version":"base",
         "types":[0],
         "cost":5,
@@ -17,7 +26,24 @@
         "level":2,
         "armour":3,
         "resistances":[0],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts": [],
+                "effect": "block-2"
+            },
+            {
+                "manacosts": [],
+                "effect": "attack-physical-melee-2"
+            },
+            {
+                "manacosts": ["red"],
+                "effect": "block-fire-4"
+            },
+            {
+                "manacosts": ["blue"],
+                "effect": "block-ice-4"
+            }
+        ],
         "version":"base",
         "types":[1,2],
         "cost":7,
@@ -56,7 +82,24 @@
         "level":1,
         "armour":3,
         "resistances":[],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts": [],
+                "effect": "move-2"
+            },
+            {
+                "manacosts": [],
+                "effect": "attack-physical-melee-2"
+            },
+            {
+                "manacosts": [],
+                "effect": "block-2"
+            },
+            {
+                "manacosts": [],
+                "effect": "influence-2"
+            }
+        ],
         "version":"base",
         "types":[0],
         "cost":4,
@@ -69,7 +112,24 @@
         "level":2,
         "armour":4,
         "resistances":[],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts": [],
+                "effect": "block-3"
+            },
+            {
+                "manacosts": [],
+                "effect": "attack-physical-melee-3"
+            },
+            {
+                "manacosts": ["blue"],
+                "effect": "block-ice-4"
+            },
+            {
+                "manacosts": ["blue"],
+                "effect": "attack-ice-melee-4"
+            }
+        ],
         "version":"base",
         "types":[3],
         "cost":7,
