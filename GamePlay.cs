@@ -370,11 +370,6 @@ public partial class GamePlay : Node2D
 		}
 	}
 
-	private void OnUnitAdded()
-	{
-
-	}
-
 	public void onStartRound()
 	{
 		deck.OnDeckButtonPressed(player.cardDrawLimit);
