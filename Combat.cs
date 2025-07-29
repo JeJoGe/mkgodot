@@ -569,7 +569,7 @@ public partial class Combat : Node2D
 					else
 					{
 						// remove defeated enemies
-						_undoRedo.CreateAction("defeate enemies");
+						_undoRedo.CreateAction("defeat enemies");
 						DefeatEnemies();
 						_confirmButton.Disabled = true;
 						ResetAttacks();
@@ -726,7 +726,6 @@ public partial class Combat : Node2D
 				}
 			case Phase.Attack:
 				{
-					_undoRedo.CreateAction("defeat enemies");
 					if (ResolvingAction)
 					{
 						// reduce armour of selected monster
