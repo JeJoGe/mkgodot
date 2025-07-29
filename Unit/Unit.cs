@@ -1,16 +1,45 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class Unit : Node2D
 {
+	[Signal]
+    public delegate void UnitActivatedEventHandler(string effect, Godot.Collections.Array<string> manaCosts);
 	public int Armour { get; set; }
 	public int Level { get; set; }
 	public List<Element> Resistances { get; set; }
-	public int Wounds { get; set; }
+	public List<AbilityObject> Abilities { get; set; } = [];
+	private int _wounds = 0;
+	public int Wounds
+	{
+		get => _wounds;
+		set
+		{
+			_wounds = value;
+			_woundSprite.Visible = _wounds > 0;
+			_abilitiesDropdown.Visible = _activateButton.Visible = _unitReady && _wounds < 1;
+		}
+	}
+	private bool _unitReady = true;
+	public bool UnitReady
+	{
+		get => _unitReady;
+		set
+		{
+			_unitReady = value;
+			_abilitiesDropdown.Visible = _activateButton.Visible = _unitReady && _wounds < 1;
+		}
+	}
 	public bool Selected { get; set; } = false;
 	public bool Damaged { get; set; } = false;
 	private bool _flag { get; set; } = false;
+	[Export]
+	private Sprite2D _woundSprite;
+	[Export]
+	private OptionButton _abilitiesDropdown;
+	[Export]
+	private Button _activateButton;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -26,6 +55,21 @@ public partial class Unit : Node2D
 		{
 			Resistances.Add(Element.ColdFire);
 		}
+		foreach (var ability in data.Abilities)
+		{
+			// populate option button
+			_abilitiesDropdown.AddItem(ability.Effect);
+			Abilities.Add(ability);
+		}
+	}
+
+	private void OnActivateButtonClicked()
+	{
+		GD.Print("activate unit");
+		var id = _abilitiesDropdown.GetSelectedId();
+		//GD.Print(string.Format("selected option: {0}", id));
+		//GD.Print(string.Format("colour: {0} effect: {1}", Abilities[id].ManaCosts[0], Abilities[id].Effect));
+		EmitSignal(SignalName.UnitActivated, Abilities[id].Effect, Abilities[id].ManaCosts.ToArray());
 	}
 
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)

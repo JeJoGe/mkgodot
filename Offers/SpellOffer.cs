@@ -2,24 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class SpellOffer : Node2D
+public partial class SpellOffer : Offer
 {
 	[Signal]
 	public delegate void DummyEventHandler(Source.Colour colour);
 	[Export]
-	private ConfirmationDialog _confirmDialog;
-	[Export]
 	private Deck _deck;
 	private LinkedList<int> _offer;
 	private Dictionary<int, OfferCard> _slots; // keys 0-2 where 0 is the oldest card
-	private static int _offset = 112;
-	private PackedScene _cardScene = GD.Load<PackedScene>("res://Offers/OfferCard.tscn");
-
-	private bool _reward = false;
-	public bool Reward
-	{
-		get => _reward;
-	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -87,7 +77,7 @@ public partial class SpellOffer : Node2D
 		}
 	}
 
-	private void RefreshOffer()
+	public override void RefreshOffer()
 	{
 		var children = GetChildren();
 		for (int j = 0; j < children.Count; j++)
@@ -101,10 +91,12 @@ public partial class SpellOffer : Node2D
 		var currNode = _offer.First;
 		for (int i = 0; i < Math.Min(3, _offer.Count); i++)
 		{
-			var spell = Utils.SpellBook[currNode.Value];
+			var id = currNode.Value;
+			var spell = Utils.SpellBook[id];
 			currNode = currNode.Next;
 			var spellCard = (OfferCard)_cardScene.Instantiate();
 			spellCard.ConfirmReward += OnConfirmReward;
+			spellCard.Initialize(CardType.Spell, id);
 			var spellSprite = spellCard.GetNode<Sprite2D>("Sprite2D");
 			var atlas = (AtlasTexture)Utils.SpriteSheets["spell"].Duplicate();
 			atlas.Region = new Rect2(

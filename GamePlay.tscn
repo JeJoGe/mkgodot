@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=60 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
 [ext_resource type="Script" uid="uid://cn07nl0ohrm7v" path="res://GamePlay.cs" id="1_m0gf8"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
 [ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
 [ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
+[ext_resource type="PackedScene" uid="uid://b5j4ylu6cvn5p" path="res://Offers/UnitOffer.tscn" id="9_6taxa"]
 [ext_resource type="Script" uid="uid://86ofhtdtnse5" path="res://SharedArea.cs" id="10_bkisu"]
 [ext_resource type="PackedScene" uid="uid://vctows426n3l" path="res://Offers/SpellOffer.tscn" id="10_h555x"]
 [ext_resource type="Script" uid="uid://dmwa0dyqkeguw" path="res://TurnOrderTracker.cs" id="12_js350"]
@@ -26,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://ddlsl1mpmfruu" path="res://Inventory.tscn" id="20_4h2of"]
 [ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
 [ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="PackedScene" uid="uid://8n1rifibsxuk" path="res://Unit/UnitArea.tscn" id="23_l6t3h"]
 [ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="26_j3ivl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
@@ -1061,7 +1063,7 @@ pattern_24 = SubResource("TileMapPattern_3knyh")
 pattern_25 = SubResource("TileMapPattern_hai2l")
 pattern_26 = SubResource("TileMapPattern_nxmvw")
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea", "_unitOffer")]
 z_index = -1
 script = ExtResource("1_m0gf8")
 mapGen = NodePath("GameplayControl/MapGen")
@@ -1070,6 +1072,7 @@ player = NodePath("GameplayControl/Player")
 tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
 inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
 _playerArea = NodePath("GameplayControl/PlayerUI/PlayerArea")
+_unitOffer = NodePath("GameplayControl/PlayerUI/SharedArea/UnitOffer")
 
 [node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("playerArea", "mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
 process_mode = 1
@@ -1177,16 +1180,21 @@ gameplayControl = NodePath("../..")
 [node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
 
-[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog", "_deck") instance=ExtResource("10_h555x")]
+[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_deck", "_confirmDialog") instance=ExtResource("10_h555x")]
 position = Vector2(984, 176)
-_confirmDialog = NodePath("../../ConfirmationDialog")
 _deck = NodePath("../../PlayerArea/Deck")
+_confirmDialog = NodePath("../../ConfirmationDialog")
 
-[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
+[node name="UnitOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog") instance=ExtResource("9_6taxa")]
+position = Vector2(984, 328)
+_confirmDialog = NodePath("../../ConfirmationDialog")
+
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory", "_unitArea")]
 process_mode = 1
 script = ExtResource("2_khnnw")
 _source = NodePath("../SharedArea/Source")
 _inventory = NodePath("Inventory")
+_unitArea = NodePath("../UnitArea")
 
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
@@ -1358,6 +1366,13 @@ offset_right = 1842.0
 offset_bottom = 727.0
 text = "Award Spell"
 
+[node name="UnitTestingButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 1720.0
+offset_top = 657.0
+offset_right = 1842.0
+offset_bottom = 688.0
+text = "Recruit Unit"
+
 [node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
 offset_left = 55.0
 offset_top = 117.0
@@ -1365,6 +1380,17 @@ offset_right = 117.0
 offset_bottom = 148.0
 text = "Undo"
 metadata/_edit_use_anchors_ = true
+
+[node name="UnitsToggle" type="CheckButton" parent="GameplayControl/PlayerUI"]
+offset_left = 208.0
+offset_top = 1024.0
+offset_right = 252.0
+offset_bottom = 1048.0
+text = "Units"
+
+[node name="UnitArea" parent="GameplayControl/PlayerUI" instance=ExtResource("23_l6t3h")]
+visible = false
+position = Vector2(312, 712)
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="GameplayControl/PlayerUI"]
 title = ""
@@ -1428,8 +1454,10 @@ patch_margin_bottom = 30
 [connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
 [connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/UnitOffer" method="NewRound"]
 [connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
 [connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
+[connection signal="Recruit" from="GameplayControl/PlayerUI/SharedArea/UnitOffer" to="GameplayControl/PlayerUI/UnitArea" method="OnRecruit"]
 [connection signal="ManaPaid" from="GameplayControl/PlayerUI/PlayerArea" to="." method="OnManaPaid"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
@@ -1455,9 +1483,13 @@ patch_margin_bottom = 30
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/DeleteDiscardWound" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="RemoveWoundFromDiscard" binds= [1]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/SpellTestingButton" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/UnitTestingButton" to="GameplayControl/PlayerUI/SharedArea/UnitOffer" method="OnRecruitUnit"]
 [connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
+[connection signal="toggled" from="GameplayControl/PlayerUI/UnitsToggle" to="GameplayControl/PlayerUI/PlayerArea" method="OnUnitsButtonToggled"]
 [connection signal="canceled" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnCancelSelection"]
+[connection signal="canceled" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/UnitOffer" method="OnCancelSelection"]
 [connection signal="confirmed" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnConfirmSelection"]
+[connection signal="confirmed" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/UnitOffer" method="OnConfirmSelection"]
 [connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
 [connection signal="pressed" from="GameplayControl/InteractButton" to="GameplayControl" method="_on_interact_button_pressed"]
 

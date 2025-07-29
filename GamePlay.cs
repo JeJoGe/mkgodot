@@ -18,6 +18,8 @@ public partial class GamePlay : Node2D
 	private Inventory inventory;
 	[Export]
 	private PlayerArea _playerArea;
+	[Export]
+	private UnitOffer _unitOffer;
 	private bool _resolvingAction = false;
 	private CardObj _currentCard;
 	private CardControl _currentCardControl;
@@ -74,6 +76,17 @@ public partial class GamePlay : Node2D
 			_currentSpecialActions = specialAction;
 			_currentCard = card;
 			_currentCardControl = cardControl;
+			ResolveManaCosts();
+		}
+	}
+
+	public void OnUnitActivated(Godot.Collections.Array<string> manaCosts, string effect)
+	{
+		if (!ResolvingAction)
+		{
+			_currentManaCosts = manaCosts;
+			_currentBasicActions = [effect];
+			GD.Print("unit activated");
 			ResolveManaCosts();
 		}
 	}

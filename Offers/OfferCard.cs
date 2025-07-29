@@ -4,6 +4,16 @@ public partial class OfferCard : Node2D
 {
 	[Signal]
 	public delegate void ConfirmRewardEventHandler();
+	private int _cardId;
+	public int CardId
+	{
+		get => _cardId;
+	}
+	private CardType _cardType;
+	public CardType CardType
+	{
+		get => _cardType;
+	}
 	private bool _selected = false;
 	public bool Selected
 	{
@@ -24,12 +34,18 @@ public partial class OfferCard : Node2D
 	{
 	}
 
+	public void Initialize(CardType type, int id)
+	{
+		_cardType = type;
+		_cardId = id;
+	}
+
 	private void OnInputEvent(Node _viewport, InputEvent inputEvent, long _idx)
 	{
-		var offer = GetParent<SpellOffer>();
+		var offer = GetParent<Offer>();
 		if (Input.IsActionPressed("leftClick"))
 		{
-			GD.Print("offer card selected");
+			GD.Print(string.Format("offer card selected: {0} {1}", _cardType.ToString(), _cardId));
 			if (offer.Reward)
 			{
 				_selected = true;
