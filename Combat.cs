@@ -183,7 +183,8 @@ public partial class Combat : Node2D
 		_playerAttacks[0] = _playerAttacks[1] = _playerAttacks[2] = _playerAttacks[3] = 0;
 		_playerAttacks[4] = _playerAttacks[5] = _playerAttacks[6] = _playerAttacks[7] = 0;
 		_playerAttacks[8] = _playerAttacks[9] = _playerAttacks[10] = _playerAttacks[11] = 0;
-		GameSettings.UnitList = new List<(int, bool, int)>([(1, true, 0), (2, true, 0), (6, true, 2)]);
+		// for testing only
+		//GameSettings.UnitList = new List<(int, bool, int)>([(1, true, 0), (2, true, 0), (6, true, 2)]);
 		//Utils.PrintBestiary();
 		// get duplicate monsters on different hexes
 		var duplicates = GameSettings.EnemyList.GroupBy(x => x.Item1)

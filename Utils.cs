@@ -292,6 +292,12 @@ public enum UnitType
 	Village, Keep, MageTower, Monastery, City, Glade
 }
 
+// currently only defined 3 types since this is only used for offers
+public enum CardType
+{
+	Action, Spell, Unit
+}
+
 public static class EnumerableExtensions
 {
 	public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
