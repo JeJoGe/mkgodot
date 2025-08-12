@@ -86,9 +86,26 @@ public partial class GamePlay : Node2D
 		{
 			_currentManaCosts = manaCosts;
 			_currentBasicActions = [effect];
-			GD.Print("unit activated");
+			GD.Print(string.Format("unit activated: {0}", effect));
 			ResolveManaCosts();
 		}
+	}
+
+	public void OnCombatInitiated()
+	{
+		var nodes = GetTree().GetNodesInGroup("combatUnits");
+		foreach (var item in nodes)
+		{
+			if (item is Unit unit)
+			{
+				OnUnitEntered(unit);
+			}
+		}
+	}
+
+	public void OnUnitEntered(Unit unit)
+	{
+		unit.UnitActivated += (effect, manaCosts) => OnUnitActivated(manaCosts, effect);
 	}
 
 	public void OnManaRuinsInteract(Godot.Collections.Array<string> manaCosts, Godot.Collections.Array<string> rewards)
@@ -357,16 +374,11 @@ public partial class GamePlay : Node2D
 	// When card enters the tree, tie the signal CardPlayed to OnCardPlayed
 	public void OnCardEntered(Node card)
 	{
-		GD.Print("OnCardEnteredTree: ", card);
-		try
+		if (card is CardControl currCardControl)
 		{
-			var currCardControl = (CardControl)card;
+			GD.Print("OnCardEnteredTree: ", currCardControl);
 			var currCard = (CardObj)currCardControl.GetChild(0);
 			currCard.CardPlayed += (basicAction, specialAction, manaCosts) => OnCardPlayed(manaCosts, basicAction, specialAction, currCard, currCardControl);
-		}
-		catch
-		{
-			GD.Print("ONCARDPLAYED signal not connected; ", card);
 		}
 	}
 

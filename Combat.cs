@@ -224,6 +224,7 @@ public partial class Combat : Node2D
 			//add child to control
 			AddChild(unitCard);
 			_unitList.Add(unitCard);
+			unitCard.AddToGroup("combatUnits");
 		}
 
 		CurrentPhase = Phase.Ranged;
