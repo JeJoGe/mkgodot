@@ -56,7 +56,20 @@
         "level":1,
         "armour":2,
         "resistances":[],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts":["green"],
+                "effect": "heal-2"
+            },
+            {
+                "manacosts":[],
+                "effect":"ready-2"
+            },
+            {
+                "manacosts":[],
+                "effect":"gainManaTokens-Green"
+            }
+        ],
         "version":"base",
         "types":[0,3],
         "cost":3,
@@ -142,7 +155,24 @@
         "level":2,
         "armour":4,
         "resistances":[],
-        "abilities":[],
+        "abilities":[
+            {
+                "manacosts":[],
+                "effect": "attack-physical-melee-3"
+            },
+            {
+                "manacosts":[],
+                "effect": "block-3"
+            },
+            {
+                "manacosts":["red"],
+                "effect": "attack-fire-melee-4"
+            },
+            {
+                "manacosts":["red"],
+                "effect": "block-fire-4"
+            }
+        ],
         "version":"base",
         "types":[3],
         "cost":7,

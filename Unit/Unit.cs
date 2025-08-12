@@ -65,7 +65,6 @@ public partial class Unit : Node2D
 
 	private void OnActivateButtonClicked()
 	{
-		GD.Print("activate unit");
 		var id = _abilitiesDropdown.GetSelectedId();
 		//GD.Print(string.Format("selected option: {0}", id));
 		//GD.Print(string.Format("colour: {0} effect: {1}", Abilities[id].ManaCosts[0], Abilities[id].Effect));

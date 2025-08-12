@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public partial class UnitArea : Node2D
 {
+    [Signal]
+    public delegate void UnitEnteredEventHandler(Unit unit);
     private static readonly int _cardOffset = 200;
     private PackedScene _unitScene = GD.Load<PackedScene>("res://Unit/Unit.tscn");
 
@@ -45,6 +47,7 @@ public partial class UnitArea : Node2D
             unitSprite.Texture = atlas;
             unitCard.Position = new Vector2(_cardOffset * i + 100, 200);
             AddChild(unitCard);
+            EmitSignal(SignalName.UnitEntered, unitCard);
         }
     }
 
