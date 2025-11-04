@@ -173,8 +173,7 @@ public partial class Player : Node2D
 					break;
 			}
 			_playerArea.GainReward(PlayerArea.Reward.fame, Utils.Bestiary[defeatedEnemy.Item1].Fame);
-			GD.Print(Reputation);
-			GD.Print(Fame);
+			GD.Print("Reputation: " + Reputation);
 		}
 		var currHexSafe = true; // check if current hex is safe
 		if (!currHexSafe)

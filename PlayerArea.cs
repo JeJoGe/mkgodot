@@ -14,6 +14,8 @@ public partial class PlayerArea : Node2D
 	private Inventory _inventory;
 	[Export]
 	private UnitArea _unitArea;
+	[Export]
+	private Player _player;
 	private PackedScene _manaPopup = GD.Load<PackedScene>("res://ManaPopUp/ManaPopup.tscn");
 	private Dictionary<string, bool> _skills = new();
 	private ManaPopup _popup;
@@ -182,6 +184,7 @@ public partial class PlayerArea : Node2D
 
 	public void GainReward(Reward reward, int num=0)
 	{
+		GD.Print("Gaining Reward");
 		switch (reward)
 		{
 			case Reward.crystal:
@@ -189,7 +192,7 @@ public partial class PlayerArea : Node2D
 				break;
 			case Reward.fame:
 				_player.Fame = _player.Fame + num;
-				GD.Print(_player.Fame);
+				GD.Print("Current Fame: " + _player.Fame);
 				break;
 			//case Reward.reputation:  //Actually reputation shouldn't be a reward as its not reward from token.
 			//	break;                 //Should be checked on combat victory and given directly as multiple variables

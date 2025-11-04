@@ -1189,12 +1189,13 @@ _confirmDialog = NodePath("../../ConfirmationDialog")
 position = Vector2(984, 328)
 _confirmDialog = NodePath("../../ConfirmationDialog")
 
-[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory", "_unitArea")]
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory", "_unitArea", "_player")]
 process_mode = 1
 script = ExtResource("2_khnnw")
 _source = NodePath("../SharedArea/Source")
 _inventory = NodePath("Inventory")
 _unitArea = NodePath("../UnitArea")
+_player = NodePath("../../Player")
 
 [node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
 visible = false
@@ -1411,10 +1412,11 @@ position = Vector2(969, 543)
 process_callback = 0
 script = ExtResource("4_15lwj")
 
-[node name="Player" type="Node2D" parent="GameplayControl" node_paths=PackedStringArray("_deck")]
+[node name="Player" type="Node2D" parent="GameplayControl" node_paths=PackedStringArray("_deck", "_playerArea")]
 position = Vector2(672, 856)
 script = ExtResource("4_jr7il")
 _deck = NodePath("../PlayerUI/PlayerArea/Deck")
+_playerArea = NodePath("../PlayerUI/PlayerArea")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
 texture = ExtResource("5_w03ud")
