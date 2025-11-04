@@ -7,6 +7,8 @@ using System.Numerics;
 
 public partial class Player : Node2D
 {
+	[Signal]
+	public delegate void CombatInitiatedEventHandler();
 	[Export]
 	private Deck _deck;
 	[Export]
@@ -88,6 +90,7 @@ public partial class Player : Node2D
 		Combat.Wound += _deck.AddWoundToHand;
 		CombatStart.GlobalPosition = new Godot.Vector2(270, 0);
 		GetTree().Paused = true;
+		EmitSignal(SignalName.CombatInitiated);
 	}
 
 	public void CombatCleanup(List<(int, Color)> defeated)

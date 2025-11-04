@@ -13,6 +13,10 @@ public partial class PlayerArea : Node2D
 	[Export]
 	private Inventory _inventory;
 	[Export]
+	private Player _player;
+	[Export]
+	private SpellOffer _spellOffer;
+	[Export]
 	private UnitArea _unitArea;
 	[Export]
 	private Player _player;
