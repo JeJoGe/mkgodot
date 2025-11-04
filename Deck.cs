@@ -209,10 +209,10 @@ public partial class Deck : Node2D
 	* Deck Interactions
 	******************************************************/
 
-	public void OnDeckButtonPressed(int numOfCards)
+	public void OnDeckButtonPressed(int numOfCards, bool fromCard)
 	{
 		int cardsDrawn = 0;
-		while (CurrentHand.Count() < this.CardLimit && cardsDrawn < numOfCards)
+		while (cardsDrawn < numOfCards && (CurrentHand.Count() < this.CardLimit || fromCard))
 		{
 			DrawCardsVisual(DrawCardType.actionCard);
 			cardsDrawn++;

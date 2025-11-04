@@ -19,6 +19,12 @@ public partial class ManaPopup : VSplitContainer
 	private bool _polarization = false;
 	private (Source.Colour, ManaType) _selectedOption;
 	private int _optionSize = 200;
+	public Source.Colour _manaRequired;
+	public bool _changeConfirm = false;
+
+	// if true, its Crystallize
+	private string _cardName = "";
+	private bool _isTop = false;
 	public enum ManaType
 	{
 		Dice, Token, Crystal
@@ -29,8 +35,14 @@ public partial class ManaPopup : VSplitContainer
 	{
 	}
 
-	public void PopulatePopup(List<(Source.Colour, ManaType)> options)
+	public void PopulatePopup(List<(Source.Colour, ManaType)> options, bool changeConfirm, Source.Colour manaRequired, string cardName = "", bool isTop = false)
 	{
+
+		_cardName = cardName;
+		_isTop = isTop;
+		_manaRequired = manaRequired;
+		_changeConfirm = changeConfirm;
+
 		foreach (var item in options)
 		{
 			AddOption(item.Item1, item.Item2);
@@ -38,10 +50,15 @@ public partial class ManaPopup : VSplitContainer
 		ResizeWindow();
 	}
 
-	public void PopulatePopup(List<(Source.Colour, ManaType)> options, List<(Source.Colour, ManaType)> polarizationOptions)
+	public void PopulatePopup(List<(Source.Colour, ManaType)> options, List<(Source.Colour, ManaType)> polarizationOptions, bool changeConfirm, Source.Colour manaRequired, string cardName = "", bool isTop = false)
 	{
+		_cardName = cardName;
+		_isTop = isTop;
+		_manaRequired = manaRequired;
+		_changeConfirm = changeConfirm;
 		_polarizationToggle.Visible = true;
-		PopulatePopup(options);
+
+		PopulatePopup(options, _changeConfirm, manaRequired, cardName, isTop);
 		foreach (var item in polarizationOptions)
 		{
 			AddOption(item.Item1, item.Item2, true);
@@ -135,8 +152,17 @@ public partial class ManaPopup : VSplitContainer
 				throw new InvalidOperationException("Failed to activate Polarization skill");
 			}
 		}
+		if (_changeConfirm)
+		{
+			GD.Print("CONFIRM CHANGED,", (int)_selectedOption.Item1);
+			playerArea._inventory.AddCrystal((int)_selectedOption.Item1);
+		}
+		else
+		{
+			GD.Print("CONSUME");
+			playerArea.ConsumeMana(_selectedOption.Item1, _selectedOption.Item2, _manaRequired, _cardName, _isTop);
+		}
 		// consume selected option
-		playerArea.ConsumeMana(_selectedOption.Item1, _selectedOption.Item2);
 		_window.QueueFree();
 	}
 

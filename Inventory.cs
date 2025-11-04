@@ -10,7 +10,7 @@ public partial class Inventory : Node2D
 	{
 		get => _manaStolenDie;
 	}
-	private Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
+	public Dictionary<Source.Colour, int> _crystals = new Dictionary<Source.Colour, int>{
 		{Source.Colour.Blue,0},
 		{Source.Colour.Red,0},
 		{Source.Colour.Green,0},
@@ -40,10 +40,10 @@ public partial class Inventory : Node2D
 	public override void _Ready()
 	{
 		// TESTING ONLY
-		_crystals[Source.Colour.Blue] = 3;
-		_crystals[Source.Colour.Red] = 3;
-		_crystals[Source.Colour.Green] = 3;
-		_crystals[Source.Colour.White] = 3;
+		_crystals[Source.Colour.Blue] = 1;
+		_crystals[Source.Colour.Red] = 1;
+		_crystals[Source.Colour.Green] = 1;
+		_crystals[Source.Colour.White] = 1;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since  the previous frame.
@@ -131,7 +131,7 @@ public partial class Inventory : Node2D
 	private void UpdateToken(Source.Colour colour)
 	{
 		var newValue = _tokens[colour];
-		switch (colour) 
+		switch (colour)
 		{
 			case Source.Colour.Blue:
 				{

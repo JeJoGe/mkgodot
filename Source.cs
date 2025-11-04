@@ -6,7 +6,7 @@ public partial class Source : Node2D
 {
 	[Signal]
 	public delegate void DieEventHandler(Colour colour);
-	private Dictionary<Colour, int> _dice = new Dictionary<Colour, int>{
+	public Dictionary<Colour, int> _dice = new Dictionary<Colour, int>{
 		{Colour.Blue, 0},
 		{Colour.Red, 0},
 		{Colour.Green, 0},

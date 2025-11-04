@@ -175,8 +175,8 @@
         "colour": "blue",
         "xCoord": 1,
         "yCoord": 2,
-        "topFunction": "payMana-1&gainCrystals-same_color",
-        "bottomFunction": "gainCrystals-1",
+        "topFunction": "top",
+        "bottomFunction": "bottom",
         "copies": 0,
         "phase": "special",
         "character": "basic"

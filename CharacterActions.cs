@@ -38,3 +38,14 @@ public enum CharacterPhases
     combat,
     postEffects
 }
+
+public enum CardRequiringInput
+{
+    Crystallize
+}
+
+public enum CardEffect
+{
+    top,
+    bottom
+}

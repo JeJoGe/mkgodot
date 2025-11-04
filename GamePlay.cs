@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
+using System.Drawing;
 using System.Linq;
 
 public partial class GamePlay : Node2D
@@ -18,6 +19,8 @@ public partial class GamePlay : Node2D
 	private Inventory inventory;
 	[Export]
 	private PlayerArea _playerArea;
+	[Export]
+	private Source _source;
 	private bool _resolvingAction = false;
 	private CardObj _currentCard;
 	private CardControl _currentCardControl;
@@ -26,14 +29,19 @@ public partial class GamePlay : Node2D
 	private Godot.Collections.Array<string> _currentManaCosts;
 	private Godot.Collections.Array<string> _currentRewards;
 	public bool ResolvingAction { get => _resolvingAction; } // prevent another action from being activated while current action resolves
+	private int colourPaid;
+	private string colourPaidType;
+
+	private string[] cardsRequiringInput = [nameof(CardRequiringInput.Crystallize)];
 
 	// Called when the node enters the scene tree for the first time.
 	// TODO: Optimize the Callable initialization by calling it in _Ready
 	public override void _Ready()
 	{
+		GD.Print("RAN THIS");
 		tactics.StartRound += onStartRound;
 		tactics.TacticSelected += tacticChosen => onResolveTactic(tacticChosen);
-
+		_playerArea.BlackManaPaid += (colourChosen, type, cardName, isGoldChosen) => onBlackManaPaid(colourChosen, type, cardName, isGoldChosen);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -110,7 +118,7 @@ public partial class GamePlay : Node2D
 				// Perform rewards
 			}
 		}
-		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0]), true)) // TODO
+		else if (!_playerArea.PayMana(Utils.ConvertStringToSourceColour(_currentManaCosts[0]), false)) // TODO
 		{
 			// no mana available to complete action TODO: return already spent mana
 			_resolvingAction = false;
@@ -121,12 +129,62 @@ public partial class GamePlay : Node2D
 	{
 		Utils.undoRedo.CreateAction("Card Play Action");
 		GD.Print(basicAction);
+		List<Callable> doMethodList = new List<Callable>();
+		List<Callable> undoMethodList = new List<Callable>();
 
+		if (cardsRequiringInput.Contains(card.cardId))
+		{
+
+			switch (card.cardId)
+			{
+				case nameof(CardRequiringInput.Crystallize):
+					if (basicAction.Contains(nameof(CardEffect.top)))
+					{
+						GD.Print("TOP");
+						_playerArea.PayMana(Source.Colour.Black, true, card.cardId);
+					}
+					else
+					{
+						GD.Print("BOTTOM");
+						_playerArea.PayMana(Source.Colour.Black, false, card.cardId);
+					}
+					Callable CrystallizeAdd = Callable.From(() =>
+					{
+						doMethodCardDeckUpdates(card, cardControl);
+					});
+					Callable CrystallizeUndo = Callable.From(() =>
+					{
+						if (basicAction.Contains(nameof(CardEffect.top)))
+						{
+							if (colourPaidType == nameof(ManaPopup.ManaType.Dice))
+							{
+								_source.SetDie((Source.Colour)colourPaid);
+							}
+							else if (colourPaidType == nameof(ManaPopup.ManaType.Crystal))
+							{
+								inventory.AddCrystal((Source.Colour)colourPaid);
+							}
+							else if (colourPaidType == nameof(ManaPopup.ManaType.Token))
+							{
+								inventory.AddToken(colourPaid);
+							}
+							inventory.ConsumeCrystal((Source.Colour)colourPaid);
+						}
+						else
+						{
+							inventory.ConsumeCrystal((Source.Colour)colourPaid);
+						}
+						undoMethodCardDeckUpdates(card, cardControl);
+
+					});
+					break;
+				default:
+					break;
+			}
+		}
 
 		if (basicAction != null)
 		{
-			List<Callable> doMethodList = new List<Callable>();
-			List<Callable> undoMethodList = new List<Callable>();
 
 			for (int i = 0; i < basicAction.Count(); i++)
 			{
@@ -175,7 +233,8 @@ public partial class GamePlay : Node2D
 							undoMethodList.Add(ReinstateWound);
 							break;
 						case nameof(BasicCardActions.draw):
-							deck.OnDeckButtonPressed(quantity);
+							GD.Print(quantity);
+							deck.OnDeckButtonPressed(quantity, true);
 							cardControl.PlayedCardAnimation();
 							Utils.undoRedo.ClearHistory();
 							Utils.undoRedo.CommitAction();
@@ -247,11 +306,6 @@ public partial class GamePlay : Node2D
 							break;
 						case nameof(BasicCardActions.useAdditionalDice):
 							break;
-						case nameof(BasicCardActions.gainCrystals):
-
-							break;
-						case nameof(BasicCardActions.payMana):
-							break;
 						default:
 							break;
 					}
@@ -276,7 +330,6 @@ public partial class GamePlay : Node2D
 				Utils.undoRedo.AddUndoMethod(undoCallable);
 			}
 			Utils.undoRedo.CommitAction();
-
 		}
 
 		if (specialAction != null)
@@ -358,14 +411,32 @@ public partial class GamePlay : Node2D
 		}
 	}
 
+	public void onBlackManaPaid(int colourChosen, string type, string cardName, bool isGoldChosen)
+	{
+		GD.Print("GOTTOSIGNAL");
+		colourPaidType = type;
+		if (isGoldChosen)
+		{
+			colourPaid = (int)Source.Colour.Gold;
+		}
+		else
+		{
+			colourPaid = colourChosen;
+		}
+		if (cardName == nameof(CardRequiringInput.Crystallize))
+		{
+			_playerArea._inventory.AddCrystal(colourChosen);
+		}
+	}
+
 	public void onStartRound()
 	{
-		deck.OnDeckButtonPressed(player.cardDrawLimit);
+		deck.OnDeckButtonPressed(player.cardDrawLimit, false);
 	}
 
 	private void OnEndTurn()
 	{
-		deck.OnDeckButtonPressed(player.cardDrawLimit - deck.CurrentHand.Count);
+		deck.OnDeckButtonPressed(player.cardDrawLimit - deck.CurrentHand.Count, false);
 	}
 
 	public void onResolveTactic(string TacticChosen)
@@ -373,7 +444,7 @@ public partial class GamePlay : Node2D
 		switch (TacticChosen)
 		{
 			case "Tactic5":
-				deck.OnDeckButtonPressed(2);
+				deck.OnDeckButtonPressed(2, true);
 				break;
 			default:
 				break;
