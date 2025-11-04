@@ -11,6 +11,8 @@ public partial class Player : Node2D
 	public delegate void CombatInitiatedEventHandler();
 	[Export]
 	private Deck _deck;
+	[Export]
+	private PlayerArea _playerArea;
 	GameplayControl gameplayControl;
 	const int MainLayer = 0;
 	const int MainTerrainSet = 0;
@@ -22,6 +24,26 @@ public partial class Player : Node2D
 	public int MovePoints { get => _movePoints; set => _movePoints = value; }
 	private int _fame = 0;
 	public int Fame { get => _fame; set => _fame = value; }
+	private int _reputation;
+	public int Reputation
+	{
+		get => _reputation;
+		set
+		{
+			if (value < 0)
+			{
+				_reputation = 0;
+			}
+			else if (value > 14)
+			{
+				_reputation = 14;
+			}
+			else
+			{
+				_reputation = value;
+			}
+		}
+	}
 	MapGen mapGen;
 	Vector2I NewPosition;
 	Callable ChangeGlobalPos;
@@ -33,9 +55,15 @@ public partial class Player : Node2D
 	public int cardDrawLimit = 5;
 	private List<(string, bool)> _skills = new();
 
+	public enum ReputationScale
+	{
+	X, NegFive, NegThree, NegTwo, NegOneNeg, NegOnePos, NegZero, Zero, PosZero, PosOneNeg, PosOnePos, PosTwoNeg, PosTwoPos, PosThree, PosFive 
+	}
+
 	public override void _Ready()
 	{
 		PlayerPos = new Vector2I(0, 0);
+		Reputation = 7;
 		mapGen = GetNode<MapGen>("../MapGen");
 		gameplayControl = GetNode<GameplayControl>("..");
 		//GD.Print(mapGen.ToGlobal(mapGen.MapToLocal(new Vector2I(0,0))));
@@ -70,8 +98,86 @@ public partial class Player : Node2D
 		GetTree().Paused = false;
 		foreach (var defeatedEnemy in defeated)
 		{
+			Vector2I enemyPosCoords = PlayerPos;
 			//for each color, determine the location of each defeated enemy and the site. Depending on site, do something 
 			//different for victory conditions like get spells, add markers, etc.
+			if (defeatedEnemy.Item2 == Colors.Black)
+			{
+				enemyPosCoords += new Vector2I(0, 0);
+			}
+			else if (defeatedEnemy.Item2 == Colors.Red)
+			{
+				enemyPosCoords += new Vector2I(1, -1);
+			}
+			else if (defeatedEnemy.Item2 == Colors.Gold)
+			{
+				enemyPosCoords += new Vector2I(1, 0);
+			}
+			else if (defeatedEnemy.Item2 == Colors.Green)
+			{
+				enemyPosCoords += new Vector2I(0, 1);
+			}
+			else if (defeatedEnemy.Item2 == Colors.Blue)
+			{
+				enemyPosCoords += new Vector2I(-1, 1);
+			}
+			else if (defeatedEnemy.Item2 == Colors.White)
+			{
+				enemyPosCoords += new Vector2I(-1, 0);
+			}
+			else if (defeatedEnemy.Item2 == Colors.Purple)
+			{
+				enemyPosCoords += new Vector2I(0, -1);
+			}
+			else
+			{
+				GD.Print("Something went terribly wrong with Enemy color position");
+			}
+
+			var mapEvent = mapGen.GetCellTileData(MapGen.MainLayer, enemyPosCoords).GetCustomData("Event").ToString();
+			switch (mapEvent)
+			{
+				case "monastery":
+					break;
+				case "keep":
+					break;
+				case "tower":
+					break;
+				case "den":
+					break;
+				case "labyrinth":
+					break;
+				case "tomb":
+					break;
+				case "grounds":
+					break;
+				case "maze":
+					break;
+				case "dungeon":
+					break;
+				case "gcastle":
+				case "bcastle":
+				case "rcastle":
+				case "wcastle":
+					break;
+				default:
+					if (Utils.Bestiary[defeatedEnemy.Item1].Colour == MonsterColour.Green)
+					{
+						Reputation += 1;
+					}
+					else if (Utils.Bestiary[defeatedEnemy.Item1].Colour == MonsterColour.Red)
+					{
+						Reputation += 2;
+					}
+					else
+					{
+						GD.Print("Not a rampaging monster (Volkare?)");
+					}
+					break;
+			}
+			_playerArea.GainReward(PlayerArea.Reward.fame, Utils.Bestiary[defeatedEnemy.Item1].Fame);
+			GD.Print(Reputation);
+			GD.Print(Fame);
 		}
 		var currHexSafe = true; // check if current hex is safe
 		if (!currHexSafe)

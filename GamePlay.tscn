@@ -1459,6 +1459,7 @@ patch_margin_bottom = 30
 [connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
 [connection signal="Recruit" from="GameplayControl/PlayerUI/SharedArea/UnitOffer" to="GameplayControl/PlayerUI/UnitArea" method="OnRecruit"]
 [connection signal="ManaPaid" from="GameplayControl/PlayerUI/PlayerArea" to="." method="OnManaPaid"]
+[connection signal="OnAwardSpell" from="GameplayControl/PlayerUI/PlayerArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
 [connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
 [connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
