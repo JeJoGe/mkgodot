@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuql3w4luen08"]
+
+[ext_resource type="Script" uid="uid://c56vl0qbcpld8" path="res://TileWindow/TileWindowControl.cs" id="1_dtyo3"]
+[ext_resource type="Script" uid="uid://ds5xqulxva02e" path="res://TileWindow/TileWindow.cs" id="1_uj0d4"]
+[ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="2_n3l4k"]
+
+[node name="TileWindow" type="Node2D"]
+top_level = true
+z_index = 99
+script = ExtResource("1_uj0d4")
+
+[node name="TileWindowControl" type="NinePatchRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("2_n3l4k")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+script = ExtResource("1_dtyo3")
+
+[node name="ColorRect" type="ColorRect" parent="TileWindowControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364706, 0.0823529, 0.0235294, 1)
+
+[node name="TerrainLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 111.0
+offset_bottom = 73.0
+theme_override_font_sizes/font_size = 50
+text = "Terrain:"
+
+[node name="TerrainText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 50.0
+offset_right = 500.0
+offset_bottom = 119.0
+theme_override_font_sizes/font_size = 50
+
+[node name="TokenLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 169.0
+offset_right = 240.0
+offset_bottom = 238.0
+theme_override_font_sizes/font_size = 50
+text = "Token:"
+
+[node name="ActionsLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 430.0
+offset_right = 243.0
+offset_bottom = 499.0
+theme_override_font_sizes/font_size = 50
+text = "Actions:"
+
+[node name="ActionsText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 430.0
+offset_right = 860.0
+offset_bottom = 499.0
+theme_override_font_sizes/font_size = 50
+
+[node name="AdditionalTokensLabelText" type="Label" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 690.0
+offset_right = 499.0
+offset_bottom = 759.0
+theme_override_font_sizes/font_size = 50
+text = "Additional Tokens:"
+
+[node name="Button" type="Button" parent="TileWindowControl"]
+layout_mode = 0
+offset_left = 910.0
+offset_top = 1000.0
+offset_right = 1010.0
+offset_bottom = 1062.0
+text = "Close"
+
+[node name="TokenSprite" type="Sprite2D" parent="TileWindowControl"]
+position = Vector2(350, 250)
+
+[connection signal="pressed" from="TileWindowControl/Button" to="TileWindowControl" method="on_button_pressed"]

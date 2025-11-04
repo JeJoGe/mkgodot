@@ -1,12 +1,1466 @@
-[gd_scene load_steps=2 format=3 uid="uid://dimobf2w6ua88"]
+[gd_scene load_steps=58 format=3 uid="uid://dimobf2w6ua88"]
 
 [ext_resource type="PackedScene" uid="uid://rgqlw68wyrqj" path="res://Source.tscn" id="1_fhj8j"]
+[ext_resource type="Script" uid="uid://cn07nl0ohrm7v" path="res://GamePlay.cs" id="1_m0gf8"]
+[ext_resource type="Script" uid="uid://cp1yt31k1tl4s" path="res://GameplayControl.cs" id="2_7jlcl"]
+[ext_resource type="ButtonGroup" uid="uid://bwjq78y5esejs" path="res://Tactics/TacticsGroup.tres" id="2_j6tl2"]
+[ext_resource type="Script" uid="uid://cftuqq5prraed" path="res://PlayerArea.cs" id="2_khnnw"]
+[ext_resource type="Script" uid="uid://m51huvwsb1g3" path="res://Tactics.cs" id="2_o1npl"]
+[ext_resource type="Texture2D" uid="uid://spu3n4vlck0y" path="res://assets/TileImages/MK_map_tiles_01-A.png" id="2_qbpyy"]
+[ext_resource type="Texture2D" uid="uid://c0v7wfecp1b3v" path="res://assets/Tactics/day1.jpg" id="3_5mt76"]
+[ext_resource type="Script" uid="uid://vhyite33o3r0" path="res://MapGen/MapGen.cs" id="3_hiwow"]
+[ext_resource type="Script" uid="uid://c8nf8sf6cqyv3" path="res://Camera2D.cs" id="4_15lwj"]
+[ext_resource type="Texture2D" uid="uid://dautabdtkq2tj" path="res://assets/Tactics/day2.jpg" id="4_b2aj0"]
+[ext_resource type="Script" uid="uid://cc417qxxetc2o" path="res://Player/Player.cs" id="4_jr7il"]
+[ext_resource type="Texture2D" uid="uid://dnvqtapwrs4r" path="res://assets/Tactics/day3.jpg" id="5_2ng8m"]
+[ext_resource type="Texture2D" uid="uid://drb6w7us2qncs" path="res://assets/CharacterModel/TovakModel.png" id="5_w03ud"]
+[ext_resource type="Texture2D" uid="uid://che2f2233m3qg" path="res://assets/Tactics/day4.jpg" id="6_rt858"]
+[ext_resource type="Texture2D" uid="uid://dtmcm4yur7m3h" path="res://assets/Tactics/day5.jpg" id="7_bkwh1"]
+[ext_resource type="Texture2D" uid="uid://corftg1wpaea2" path="res://assets/Tactics/day6.jpg" id="8_1ear6"]
+[ext_resource type="Script" uid="uid://86ofhtdtnse5" path="res://SharedArea.cs" id="10_bkisu"]
+[ext_resource type="PackedScene" uid="uid://vctows426n3l" path="res://Offers/SpellOffer.tscn" id="10_h555x"]
+[ext_resource type="Script" uid="uid://dmwa0dyqkeguw" path="res://TurnOrderTracker.cs" id="12_js350"]
+[ext_resource type="Script" uid="uid://dirawnwx0ylhe" path="res://Deck.cs" id="18_4oofl"]
+[ext_resource type="Script" uid="uid://ckdio2pl1s5hc" path="res://DummyArea.cs" id="18_70l2p"]
+[ext_resource type="Texture2D" uid="uid://ctxr7ebcu25fy" path="res://assets/cardback.jpg" id="19_vtp22"]
+[ext_resource type="PackedScene" uid="uid://ddlsl1mpmfruu" path="res://Inventory.tscn" id="20_4h2of"]
+[ext_resource type="PackedScene" uid="uid://dxvs8dbywtf8c" path="res://DeckPopup.tscn" id="21_bdyk2"]
+[ext_resource type="PackedScene" uid="uid://crxcneojuya1f" path="res://Crystal.tscn" id="22_7fhxe"]
+[ext_resource type="Texture2D" uid="uid://d00cjwdif7noe" path="res://assets/GameWindows/Window9PatchRect.png" id="26_j3ivl"]
 
-[node name="GamePlay" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3iwm"]
+size = Vector2(100, 140)
 
-[node name="PlayerArea" type="Node2D" parent="."]
+[sub_resource type="TileMapPattern" id="TileMapPattern_7j6h4"]
+tile_data = PackedInt32Array(65536, 131072, 0, 131072, 327680, 0, 1, 0, 0, 65537, 196608, 0, 131073, 393216, 0, 2, 65536, 0, 65538, 262144, 0)
 
-[node name="HUD" type="Node2D" parent="."]
+[sub_resource type="TileMapPattern" id="TileMapPattern_t51yq"]
+tile_data = PackedInt32Array(65536, 131072, 1, 131072, 327680, 1, 1, 0, 1, 65537, 196608, 1, 131073, 393216, 1, 2, 65536, 1, 65538, 262144, 1)
 
-[node name="Source" parent="HUD" instance=ExtResource("1_fhj8j")]
+[sub_resource type="TileMapPattern" id="TileMapPattern_d3p76"]
+tile_data = PackedInt32Array(65536, 131072, 10, 131072, 327680, 10, 1, 0, 10, 65537, 196608, 10, 131073, 393216, 10, 2, 65536, 10, 65538, 262144, 10)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_4lkm7"]
+tile_data = PackedInt32Array(65536, 131072, 11, 131072, 327680, 11, 1, 0, 11, 65537, 196608, 11, 131073, 393216, 11, 2, 65536, 11, 65538, 262144, 11)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_1g8q5"]
+tile_data = PackedInt32Array(65536, 131072, 12, 131072, 327680, 12, 1, 0, 12, 65537, 196608, 12, 131073, 393216, 12, 2, 65536, 12, 65538, 262144, 12)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_me8yi"]
+tile_data = PackedInt32Array(65536, 131072, 13, 131072, 327680, 13, 1, 0, 13, 65537, 196608, 13, 131073, 393216, 13, 2, 65536, 13, 65538, 262144, 13)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_7xg8v"]
+tile_data = PackedInt32Array(65536, 131072, 14, 131072, 327680, 14, 1, 0, 14, 65537, 196608, 14, 131073, 393216, 14, 2, 65536, 14, 65538, 262144, 14)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_hqt4r"]
+tile_data = PackedInt32Array(65536, 131072, 15, 131072, 327680, 15, 1, 0, 15, 65537, 196608, 15, 131073, 393216, 15, 2, 65536, 15, 65538, 262144, 15)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_hp27w"]
+tile_data = PackedInt32Array(65536, 131072, 16, 131072, 327680, 16, 1, 0, 16, 65537, 196608, 16, 131073, 393216, 16, 2, 65536, 16, 65538, 262144, 16)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_b6ey2"]
+tile_data = PackedInt32Array(65536, 131072, 17, 131072, 327680, 17, 1, 0, 17, 65537, 196608, 17, 131073, 393216, 17, 2, 65536, 17, 65538, 262144, 17)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_kmuri"]
+tile_data = PackedInt32Array(65536, 131072, 18, 131072, 327680, 18, 1, 0, 18, 65537, 196608, 18, 131073, 393216, 18, 2, 65536, 18, 65538, 262144, 18)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_fjdfl"]
+tile_data = PackedInt32Array(65536, 131072, 19, 131072, 327680, 19, 1, 0, 19, 65537, 196608, 19, 131073, 393216, 19, 2, 65536, 19, 65538, 262144, 19)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_q06b5"]
+tile_data = PackedInt32Array(65536, 131072, 2, 131072, 327680, 2, 1, 0, 2, 65537, 196608, 2, 131073, 393216, 2, 2, 65536, 2, 65538, 262144, 2)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_l4rls"]
+tile_data = PackedInt32Array(65536, 131072, 20, 131072, 327680, 20, 1, 0, 20, 65537, 196608, 20, 131073, 393216, 20, 2, 65536, 20, 65538, 262144, 20)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_j8lvl"]
+tile_data = PackedInt32Array(65536, 131072, 21, 131072, 327680, 21, 1, 0, 21, 65537, 196608, 21, 131073, 393216, 21, 2, 65536, 21, 65538, 262144, 21)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_ln1gb"]
+tile_data = PackedInt32Array(65536, 131072, 22, 131072, 327680, 22, 1, 0, 22, 65537, 196608, 22, 131073, 393216, 22, 2, 65536, 22, 65538, 262144, 22)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_b0lo2"]
+tile_data = PackedInt32Array(65536, 131072, 23, 131072, 327680, 23, 1, 0, 23, 65537, 196608, 23, 131073, 393216, 23, 2, 65536, 23, 65538, 262144, 23)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_3knyh"]
+tile_data = PackedInt32Array(65536, 131072, 24, 131072, 327680, 24, 1, 0, 24, 65537, 196608, 24, 131073, 393216, 24, 2, 65536, 24, 65538, 262144, 24)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_hai2l"]
+tile_data = PackedInt32Array(65536, 131072, 25, 131072, 327680, 25, 1, 0, 25, 65537, 196608, 25, 131073, 393216, 25, 2, 65536, 25, 65538, 262144, 25)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_nxmvw"]
+tile_data = PackedInt32Array(65536, 131072, 26, 131072, 327680, 26, 1, 0, 26, 65537, 196608, 26, 131073, 393216, 26, 2, 65536, 26, 65538, 262144, 26)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_3kxsx"]
+tile_data = PackedInt32Array(65536, 131072, 3, 131072, 327680, 3, 1, 0, 3, 65537, 196608, 3, 131073, 393216, 3, 2, 65536, 3, 65538, 262144, 3)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_5ws5w"]
+tile_data = PackedInt32Array(65536, 131072, 4, 131072, 327680, 4, 1, 0, 4, 65537, 196608, 4, 131073, 393216, 4, 2, 65536, 4, 65538, 262144, 4)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_lb8gv"]
+tile_data = PackedInt32Array(65536, 131072, 5, 131072, 327680, 5, 1, 0, 5, 65537, 196608, 5, 131073, 393216, 5, 2, 65536, 5, 65538, 262144, 5)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_2phja"]
+tile_data = PackedInt32Array(65536, 131072, 6, 131072, 327680, 6, 1, 0, 6, 65537, 196608, 6, 131073, 393216, 6, 2, 65536, 6, 65538, 262144, 6)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_e7mk1"]
+tile_data = PackedInt32Array(65536, 131072, 7, 131072, 327680, 7, 1, 0, 7, 65537, 196608, 7, 131073, 393216, 7, 2, 65536, 7, 65538, 262144, 7)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_28gyj"]
+tile_data = PackedInt32Array(65536, 131072, 8, 131072, 327680, 8, 1, 0, 8, 65537, 196608, 8, 131073, 393216, 8, 2, 65536, 8, 65538, 262144, 8)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_x5mfn"]
+tile_data = PackedInt32Array(65536, 131072, 9, 131072, 327680, 9, 1, 0, 9, 65537, 196608, 9, 131073, 393216, 9, 2, 65536, 9, 65538, 262144, 9)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rkkx8"]
+texture = ExtResource("2_qbpyy")
+margins = Vector2i(1, 0)
+texture_region_size = Vector2i(61, 71)
+0:0/0 = 0
+0:0/0/z_index = -1
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+1:0/0 = 0
+1:0/0/z_index = -1
+1:0/0/terrain_set = 0
+1:0/0/terrain = 1
+2:0/0 = 0
+2:0/0/z_index = -1
+2:0/0/terrain_set = 0
+2:0/0/terrain = 9
+3:0/0 = 0
+3:0/0/z_index = -1
+3:0/0/terrain_set = 0
+3:0/0/terrain = 0
+4:0/0 = 0
+4:0/0/z_index = -1
+4:0/0/terrain_set = 0
+4:0/0/terrain = 0
+5:0/0 = 0
+5:0/0/z_index = -1
+5:0/0/terrain_set = 0
+5:0/0/terrain = 9
+6:0/0 = 0
+6:0/0/z_index = -1
+6:0/0/terrain_set = 0
+6:0/0/terrain = 9
+0:1/0 = 0
+0:1/0/z_index = -1
+0:1/0/terrain_set = 0
+0:1/0/terrain = 0
+1:1/0 = 0
+1:1/0/z_index = -1
+1:1/0/terrain_set = 0
+1:1/0/terrain = 1
+2:1/0 = 0
+2:1/0/z_index = -1
+2:1/0/terrain_set = 0
+2:1/0/terrain = 9
+3:1/0 = 0
+3:1/0/z_index = -1
+3:1/0/terrain_set = 0
+3:1/0/terrain = 0
+4:1/0 = 0
+4:1/0/z_index = -1
+4:1/0/terrain_set = 0
+4:1/0/terrain = 0
+5:1/0 = 0
+5:1/0/z_index = -1
+5:1/0/terrain_set = 0
+5:1/0/terrain = 9
+6:1/0 = 0
+6:1/0/z_index = -1
+6:1/0/terrain_set = 0
+6:1/0/terrain = 0
+0:2/0 = 0
+0:2/0/z_index = -1
+0:2/0/terrain_set = 0
+0:2/0/terrain = 1
+0:2/0/custom_data_0 = "green"
+1:2/0 = 0
+1:2/0/z_index = -1
+1:2/0/terrain_set = 0
+1:2/0/terrain = 8
+2:2/0 = 0
+2:2/0/z_index = -1
+2:2/0/terrain_set = 0
+2:2/0/terrain = 1
+3:2/0 = 0
+3:2/0/z_index = -1
+3:2/0/terrain_set = 0
+3:2/0/terrain = 1
+3:2/0/custom_data_1 = "glade"
+4:2/0 = 0
+4:2/0/z_index = -1
+4:2/0/terrain_set = 0
+4:2/0/terrain = 0
+4:2/0/custom_data_1 = "village"
+6:2/0 = 0
+6:2/0/z_index = -1
+6:2/0/terrain_set = 0
+6:2/0/terrain = 0
+5:2/0 = 0
+5:2/0/z_index = -1
+5:2/0/terrain_set = 0
+5:2/0/terrain = 0
+6:3/0 = 0
+6:3/0/z_index = -1
+6:3/0/terrain_set = 0
+6:3/0/terrain = 0
+5:3/0 = 0
+5:3/0/z_index = -1
+5:3/0/terrain_set = 0
+5:3/0/terrain = 2
+5:3/0/custom_data_1 = "gmine"
+4:3/0 = 0
+4:3/0/z_index = -1
+4:3/0/terrain_set = 0
+4:3/0/terrain = 0
+4:3/0/custom_data_1 = "village"
+3:3/0 = 0
+3:3/0/z_index = -1
+3:3/0/terrain_set = 0
+3:3/0/terrain = 2
+2:3/0 = 0
+2:3/0/z_index = -1
+2:3/0/terrain_set = 0
+2:3/0/terrain = 0
+1:3/0 = 0
+1:3/0/z_index = -1
+1:3/0/terrain_set = 0
+1:3/0/terrain = 1
+1:3/0/custom_data_1 = "glade"
+0:3/0 = 0
+0:3/0/z_index = -1
+0:3/0/terrain_set = 0
+0:3/0/terrain = 2
+0:3/0/custom_data_0 = "green"
+0:4/0 = 0
+0:4/0/z_index = -1
+0:4/0/terrain_set = 0
+0:4/0/terrain = 0
+1:4/0 = 0
+1:4/0/z_index = -1
+1:4/0/terrain_set = 0
+1:4/0/terrain = 2
+1:4/0/custom_data_0 = "grey"
+1:4/0/custom_data_1 = "keep"
+2:4/0 = 0
+2:4/0/z_index = -1
+2:4/0/terrain_set = 0
+2:4/0/terrain = 0
+3:4/0 = 0
+3:4/0/z_index = -1
+3:4/0/terrain_set = 0
+3:4/0/terrain = 1
+4:4/0 = 0
+4:4/0/z_index = -1
+4:4/0/terrain_set = 0
+4:4/0/terrain = 2
+5:4/0 = 0
+5:4/0/z_index = -1
+5:4/0/terrain_set = 0
+5:4/0/terrain = 0
+5:4/0/custom_data_1 = "village"
+6:4/0 = 0
+6:4/0/z_index = -1
+6:4/0/terrain_set = 0
+6:4/0/terrain = 2
+6:4/0/custom_data_1 = "wmine"
+6:5/0 = 0
+6:5/0/z_index = -1
+6:5/0/terrain_set = 0
+6:5/0/terrain = 0
+6:5/0/custom_data_1 = "village"
+6:6/0 = 0
+6:6/0/z_index = -1
+6:6/0/terrain_set = 0
+6:6/0/terrain = 2
+6:6/0/custom_data_1 = "bmine"
+5:6/0 = 0
+5:6/0/z_index = -1
+5:6/0/terrain_set = 0
+5:6/0/terrain = 1
+5:5/0 = 0
+5:5/0/z_index = -1
+5:5/0/terrain_set = 0
+5:5/0/terrain = 0
+4:5/0 = 0
+4:5/0/z_index = -1
+4:5/0/terrain_set = 0
+4:5/0/terrain = 7
+4:6/0 = 0
+4:6/0/z_index = -1
+4:6/0/terrain_set = 0
+4:6/0/terrain = 0
+4:6/0/custom_data_0 = "green"
+3:6/0 = 0
+3:6/0/z_index = -1
+3:6/0/terrain_set = 0
+3:6/0/terrain = 8
+3:5/0 = 0
+3:5/0/z_index = -1
+3:5/0/terrain_set = 0
+3:5/0/terrain = 5
+3:5/0/custom_data_0 = "purple"
+3:5/0/custom_data_1 = "tower"
+2:5/0 = 0
+2:5/0/z_index = -1
+2:5/0/terrain_set = 0
+2:5/0/terrain = 2
+2:5/0/custom_data_0 = "green"
+2:6/0 = 0
+2:6/0/z_index = -1
+2:6/0/terrain_set = 0
+2:6/0/terrain = 1
+2:6/0/custom_data_1 = "glade"
+1:6/0 = 0
+1:6/0/z_index = -1
+1:6/0/terrain_set = 0
+1:6/0/terrain = 0
+1:6/0/custom_data_1 = "monastery"
+1:5/0 = 0
+1:5/0/z_index = -1
+1:5/0/terrain_set = 0
+1:5/0/terrain = 5
+0:5/0 = 0
+0:5/0/z_index = -1
+0:5/0/terrain_set = 0
+0:5/0/terrain = 5
+0:6/0 = 0
+0:6/0/z_index = -1
+0:6/0/terrain_set = 0
+0:6/0/terrain = 1
+0:7/0 = 0
+0:7/0/z_index = -1
+0:7/0/terrain_set = 0
+0:7/0/terrain = 7
+0:8/0 = 0
+0:8/0/z_index = -1
+0:8/0/terrain_set = 0
+0:8/0/terrain = 8
+1:8/0 = 0
+1:8/0/z_index = -1
+1:8/0/terrain_set = 0
+1:8/0/terrain = 1
+1:8/0/custom_data_0 = "green"
+1:7/0 = 0
+1:7/0/z_index = -1
+1:7/0/terrain_set = 0
+1:7/0/terrain = 1
+2:7/0 = 0
+2:7/0/z_index = -1
+2:7/0/terrain_set = 0
+2:7/0/terrain = 2
+2:7/0/custom_data_1 = "den"
+2:8/0 = 0
+2:8/0/z_index = -1
+2:8/0/terrain_set = 0
+2:8/0/terrain = 0
+2:8/0/custom_data_1 = "monastery"
+3:8/0 = 0
+3:8/0/z_index = -1
+3:8/0/terrain_set = 0
+3:8/0/terrain = 3
+3:7/0 = 0
+3:7/0/z_index = -1
+3:7/0/terrain_set = 0
+3:7/0/terrain = 2
+3:7/0/custom_data_1 = "rmine"
+4:7/0 = 0
+4:7/0/z_index = -1
+4:7/0/terrain_set = 0
+4:7/0/terrain = 0
+4:8/0 = 0
+4:8/0/z_index = -1
+4:8/0/terrain_set = 0
+4:8/0/terrain = 1
+4:8/0/custom_data_1 = "glade"
+5:8/0 = 0
+5:8/0/z_index = -1
+5:8/0/terrain_set = 0
+5:8/0/terrain = 0
+5:7/0 = 0
+5:7/0/z_index = -1
+5:7/0/terrain_set = 0
+5:7/0/terrain = 2
+6:7/0 = 0
+6:7/0/z_index = -1
+6:7/0/terrain_set = 0
+6:7/0/terrain = 1
+6:7/0/custom_data_0 = "green"
+6:8/0 = 0
+6:8/0/z_index = -1
+6:8/0/terrain_set = 0
+6:8/0/terrain = 0
+6:8/0/custom_data_1 = "dungeon"
+6:9/0 = 0
+6:9/0/z_index = -1
+6:9/0/terrain_set = 0
+6:9/0/terrain = 3
+6:9/0/custom_data_1 = "village"
+6:10/0 = 0
+6:10/0/z_index = -1
+6:10/0/terrain_set = 0
+6:10/0/terrain = 0
+5:10/0 = 0
+5:10/0/z_index = -1
+5:10/0/terrain_set = 0
+5:10/0/terrain = 4
+5:10/0/custom_data_0 = "purple"
+5:10/0/custom_data_1 = "tower"
+5:9/0 = 0
+5:9/0/z_index = -1
+5:9/0/terrain_set = 0
+5:9/0/terrain = 3
+4:9/0 = 0
+4:9/0/z_index = -1
+4:9/0/terrain_set = 0
+4:9/0/terrain = 0
+4:10/0 = 0
+4:10/0/z_index = -1
+4:10/0/terrain_set = 0
+4:10/0/terrain = 4
+4:10/0/custom_data_0 = "grey"
+4:10/0/custom_data_1 = "keep"
+3:9/0 = 0
+3:9/0/z_index = -1
+3:9/0/terrain_set = 0
+3:9/0/terrain = 3
+3:9/0/custom_data_0 = "green"
+3:10/0 = 0
+3:10/0/z_index = -1
+3:10/0/terrain_set = 0
+3:10/0/terrain = 7
+2:10/0 = 0
+2:10/0/z_index = -1
+2:10/0/terrain_set = 0
+2:10/0/terrain = 0
+2:9/0 = 0
+2:9/0/z_index = -1
+2:9/0/terrain_set = 0
+2:9/0/terrain = 1
+1:9/0 = 0
+1:9/0/z_index = -1
+1:9/0/terrain_set = 0
+1:9/0/terrain = 1
+1:9/0/custom_data_0 = "yellow"
+1:10/0 = 0
+1:10/0/z_index = -1
+1:10/0/terrain_set = 0
+1:10/0/terrain = 7
+0:10/0 = 0
+0:10/0/z_index = -1
+0:10/0/terrain_set = 0
+0:10/0/terrain = 4
+0:10/0/custom_data_1 = "dungeon"
+0:9/0 = 0
+0:9/0/z_index = -1
+0:9/0/terrain_set = 0
+0:9/0/terrain = 1
+0:9/0/custom_data_1 = "glade"
+0:11/0 = 0
+0:11/0/z_index = -1
+0:11/0/terrain_set = 0
+0:11/0/terrain = 2
+0:11/0/custom_data_1 = "den"
+1:11/0 = 0
+1:11/0/z_index = -1
+1:11/0/terrain_set = 0
+1:11/0/terrain = 1
+2:11/0 = 0
+2:11/0/z_index = -1
+2:11/0/terrain_set = 0
+2:11/0/terrain = 2
+0:12/0 = 0
+0:12/0/z_index = -1
+0:12/0/terrain_set = 0
+0:12/0/terrain = 2
+1:12/0 = 0
+1:12/0/z_index = -1
+1:12/0/terrain_set = 0
+1:12/0/terrain = 8
+2:12/0 = 0
+2:12/0/z_index = -1
+2:12/0/terrain_set = 0
+2:12/0/terrain = 0
+2:12/0/custom_data_0 = "yellow"
+3:12/0 = 0
+3:12/0/z_index = -1
+3:12/0/terrain_set = 0
+3:12/0/terrain = 0
+3:12/0/custom_data_0 = "purple"
+3:12/0/custom_data_1 = "tower"
+3:11/0 = 0
+3:11/0/z_index = -1
+3:11/0/terrain_set = 0
+3:11/0/terrain = 7
+4:11/0 = 0
+4:11/0/z_index = -1
+4:11/0/terrain_set = 0
+4:11/0/terrain = 0
+4:12/0 = 0
+4:12/0/z_index = -1
+4:12/0/terrain_set = 0
+4:12/0/terrain = 8
+5:12/0 = 0
+5:12/0/z_index = -1
+5:12/0/terrain_set = 0
+5:12/0/terrain = 8
+5:11/0 = 0
+5:11/0/z_index = -1
+5:11/0/terrain_set = 0
+5:11/0/terrain = 2
+5:11/0/custom_data_0 = "grey"
+5:11/0/custom_data_1 = "keep"
+6:11/0 = 0
+6:11/0/z_index = -1
+6:11/0/terrain_set = 0
+6:11/0/terrain = 2
+6:11/0/custom_data_0 = "yellow"
+6:12/0 = 0
+6:12/0/z_index = -1
+6:12/0/terrain_set = 0
+6:12/0/terrain = 2
+6:12/0/custom_data_0 = "green"
+6:13/0 = 0
+6:13/0/z_index = -1
+6:13/0/terrain_set = 0
+6:13/0/terrain = 7
+6:14/0 = 0
+6:14/0/z_index = -1
+6:14/0/terrain_set = 0
+6:14/0/terrain = 1
+6:14/0/custom_data_1 = "bgmine"
+5:14/0 = 0
+5:14/0/z_index = -1
+5:14/0/terrain_set = 0
+5:14/0/terrain = 0
+5:13/0 = 0
+5:13/0/z_index = -1
+5:13/0/terrain_set = 0
+5:13/0/terrain = 0
+5:13/0/custom_data_1 = "maze"
+5:13/0/custom_data_2 = [Vector2i(1, -1)]
+4:13/0 = 0
+4:13/0/z_index = -1
+4:13/0/terrain_set = 0
+4:13/0/terrain = 2
+4:13/0/custom_data_1 = "monastery"
+4:13/0/custom_data_2 = [Vector2i(-1, 0)]
+4:14/0 = 0
+4:14/0/z_index = -1
+4:14/0/terrain_set = 0
+4:14/0/terrain = 8
+3:13/0 = 0
+3:13/0/z_index = -1
+3:13/0/terrain_set = 0
+3:13/0/terrain = 0
+3:13/0/custom_data_0 = "green"
+3:13/0/custom_data_2 = [Vector2i(1, 0), Vector2i(-1, 1), Vector2i(-1, 0), Vector2i(0, -1)]
+3:14/0 = 0
+3:14/0/z_index = -1
+3:14/0/terrain_set = 0
+3:14/0/terrain = 1
+3:14/0/custom_data_0 = "purple"
+3:14/0/custom_data_1 = "tower"
+3:14/0/custom_data_2 = [Vector2i(1, -1)]
+2:14/0 = 0
+2:14/0/z_index = -1
+2:14/0/terrain_set = 0
+2:14/0/terrain = 3
+2:14/0/custom_data_1 = "glade"
+2:13/0 = 0
+2:13/0/z_index = -1
+2:13/0/terrain_set = 0
+2:13/0/terrain = 2
+2:13/0/custom_data_1 = "refugee"
+2:13/0/custom_data_2 = [Vector2i(1, 0)]
+1:13/0 = 0
+1:13/0/z_index = -1
+1:13/0/terrain_set = 0
+1:13/0/terrain = 3
+1:14/0 = 0
+1:14/0/z_index = -1
+1:14/0/terrain_set = 0
+1:14/0/terrain = 2
+1:14/0/custom_data_0 = "green"
+1:14/0/custom_data_2 = [Vector2i(-1, 1), Vector2i(-1, 0)]
+0:13/0 = 0
+0:13/0/z_index = -1
+0:13/0/terrain_set = 0
+0:13/0/terrain = 7
+0:13/0/custom_data_2 = [Vector2i(0, 1)]
+0:14/0 = 0
+0:14/0/z_index = -1
+0:14/0/terrain_set = 0
+0:14/0/terrain = 1
+0:14/0/custom_data_2 = [Vector2i(1, 0)]
+0:15/0 = 0
+0:15/0/z_index = -1
+0:15/0/terrain_set = 0
+0:15/0/terrain = 5
+0:16/0 = 0
+0:16/0/z_index = -1
+0:16/0/terrain_set = 0
+0:16/0/terrain = 7
+1:16/0 = 0
+1:16/0/z_index = -1
+1:16/0/terrain_set = 0
+1:16/0/terrain = 5
+1:16/0/custom_data_1 = "tomb"
+1:15/0 = 0
+1:15/0/z_index = -1
+1:15/0/terrain_set = 0
+1:15/0/terrain = 0
+1:15/0/custom_data_0 = "grey"
+1:15/0/custom_data_1 = "keep"
+1:15/0/custom_data_2 = [Vector2i(-1, 1)]
+2:15/0 = 0
+2:15/0/z_index = -1
+2:15/0/terrain_set = 0
+2:15/0/terrain = 5
+2:15/0/custom_data_1 = "rwmine"
+2:16/0 = 0
+2:16/0/z_index = -1
+2:16/0/terrain_set = 0
+2:16/0/terrain = 2
+2:16/0/custom_data_1 = "grounds"
+3:16/0 = 0
+3:16/0/z_index = -1
+3:16/0/terrain_set = 0
+3:16/0/terrain = 5
+3:16/0/custom_data_1 = "monastery"
+3:15/0 = 0
+3:15/0/z_index = -1
+3:15/0/terrain_set = 0
+3:15/0/terrain = 0
+3:15/0/custom_data_2 = [Vector2i(1, -1)]
+4:15/0 = 0
+4:15/0/z_index = -1
+4:15/0/terrain_set = 0
+4:15/0/terrain = 4
+4:15/0/custom_data_1 = "maze"
+4:16/0 = 0
+4:16/0/z_index = -1
+4:16/0/terrain_set = 0
+4:16/0/terrain = 5
+5:16/0 = 0
+5:16/0/z_index = -1
+5:16/0/terrain_set = 0
+5:16/0/terrain = 2
+5:15/0 = 0
+5:15/0/z_index = -1
+5:15/0/terrain_set = 0
+5:15/0/terrain = 0
+6:15/0 = 0
+6:15/0/z_index = -1
+6:15/0/terrain_set = 0
+6:15/0/terrain = 2
+6:15/0/custom_data_1 = "village"
+6:16/0 = 0
+6:16/0/z_index = -1
+6:16/0/terrain_set = 0
+6:16/0/terrain = 5
+6:17/0 = 0
+6:17/0/z_index = -1
+6:17/0/terrain_set = 0
+6:17/0/terrain = 3
+6:17/0/custom_data_0 = "red"
+6:18/0 = 0
+6:18/0/z_index = -1
+6:18/0/terrain_set = 0
+6:18/0/terrain = 4
+5:18/0 = 0
+5:18/0/z_index = -1
+5:18/0/terrain_set = 0
+5:18/0/terrain = 2
+5:18/0/custom_data_1 = "wmine"
+5:17/0 = 0
+5:17/0/z_index = -1
+5:17/0/terrain_set = 0
+5:17/0/terrain = 3
+5:17/0/custom_data_0 = "purple"
+5:17/0/custom_data_1 = "tower"
+4:17/0 = 0
+4:17/0/z_index = -1
+4:17/0/terrain_set = 0
+4:17/0/terrain = 2
+4:17/0/custom_data_1 = "gmine"
+4:18/0 = 0
+4:18/0/z_index = -1
+4:18/0/terrain_set = 0
+4:18/0/terrain = 2
+4:18/0/custom_data_0 = "purple"
+4:18/0/custom_data_1 = "tower"
+3:18/0 = 0
+3:18/0/z_index = -1
+3:18/0/terrain_set = 0
+3:18/0/terrain = 4
+3:17/0 = 0
+3:17/0/z_index = -1
+3:17/0/terrain_set = 0
+3:17/0/terrain = 7
+2:17/0 = 0
+2:17/0/z_index = -1
+2:17/0/terrain_set = 0
+2:17/0/terrain = 1
+2:18/0 = 0
+2:18/0/z_index = -1
+2:18/0/terrain_set = 0
+2:18/0/terrain = 4
+2:18/0/custom_data_1 = "tomb"
+1:18/0 = 0
+1:18/0/z_index = -1
+1:18/0/terrain_set = 0
+1:18/0/terrain = 4
+1:18/0/custom_data_0 = "yellow"
+1:17/0 = 0
+1:17/0/z_index = -1
+1:17/0/terrain_set = 0
+1:17/0/terrain = 3
+1:17/0/custom_data_0 = "yellow"
+0:17/0 = 0
+0:17/0/z_index = -1
+0:17/0/terrain_set = 0
+0:17/0/terrain = 8
+0:18/0 = 0
+0:18/0/z_index = -1
+0:18/0/terrain_set = 0
+0:18/0/terrain = 7
+0:19/0 = 0
+0:19/0/z_index = -1
+0:19/0/terrain_set = 0
+0:19/0/terrain = 2
+0:19/0/custom_data_1 = "bmine"
+0:20/0 = 0
+0:20/0/z_index = -1
+0:20/0/terrain_set = 0
+0:20/0/terrain = 1
+0:20/0/custom_data_1 = "glade"
+1:20/0 = 0
+1:20/0/z_index = -1
+1:20/0/terrain_set = 0
+1:20/0/terrain = 3
+1:20/0/custom_data_1 = "village"
+1:19/0 = 0
+1:19/0/z_index = -1
+1:19/0/terrain_set = 0
+1:19/0/terrain = 2
+2:20/0 = 0
+2:20/0/z_index = -1
+2:20/0/terrain_set = 0
+2:20/0/terrain = 8
+2:19/0 = 0
+2:19/0/z_index = -1
+2:19/0/terrain_set = 0
+2:19/0/terrain = 4
+3:19/0 = 0
+3:19/0/z_index = -1
+3:19/0/terrain_set = 0
+3:19/0/terrain = 7
+3:19/0/custom_data_0 = "red"
+3:20/0 = 0
+3:20/0/z_index = -1
+3:20/0/terrain_set = 0
+3:20/0/terrain = 6
+3:20/0/custom_data_1 = "gcity"
+4:20/0 = 0
+4:20/0/z_index = -1
+4:20/0/terrain_set = 0
+4:20/0/terrain = 3
+4:20/0/custom_data_0 = "green"
+4:19/0 = 0
+4:19/0/z_index = -1
+4:19/0/terrain_set = 0
+4:19/0/terrain = 4
+4:19/0/custom_data_0 = "grey"
+4:19/0/custom_data_1 = "keep"
+5:19/0 = 0
+5:19/0/z_index = -1
+5:19/0/terrain_set = 0
+5:19/0/terrain = 4
+5:19/0/custom_data_0 = "yellow"
+5:20/0 = 0
+5:20/0/z_index = -1
+5:20/0/terrain_set = 0
+5:20/0/terrain = 1
+5:20/0/custom_data_0 = "green"
+6:19/0 = 0
+6:19/0/z_index = -1
+6:19/0/terrain_set = 0
+6:19/0/terrain = 4
+6:20/0 = 0
+6:20/0/z_index = -1
+6:20/0/terrain_set = 0
+6:20/0/terrain = 3
+6:21/0 = 0
+6:21/0/z_index = -1
+6:21/0/terrain_set = 0
+6:21/0/terrain = 8
+6:22/0 = 0
+6:22/0/z_index = -1
+6:22/0/terrain_set = 0
+6:22/0/terrain = 8
+6:22/0/custom_data_0 = "red"
+5:21/0 = 0
+5:21/0/z_index = -1
+5:21/0/terrain_set = 0
+5:21/0/terrain = 2
+4:21/0 = 0
+4:21/0/z_index = -1
+4:21/0/terrain_set = 0
+4:21/0/terrain = 8
+3:21/0 = 0
+3:21/0/z_index = -1
+3:21/0/terrain_set = 0
+3:21/0/terrain = 6
+3:21/0/custom_data_1 = "bcity"
+2:21/0 = 0
+2:21/0/z_index = -1
+2:21/0/terrain_set = 0
+2:21/0/terrain = 7
+2:21/0/custom_data_0 = "red"
+1:21/0 = 0
+1:21/0/z_index = -1
+1:21/0/terrain_set = 0
+1:21/0/terrain = 0
+1:21/0/custom_data_1 = "monastery"
+0:21/0 = 0
+0:21/0/z_index = -1
+0:21/0/terrain_set = 0
+0:21/0/terrain = 1
+0:22/0 = 0
+0:22/0/z_index = -1
+0:22/0/terrain_set = 0
+0:22/0/terrain = 4
+0:22/0/custom_data_1 = "grounds"
+1:22/0 = 0
+1:22/0/z_index = -1
+1:22/0/terrain_set = 0
+1:22/0/terrain = 0
+2:22/0 = 0
+2:22/0/z_index = -1
+2:22/0/terrain_set = 0
+2:22/0/terrain = 4
+2:22/0/custom_data_0 = "grey"
+2:22/0/custom_data_1 = "keep"
+3:22/0 = 0
+3:22/0/z_index = -1
+3:22/0/terrain_set = 0
+3:22/0/terrain = 6
+3:22/0/custom_data_1 = "wcity"
+4:22/0 = 0
+4:22/0/z_index = -1
+4:22/0/terrain_set = 0
+4:22/0/terrain = 1
+5:22/0 = 0
+5:22/0/z_index = -1
+5:22/0/terrain_set = 0
+5:22/0/terrain = 8
+6:23/0 = 0
+6:23/0/z_index = -1
+6:23/0/terrain_set = 0
+6:23/0/terrain = 5
+6:23/0/custom_data_0 = "red"
+5:23/0 = 0
+5:23/0/z_index = -1
+5:23/0/terrain_set = 0
+5:23/0/terrain = 4
+4:23/0 = 0
+4:23/0/z_index = -1
+4:23/0/terrain_set = 0
+4:23/0/terrain = 5
+3:23/0 = 0
+3:23/0/z_index = -1
+3:23/0/terrain_set = 0
+3:23/0/terrain = 6
+3:23/0/custom_data_1 = "rcity"
+2:23/0 = 0
+2:23/0/z_index = -1
+2:23/0/terrain_set = 0
+2:23/0/terrain = 4
+2:23/0/custom_data_0 = "red"
+1:23/0 = 0
+1:23/0/z_index = -1
+1:23/0/terrain_set = 0
+1:23/0/terrain = 2
+1:23/0/custom_data_1 = "rmine"
+0:23/0 = 0
+0:23/0/z_index = -1
+0:23/0/terrain_set = 0
+0:23/0/terrain = 5
+0:23/0/custom_data_0 = "yellow"
+0:24/0 = 0
+0:24/0/z_index = -1
+0:24/0/terrain_set = 0
+0:24/0/terrain = 2
+0:24/0/custom_data_1 = "labyrinth"
+0:24/0/custom_data_2 = [Vector2i(-1, 1)]
+1:24/0 = 0
+1:24/0/z_index = -1
+1:24/0/terrain_set = 0
+1:24/0/terrain = 2
+1:24/0/custom_data_0 = "purple"
+1:24/0/custom_data_1 = "tower"
+2:24/0 = 0
+2:24/0/z_index = -1
+2:24/0/terrain_set = 0
+2:24/0/terrain = 4
+2:24/0/custom_data_2 = [Vector2i(1, -1), Vector2i(1, 0)]
+3:24/0 = 0
+3:24/0/z_index = -1
+3:24/0/terrain_set = 0
+3:24/0/terrain = 0
+3:24/0/custom_data_0 = "red"
+3:24/0/custom_data_2 = [Vector2i(0, 1), Vector2i(-1, 1), Vector2i(-1, 0)]
+4:24/0 = 0
+4:24/0/z_index = -1
+4:24/0/terrain_set = 0
+4:24/0/terrain = 7
+4:24/0/custom_data_2 = [Vector2i(-1, 1)]
+5:24/0 = 0
+5:24/0/z_index = -1
+5:24/0/terrain_set = 0
+5:24/0/terrain = 5
+5:24/0/custom_data_2 = [Vector2i(1, -1)]
+6:24/0 = 0
+6:24/0/z_index = -1
+6:24/0/terrain_set = 0
+6:24/0/terrain = 5
+6:24/0/custom_data_1 = "refugee"
+6:24/0/custom_data_2 = [Vector2i(1, -1), Vector2i(0, -1)]
+6:25/0 = 0
+6:25/0/z_index = -1
+6:25/0/terrain_set = 0
+6:25/0/terrain = 2
+6:25/0/custom_data_0 = "green"
+6:26/0 = 0
+6:26/0/z_index = -1
+6:26/0/terrain_set = 0
+6:26/0/terrain = 5
+6:26/0/custom_data_1 = "village"
+6:26/0/custom_data_2 = [Vector2i(1, -1), Vector2i(0, -1)]
+5:26/0 = 0
+5:26/0/z_index = -1
+5:26/0/terrain_set = 0
+5:26/0/terrain = 2
+5:26/0/custom_data_2 = [Vector2i(1, -1)]
+5:25/0 = 0
+5:25/0/z_index = -1
+5:25/0/terrain_set = 0
+5:25/0/terrain = 2
+5:25/0/custom_data_0 = "green"
+4:25/0 = 0
+4:25/0/z_index = -1
+4:25/0/terrain_set = 0
+4:25/0/terrain = 1
+4:25/0/custom_data_1 = "labyrinth"
+4:26/0 = 0
+4:26/0/z_index = -1
+4:26/0/terrain_set = 0
+4:26/0/terrain = 4
+4:26/0/custom_data_0 = "red"
+4:26/0/custom_data_2 = [Vector2i(-1, 1)]
+3:26/0 = 0
+3:26/0/z_index = -1
+3:26/0/terrain_set = 0
+3:26/0/terrain = 6
+3:26/0/custom_data_1 = "volkare"
+3:26/0/custom_data_2 = [Vector2i(0, 1), Vector2i(-1, 1)]
+3:25/0 = 0
+3:25/0/z_index = -1
+3:25/0/terrain_set = 0
+3:25/0/terrain = 3
+2:25/0 = 0
+2:25/0/z_index = -1
+2:25/0/terrain_set = 0
+2:25/0/terrain = 1
+2:25/0/custom_data_0 = "grey"
+2:25/0/custom_data_1 = "keep"
+2:26/0 = 0
+2:26/0/z_index = -1
+2:26/0/terrain_set = 0
+2:26/0/terrain = 8
+1:26/0 = 0
+1:26/0/z_index = -1
+1:26/0/terrain_set = 0
+1:26/0/terrain = 7
+1:25/0 = 0
+1:25/0/z_index = -1
+1:25/0/terrain_set = 0
+1:25/0/terrain = 8
+0:25/0 = 0
+0:25/0/z_index = -1
+0:25/0/terrain_set = 0
+0:25/0/terrain = 3
+0:25/0/custom_data_1 = "bgwrmine"
+0:26/0 = 0
+0:26/0/z_index = -1
+0:26/0/terrain_set = 0
+0:26/0/terrain = 1
+0:26/0/custom_data_0 = "green"
+
+[sub_resource type="TileSet" id="TileSet_cu01s"]
+tile_shape = 3
+tile_layout = 2
+tile_size = Vector2i(61, 71)
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Plains"
+terrain_set_0/terrain_0/color = Color(0.368627, 0.52549, 0.235294, 1)
+terrain_set_0/terrain_1/name = "Forest"
+terrain_set_0/terrain_1/color = Color(0.0666667, 0.219608, 0, 1)
+terrain_set_0/terrain_2/name = "Hills"
+terrain_set_0/terrain_2/color = Color(0.713726, 0.564706, 0.282353, 1)
+terrain_set_0/terrain_3/name = "Swamp"
+terrain_set_0/terrain_3/color = Color(0.258824, 0.192157, 0, 1)
+terrain_set_0/terrain_4/name = "Wasteland"
+terrain_set_0/terrain_4/color = Color(0.423529, 0.309804, 0.101961, 1)
+terrain_set_0/terrain_5/name = "Desert"
+terrain_set_0/terrain_5/color = Color(1, 0.952941, 0.588235, 1)
+terrain_set_0/terrain_6/name = "City"
+terrain_set_0/terrain_6/color = Color(0.541176, 0.556863, 0.513726, 1)
+terrain_set_0/terrain_7/name = "Mountain"
+terrain_set_0/terrain_7/color = Color(0.101961, 0.109804, 0.494118, 1)
+terrain_set_0/terrain_8/name = "Lake"
+terrain_set_0/terrain_8/color = Color(0.2, 0.592157, 0.964706, 1)
+terrain_set_0/terrain_9/name = "Nothing"
+terrain_set_0/terrain_9/color = Color(0, 0, 0, 1)
+custom_data_layer_0/name = "Token"
+custom_data_layer_0/type = 4
+custom_data_layer_1/name = "Event"
+custom_data_layer_1/type = 4
+custom_data_layer_2/name = "Walls"
+custom_data_layer_2/type = 28
+sources/0 = SubResource("TileSetAtlasSource_rkkx8")
+pattern_0 = SubResource("TileMapPattern_7j6h4")
+pattern_1 = SubResource("TileMapPattern_t51yq")
+pattern_2 = SubResource("TileMapPattern_q06b5")
+pattern_3 = SubResource("TileMapPattern_3kxsx")
+pattern_4 = SubResource("TileMapPattern_5ws5w")
+pattern_5 = SubResource("TileMapPattern_lb8gv")
+pattern_6 = SubResource("TileMapPattern_2phja")
+pattern_7 = SubResource("TileMapPattern_e7mk1")
+pattern_8 = SubResource("TileMapPattern_28gyj")
+pattern_9 = SubResource("TileMapPattern_x5mfn")
+pattern_10 = SubResource("TileMapPattern_d3p76")
+pattern_11 = SubResource("TileMapPattern_4lkm7")
+pattern_12 = SubResource("TileMapPattern_1g8q5")
+pattern_13 = SubResource("TileMapPattern_me8yi")
+pattern_14 = SubResource("TileMapPattern_7xg8v")
+pattern_15 = SubResource("TileMapPattern_hqt4r")
+pattern_16 = SubResource("TileMapPattern_hp27w")
+pattern_17 = SubResource("TileMapPattern_b6ey2")
+pattern_18 = SubResource("TileMapPattern_kmuri")
+pattern_19 = SubResource("TileMapPattern_fjdfl")
+pattern_20 = SubResource("TileMapPattern_l4rls")
+pattern_21 = SubResource("TileMapPattern_j8lvl")
+pattern_22 = SubResource("TileMapPattern_ln1gb")
+pattern_23 = SubResource("TileMapPattern_b0lo2")
+pattern_24 = SubResource("TileMapPattern_3knyh")
+pattern_25 = SubResource("TileMapPattern_hai2l")
+pattern_26 = SubResource("TileMapPattern_nxmvw")
+
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("mapGen", "deck", "player", "tactics", "inventory", "_playerArea")]
+z_index = -1
+script = ExtResource("1_m0gf8")
+mapGen = NodePath("GameplayControl/MapGen")
+deck = NodePath("GameplayControl/PlayerUI/PlayerArea/Deck")
+player = NodePath("GameplayControl/Player")
+tactics = NodePath("GameplayControl/PlayerUI/PlayerArea/Tactics")
+inventory = NodePath("GameplayControl/PlayerUI/PlayerArea/Inventory")
+_playerArea = NodePath("GameplayControl/PlayerUI/PlayerArea")
+
+[node name="GameplayControl" type="Control" parent="." node_paths=PackedStringArray("playerArea", "mapGen", "player", "gamePlay", "challengeButton", "interactButton")]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("2_7jlcl")
+playerArea = NodePath("PlayerUI/PlayerArea")
+mapGen = NodePath("MapGen")
+player = NodePath("Player")
+gamePlay = NodePath("..")
+challengeButton = NodePath("ChallengeButton")
+interactButton = NodePath("InteractButton")
+
+[node name="TurnOrderTracker" type="Node2D" parent="GameplayControl"]
+position = Vector2(208, 480)
+script = ExtResource("12_js350")
+
+[node name="RoundMarker" type="Label" parent="GameplayControl"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 472.0
+offset_right = 112.0
+offset_bottom = 495.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Area2D" type="Area2D" parent="GameplayControl"]
+position = Vector2(0, 1)
+scale = Vector2(0.1, 0.1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayControl/Area2D"]
+position = Vector2(2390, 8460)
+scale = Vector2(9.99999, 9.99999)
+shape = SubResource("RectangleShape2D_e3iwm")
+
+[node name="DummyDeck" type="Sprite2D" parent="GameplayControl/Area2D"]
+position = Vector2(2390, 8460)
+texture = ExtResource("19_vtp22")
+
+[node name="DummyArea" type="Node2D" parent="GameplayControl/Area2D"]
+position = Vector2(2390, 8460)
+scale = Vector2(10, 10)
+script = ExtResource("18_70l2p")
+metadata/_edit_group_ = true
+
+[node name="Total" type="Label" parent="GameplayControl/Area2D/DummyArea"]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 21.0
+offset_bottom = 29.0
+theme_override_font_sizes/font_size = 32
+text = "16"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DeckPopup" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("21_bdyk2")]
+visible = false
+position = Vector2(51, -64)
+
+[node name="BlueCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-144, 24)
+
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/BlueCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/BlueCrystal" index="1"]
+color = Color(0, 0, 1, 1)
+
+[node name="RedCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-93, 24)
+
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/RedCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/RedCrystal" index="1"]
+color = Color(1, 0, 0, 1)
+
+[node name="GreenCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(-42, 24)
+
+[node name="Count" parent="GameplayControl/Area2D/DummyArea/GreenCrystal" index="0"]
+metadata/_edit_use_anchors_ = true
+
+[node name="Polygon2D2" parent="GameplayControl/Area2D/DummyArea/GreenCrystal" index="1"]
+color = Color(0, 1, 0, 1)
+
+[node name="WhiteCrystal" parent="GameplayControl/Area2D/DummyArea" instance=ExtResource("22_7fhxe")]
+position = Vector2(8, 24)
+
+[node name="PlayerUI" type="CanvasLayer" parent="GameplayControl"]
+
+[node name="SharedArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_roundMarker", "gameplayControl")]
+process_mode = 3
+script = ExtResource("10_bkisu")
+_roundMarker = NodePath("../../RoundMarker")
+gameplayControl = NodePath("../..")
+
+[node name="Source" parent="GameplayControl/PlayerUI/SharedArea" instance=ExtResource("1_fhj8j")]
 position = Vector2(968, 0)
+
+[node name="SpellOffer" parent="GameplayControl/PlayerUI/SharedArea" node_paths=PackedStringArray("_confirmDialog", "_deck") instance=ExtResource("10_h555x")]
+position = Vector2(984, 176)
+_confirmDialog = NodePath("../../ConfirmationDialog")
+_deck = NodePath("../../PlayerArea/Deck")
+
+[node name="PlayerArea" type="Node2D" parent="GameplayControl/PlayerUI" node_paths=PackedStringArray("_source", "_inventory")]
+process_mode = 1
+script = ExtResource("2_khnnw")
+_source = NodePath("../SharedArea/Source")
+_inventory = NodePath("Inventory")
+
+[node name="Tactics" type="Control" parent="GameplayControl/PlayerUI/PlayerArea"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 336.0
+offset_top = 236.0
+offset_right = 376.0
+offset_bottom = 276.0
+script = ExtResource("2_o1npl")
+metadata/_edit_group_ = true
+
+[node name="Tactic1" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 16.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("3_5mt76")
+
+[node name="Tactic2" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 8.0
+offset_right = 1144.0
+offset_bottom = 1416.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("4_b2aj0")
+
+[node name="Tactic3" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 8.0
+offset_right = 1272.0
+offset_bottom = 1416.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("5_2ng8m")
+
+[node name="Tactic4" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 168.0
+offset_right = 1016.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("6_rt858")
+
+[node name="Tactic5" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 168.0
+offset_right = 1144.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("7_bkwh1")
+
+[node name="Tactic6" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 168.0
+offset_right = 1272.0
+offset_bottom = 1576.0
+scale = Vector2(0.1, 0.1)
+disabled = true
+toggle_mode = true
+button_group = ExtResource("2_j6tl2")
+icon = ExtResource("8_1ear6")
+
+[node name="ConfirmTactic" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Tactics"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 328.0
+offset_right = 160.0
+offset_bottom = 336.0
+disabled = true
+text = "Confirm"
+
+[node name="NewRoundButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 37.0
+offset_top = 25.0
+offset_right = 135.0
+offset_bottom = 56.0
+text = "New Round"
+metadata/_edit_use_anchors_ = true
+
+[node name="EndTurnButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 46.0
+offset_top = 71.0
+offset_right = 124.0
+offset_bottom = 102.0
+disabled = true
+text = "End Turn"
+metadata/_edit_use_anchors_ = true
+
+[node name="Deck" type="Node2D" parent="GameplayControl/PlayerUI/PlayerArea"]
+process_mode = 3
+position = Vector2(1, -2)
+script = ExtResource("18_4oofl")
+
+[node name="TextureButton" type="TextureButton" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1770.0
+offset_top = 864.0
+offset_right = 2770.0
+offset_bottom = 2264.0
+scale = Vector2(0.14402, 0.14402)
+texture_normal = ExtResource("19_vtp22")
+stretch_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="WoundToDiscard" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1626.0
+offset_top = 1019.0
+offset_right = 1749.0
+offset_bottom = 1066.0
+text = "WoundToDiscard"
+
+[node name="WoundToHand" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1491.0
+offset_top = 1019.0
+offset_right = 1591.0
+offset_bottom = 1064.0
+text = "WoundToHand"
+
+[node name="DeleteHandWound" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1462.0
+offset_top = 967.0
+offset_right = 1617.0
+offset_bottom = 1013.0
+text = "DeleteHandWound"
+
+[node name="DeleteDiscardWound" type="Button" parent="GameplayControl/PlayerUI/PlayerArea/Deck"]
+offset_left = 1626.0
+offset_top = 968.0
+offset_right = 1778.0
+offset_bottom = 1014.0
+text = "DeleteDiscardWound"
+
+[node name="Inventory" parent="GameplayControl/PlayerUI/PlayerArea" instance=ExtResource("20_4h2of")]
+process_mode = 3
+position = Vector2(1528, 680)
+
+[node name="ManaTestingButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 1576.0
+offset_top = 696.0
+offset_right = 1698.0
+offset_bottom = 727.0
+text = "Pay Blue Mana"
+
+[node name="SpellTestingButton" type="Button" parent="GameplayControl/PlayerUI/PlayerArea"]
+offset_left = 1720.0
+offset_top = 696.0
+offset_right = 1842.0
+offset_bottom = 727.0
+text = "Award Spell"
+
+[node name="Undo" type="Button" parent="GameplayControl/PlayerUI"]
+offset_left = 55.0
+offset_top = 117.0
+offset_right = 117.0
+offset_bottom = 148.0
+text = "Undo"
+metadata/_edit_use_anchors_ = true
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="GameplayControl/PlayerUI"]
+title = ""
+initial_position = 1
+size = Vector2i(204, 100)
+dialog_text = "Please confirm selection"
+
+[node name="MapGen" type="TileMap" parent="GameplayControl" node_paths=PackedStringArray("gameplayControl")]
+position = Vector2(482, 912)
+tile_set = SubResource("TileSet_cu01s")
+format = 2
+layer_0/tile_data = PackedInt32Array(65535, 131072, 0, 131071, 327680, 0, 65536, 393216, 0, -65535, 65536, 0, 1, 262144, 0, -65536, 0, 0, 0, 196608, 0)
+script = ExtResource("3_hiwow")
+gameplayControl = NodePath("..")
+
+[node name="Camera2D" type="Camera2D" parent="GameplayControl"]
+position = Vector2(969, 543)
+process_callback = 0
+script = ExtResource("4_15lwj")
+
+[node name="Player" type="Node2D" parent="GameplayControl" node_paths=PackedStringArray("_deck")]
+position = Vector2(672, 856)
+script = ExtResource("4_jr7il")
+_deck = NodePath("../PlayerUI/PlayerArea/Deck")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameplayControl/Player"]
+texture = ExtResource("5_w03ud")
+
+[node name="ChallengeButton" type="Button" parent="GameplayControl"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 423.0
+offset_right = 120.0
+offset_bottom = 454.0
+text = "Challenge
+"
+
+[node name="InteractButton" type="Button" parent="GameplayControl"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 377.0
+offset_right = 112.0
+offset_bottom = 408.0
+text = "Interact"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+show_behind_parent = true
+z_index = -1
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("26_j3ivl")
+patch_margin_left = 30
+patch_margin_top = 30
+patch_margin_right = 30
+patch_margin_bottom = 30
+
+[connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/Area2D/DummyArea" method="OnCurrentTurn"]
+[connection signal="CurrentTurn" from="GameplayControl/TurnOrderTracker" to="GameplayControl/PlayerUI/PlayerArea" method="OnCurrentTurn"]
+[connection signal="mouse_entered" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseEntered"]
+[connection signal="mouse_exited" from="GameplayControl/Area2D" to="GameplayControl/Area2D/DummyArea" method="OnMouseExited"]
+[connection signal="EndTurn" from="GameplayControl/Area2D/DummyArea" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/Area2D/DummyArea" method="NewRound"]
+[connection signal="NewRound" from="GameplayControl/PlayerUI/SharedArea" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="NewRound"]
+[connection signal="Die" from="GameplayControl/PlayerUI/SharedArea/Source" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnDieTaken"]
+[connection signal="Dummy" from="GameplayControl/PlayerUI/SharedArea/SpellOffer" to="GameplayControl/Area2D/DummyArea" method="AddCrystal"]
+[connection signal="ManaPaid" from="GameplayControl/PlayerUI/PlayerArea" to="." method="OnManaPaid"]
+[connection signal="TurnOrder" from="GameplayControl/PlayerUI/PlayerArea/Tactics" to="GameplayControl/TurnOrderTracker" method="OnTurnOrder"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic1" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic2" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic3" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic4" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic5" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/Tactic6" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnTacticButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Tactics/ConfirmTactic" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="OnConfirmTacticPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea" method="OnNewRoundButtonPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/NewRoundButton" to="GameplayControl/PlayerUI/PlayerArea/Tactics" method="NewRound"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="." method="OnEndTurn"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/TurnOrderTracker" method="OnEndTurnPressed"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/SharedArea/Source" method="EndTurn"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea" method="OnEndTurn"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/EndTurnButton" to="GameplayControl/PlayerUI/PlayerArea/Inventory" method="OnEndTurn"]
+[connection signal="child_entered_tree" from="GameplayControl/PlayerUI/PlayerArea/Deck" to="." method="OnCardEntered"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/TextureButton" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="OnDeckButtonPressed" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToDiscard" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToDiscard" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/WoundToHand" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="AddWoundToHand" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/DeleteHandWound" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="RemoveWoundFromHand"]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/Deck/DeleteDiscardWound" to="GameplayControl/PlayerUI/PlayerArea/Deck" method="RemoveWoundFromDiscard" binds= [1]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/ManaTestingButton" to="GameplayControl/PlayerUI/PlayerArea" method="PayMana" binds= [0]]
+[connection signal="pressed" from="GameplayControl/PlayerUI/PlayerArea/SpellTestingButton" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnAwardSpell"]
+[connection signal="button_down" from="GameplayControl/PlayerUI/Undo" to="GameplayControl/Player" method="_OnUndoButtonDown"]
+[connection signal="canceled" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnCancelSelection"]
+[connection signal="confirmed" from="GameplayControl/PlayerUI/ConfirmationDialog" to="GameplayControl/PlayerUI/SharedArea/SpellOffer" method="OnConfirmSelection"]
+[connection signal="pressed" from="GameplayControl/ChallengeButton" to="GameplayControl" method="_on_challenge_button_pressed"]
+[connection signal="pressed" from="GameplayControl/InteractButton" to="GameplayControl" method="_on_interact_button_pressed"]
+
+[editable path="GameplayControl/Area2D/DummyArea/BlueCrystal"]
+[editable path="GameplayControl/Area2D/DummyArea/RedCrystal"]
+[editable path="GameplayControl/Area2D/DummyArea/GreenCrystal"]

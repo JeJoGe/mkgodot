@@ -1,0 +1,622 @@
+{
+    "0":{
+        "name":"Prowlers",
+        "colour": 0,
+        "armour":3,
+        "attacks":[
+            {
+                "value":4,
+                "element":0
+            }
+        ],
+        "fame":2,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count": 2
+    },
+    "1":{
+        "name":"Diggers",
+        "colour": 0,
+        "armour":3,
+        "attacks":[
+            {
+                "value":3,
+                "element":0
+            }
+        ],
+        "fame":2,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count": 2
+    },
+    "2":{
+        "name":"Cursed Hags",
+        "colour": 0,
+        "armour":5,
+        "attacks":[
+            {
+                "value":3,
+                "element":0
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["poison"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count": 2
+    },
+    "3":{
+        "name":"Wolf Riders",
+        "colour": 0,
+        "armour":4,
+        "attacks":[
+            {
+                "value":3,
+                "element":0
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count": 2
+    },
+    "4":{
+        "name":"Ironclads",
+        "colour": 0,
+        "armour":3,
+        "attacks":[
+            {
+                "value":4,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":3,
+        "y":0,
+        "count": 2
+    },
+    "5":{
+        "name":"Orc Summoners",
+        "colour": 0,
+        "armour":4,
+        "attacks":[
+            {
+                "value":1,
+                "element":9
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "x":4,
+        "y":0,
+        "count": 2
+    },
+    "103":{
+        "name":"Orc Stonethrower",
+        "colour": 0,
+        "armour":2,
+        "attacks":[
+            {
+                "value":7,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":["fortified","cumbersome"],
+        "version":"base",
+        "x":3,
+        "y":1,
+        "count": 2
+    },
+    "500":{
+        "name":"Crossbowmen",
+        "colour": 1,
+        "armour":4,
+        "attacks":[
+            {
+                "value":4,
+                "element":0
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count": 3
+    },
+    "501":{
+        "name":"Guardsmen",
+        "colour": 1,
+        "armour":7,
+        "attacks":[
+            {
+                "value":3,
+                "element":0
+            }
+        ],
+        "fame":3,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "x":3,
+        "y":0,
+        "count": 3
+    },
+    "502":{
+        "name":"Swordsmen",
+        "colour": 1,
+        "armour":5,
+        "attacks":[
+            {
+                "value":6,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":[],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count": 2
+    },
+    "503":{
+        "name":"Golems",
+        "colour": 1,
+        "armour":5,
+        "attacks":[
+            {
+                "value":2,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":[],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count": 2
+    },
+    "1000":{
+        "name":"Monks",
+        "colour": 2,
+        "armour":5,
+        "attacks":[
+            {
+                "value":5,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":["poison"],
+        "version":"base",
+        "x":0,
+        "y":2,
+        "count": 2
+    },
+    "1001":{
+        "name":"Illusionists",
+        "colour": 2,
+        "armour":3,
+        "attacks":[
+            {
+                "value":1,
+                "element":"summon"
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":[],
+        "version":"base",
+        "x":2,
+        "y":1,
+        "count": 2
+    },
+    "1002":{
+        "name":"Ice Mages",
+        "colour": 2,
+        "armour":6,
+        "attacks":[
+            {
+                "value":5,
+                "element":2
+            }
+        ],
+        "fame":4,
+        "resistances":[2],
+        "abilities":[],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count": 2
+    },
+    "1003":{
+        "name":"Ice Golems",
+        "colour": 2,
+        "armour":4,
+        "attacks":[
+            {
+                "value":2,
+                "element":2
+            }
+        ],
+        "fame":5,
+        "resistances":[0,2],
+        "abilities":["paralyze"],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count": 1
+    },
+    "1004":{
+        "name":"Fire Mages",
+        "colour": 2,
+        "armour":5,
+        "attacks":[
+            {
+                "value":6,
+                "element":1
+            }
+        ],
+        "fame":5,
+        "resistances":[1],
+        "abilities":[],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count": 2
+    },
+    "1005":{
+        "name":"Fire Golems",
+        "colour": 2,
+        "armour":4,
+        "attacks":[
+            {
+                "value":3,
+                "element":1
+            }
+        ],
+        "fame":5,
+        "resistances":[0,1],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count": 1
+    },
+    "1500":{
+        "name":"Minotaur",
+        "colour": 3,
+        "armour":5,
+        "attacks":[
+            {
+                "value":5,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":4,
+        "y":0,
+        "count": 2
+    },
+    "1501":{
+        "name":"Gargoyle",
+        "colour": 3,
+        "armour":4,
+        "attacks":[
+            {
+                "value":5,
+                "element":0
+            }
+        ],
+        "fame":4,
+        "resistances":[0],
+        "abilities":[],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count": 2
+    },
+    "1502":{
+        "name":"Medusa",
+        "colour": 3,
+        "armour":4,
+        "attacks":[
+            {
+                "value":6,
+                "element":0
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["paralyze"],
+        "version":"base",
+        "x":3,
+        "y":0,
+        "count": 2
+    },
+    "1503":{
+        "name":"Crypt Worm",
+        "colour": 3,
+        "armour":6,
+        "attacks":[
+            {
+                "value":6,
+                "element":0
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["fortified"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count": 2
+    },
+    "1504":{
+        "name":"Werewolf",
+        "colour": 3,
+        "armour":5,
+        "attacks":[
+            {
+                "value":7,
+                "element":0
+            }
+        ],
+        "fame":5,
+        "resistances":[],
+        "abilities":["swift"],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count": 2
+    },
+    "1600":{
+        "name":"Hydra",
+        "colour": 3,
+        "armour":6,
+        "attacks":[
+            {
+                "value":2,
+                "element":0
+            },
+            {
+                "value":2,
+                "element":0
+            },
+            {
+                "value":2,
+                "element":0
+            }
+        ],
+        "fame":5,
+        "resistances":[2],
+        "abilities":[],
+        "version":"ll",
+        "x":1,
+        "y":1,
+        "count": 2
+    },
+    "2000":{
+        "name":"Swamp Dragon",
+        "colour": 4,
+        "armour":9,
+        "attacks":[
+            {
+                "value":5,
+                "element":0
+            }
+        ],
+        "fame":7,
+        "resistances":[],
+        "abilities":["poison","swift"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count":2
+    },
+    "2001":{
+        "name":"Fire Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":9,
+                "element":1
+            }
+        ],
+        "fame":8,
+        "resistances":[0,1],
+        "abilities":[],
+        "version":"base",
+        "x":3,
+        "y":0,
+        "count":2
+    },
+    "2002":{
+        "name":"Ice Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":6,
+                "element":2
+            }
+        ],
+        "fame":8,
+        "resistances":[0,2],
+        "abilities":["paralyze"],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count":2
+    },
+    "2003":{
+        "name":"High Dragon",
+        "colour": 4,
+        "armour":9,
+        "attacks":[
+            {
+                "value":6,
+                "element":4
+            }
+        ],
+        "fame":9,
+        "resistances":[1,2],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count":2
+    },
+    "2100":{
+        "name":"Storm Dragon",
+        "colour": 4,
+        "armour":7,
+        "attacks":[
+            {
+                "value":4,
+                "element":2
+            }
+        ],
+        "fame":7,
+        "resistances":[2],
+        "abilities":["illusive","swift"],
+        "version":"ll",
+        "x":2,
+        "y":1,
+        "count":2
+    },
+    "2101":{
+        "name":"Lava Dragon",
+        "colour": 4,
+        "armour":8,
+        "attacks":[
+            {
+                "value":6,
+                "element":1
+            }
+        ],
+        "fame":8,
+        "resistances":[1],
+        "abilities":["brutal","fortified"],
+        "version":"ll",
+        "x":2,
+        "y":0,
+        "count":2
+    },
+    "2102":{
+        "name":"Dragon Summoner",
+        "colour": 4,
+        "armour":8,
+        "attacks":[
+            {
+                "value":2,
+                "element":9
+            }
+        ],
+        "fame":9,
+        "resistances":[0],
+        "abilities":["immunity"],
+        "version":"ll",
+        "x":3,
+        "y":1,
+        "count":2
+    },
+    "2500":{
+        "name":"Freezers",
+        "colour": 5,
+        "armour":7,
+        "attacks":[
+            {
+                "value":3,
+                "element":2
+            }
+        ],
+        "fame":7,
+        "resistances":[1],
+        "abilities":["swift","paralyze"],
+        "version":"base",
+        "x":2,
+        "y":0,
+        "count":3
+    },
+    "2501":{
+        "name":"Gunners",
+        "colour": 5,
+        "armour":6,
+        "attacks":[
+            {
+                "value":6,
+                "element":1
+            }
+        ],
+        "fame":7,
+        "resistances":[2],
+        "abilities":["brutal"],
+        "version":"base",
+        "x":1,
+        "y":1,
+        "count":3
+    },
+    "2502":{
+        "name":"Altem Guardsmen",
+        "colour": 5,
+        "armour":7,
+        "attacks":[
+            {
+                "value":6,
+                "element":0
+            }
+        ],
+        "fame":8,
+        "resistances":[0,1,2],
+        "abilities":["fortified"],
+        "version":"base",
+        "x":1,
+        "y":0,
+        "count":2
+    },
+    "2503":{
+        "name":"Altem Mages",
+        "colour": 5,
+        "armour":8,
+        "attacks":[
+            {
+                "value":4,
+                "element":4
+            }
+        ],
+        "fame":8,
+        "resistances":[1],
+        "abilities":["brutal","poison","fortified"],
+        "version":"base",
+        "x":0,
+        "y":1,
+        "count":2
+    }
+}

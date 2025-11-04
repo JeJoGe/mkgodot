@@ -1,0 +1,46 @@
+{
+    "93":{
+        "id": 93,
+        "cardId": "Fireball ",
+        "colour": "red",
+        "xCoord": 3,
+        "yCoord": 1,
+        "topFunction": "attack-fire-ranged-5",
+        "bottomFunction": "attack-fire-siege-8",
+        "phase": "combat",
+        "version": "base"
+    },
+    "94":{
+        "id": 94,
+        "cardId": "Snowstorm",
+        "colour": "blue",
+        "xCoord": 3,
+        "yCoord": 2,
+        "topFunction": "attack-ice-ranged-5",
+        "bottomFunction": "attack-ice-siege-8",
+        "phase": "combat",
+        "version": "base"
+    },
+    "96":{
+        "id": 96,
+        "cardId": "Tremor",
+        "colour": "green",
+        "xCoord": 3,
+        "yCoord": 0,
+        "topFunction": "",
+        "bottomFunction": "",
+        "phase": "combat",
+        "version": "base"
+    },
+    "99":{
+        "id": 99,
+        "cardId": "Whirlwind",
+        "colour": "white",
+        "xCoord": 4,
+        "yCoord": 3,
+        "topFunction": "",
+        "bottomFunction": "",
+        "phase": "combat",
+        "version": "base"
+    }
+}

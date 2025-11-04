@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpkfg3i2uq1dl"]
+
+[ext_resource type="Script" uid="uid://c0m8rkn88dxaj" path="res://ChallengePopUp/ChallengePopUp.cs" id="1_55dua"]
+[ext_resource type="Script" uid="uid://54hrdm8p7sj2" path="res://ChallengePopUp/ChallengeWindow.cs" id="1_edn05"]
+[ext_resource type="Script" uid="uid://m7nwdwnw64at" path="res://ChallengePopUp/ChallengeOptions.cs" id="2_yya27"]
+
+[node name="ChallengeWindow" type="Window"]
+position = Vector2i(0, 36)
+size = Vector2i(350, 100)
+transient = true
+exclusive = true
+unresizable = true
+always_on_top = true
+script = ExtResource("1_edn05")
+
+[node name="ChallengePopUp" type="Control" parent="." node_paths=PackedStringArray("ChallengeWindow", "ChallengeOptions", "Challenge", "Cancel")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_55dua")
+ChallengeWindow = NodePath("..")
+ChallengeOptions = NodePath("PanelContainer/ChallengeOptions")
+Challenge = NodePath("ColorRect/Challenge")
+Cancel = NodePath("ColorRect/Cancel")
+
+[node name="ColorRect" type="ColorRect" parent="ChallengePopUp"]
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 60.0
+color = Color(0.364706, 0.0823529, 0.0235294, 1)
+
+[node name="Challenge" type="Button" parent="ChallengePopUp/ColorRect"]
+layout_mode = 2
+offset_top = 60.0
+offset_right = 175.0
+offset_bottom = 92.0
+text = "Challenge
+"
+
+[node name="Cancel" type="Button" parent="ChallengePopUp/ColorRect"]
+layout_mode = 2
+offset_top = 60.0
+offset_right = 175.0
+offset_bottom = 92.0
+text = "Cancel
+"
+
+[node name="PanelContainer" type="PanelContainer" parent="ChallengePopUp"]
+layout_mode = 0
+offset_top = 60.0
+offset_right = 350.0
+offset_bottom = 92.0
+
+[node name="ChallengeOptions" type="VBoxContainer" parent="ChallengePopUp/PanelContainer"]
+layout_mode = 2
+mouse_filter = 0
+script = ExtResource("2_yya27")
+
+[node name="Label" type="Label" parent="ChallengePopUp"]
+layout_mode = 0
+offset_left = 10.0
+offset_right = 341.0
+offset_bottom = 51.0
+text = "You are about to enter combat.
+Select which monsters to fight below:"
+
+[connection signal="close_requested" from="." to="ChallengePopUp" method="_on_cancel_pressed"]
+[connection signal="pressed" from="ChallengePopUp/ColorRect/Challenge" to="ChallengePopUp" method="_on_challenge_pressed"]
+[connection signal="pressed" from="ChallengePopUp/ColorRect/Cancel" to="ChallengePopUp" method="_on_cancel_pressed"]

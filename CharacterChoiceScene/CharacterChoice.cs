@@ -1,14 +1,24 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class CharacterChoice : Control
 {
-	private string[] characters = ["Tovak", "Arythea"];
+	private Dictionary<int,string> _characters = new Dictionary<int,string>{
+		{ 0, "Tovak"},
+		{ 1, "Arythea"},
+		{ 2, "Goldyx"},
+		{ 3, "Norowas"},
+		{ 4, "Wolfhawk"},
+		{ 5, "Krang"},
+		{ 6, "Braevalar"}
+	};
 
 	public override void _Ready() {
 		var characterDropdown = GetNode<OptionButton>("CharacterDropdown");
-		for(int i = 0; i < characters.Length; ++i ) {
-			characterDropdown.AddItem(characters[i], i);
+		for(int i = 0; i < _characters.Count; ++i ) {
+			characterDropdown.AddItem(_characters[i], i);
 		}
 		characterDropdown.Selected = -1;
 
@@ -18,12 +28,21 @@ public partial class CharacterChoice : Control
 
 	private void OnCharacterSelected(long index)
 	{
-		GD.Print("Selected ", characters[index]);
+		GD.Print("Selected ", _characters[(int)index]);
 		GetNode<Button>("Submit").Disabled = false;
 	}
 	
 	private void OnSubmitPressed()
 	{
+		var playerId = GetNode<OptionButton>("CharacterDropdown").GetSelectedId();
+		GameSettings.PlayerCharacter = playerId;
+		GameSettings.PlayerCharacterName = _characters[(int)playerId];
+		GD.Print("Player: "+_characters[GameSettings.PlayerCharacter]);
+		// randomly select dummy character
+		_characters.Remove(playerId);
+		var characterIds = _characters.Keys.ToList(); 
+		GameSettings.DummyCharacter = characterIds[Utils.RandomNumber(0,_characters.Count)];
+		GD.Print( "Dummy: "+_characters[GameSettings.DummyCharacter]);
 		GD.Print("PLAY");
 		GetTree().ChangeSceneToFile("res://GamePlay.tscn");
 	}

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://drqo64v0t6gku"]
 
-[ext_resource type="Script" path="res://CharacterChoiceScene/CharacterChoice.cs" id="1_pku4p"]
+[ext_resource type="Script" uid="uid://c6ycvqdiwh8k6" path="res://CharacterChoiceScene/CharacterChoice.cs" id="1_pku4p"]
 
 [node name="CharacterChoice" type="Control"]
 layout_mode = 3
@@ -10,17 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pku4p")
-
-[node name="Title" type="TextEdit" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 136.0
-offset_top = 64.0
-offset_right = 355.0
-offset_bottom = 100.0
-scale = Vector2(4.05609, 5.89373)
-text = "CHOOSE YOUR CHARACTER"
-placeholder_text = "CHOOSE YOUR CHARACTER"
 
 [node name="CharacterDropdown" type="OptionButton" parent="."]
 layout_mode = 0
